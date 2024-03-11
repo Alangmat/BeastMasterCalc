@@ -1,0 +1,387 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4045C612-0CB6-417F-89DD-6444143CE87B}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>View</RootNamespace>
+    <AssemblyName>View</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>C:\Users\alang\Desktop\BEASTMASTERCALC\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>12B3ECC9E51741E18FF2218E4EDBAEDC096620F9</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>View_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == '17022024version|AnyCPU'">
+    <OutputPath>bin\17022024version\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="CommonServiceLocator, Version=2.0.2.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommonServiceLocator.2.0.2\lib\net47\CommonServiceLocator.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight, Version=5.4.1.0, Culture=neutral, PublicKeyToken=e7570ab207bcb616, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Extras, Version=5.4.1.0, Culture=neutral, PublicKeyToken=669f0b5e8f868abf, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.Extras.dll</HintPath>
+    </Reference>
+    <Reference Include="GalaSoft.MvvmLight.Platform, Version=5.4.1.0, Culture=neutral, PublicKeyToken=5f873c45e98af8a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\GalaSoft.MvvmLight.Platform.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\MvvmLightLibs.5.4.1.1\lib\net45\System.Windows.Interactivity.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="View_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ViewModel\ViewModel.csproj">
+      <Project>{d52a7f53-9bfe-42be-93fa-20e87ac63a0c}</Project>
+      <Name>ViewModel</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\buttons\plus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\buttons\minus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\numbers\1.3.png" />
+    <Resource Include="icons\numbers\1.4.png" />
+    <Resource Include="icons\numbers\2.3.png" />
+    <Resource Include="icons\numbers\2.4.png" />
+    <Resource Include="icons\numbers\3.3.png" />
+    <Resource Include="icons\numbers\3.4.png" />
+    <Resource Include="icons\numbers\3.5.png" />
+    <Resource Include="icons\numbers\4.4.png" />
+    <Resource Include="icons\numbers\4.5.png" />
+    <Resource Include="icons\numbers\5.5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\base\MoonTouchFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\base\BeastAwakeningFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\base\ChainLightningFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\numbers\2.5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\expert\BestialRampageFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\numbers\1.5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talants\GuardianUnity.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talants\ForestInspiration.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talants\DualRage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\expert\AuraOfTheForestChoiceFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\expert\AuraOfTheForestUpgradeFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\expert\AuraOfTheForestFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\expert\MoonlightFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talants\MoonlightPlusFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talants\AuraOfTheForestUpgradeFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talants\BeastAwakeningPlusFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talants\BestialRampagePlusFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talants\MoonTouchPlusFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talants\AuraOfTheForestChoiceFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talants\BestialRageFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talants\PredatoryDeliriumFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talants\MomentOfPowerFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talants\LongDeathFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\other\CrushingWillFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\stats\Accuracy.png" />
+    <Resource Include="icons\stats\AttackSpeed.png" />
+    <Resource Include="icons\stats\AttackStrength.png" />
+    <Resource Include="icons\stats\CriticalDamage.png" />
+    <Resource Include="icons\stats\CriticalHit.png" />
+    <Resource Include="icons\stats\MagicPower.png" />
+    <Resource Include="icons\stats\Penetration.png" />
+    <Resource Include="icons\stats\PhysicalPower.png" />
+    <Resource Include="icons\stats\PiercingAttack.png" />
+    <Resource Include="icons\stats\SkillCooldown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\weapons\axe.png" />
+    <Resource Include="icons\weapons\mace.png" />
+    <Resource Include="icons\weapons\spear.png" />
+    <Resource Include="icons\weapons\staff.png" />
+    <Resource Include="icons\weapons\sword.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talants\AnimalRageFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talants\Symbiosis.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\base\OrderToAttackFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\base\HealingFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\expert\BlessingOfTheMoonFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\expert\DoubleConcentrationFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\other\IrreversibleAngerFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\stats\Rage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\stats\Protection.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\stats\Dodge.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\stats\Resilience.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talants\RageTalent.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talants\OrderToAttackPlusFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talants\SymbiosisFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.8">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.8 %28x86 и x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\AnimalRageFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\AuraOfTheForestChoiceFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\AuraOfTheForestUpgradeFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\BeastAwakeningPlusFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\BestialRageFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\BestialRampagePlusFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\DualRage.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\ForestInspiration.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\GuardianUnity.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\LongDeathFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\MomentOfPowerFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\MoonlightPlusFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\MoonTouchPlusFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\OrderToAttackPlusFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\PredatoryDeliriumFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\RageTalent.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\Symbiosis.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\SymbiosisFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\base\BeastAwakening.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\other\background.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Image1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="background.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ask.jpg" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

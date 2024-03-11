@@ -1,0 +1,1896 @@
+﻿<Window x:Class="View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:View"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        Title="Калькулятор ловчего" Height="592" Width="730"
+        Icon="/icons/base/BeastAwakening.png" Closed="Window_Closed">
+    <Window.Resources>
+        <!-- Определение именованного стиля -->
+        <Style x:Key="CustomButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="Black" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}">
+                            <ContentPresenter/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="Transparent" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="HintButtonStyle" TargetType="Button">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                                CornerRadius="50">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.5"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+    </Window.Resources>
+    <Grid>
+        <TabControl>
+            <TabItem Header="Навыки">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="26*"/>
+                        <RowDefinition Height="215*"/>
+                        <RowDefinition Height="307*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="9"/>
+                        <ColumnDefinition Width="141*"/>
+                        <ColumnDefinition Width="295*"/>
+                        <ColumnDefinition Width="279*"/>
+                    </Grid.ColumnDefinitions>
+
+
+                    <Rectangle HorizontalAlignment="Left" Height="203"  VerticalAlignment="Top" Stroke="Black" Width="409" Grid.Column="1" Fill="#FF182946" Margin="14,26,0,0" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
+
+                    <!--
+                    <Rectangle HorizontalAlignment="Left" Height="203"  VerticalAlignment="Top" Stroke="Black" Width="409" Grid.Column="1" Fill="#FF182946" Margin="14,26,0,0" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
+                    -->
+
+                    <Label Content="Базовые"
+                           HorizontalContentAlignment="Center"
+                           VerticalContentAlignment="Center"
+                           Grid.Column="1"
+                           Margin="14,26,0,0"
+                           Height="38"
+                           Width="409"
+                           VerticalAlignment="Top"
+                           HorizontalAlignment="Left" Background="#FF332220" FontSize="16" FontFamily="Palatino Linotype" Foreground="White" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
+                    <Button Grid.Column="1"
+                            HorizontalAlignment="Left"
+                            Height="70" 
+                            Margin="29,83,0,0"
+                            Grid.Row="1" 
+                            VerticalAlignment="Top"
+                            x:Name="moonTouchButton"
+                            Width="70" IsCancel="True" Click="moonTouchButton_Clicked" 
+                            Style="{StaticResource CustomButtonStyle}">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/base/MoonTouchFramed.png"/>
+                        </Button.Background>
+                        <Image x:Name="moonTouchLvlIcon" Height="20" Width="30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,12,13"/>
+
+                    </Button>
+                    <Button Grid.Column="1"
+                            HorizontalAlignment="Left"
+                            Height="70" 
+                            Margin="103,83,0,0"
+                            Grid.Row="1" 
+                            VerticalAlignment="Top"
+                            Width="70" IsCancel="True"
+                            x:Name="beastAwakeningButton"
+                            Style="{StaticResource CustomButtonStyle}" Click="beastAwakeningButton_Click" Grid.ColumnSpan="2">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/base/BeastAwakeningFramed.png"/>
+                        </Button.Background>
+                        <Image x:Name="beastAwakeningLvlIcon" Height="20" Width="30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,12,13"/>
+
+                    </Button>
+                    <Button Grid.Column="2"
+                            HorizontalAlignment="Left"
+                            Height="70" 
+                            Margin="35,83,0,0"
+                            Grid.Row="1" 
+                            VerticalAlignment="Top"
+                            Width="70" IsCancel="True"
+                            x:Name="orderToAttackButton"
+                            Style="{StaticResource CustomButtonStyle}" Click="orderToAttackButton_Click">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/base/OrderToAttackFramed.png"/>
+                        </Button.Background>
+                        <Image x:Name="orderToAttackLvlIcon" Height="20" Width="30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,12,13"/>
+                    </Button>
+                    <Button Grid.Column="2"
+                            HorizontalAlignment="Left"
+                            Height="70" 
+                            Margin="106,83,0,0"
+                            Grid.Row="1" 
+                            VerticalAlignment="Top"
+                            Width="70" IsCancel="True"
+                            x:Name="healingButton"
+                            Style="{StaticResource CustomButtonStyle}" Click="healingButton_Click">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/base/HealingFramed.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button Grid.Column="2"
+                            HorizontalAlignment="Left"
+                            Height="70" 
+                            Margin="175,83,0,0"
+                            Grid.Row="1" 
+                            VerticalAlignment="Top"
+                            Width="70" IsCancel="True"
+                            x:Name="chainLightningButton"
+                            Style="{StaticResource CustomButtonStyle}" Click="chainLightningButton_Click">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/base/ChainLightningFramed.png"/>
+                        </Button.Background>
+
+                        <Image x:Name="chainLightningLvlIcon" Height="20" Width="30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,12,13"/>
+
+                    </Button>
+                    <TextBox Grid.Column="3"
+                             Text="{Binding MagicalDD}"
+                             HorizontalAlignment="Left"
+                             Height="33" Margin="7,26,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="89"/>
+                    <Label Grid.Column="3" x:Name="outLabel"
+                           Content="{Binding OutDD}"
+                           HorizontalAlignment="Left" Height="34"
+                           Margin="96,171,0,0" Grid.Row="1" 
+                           VerticalAlignment="Top"
+                           Width="166"/>
+                    <Button Grid.Column="1"
+                            Command="{Binding IncreaseLvlMoonTouchCommand}"
+                        HorizontalAlignment="Left"
+                        Height="28" 
+                        Margin="49,52,0,0"
+                        Grid.Row="1" 
+                        VerticalAlignment="Top"
+                        x:Name="increaseLvlMoonTouchButton"
+                        Width="33" IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlMoonTouchButton_Click" >
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button Grid.Column="1"
+                            Command="{Binding DecreaseLvlMoonTouchCommand}"
+                        HorizontalAlignment="Left"
+                        Height="28" 
+                        Margin="49,152,0,0"
+                        Grid.Row="1" 
+                        VerticalAlignment="Top"
+                            x:Name="decreaseLvlMoonTouchButton"
+                        Width="33" IsCancel="True" BorderBrush="{x:Null}" Click="decreaseLvlMoonTouchButton_Click" >
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <!--
+                    <CheckBox Grid.Column="2"
+                              IsChecked="{Binding HasTalantMoonTouchPlus}"
+                              HorizontalAlignment="Left" 
+                              Height="16" 
+                              Margin="42,5,0,0"
+                              Grid.Row="2" 
+                              VerticalAlignment="Top" 
+                              Width="194">
+                        <TextBlock Text="Лунное касание +"
+                                   TextWrapping="Wrap" Height="17"/>
+                    </CheckBox>
+                    -->
+                    <CheckBox Grid.Column="3"
+                        IsChecked="{Binding HasRelicMoonTouch}"
+                        HorizontalAlignment="Center" 
+                        Height="35" 
+                        Margin="0,25,0,0"
+                        Grid.Row="2" 
+                        VerticalAlignment="Top" 
+                        Width="194">
+                        <TextBlock Text="Великая реликвия карающего умения в Лунном касании"
+                            TextWrapping="Wrap" Height="35"/>
+                    </CheckBox>
+                    <CheckBox Grid.Column="3"
+                        IsChecked="{Binding HasRelicChainLightning}"
+                        HorizontalAlignment="Center" 
+                        Height="35" 
+                        Margin="0,60,0,0"
+                        Grid.Row="2" 
+                        VerticalAlignment="Top" 
+                        Width="194">
+                        <TextBlock Text="Великая реликвия карающего умения в Цепной молнии"
+                            TextWrapping="Wrap" Height="35"/>
+                    </CheckBox>
+                    <ComboBox Grid.Column="3"
+                              ItemsSource="{Binding Castles}"
+                              SelectedItem="{Binding NumberCastle}"
+                              HorizontalAlignment="Left"
+                              Margin="42,101,0,0" Grid.Row="2" VerticalAlignment="Top" Width="96" Height="22">
+                        <ComboBox.Background>
+                            <LinearGradientBrush EndPoint="0,1">
+                                <GradientStop Color="#FFF0F0F0"/>
+                                <GradientStop Color="#FFC7C6BB" Offset="1"/>
+                            </LinearGradientBrush>
+                        </ComboBox.Background>
+                    </ComboBox>
+                    <Button Grid.Column="2"
+                        Command="{Binding IncreaseLvlChainLightningCommand}"
+                        HorizontalAlignment="Left"
+                        Height="28" 
+                        Margin="193,52,0,0"
+                        Grid.Row="1" 
+                            x:Name="increaseLvlChainLightningButton"
+                        VerticalAlignment="Top"
+                        Width="33" IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlChainLightningButton_Click">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button Grid.Column="2"
+                        Command="{Binding DecreaseLvlChainLightningCommand}"
+                        HorizontalAlignment="Left"
+                        Height="28" 
+                        Margin="193,152,0,0"
+                        Grid.Row="1" 
+                        VerticalAlignment="Top"
+                            x:Name="decreaseLvlChainLightningButton"
+                        Width="33" IsCancel="True" BorderBrush="{x:Null}" Click="decreaseLvlChainLightningButton_Click">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
+                        </Button.Background>
+                    </Button>
+
+                    <TextBox Grid.Column="3"
+                        Text="{Binding PhysicalDD}"
+                        HorizontalAlignment="Left"
+                        Height="33" Margin="152,26,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="89"/>
+                    <Label Grid.Column="3" Content="Маг дд" HorizontalAlignment="Left" Margin="26,26,0,0" VerticalAlignment="Top" Grid.RowSpan="2" Height="26" Width="48"/>
+                    <Label Grid.Column="3" Content="Физ дд" HorizontalAlignment="Left" Margin="170,25,0,0" VerticalAlignment="Top" Grid.RowSpan="2" Height="26" Width="47"/>
+                    <Button Grid.Column="1"
+                        Command="{Binding IncreaseLvlBeastAwakeningCommand}"
+                        HorizontalAlignment="Left"
+                        Height="28" 
+                        Margin="121,52,0,0"
+                        Grid.Row="1" 
+                        VerticalAlignment="Top"
+                            x:Name="increaseLvlBeastAwakeningButton"
+                        Width="33" IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlBeastAwakeningButton_Click" Grid.ColumnSpan="2">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button Grid.Column="1"
+                        Command="{Binding DecreaseLvlBeastAwakeningCommand}"
+                        HorizontalAlignment="Left"
+                        Height="28" 
+                        Margin="122,152,0,0"
+                        Grid.Row="1" 
+                        VerticalAlignment="Top"
+                            x:Name="decreaseLvlBeastAwakeningButton"
+                        Width="33" IsCancel="True" BorderBrush="{x:Null}" Click="decreaseLvlBeastAwakeningButton_Click" Grid.ColumnSpan="2">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <!--
+                    <CheckBox Grid.Column="2"
+                        IsChecked="{Binding HasTalantBeastAwakeningMage}"
+                        HorizontalAlignment="Left" 
+                        Height="20" 
+                        Margin="43,133,0,0"
+                        Grid.Row="2" 
+                        VerticalAlignment="Top" 
+                        Width="194">
+                        <TextBlock Text="Пробуждение зверя + (маг)"
+                            TextWrapping="Wrap" Height="20"/>
+                    </CheckBox>
+                    
+                    <ComboBox Grid.Column="2"
+                        ItemsSource="{Binding ThreeLevels}"
+                        SelectedItem="{Binding LvlTalantBeastAwakeningPhysical}"
+                        HorizontalAlignment="Left"
+                        Margin="42,134,0,0" Grid.Row="2" VerticalAlignment="Top" Width="39" Height="22">
+                        <ComboBox.Background>
+                            <LinearGradientBrush EndPoint="0,1">
+                                <GradientStop Color="#FFF0F0F0"/>
+                                <GradientStop Color="#FFC7C6BB" Offset="1"/>
+                            </LinearGradientBrush>
+                        </ComboBox.Background>
+                    </ComboBox> 
+                    <Label Grid.Column="2" Content="Пробуждение зверя + (физ)" HorizontalAlignment="Left" Height="27" Margin="85,131,0,0" Grid.Row="2" VerticalAlignment="Top" Width="167"/>
+                    -->
+                    <Image HorizontalAlignment="Left" 
+                               Source="icons/other/background.jpg"
+                               Height="278"  VerticalAlignment="Top"  Width="410" Grid.Column="1"  Margin="13,13,0,0" Grid.Row="2" Grid.ColumnSpan="2" Stretch="Fill"/>
+                    <Label Content="Экспертные"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center"
+                        Grid.Column="1"
+                        Margin="14,11,0,0"
+                        Height="38"
+                        Width="409"
+                        VerticalAlignment="Top"
+                        HorizontalAlignment="Left" Background="#FF332220" FontSize="16" FontFamily="Palatino Linotype" Foreground="White" Grid.Row="2" Grid.ColumnSpan="2"/>
+                    <Button Grid.Column="1"
+                        HorizontalAlignment="Left"
+                        Height="70" 
+                        Margin="33,65,0,0"
+                        Grid.Row="2" 
+                        VerticalAlignment="Top"
+                        x:Name="bestialRampageButton"
+                        Width="70" IsCancel="True" 
+                        Style="{StaticResource CustomButtonStyle}" Click="bestialRampageButton_Click">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/expert/BestialRampageFramed.png"/>
+                        </Button.Background>
+                        <Image x:Name="bestialRampageLvlIcon" Height="20" Width="30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,12,13"/>
+
+                    </Button>
+                    <Button Grid.Column="1"
+                        HorizontalAlignment="Left"
+                        Height="70" 
+                        Margin="104,65,0,0"
+                        Grid.Row="2" 
+                        VerticalAlignment="Top"
+                        x:Name="auraOfTheForestButton"
+                        Width="70" IsCancel="True" 
+                        Style="{StaticResource CustomButtonStyle}" Click="auraOfTheForestButton_Click" Grid.ColumnSpan="2" >
+                        <Button.Background>
+                            <ImageBrush ImageSource="/icons/expert/AuraOfTheForestFramed.png"/>
+                        </Button.Background>
+                        <Grid>
+                            <Image x:Name="imageAuraOfTheForestButton" />
+                            <Image x:Name="auraOfTheForestLvlIcon" Height="20" Width="30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,12,13"/>
+
+                        </Grid>
+                    </Button>
+                    <Button Grid.Column="1"
+                            Command="{Binding DecreaseLvlBestialRampageCommand}"
+                            HorizontalAlignment="Left"
+                            Margin="39,134,0,0"
+                            Grid.Row="2" 
+                            VerticalAlignment="Top"
+                            Height="23" 
+                            x:Name="decreaseLvlBestialRampageButton"
+                            Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="decreaseLvlBestialRampageButton_Click" >
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button Grid.Column="1"
+                        Command="{Binding IncreaseLvlBestialRampageCommand}"
+                        HorizontalAlignment="Left"
+                        Margin="68,134,0,0"
+                        Grid.Row="2" 
+                        VerticalAlignment="Top"
+                        Height="23" 
+                            x:Name="increaseLvlBestialRampageButton"
+                        Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlBestialRampageButton_Click" >
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <!--
+                    <CheckBox Grid.Column="2"
+                        IsChecked="{Binding HasTalantBestialRampage}"
+                        HorizontalAlignment="Left" 
+                        Height="20" 
+                        Margin="43,166,0,0"
+                        Grid.Row="2" 
+                        VerticalAlignment="Top" 
+                        Width="194">
+                        <TextBlock Text="Звериное буйство +"
+                            TextWrapping="Wrap" Height="20"/>
+                    </CheckBox>
+                    -->
+                    <CheckBox Grid.Column="3"
+                        IsChecked="{Binding AttackActive}"
+                        HorizontalAlignment="Left" 
+                        Height="16" 
+                        Margin="8,78,0,0"
+                        Grid.Row="1" 
+                        VerticalAlignment="Top" 
+                        Width="126">
+                        <TextBlock
+                            TextWrapping="Wrap" Height="17"><Run Language="ru-ru" Text="Автоатака"/></TextBlock>
+                    </CheckBox>
+                    <Button Grid.Column="1"
+                        Command="{Binding DecreaseLvlAuraOfTheForestCommand}"
+                        HorizontalAlignment="Left"
+                        Margin="110,134,0,0"
+                        Grid.Row="2" 
+                        VerticalAlignment="Top"
+                        Height="23" 
+                            x:Name="decreaseLvlAuraOfTheForestButton"
+                        Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="decreaseLvlAuraOfTheForestButton_Click" >
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button Grid.Column="1"
+                        Command="{Binding IncreaseLvlAuraOfTheForestCommand}"
+                        HorizontalAlignment="Left"
+                        Margin="139,134,0,0"
+                        Grid.Row="2" 
+                        VerticalAlignment="Top"
+                        Height="23" 
+                            x:Name="increaseLvlAuraOfTheForestButton"
+                        Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlAuraOfTheForestButton_Click" Grid.ColumnSpan="2" >
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <!--
+                    <CheckBox Grid.Column="2"
+                        IsChecked="{Binding HasTalantPowerOfNature}"
+                        HorizontalAlignment="Left" 
+                        Height="20" 
+                        Margin="43,216,0,0"
+                        Grid.Row="2" 
+                        VerticalAlignment="Top" 
+                        Width="194">
+                        <TextBlock Text="Могущество природы"
+                            TextWrapping="Wrap" Height="20"/>
+                    </CheckBox>
+                    <CheckBox Grid.Column="2"
+                        IsChecked="{Binding HasTalantGrandeurOfTheLotus}"
+                        HorizontalAlignment="Left" 
+                        Height="20" 
+                        Margin="43,241,0,0"
+                        Grid.Row="2" 
+                        VerticalAlignment="Top" 
+                        Width="194"
+                              x:Name="grandeurOfTheLotusCheckBox">
+                        <TextBlock Text="Величие лотоса"
+                            TextWrapping="Wrap" Height="20"/>
+                    </CheckBox>
+                    -->
+                    <Button Grid.Column="2"
+                        HorizontalAlignment="Left"
+                        Height="70" 
+                        Margin="38,65,0,0"
+                        Grid.Row="2" 
+                        VerticalAlignment="Top"
+                        x:Name="moonlightPermanentButton"
+                        Width="70" IsCancel="True" 
+                        Style="{StaticResource CustomButtonStyle}" Click="moonlightPermanentButton_Click"  >
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/expert/MoonlightFramed.png"/>
+                        </Button.Background>
+                        <Image x:Name="moonlightLvlIcon" Height="20" Width="30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,12,13"/>
+
+                    </Button>
+                    <Button Grid.Column="2"
+                        Command="{Binding DecreaseLvlMoonlightCommand}"
+                        HorizontalAlignment="Left"
+                        Margin="80,134,0,0"
+                        Grid.Row="2" 
+                        VerticalAlignment="Top"
+                        Height="23" 
+                            x:Name="decreaseLvlMoonlightButton"
+                        Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="decreaseLvlMoonlightButton_Click" >
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button Grid.Column="2"
+                        Command="{Binding IncreaseLvlMoonlightCommand}"
+                        HorizontalAlignment="Left"
+                        Margin="109,134,0,0"
+                        Grid.Row="2" 
+                        VerticalAlignment="Top"
+                        Height="23" 
+                            x:Name="increaseLvlMoonlightButton"
+                        Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlMoonlightButton_Click" >
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button Grid.Column="2"
+                        HorizontalAlignment="Left"
+                        Height="70" 
+                        Margin="108,65,0,0"
+                        Grid.Row="2" 
+                        VerticalAlignment="Top"
+                        x:Name="moonlightNonPermanentButton"
+                        Width="70" IsCancel="True" 
+                        Style="{StaticResource CustomButtonStyle}" Click="moonlightNonPermanentButton_Click" >
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/expert/MoonlightFramed.png"/>
+                        </Button.Background>
+                        <Image x:Name="moonlightLvlIcon_Copy" Height="20" Width="30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,12,13"/>
+
+                    </Button>
+                    <!--
+                    <ComboBox Grid.Column="2"
+                        ItemsSource="{Binding ThreeLevels}"
+                        SelectedItem="{Binding LvlTalantMoonlightPlus}"
+                        HorizontalAlignment="Left"
+                        Margin="42,263,0,0" Grid.Row="2" VerticalAlignment="Top" Width="39" Height="22">
+                        <ComboBox.Background>
+                            <LinearGradientBrush EndPoint="0,1">
+                                <GradientStop Color="#FFF0F0F0"/>
+                                <GradientStop Color="#FFC7C6BB" Offset="1"/>
+                            </LinearGradientBrush>
+                        </ComboBox.Background>
+                    </ComboBox>
+                    
+                    <Label Grid.Column="2" Content="Лунный свет +" HorizontalAlignment="Left" Height="27" Margin="85,260,0,0" Grid.Row="2" VerticalAlignment="Top" Width="167"/>
+                    -->
+                    <Button Grid.Column="3"
+                        HorizontalAlignment="Left"
+                        Height="80" 
+                        Margin="95,79,0,0"
+                        Grid.Row="1" 
+                        VerticalAlignment="Top"
+                        x:Name="irreversibleAngerButton"
+                        Width="80" IsCancel="True" 
+                        Style="{StaticResource CustomButtonStyle}" Click="irreversibleAngerButton_Click">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/other/IrreversibleAngerFramed.png"/>
+                        </Button.Background>
+
+                    </Button>
+                    <Button Grid.Column="3"
+                        HorizontalAlignment="Left"
+                        Height="80" 
+                        Margin="187,79,0,0"
+                        Grid.Row="1" 
+                        VerticalAlignment="Top"
+                        x:Name="crushingWillButton"
+                        Width="80" IsCancel="True" 
+                        Style="{StaticResource CustomButtonStyle}" Click="crushingWillButton_Click">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/other/CrushingWillFramed.png"/>
+                        </Button.Background>
+
+                    </Button>
+                    <CheckBox Grid.Column="3"
+                        IsChecked="{Binding IsUsingBlessingOfTheMoonOnLuna}"
+                        HorizontalAlignment="Center" 
+                        Height="35" 
+                        Margin="0,130,0,0"
+                        Grid.Row="2" 
+                        VerticalAlignment="Top" 
+                        Width="194">
+                        <TextBlock Text="Использование блага на себя и на собаку "
+                            TextWrapping="Wrap" Height="35"/>
+                    </CheckBox>
+                    <TextBox Grid.Column="3"
+                        Text="{Binding PercentMagicalDD}"
+                        HorizontalAlignment="Left"
+                        Height="30" Margin="39,173,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="89"/>
+                    <TextBox Grid.Column="3"
+                        Text="{Binding PercentPhysicalDD}"
+                        HorizontalAlignment="Left"
+                        Height="33" Margin="39,217,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="89"/>
+                    <TextBlock
+                        TextWrapping="Wrap" Margin="138,172,17,85" Grid.Column="3" Grid.Row="2"><Run Language="ru-ru" Text="Процентная прибавка к маг дд"/></TextBlock>
+                    <TextBlock
+                        TextWrapping="Wrap" Margin="138,217,17,26" Grid.Column="3" Grid.Row="2"><Run Text="Процентная прибавка к "/><Run Language="ru-ru" Text="физ"/><Run Text=" дд"/></TextBlock>
+                    <Button Grid.Column="2"
+                        Command="{Binding IncreaseLvlOrderToAttackCommand}"
+                        HorizontalAlignment="Left"
+                        Height="28" 
+                        Margin="53,52,0,0"
+                        Grid.Row="1" 
+                        VerticalAlignment="Top"
+                        x:Name="increaseLvlOrderToAttackButton"
+                        Width="33" IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlOrderToAttackButton_Click" >
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button Grid.Column="2"
+                        Command="{Binding DecreaseLvlLvlOrderToAttackCommand}"
+                        HorizontalAlignment="Left"
+                        Height="28" 
+                        Margin="54,152,0,0"
+                        Grid.Row="1" 
+                        VerticalAlignment="Top"
+                        x:Name="decreaseLvlOrderToAttackButton"
+                        Width="33" IsCancel="True" BorderBrush="{x:Null}" Click="decreaseLvlOrderToAttackButton_Click" >
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button Grid.Column="2"
+                        HorizontalAlignment="Center"
+                        Height="70" 
+                        Margin="0,182,0,0"
+                        Grid.Row="2" 
+                        VerticalAlignment="Top"
+                        Width="70" IsCancel="True"
+                        x:Name="blessingOfTheMoonButton"
+                        Style="{StaticResource CustomButtonStyle}" Click="blessingOfTheMoonButton_Click">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/expert/BlessingOfTheMoonFramed.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button Grid.Column="2"
+                        HorizontalAlignment="Left"
+                        Height="70" 
+                        Margin="195,182,0,0"
+                        Grid.Row="2" 
+                        VerticalAlignment="Top"
+                        Width="70" IsCancel="True"
+                        x:Name="doubleConcentrationButton"
+                        Style="{StaticResource CustomButtonStyle}" Click="doubleConcentrationButton_Click">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/expert/DoubleConcentrationFramed.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Label Grid.Column="3" Content="ДПМ" HorizontalAlignment="Left" Height="34" Margin="49,171,0,0" Grid.Row="1" VerticalAlignment="Top" Width="43"/>
+
+                    <Button HorizontalAlignment="Left" 
+                        x:Name="moonlightlHintButton"
+                        Style="{StaticResource HintButtonStyle}"
+                        Height="20" Margin="182,68,0,0" 
+                            VerticalAlignment="Top" 
+                            Width="20" 
+                            Grid.Column="2" Grid.Row="2" PreviewMouseUp="moonlightlHintButton_Click" >
+                        <Button.Background>
+                            <ImageBrush ImageSource="/ask.jpg" Stretch="Fill"/>
+                        </Button.Background>
+                        <Popup x:Name="moonlightPopup"
+                               MaxWidth="240" MinWidth="100"
+                               StaysOpen="False" Placement="Mouse" 
+                            AllowsTransparency="True"
+                               >
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <TextBlock
+                                    x:Name="moonlightHintText"
+                                    Padding="5"
+                                    TextWrapping="Wrap" Background="#FFBBCBF3" >
+                                </TextBlock>
+                            </Border>
+                        </Popup>
+                    </Button>
+                    <Button HorizontalAlignment="Left" 
+                        x:Name="basicSkillHintButton"
+                        Style="{StaticResource HintButtonStyle}"
+                        Height="20" Margin="259,3,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="20" 
+                        Grid.Column="2" Grid.Row="1" PreviewMouseUp="basicSkillHintButton_PreviewMouseUp"  >
+                        <Button.Background>
+                            <ImageBrush ImageSource="/ask.jpg" Stretch="Fill"/>
+                        </Button.Background>
+                        <Popup x:Name="basicSkillPopup"
+                            MaxWidth="240" MinWidth="100"
+                            StaysOpen="False" Placement="Mouse" 
+                            AllowsTransparency="True"
+                               >
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <TextBlock
+                                    x:Name="basicSkillHintText"
+                                    Padding="5"
+                                    TextWrapping="Wrap" Background="#FFBBCBF3" />
+                            </Border>
+                        </Popup>
+                    </Button>
+                    <Button HorizontalAlignment="Left" 
+                        x:Name="temporaryHintButton"
+                        Style="{StaticResource HintButtonStyle}"
+                        Height="20" Margin="84,185,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="20" 
+                        Grid.Column="2" Grid.Row="2" PreviewMouseUp="temporaryHintButton_PreviewMouseUp"  >
+                        <Button.Background>
+                            <ImageBrush ImageSource="/ask.jpg" Stretch="Fill"/>
+                        </Button.Background>
+                        <Popup x:Name="temporaryPopup"
+                            MaxWidth="240" MinWidth="100"
+                            StaysOpen="False" Placement="Mouse" 
+                            AllowsTransparency="True"
+                               >
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <TextBlock
+                                    x:Name="temporaryHintText"
+                                    Padding="5"
+                                    TextWrapping="Wrap" Background="#FFBBCBF3" />
+                            </Border>
+                        </Popup>
+                    </Button>
+                    <Button HorizontalAlignment="Left" 
+                        x:Name="ddHintButton"
+                        Style="{StaticResource HintButtonStyle}"
+                        Height="20" Margin="251,30,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="20" 
+                        Grid.Column="3" PreviewMouseUp="ddHintButton_PreviewMouseUp" Grid.Row="1"  >
+                        <Button.Background>
+                            <ImageBrush ImageSource="/ask.jpg" Stretch="Fill"/>
+                        </Button.Background>
+                        <Popup x:Name="ddPopup"
+                            MaxWidth="240" MinWidth="100"
+                            StaysOpen="False" Placement="Mouse" 
+                            AllowsTransparency="True"
+                               >
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <TextBlock
+                                    x:Name="ddHintText"
+                                    Padding="5"
+                                    TextWrapping="Wrap" Background="#FFBBCBF3" />
+                            </Border>
+                        </Popup>
+                    </Button>
+                    <Button HorizontalAlignment="Left" 
+                        x:Name="mermenHintButton"
+                        Style="{StaticResource HintButtonStyle}"
+                        Height="20" Margin="67,135,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="20" 
+                        Grid.Column="3" PreviewMouseUp="mermenHintButton_PreviewMouseUp" Grid.Row="1"  >
+                        <Button.Background>
+                            <ImageBrush ImageSource="/ask.jpg" Stretch="Fill"/>
+                        </Button.Background>
+                        <Popup x:Name="mermenPopup"
+                            MaxWidth="240" MinWidth="100"
+                            StaysOpen="False" Placement="Mouse" 
+                            AllowsTransparency="True"
+                               >
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <TextBlock
+                                    x:Name="mermenHintText"
+                                    Padding="5"
+                                    TextWrapping="Wrap" Background="#FFBBCBF3" />
+                            </Border>
+                        </Popup>
+                    </Button>
+                    <Button HorizontalAlignment="Left" 
+                        x:Name="blessingHintButton"
+                        Style="{StaticResource HintButtonStyle}"
+                        Height="20" Margin="9,135,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="20" 
+                        Grid.Column="3" PreviewMouseUp="blessingHintButton_PreviewMouseUp" Grid.Row="2"  >
+                        <Button.Background>
+                            <ImageBrush ImageSource="/ask.jpg" Stretch="Fill"/>
+                        </Button.Background>
+                        <Popup x:Name="blessingPopup"
+                                MaxWidth="240" MinWidth="100"
+                                StaysOpen="False" Placement="Mouse" 
+                                AllowsTransparency="True"
+                               >
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <TextBlock
+                                        x:Name="blessingHintText"
+                                        Padding="5"
+                                        TextWrapping="Wrap" Background="#FFBBCBF3" />
+                            </Border>
+                        </Popup>
+                    </Button>
+                    <Button HorizontalAlignment="Left" 
+                            x:Name="procentHintButton"
+                            Style="{StaticResource HintButtonStyle}"
+                            Height="20" 
+                            VerticalAlignment="Top" 
+                            Width="20" PreviewMouseUp="procentHintButton_PreviewMouseUp" Grid.Column="3" Margin="10,199,0,0" Grid.Row="2"  >
+                        <Button.Background>
+                            <ImageBrush ImageSource="/ask.jpg" Stretch="Fill"/>
+                        </Button.Background>
+                        <Popup x:Name="procentPopup"
+                                MaxWidth="240" MinWidth="100"
+                                StaysOpen="False" Placement="Mouse" 
+                                AllowsTransparency="True"
+                               >
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <TextBlock
+                                        x:Name="procentHintText"
+                                        Padding="5"
+                                        TextWrapping="Wrap" Background="#FFBBCBF3" />
+                            </Border>
+                        </Popup>
+                    </Button>
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="Характеристики">
+                <Grid Background="#FFE5E5E5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="8*"/>
+                        <RowDefinition Height="523*"/>
+                        <RowDefinition Height="17*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="15*"/>
+                        <ColumnDefinition Width="332*"/>
+                        <ColumnDefinition Width="332*"/>
+                        <ColumnDefinition Width="15*"/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Header="Статы персонажа" Grid.Row="1" BorderBrush="#FF400984"
+                              Margin="15,2,10,0" Grid.ColumnSpan="2">
+                        <Grid Height="451">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Image Height="36"
+                                Width="36"
+                                Margin="10,0,0,0"
+                                Source="/icons/stats/CriticalHit.png"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left" Grid.Row="2"/>
+                                <Label Content="Критический удар" HorizontalAlignment="Left" Height="27" Margin="50,0,0,0" VerticalAlignment="Center" Width="137" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Left"
+                                    Text="{Binding CriticalHit}"
+                                    Margin="238,0,0,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="70" Grid.Row="2"/>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/CriticalDamage.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="3"/>
+                                <Label Content="Критический урон" HorizontalAlignment="Left" Height="27" Margin="50,0,0,0" VerticalAlignment="Center" Width="137" Grid.Row="3"/>
+                                <TextBox HorizontalAlignment="Left"
+                                    Text="{Binding CriticalDamage}"
+                                    Margin="238,0,0,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="70" Grid.Row="3"/>
+                            </Grid>
+                            <Grid Grid.Row="2">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/Accuracy.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="5"/>
+                                <Label Content="Точность" 
+                                    HorizontalAlignment="Left" 
+                                    Height="27" Margin="50,0,0,0" 
+                                    VerticalAlignment="Center" Width="149"
+                                    Grid.Row="5"/>
+                                <TextBox HorizontalAlignment="Left"
+                                    Text="{Binding Accuracy}"
+                                    Margin="238,0,0,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="70" Grid.Row="5"/>
+                            </Grid>
+                            <Grid Grid.Row="3">
+                                <Image Height="36"
+                                   Width="36"
+                                   Margin="10,0,0,0"
+                                   Source="/icons/stats/AttackSpeed.png"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left" Grid.Row="1"/>
+                                <Label Content="Скорость атаки" HorizontalAlignment="Left" Height="27" Margin="50,0,0,0" VerticalAlignment="Center" Width="137" Grid.Row="1"/>
+                                <TextBox HorizontalAlignment="Left"
+                                    Text="{Binding AttackSpeed}"
+                                    Margin="238,0,0,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="70" Grid.Row="1"/>
+                            </Grid>
+                            <Grid Grid.Row="4">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/Penetration.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="4"/>
+                                <Label Content="Пробивная способность" 
+                                       HorizontalAlignment="Left" 
+                                       Height="27" Margin="50,0,0,0" 
+                                       VerticalAlignment="Center" Width="149"
+                                       Grid.Row="4"/>
+                                <TextBox HorizontalAlignment="Left"
+                                    Text="{Binding Penetration}"
+                                    Margin="238,0,0,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="70" Grid.Row="4"/>
+                            </Grid>
+                            <Grid Grid.Row="5">
+                                <Image Height="36"
+                                       Width="36"
+                                       Source="/icons/stats/SkillCooldown.png"
+                                       Margin="10,0,0,0"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Left"/>
+                                <Label Content="Перезарядка навыков" HorizontalAlignment="Left" Height="27" Margin="50,0,0,0" VerticalAlignment="Center" Width="137"/>
+                                <TextBox HorizontalAlignment="Left"
+                                         Text="{Binding SkillCooldown}"
+                                         Margin="238,0,0,0"
+                                         TextWrapping="Wrap"
+                                         VerticalAlignment="Center"
+                                         Width="70"/>
+                            </Grid>
+                            <Grid Grid.Row="6">
+                                <Image Height="36"
+                                    Width="36"
+                                    x:Name="iconAttackSpeed_Copy6"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/Rage.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="8"/>
+                                <Label Content="Ярость" 
+                                    HorizontalAlignment="Left" 
+                                    Height="27" Margin="50,0,0,0" 
+                                    VerticalAlignment="Center" Width="149"
+                                    Grid.Row="8"/>
+                                <TextBox HorizontalAlignment="Left"
+                                    Text="{Binding Rage}"
+                                    Margin="238,0,0,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="70" Grid.Row="8"/>
+                            </Grid>
+                            <Grid Grid.Row="7">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/AttackStrength.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="6"/>
+                                <Label Content="Сила атаки" 
+                                    HorizontalAlignment="Left" 
+                                    Height="27" Margin="50,0,0,0" 
+                                    VerticalAlignment="Center" Width="149"
+                                    Grid.Row="6"/>
+                                <TextBox HorizontalAlignment="Left"
+                                    Text="{Binding AttackStrength}"
+                                    Margin="238,0,0,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="70" Grid.Row="6"/>
+                            </Grid>
+                            <Grid Grid.Row="8">
+                                <Image Height="36"
+                                    Width="36"
+                                    x:Name="iconAttackSpeed_Copy5"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/PiercingAttack.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="7"/>
+                                <Label Content="Пронзающая атака" 
+                                    HorizontalAlignment="Left" 
+                                    Height="27" Margin="50,0,0,0" 
+                                    VerticalAlignment="Center" Width="149"
+                                    Grid.Row="7"/>
+                                <TextBox HorizontalAlignment="Left"
+                                    Text="{Binding PiercingAttack}"
+                                    Margin="238,0,0,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="70" Grid.Row="7"/>
+                            </Grid>
+                        </Grid>
+                    </GroupBox>
+                    <Grid Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" Margin="343,2,15,0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="10*"/>
+
+                        </Grid.RowDefinitions>
+                        <GroupBox HorizontalAlignment="Left" Height="82" 
+                                  BorderBrush="#FF400984"
+                                  Header="Тип надетого оружия" Margin="10,0,0,0" VerticalAlignment="Top" Width="320">
+                            <StackPanel Grid.Row="2">
+                                <StackPanel.Resources>
+                                    <Style x:Key="Flag" TargetType="{x:Type RadioButton}">
+
+                                        <Setter Property="BorderThickness" Value="2"/>
+
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="{x:Type RadioButton}">
+                                                    <Border BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}">
+                                                        <Image Source="{Binding Content, RelativeSource={RelativeSource TemplatedParent}}"/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Style.Triggers>
+                                            <Trigger Property="IsChecked" Value="False">
+                                                <Setter Property="Opacity" Value="0.5"/>
+                                            </Trigger>
+                                        </Style.Triggers>
+
+                                    </Style>
+                                </StackPanel.Resources>
+                                <Grid VerticalAlignment="Center" Height="60">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    <RadioButton Grid.Column="0" VerticalAlignment="Center" IsChecked="{Binding StaffSelected}" Content="/icons/weapons/staff.png" Style="{StaticResource Flag}" Width="40" Height="40"/>
+                                    <RadioButton Grid.Column="1" IsChecked="{Binding SpearSelected}" Content="/icons/weapons/spear.png" Style="{StaticResource Flag}" Width="40" Height="40"/>
+                                    <RadioButton Grid.Column="2" IsChecked="{Binding MaceSelected}" Content="/icons/weapons/mace.png" Style="{StaticResource Flag}" Width="40" Height="40"/>
+                                    <RadioButton Grid.Column="3" IsChecked="{Binding SwordSelected}" Content="/icons/weapons/sword.png" Style="{StaticResource Flag}" Width="40" Height="40"/>
+                                    <RadioButton Grid.Column="4" IsChecked="{Binding AxeSelected}" Content="/icons/weapons/axe.png" Style="{StaticResource Flag}" Width="40" Height="40"/>
+
+                                </Grid>
+                                <ItemsControl/>
+                            </StackPanel>
+
+                        </GroupBox>
+                        <GroupBox HorizontalAlignment="Left" 
+                                  BorderBrush="#FF400984"
+                                  Grid.Row="1"
+                                  Header="Статы цели" Margin="10,0,0,0" VerticalAlignment="Top" Width="320">
+                            <Grid Height="168">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+
+                                </Grid.RowDefinitions>
+                                <Image Height="36"
+                                   Width="36"
+                                   Source="/icons/stats/Protection.png"
+                                   Margin="10,0,0,0"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"/>
+                                <Label Content="Защита в процентах" HorizontalAlignment="Left" Height="27" Margin="50,0,0,0" VerticalAlignment="Center" Width="137"/>
+                                <TextBox HorizontalAlignment="Left"
+                                     Text="{Binding Protection}"
+                                     Margin="238,0,0,0"
+                                     TextWrapping="Wrap"
+                                     VerticalAlignment="Center"
+                                     Width="70"/>
+                                <Image Height="36"
+                                    Width="36"
+                                    Source="/icons/stats/Dodge.png"
+                                    Margin="10,0,0,0"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="1"/>
+                                <Label Content="Уклонение" HorizontalAlignment="Left" Height="27" Margin="50,0,0,0" VerticalAlignment="Center" Width="137" Grid.Row="1"/>
+                                <TextBox HorizontalAlignment="Left"
+                                    Text="{Binding Dodge}"
+                                    Margin="238,0,0,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="70" Grid.Row="1"/>
+                                <Image Height="36"
+                                    Width="36"
+                                    Source="/icons/stats/Resilience.png"
+                                    Margin="10,0,0,0"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <Label Content="Устойчивость" HorizontalAlignment="Left" Height="27" Margin="50,0,0,0" VerticalAlignment="Center" Width="137" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Left"
+                                    Text="{Binding Resilience}"
+                                    Margin="238,0,0,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="70" Grid.Row="2"/>
+
+                            </Grid>
+                        </GroupBox>
+                    </Grid>
+                    <!--
+                    <TextBox HorizontalAlignment="Left"
+                        Text="{Binding TimeCast}"
+                        Margin="140,394,0,0"
+                        TextWrapping="Wrap"
+                        VerticalAlignment="Top"
+                        Width="70" Grid.Row="1" Grid.Column="2"/>
+                    -->
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="Таланты">
+                <Grid Margin="0,0,0,0">
+
+                    <Button
+                        HorizontalAlignment="Left"
+                        Height="90" 
+                        Margin="423,405,0,0" 
+                        VerticalAlignment="Top"
+                        x:Name="moonTouchPlusTalantButton"
+                        Width="90" IsCancel="True" 
+                        Style="{StaticResource CustomButtonStyle}" Click="moonTouchPlusTalantButton_Click" >
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/talants/MoonTouchPlusFramed.png"/>
+                        </Button.Background>
+
+                    </Button>
+                    <Button
+                        HorizontalAlignment="Left"
+                        Height="90" 
+                        Margin="578,407,0,0" 
+                        VerticalAlignment="Top"
+                        x:Name="powerOfNatureTalantButton"
+                        Width="90" IsCancel="True" 
+                        Style="{StaticResource CustomButtonStyle}" Click="powerOfNatureTalantButton_Click" >
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/talants/AuraOfTheForestChoiceFramed.png"/>
+                        </Button.Background>
+
+                    </Button>
+                    <Label Content="Лунное касание +" HorizontalAlignment="Left" Margin="416,383,0,0" VerticalAlignment="Top"/>
+                    <Label Content="Могущество природы" HorizontalAlignment="Left" Margin="556,384,0,0" VerticalAlignment="Top"/>
+                    <GroupBox HorizontalAlignment="Left" BorderBrush="#FF400984" Height="349" Margin="10,11,0,0" VerticalAlignment="Top" Width="285">
+                        <GroupBox.Header>
+                            <Button Height="40" Style="{StaticResource CustomButtonStyle}"
+                                    x:Name="dualRageActiveButton" Click="dualRageActiveButton_Click">
+                                <Image Source="/icons/talants/DualRage.png" Stretch="Uniform"/>
+                            </Button>
+                        </GroupBox.Header>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="124*"/>
+                                    <ColumnDefinition Width="149*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="10*"/>
+                                    <RowDefinition Height="30*"/>
+                                    <RowDefinition Height="10*"/>
+                                </Grid.RowDefinitions>
+                                <Button HorizontalAlignment="Center"
+                                Height="90" 
+                                VerticalAlignment="Center"
+                                x:Name="bestialRampageTalantButton"
+                                Width="90" IsCancel="True" 
+                                Style="{StaticResource CustomButtonStyle}" Grid.Row="1" Click="bestialRampageTalantButton_Click" >
+                                    <Button.Background>
+                                        <ImageBrush Stretch="Uniform" ImageSource="/icons/talants/BestialRampagePlusFramed.png"/>
+                                    </Button.Background>
+
+                                </Button>
+                                <Label Content="Звериное буйство +" 
+                                       
+                                       HorizontalAlignment="Center" VerticalAlignment="Center" Height="26" Width="120" Foreground="Black" />
+                                <Button
+                                HorizontalAlignment="Center"
+                                Height="90" 
+                                VerticalAlignment="Center"
+                                x:Name="beastAwakeningPlusPhysicalTalantButton"
+                                Width="90" IsCancel="True" 
+                                Style="{StaticResource CustomButtonStyle}" Grid.Column="1" Grid.Row="1">
+                                    <Button.Background>
+                                        <ImageBrush Stretch="Uniform" ImageSource="/icons/talants/BeastAwakeningPlusFramed.png"/>
+                                    </Button.Background>
+                                    <Image x:Name="beastAwakeningPlusPhysicalLvlIcon" Height="18" Width="27" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,23,23"/>
+
+                                </Button>
+                                <Label Content="Пробуждение зверя +" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="1" Height="26" Width="136" />
+                                <Button Command="{Binding DecreaseLvlTalantBeastAwakeningPlusPhysicalCommand}"
+                                HorizontalAlignment="Left"
+                                Margin="45,0,0,0" 
+                                VerticalAlignment="Top"
+                                Height="23" 
+                                x:Name="decreaseLvlBeastAwakeningPlusPhysicalTalantButton"
+                                Width="28" IsCancel="True" BorderBrush="{x:Null}" Grid.Column="1" Grid.Row="2" Click="decreaseLvlBeastAwakeningPlusPhysicalTalantButton_Click" >
+                                    <Button.Background>
+                                        <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
+                                    </Button.Background>
+                                </Button>
+                                <Button
+                                Command="{Binding IncreaseLvlTalantBeastAwakeningPlusPhysicalCommand}"
+                                HorizontalAlignment="Left" 
+                                VerticalAlignment="Top"
+                                Height="23" 
+                                x:Name="increaseLvlBeastAwakeningPlusPhysicalTalantButton"
+                                Width="28" IsCancel="True" BorderBrush="{x:Null}" Grid.Column="1" Grid.Row="2" Margin="76,0,0,0" Click="increaseLvlBeastAwakeningPlusPhysicalTalantButton_Click"  >
+                                    <Button.Background>
+                                        <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
+                                    </Button.Background>
+                                </Button>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="124*"/>
+                                    <ColumnDefinition Width="149*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="10*"/>
+                                    <RowDefinition Height="30*"/>
+                                    <RowDefinition Height="10*"/>
+                                </Grid.RowDefinitions>
+                                <Button HorizontalAlignment="Center"
+                                    Height="90" 
+                                    VerticalAlignment="Center"
+                                    x:Name="orderToAttackTalantButton"
+                                    Width="90" IsCancel="True" 
+                                    Style="{StaticResource CustomButtonStyle}" Grid.Row="1" >
+                                    <Button.Background>
+                                        <ImageBrush Stretch="Uniform" ImageSource="/icons/talants/OrderToAttackPlusFramed.png"/>
+                                    </Button.Background>
+                                    <Image x:Name="orderToAttackPlusLvlIcon" Height="18" Width="27" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,23,23"/>
+
+                                </Button>
+                                <Label Content="Приказ к атаке +" HorizontalAlignment="Center" VerticalAlignment="Center" Height="26" Width="106" />
+                                <Button HorizontalAlignment="Center"
+                                    Height="90" 
+                                    VerticalAlignment="Center"
+                                    x:Name="symbiosisTalantButton"
+                                    Width="90" IsCancel="True" 
+                                    Style="{StaticResource CustomButtonStyle}" Grid.Row="1"   Grid.Column="1" Click="symbiosisTalantButton_Click" >
+                                    <Button.Background>
+                                        <ImageBrush Stretch="Uniform" ImageSource="/icons/talants/SymbiosisFramed.png"/>
+                                    </Button.Background>
+
+                                </Button>
+                                <Label Content="Симбиоз" HorizontalAlignment="Center" VerticalAlignment="Center" Height="26" Width="63" Grid.Column="1" />
+                                <Button Command="{Binding DecreaseLvlTalantOrderToAttackPlusCommand}"
+                                    HorizontalAlignment="Left" 
+                                    VerticalAlignment="Top"
+                                    Height="23" 
+                                    x:Name="decreaseLvlOrderToAttackPlusTalantButton"
+                                    Width="28" IsCancel="True" BorderBrush="{x:Null}" Grid.Row="2"  Margin="33,0,0,0" Click="decreaseLvlOrderToAttackPlusTalantButton_Click" >
+                                    <Button.Background>
+                                        <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
+                                    </Button.Background>
+                                </Button>
+                                <Button
+                                    Command="{Binding IncreaseLvlTalantOrderToAttackPlusCommand}"
+                                    HorizontalAlignment="Left" 
+                                    VerticalAlignment="Top"
+                                    Height="23" 
+                                    x:Name="increaseLvlOrderToAttackPlusTalantButton"
+                                    Width="28" IsCancel="True" BorderBrush="{x:Null}" Grid.Row="2" Margin="65,0,0,0" Click="increaseLvlOrderToAttackPlusTalantButton_Click"   >
+                                    <Button.Background>
+                                        <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
+                                    </Button.Background>
+                                </Button>
+                            </Grid>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox HorizontalAlignment="Right" BorderBrush="#FF400984" Height="192" Margin="0,11,15,0" VerticalAlignment="Top" Width="394">
+                        <GroupBox.Header>
+                            <Button Height="40" Style="{StaticResource CustomButtonStyle}"
+                                    x:Name="forestInspirationActiveButton" Click="forestInspirationActiveButton_Click">
+                                <Image Source="/icons/talants/ForestInspiration.png" Stretch="Uniform"/>
+                            </Button>
+                        </GroupBox.Header>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="9*"/>
+                                <ColumnDefinition Width="9*"/>
+                                <ColumnDefinition Width="11*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="10*"/>
+                                <RowDefinition Height="30*"/>
+                                <RowDefinition Height="10*"/>
+                            </Grid.RowDefinitions>
+                            <Label Content="Величие лотоса" HorizontalAlignment="Center" VerticalAlignment="Center" Height="25"/>
+                            <Button HorizontalAlignment="Center"
+                                    Height="90" 
+                                    Width="90"
+                                    VerticalAlignment="Center"
+                                    x:Name="grandeurOfTheLotusTalantButton"
+                                     IsCancel="True" 
+                                    Style="{StaticResource CustomButtonStyle}" Click="grandeurOfTheLotusTalantButton_Click" Grid.Row="1">
+                                <Button.Background>
+                                    <ImageBrush Stretch="Uniform" ImageSource="/icons/talants/AuraOfTheForestUpgradeFramed.png"/>
+                                </Button.Background>
+
+                            </Button>
+                            <Label Content="Лунный свет +" HorizontalAlignment="Center" VerticalAlignment="Top" Grid.Column="1" Margin="0,0,0,0"/>
+                            <Button
+                                    HorizontalAlignment="Center"
+                                    Height="90" 
+                                    Width="90"
+                        VerticalAlignment="Center"
+                        x:Name="moonlightPlusTalantButton"
+                                    IsCancel="True" 
+                        Style="{StaticResource CustomButtonStyle}" Grid.Column="1" Grid.Row="1">
+                                <Button.Background>
+                                    <ImageBrush Stretch="Uniform" ImageSource="/icons/talants/MoonlightPlusFramed.png"/>
+                                </Button.Background>
+                                <Image x:Name="moonlightPlusLvlIcon" Height="20" Width="29" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,23,23"/>
+                            </Button>
+                            <Button Command="{Binding DecreaseLvlTalantMoonlightPlusCommand}"
+                                    HorizontalAlignment="Left"
+                                    Margin="31,0,0,0" 
+                                    VerticalAlignment="Top"
+                                    Height="23" 
+                                    x:Name="decreaseLvlMoonlightPlusTalantButton"
+                                    Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="decreaseLvlMoonlightPlusTalantButton_Click" Grid.Column="1" Grid.Row="2" >
+                                <Button.Background>
+                                    <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
+                                </Button.Background>
+                            </Button>
+                            <Button
+                        Command="{Binding IncreaseLvlTalantMoonlightPlusCommand}"
+                        HorizontalAlignment="Left"
+                        Margin="61,0,0,0" 
+                        VerticalAlignment="Top"
+                        Height="23" 
+                        x:Name="increaseLvlMoonlightPlusTalantButton"
+                        Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlMoonlightPlusTalantButton_Click"  Grid.Column="1" Grid.Row="2"  >
+                                <Button.Background>
+                                    <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
+                                </Button.Background>
+                            </Button>
+                            <Label Content="Пробуждение зверя +" HorizontalAlignment="Center" VerticalAlignment="Center" Grid.Column="2" Height="26"/>
+                            <Button
+                                HorizontalAlignment="Center"
+                                Height="90"
+                                VerticalAlignment="Center"
+                                x:Name="beastAwakeningPlusMagicalTalantButton"
+                                Width="90" IsCancel="True" 
+                                Style="{StaticResource CustomButtonStyle}" Grid.Column="2" Grid.Row="1" Click="beastAwakeningPlusMagicalTalantButton_Click">
+                                <Button.Background>
+                                    <ImageBrush Stretch="Uniform" ImageSource="/icons/talants/BeastAwakeningPlusFramed.png"/>
+                                </Button.Background>
+
+                            </Button>
+                        </Grid>
+                    </GroupBox>
+                    <Button
+                        HorizontalAlignment="Left"
+                        Height="72" 
+                        VerticalAlignment="Top"
+                        x:Name="bestialRageTalantButton"
+                        Width="72" IsCancel="True" 
+                        Style="{StaticResource CustomButtonStyle}" Margin="303,415,0,0">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/talants/BestialRageFramed.png"/>
+                        </Button.Background>
+                        <Image x:Name="bestialRageLvlIcon" Height="19" Width="29" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,14,14"/>
+
+                    </Button>
+                    <Label Content="Звериная ярость" HorizontalAlignment="Left" Margin="288,383,0,0" VerticalAlignment="Top"/>
+                    <Button Command="{Binding DecreaseLvlTalantBestialRageCommand}"
+                        HorizontalAlignment="Left"
+                        Margin="310,489,0,0" 
+                        VerticalAlignment="Top"
+                        Height="23" 
+                        x:Name="decreaseLvlBestialRageTalantButton"
+                        Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="decreaseLvlBestialRageTalantButton_Click">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button
+                        Command="{Binding IncreaseLvlTalantBestialRageCommand}"
+                        HorizontalAlignment="Left"
+                        Margin="340,489,0,0" 
+                        VerticalAlignment="Top"
+                        Height="23" 
+                        x:Name="increaseLvlBestialRageTalantButton"
+                        Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlBestialRageTalantButton_Click">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button
+                        HorizontalAlignment="Left"
+                        Height="72" 
+                        VerticalAlignment="Top"
+                        x:Name="predatoryDeliriumTalantButton"
+                        Width="72" IsCancel="True" 
+                        Style="{StaticResource CustomButtonStyle}" Margin="395,246,0,0">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/talants/PredatoryDeliriumFramed.png"/>
+                        </Button.Background>
+                        <Image x:Name="predatoryDeliriumLvlIcon" Height="19" Width="29" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,14,14"/>
+
+                    </Button>
+                    <Label Content="Исступление хищника" HorizontalAlignment="Left" Margin="366,214,0,0" VerticalAlignment="Top"/>
+                    <Button Command="{Binding DecreaseLvlTalantPredatoryDeliriumCommand}"
+                        HorizontalAlignment="Left"
+                        Margin="402,320,0,0" 
+                        VerticalAlignment="Top"
+                        Height="23" 
+                        x:Name="decreaseLvlPredatoryDeliriumTalantButton"
+                        Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="decreaseLvlPredatoryDeliriumTalantButton_Click">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button
+                        Command="{Binding IncreaseLvlTalantPredatoryDeliriumCommand}"
+                        HorizontalAlignment="Left"
+                        Margin="432,320,0,0" 
+                        VerticalAlignment="Top"
+                        Height="23" 
+                        x:Name="increaseLvlPredatoryDeliriumTalantButton"
+                        Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlPredatoryDeliriumTalantButton_Click">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button
+                        HorizontalAlignment="Left"
+                        Height="72" 
+                        VerticalAlignment="Top"
+                        x:Name="momentOfPowerTalantButton"
+                        Width="72" IsCancel="True" 
+                        Style="{StaticResource CustomButtonStyle}" Margin="514,246,0,0">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/talants/MomentOfPowerFramed.png"/>
+                        </Button.Background>
+                        <Image x:Name="momentOfPowerLvlIcon" Height="19" Width="29" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,14,14"/>
+
+                    </Button>
+                    <Label Content="Момент силы" HorizontalAlignment="Left" Margin="507,214,0,0" VerticalAlignment="Top"/>
+                    <Button Command="{Binding DecreaseLvlTalantMomentOfPowerCommand}"
+                        HorizontalAlignment="Left"
+                        Margin="521,320,0,0" 
+                        VerticalAlignment="Top"
+                        Height="23" 
+                        x:Name="decreaseLvlMomentOfPowerTalantButton"
+                        Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="decreaseLvlMomentOfPowerTalantButton_Click" >
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button
+                        Command="{Binding IncreaseLvlTalantMomentOfPowerCommand}"
+                        HorizontalAlignment="Left"
+                        Margin="551,320,0,0" 
+                        VerticalAlignment="Top"
+                        Height="23" 
+                        x:Name="increaseLvlMomentOfPowerTalantButton"
+                        Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlMomentOfPowerTalantButton_Click">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button
+                        HorizontalAlignment="Left"
+                        Height="72" 
+                        VerticalAlignment="Top"
+                        x:Name="longDeathTalantButton"
+                        Width="72" IsCancel="True" 
+                        Style="{StaticResource CustomButtonStyle}" Margin="612,246,0,0">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/talants/LongDeathFramed.png"/>
+                        </Button.Background>
+                        <Image x:Name="longDeathLvlIcon" Height="19" Width="29" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,14,14"/>
+
+                    </Button>
+                    <Label Content="Долгая смерть" HorizontalAlignment="Left" Margin="604,214,0,0" VerticalAlignment="Top"/>
+                    <Button Command="{Binding DecreaseLvlTalantLongDeathCommand}"
+                        HorizontalAlignment="Left"
+                        Margin="619,320,0,0" 
+                        VerticalAlignment="Top"
+                        Height="23" 
+                        x:Name="decreaseLvlLongDeathTalantButton"
+                        Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="decreaseLvlLongDeathTalantButton_Click" >
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button
+                        Command="{Binding IncreaseLvlTalantLongDeathCommand}"
+                        HorizontalAlignment="Left"
+                        Margin="649,320,0,0" 
+                        VerticalAlignment="Top"
+                        Height="23" 
+                        x:Name="increaseLvlLongDeathTalantButton"
+                        Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlLongDeathTalantButton_Click">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button
+                        HorizontalAlignment="Left"
+                        Height="72" 
+                        VerticalAlignment="Top"
+                        x:Name="animalRageTalantButton"
+                        Width="72" IsCancel="True" 
+                        Style="{StaticResource CustomButtonStyle}" Margin="40,413,0,0">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/talants/AnimalRageFramed.png"/>
+                        </Button.Background>
+                        <Image x:Name="animalRageLvlIcon" 
+                               Height="19" 
+                               Width="29" 
+                               HorizontalAlignment="Right" 
+                               VerticalAlignment="Bottom" Margin="0,0,14,14"/>
+
+                    </Button>
+                    <Label Content="Животный гнев" HorizontalAlignment="Left" Margin="28,381,0,0" VerticalAlignment="Top"/>
+                    <Button Command="{Binding DecreaseLvlTalantAnimalRageCommand}"
+                        HorizontalAlignment="Left"
+                        Margin="47,487,0,0" 
+                        VerticalAlignment="Top"
+                        Height="23" 
+                        x:Name="decreaseLvlAnimalRageTalantButton"
+                        Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="decreaseLvlAnimalRageTalantButton_Click" >
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button
+                        Command="{Binding IncreaseLvlTalantAnimalRageCommand}"
+                        HorizontalAlignment="Left"
+                        Margin="77,487,0,0" 
+                        VerticalAlignment="Top"
+                        Height="23" 
+                        x:Name="increaseLvlAnimalRageTalantButton"
+                        Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlAnimalRageTalantButton_Click" >
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button
+                        HorizontalAlignment="Left"
+                        Height="72" 
+                        VerticalAlignment="Top"
+                        x:Name="continuousFuryTalantButton"
+                        Width="72" IsCancel="True" 
+                        Style="{StaticResource CustomButtonStyle}" Margin="166,413,0,0">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/talants/RageTalent.png"/>
+                        </Button.Background>
+                        <Image x:Name="continuousFuryLvlIcon" 
+                            Height="19" 
+                               Width="29" 
+                               HorizontalAlignment="Right" 
+                               VerticalAlignment="Bottom" Margin="0,0,14,14"/>
+
+                    </Button>
+                    <Label Content="Длительная неистовость" HorizontalAlignment="Left" Margin="131,381,0,0" VerticalAlignment="Top"/>
+                    <Button Command="{Binding DecreaseLvlTalantContinuousFuryCommand}"
+                        HorizontalAlignment="Left"
+                        Margin="173,487,0,0" 
+                        VerticalAlignment="Top"
+                        Height="23" 
+                        x:Name="decreaseLvlContinuousFuryTalantButton"
+                        Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="decreaseLvlContinuousFuryTalantButton_Click" >
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button
+                        Command="{Binding IncreaseLvlTalantContinuousFuryCommand}"
+                        HorizontalAlignment="Left"
+                        Margin="203,487,0,0" 
+                        VerticalAlignment="Top"
+                        Height="23" 
+                        x:Name="increaseLvlContinuousFuryTalantButton"
+                        Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlContinuousFuryTalantButton_Click"  >
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
+                        </Button.Background>
+                    </Button>
+
+                </Grid>
+            </TabItem>
+            <TabItem Header="Билды" >
+                <Grid >
+                    <Grid.Background>
+                        <ImageBrush ImageSource="/background.jpg"/>
+                    </Grid.Background>
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="107*"/>
+                        <ColumnDefinition Width="255*"/>
+                    </Grid.ColumnDefinitions>
+                    <ListView Grid.Column="1" ItemsSource="{Binding Builds}"
+                              SelectedItem="{Binding SelectedDataSet}">
+                        <ListView.View>
+                            <GridView>
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Name}"
+                                                Width="140"
+                                                >Имя</GridViewColumn>
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Width="220">Описание</GridViewColumn>
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=LastDate}">Последнее изменение</GridViewColumn>
+                            </GridView>
+                        </ListView.View>
+                        <!--<ListView.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    
+                                        <Grid Margin="10,5" Background="#FFD9EFFF">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition/>
+                                            </Grid.ColumnDefinitions>
+                                            <TextBlock MinHeight="10" 
+                                                   MaxHeight="150" 
+                                                   HorizontalAlignment="Left" 
+                                                   TextWrapping="Wrap" 
+                                                   Width="120" 
+                                                   FontSize="14" 
+                                                   Text="{Binding Path=Name}"/>
+                                            <TextBlock MinHeight="10" 
+                                                   MaxHeight="220" 
+                                                   HorizontalAlignment="Left" 
+                                                   TextWrapping="Wrap" 
+                                                   Width="120" 
+                                                   Grid.Column="1"
+                                                   FontSize="14" 
+                                                   Text="{Binding Path=Description}"/>
+                                            <TextBlock MinHeight="10" 
+                                                   MaxHeight="100" 
+                                                   HorizontalAlignment="Left" 
+                                                   TextWrapping="Wrap" 
+                                                   Width="120" 
+                                                       Grid.Column="2"
+                                                   FontSize="14" 
+                                                   Text="{Binding Path=LastDate}"/>
+                                            
+                                        </Grid>
+                                    
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>-->
+                    </ListView>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="64*"/>
+                            <RowDefinition Height="215*"/>
+
+
+                            <RowDefinition Height="100*"/>
+                            <RowDefinition Height="86*"/>
+                            <RowDefinition Height="83*"/>
+                        </Grid.RowDefinitions>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+
+
+                            <Label Content="Название"
+                                   Foreground="White"
+                                   HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Width="64"/>
+
+
+                            <TextBox HorizontalAlignment="Center" 
+                                     Margin="0,32,0,0"
+                                     TextWrapping="Wrap" Text="{Binding Name}" VerticalAlignment="Top" Width="195" Grid.RowSpan="2"/>
+                        </Grid>
+                        <Grid Margin="0,14,0,0" Grid.Row="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="12*"/>
+                                <RowDefinition Height="55*"/>
+                            </Grid.RowDefinitions>
+
+
+                            <Label Content="Описание"
+                                   Foreground="White"
+                                   HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Width="64" Height="26"/>
+
+
+                            <TextBox HorizontalAlignment="Center" 
+                                     Margin="0,4,0,0"
+                                     TextWrapping="Wrap" Text="{Binding Description}" VerticalAlignment="Top" Width="196" Grid.Row="1" Height="152"/>
+                            <!--
+                            <Button Content="COpy" 
+                        HorizontalAlignment="Left" 
+                        Height="22" 
+                        Margin="117,2,0,0" 
+                        x:Name="copyDataSetButton"
+                        VerticalAlignment="Top" Width="80" Click="copyDataSetButton_Click"/>
+                        -->
+                        </Grid>
+                        <Button Content="Сохранить изменения"  
+                                x:Name="editDataSetButton"
+                                Height="25" 
+                                Margin="12,20,12,0" VerticalAlignment="Top" Grid.Row="2" Width="190" Click="editDataSetButton_Click"/>
+                        <Button Content="Загрузить выбранный билд"
+                                x:Name="choiceDataSet"
+                                Height="25" 
+                                Margin="12,15,12,0" VerticalAlignment="Top" Grid.Row="3" Width="190" Click="choiceDataSet_Click"/>
+                        <Button Content="Сохранить как новую запись" 
+                                HorizontalAlignment="Left" 
+                                Height="25"  
+                                Margin="13,0,0,5" 
+                                x:Name="addDataSetButton"
+                                VerticalAlignment="Bottom" Width="190" Grid.Row="3" Click="addDataSetButton_Click" />
+                        <Button Content="Создать новый билд"  
+                                x:Name="addAndGenerateDataSetButton"
+                                Margin="12,29,12,0" 
+                                Height="25" 
+                                Click="addAndGenerateDataSetButton_Click"
+                                VerticalAlignment="Top" Width="190" Grid.Row="4"/>
+                        <Button Content="Удалить выбранный билд" 
+                        HorizontalAlignment="Left" 
+                        Height="25" 
+                        Margin="12,0,0,15" 
+                        x:Name="deleteDataSetButton"
+                        VerticalAlignment="Bottom" Width="190"  Grid.Row="2" Click="deleteDataSetButton_Click"/>
+
+                    </Grid>
+                </Grid>
+            </TabItem>
+            <TabItem Header="" 
+                     BorderBrush="White"
+                     BorderThickness="0"
+                     Background="White"
+                     
+                     HorizontalAlignment="Left">
+                <Grid Background="#FFE5E5E5">
+                    <Label Content="Лунное касание" HorizontalAlignment="Left" Height="25" Margin="31,18,0,0" VerticalAlignment="Top" Width="98"/>
+                    <Label Content="{Binding OutMoonTouchDD}"
+                           HorizontalAlignment="Left"
+                           Height="31" 
+                           Margin="31,46,0,0" 
+                           VerticalAlignment="Top"
+                           Width="98"/>
+                    <Label Content="Цепная молния" HorizontalAlignment="Left" Height="25" Margin="150,18,0,0" VerticalAlignment="Top" Width="98"/>
+                    <Label Content="{Binding OutChainLightningDD}"
+                        HorizontalAlignment="Left"
+                        Height="31" 
+                        Margin="150,46,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="98"/>
+                    <Label Content="{Binding OutMoonTouchDPM}"
+                        HorizontalAlignment="Left"
+                        Height="31" 
+                        Margin="31,84,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="98"/>
+                    <Label Content="{Binding OutChainLightningDPM}"
+                        HorizontalAlignment="Left"
+                        Height="31" 
+                        Margin="150,84,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="98"/>
+                    <Label Content="Пробуждение зверя" HorizontalAlignment="Left" Height="25" Margin="269,18,0,0" VerticalAlignment="Top" Width="121"/>
+                    <Label Content="{Binding OutBeastAwakeningDD}"
+                        HorizontalAlignment="Left"
+                        Height="31" 
+                        Margin="269,46,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="121"/>
+                    <Label Content="{Binding OutBeastAwakeningDPM}"
+                        HorizontalAlignment="Left"
+                        Height="31" 
+                        Margin="269,84,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="121"/>
+                    <Label Content="Буйство" HorizontalAlignment="Left" Height="25" Margin="410,18,0,0" VerticalAlignment="Top" Width="121"/>
+                    <Label Content="{Binding OutBestialRampageDD}"
+                        HorizontalAlignment="Left"
+                        Height="31" 
+                        Margin="410,46,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="121"/>
+                    <Label Content="{Binding OutBestialRampageDPM}"
+                        HorizontalAlignment="Left"
+                        Height="31" 
+                        Margin="410,84,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="121"/>
+                    <Label Content="Автоатака" HorizontalAlignment="Left" Height="25" Margin="550,18,0,0" VerticalAlignment="Top" Width="121"/>
+                    <Label Content="{Binding OutAttackDD}"
+                        HorizontalAlignment="Left"
+                        Height="31" 
+                        Margin="550,46,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="121"/>
+                    <Label Content="{Binding OutAttackDPM}"
+                        HorizontalAlignment="Left"
+                        Height="31" 
+                        Margin="550,84,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="121"/>
+                    <Label Content="Аура леса на луне" HorizontalAlignment="Left" Height="25" Margin="31,128,0,0" VerticalAlignment="Top" Width="113"/>
+                    <Label Content="{Binding OutAuraOfTheForestLunaDD}"
+                        HorizontalAlignment="Left"
+                        Height="31" 
+                        Margin="31,156,0,0" 
+                        VerticalAlignment="Top"
+                        Width="113"/>
+                    <Label Content="{Binding OutAuraOfTheForestLunaDPM}"
+                        HorizontalAlignment="Left"
+                        Height="31" 
+                        Margin="31,194,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="113"/>
+                    <Label Content="Аура леса на персонаже" HorizontalAlignment="Left" Height="25" Margin="161,128,0,0" VerticalAlignment="Top" Width="151"/>
+                    <Label Content="{Binding OutAuraOfTheForestHeroDD}"
+                        HorizontalAlignment="Left"
+                        Height="31" 
+                        Margin="161,156,0,0" 
+                        VerticalAlignment="Top"
+                        Width="151"/>
+                    <Label Content="{Binding OutAuraOfTheForestHeroDPM}"
+                        HorizontalAlignment="Left"
+                        Height="31" 
+                        Margin="161,194,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="151"/>
+                    <Label Content="Лунный свет (постоянный)" HorizontalAlignment="Left" Height="25" Margin="331,128,0,0" VerticalAlignment="Top" Width="161"/>
+                    <Label Content="{Binding OutMoonlightPermanentDD}"
+                        HorizontalAlignment="Left"
+                        Height="31" 
+                        Margin="331,156,0,0" 
+                        VerticalAlignment="Top"
+                        Width="161"/>
+                    <Label Content="{Binding OutMoonlightPermanentDPM}"
+                        HorizontalAlignment="Left"
+                        Height="31" 
+                        Margin="331,194,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="161"/>
+                    <Label Content="Лунный свет (нажимной)" HorizontalAlignment="Left" Height="25" Margin="505,128,0,0" VerticalAlignment="Top" Width="151"/>
+                    <Label Content="{Binding OutMoonlightNonPermanentDD}"
+                        HorizontalAlignment="Left"
+                        Height="31" 
+                        Margin="505,156,0,0" 
+                        VerticalAlignment="Top"
+                        Width="151"/>
+                    <Label Content="{Binding OutMoonlightNonPermanentDPM}"
+                        HorizontalAlignment="Left"
+                        Height="31" 
+                        Margin="505,194,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="151"/>
+                    <Label Content="Приказ к атаке" HorizontalAlignment="Left" Height="25" Margin="31,252,0,0" VerticalAlignment="Top" Width="98"/>
+                    <Label Content="{Binding OutOrderToAttackDD}"
+                        HorizontalAlignment="Left"
+                        Height="31" 
+                        Margin="31,280,0,0" 
+                        VerticalAlignment="Top"
+                        Width="98"/>
+                    <Label Content="{Binding OutOrderToAttackDPM}"
+                        HorizontalAlignment="Left"
+                        Height="31" 
+                        Margin="31,318,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="98"/>
+                    <Label Content="Симбиоз" HorizontalAlignment="Left" Height="25" Margin="339,252,0,0" VerticalAlignment="Top" Width="98"/>
+                    <Label Content="{Binding OutSymbiosisDPM}"
+                        HorizontalAlignment="Left"
+                        Height="31" 
+                        Margin="339,280,0,0" 
+                        VerticalAlignment="Top"
+                        Width="98"/>
+                    <Label Content="МАГ ПРОЦЕНТЫ (РАССОВЫЕ 4)&#xD;&#xA;1)  ги - 10 (14)&#xD;&#xA;2) таланты  - 4.75 (18.75)&#xD;&#xA;3) пк+вела+бал  - 38 (56.75)&#xD;&#xA;4) битва - 10 (66.75)&#xD;&#xA;ФИЗ ПРОЦЕНТЫ (РАССОВЫЕ 4)&#xD;&#xA;1)  ги - 10 (14)&#xD;&#xA;2) таланты  - 4.75 (18.75)&#xD;&#xA;4) битва - 10 (28.75)" HorizontalAlignment="Left" Height="182" Margin="322,332,0,0" VerticalAlignment="Top" Width="361"/>
+                    <!--
+                    <Button
+                        Command="{Binding SaveCommand}"
+                        Content="Button" HorizontalAlignment="Left" Height="21" Margin="57,501,0,0" VerticalAlignment="Top" Width="43"/>
+                    <Button
+                        
+                        Content="LOAD" HorizontalAlignment="Left" Height="21" Margin="123,501,0,0" VerticalAlignment="Top" Width="43" Click="Button_Click"/>
+                    <Label Content="Приказ к атаке" HorizontalAlignment="Left" Height="25" Margin="31,252,0,0" VerticalAlignment="Top" Width="98"/>
+                    -->
+                </Grid>
+            </TabItem>
+        </TabControl>
+
+
+    </Grid>
+</Window>
