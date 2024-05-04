@@ -48,9 +48,9 @@ namespace Model
                 NotifyPropertyChanged("MagicalDamage");
             }
         }*/
-        public double PercentMagicalDD { get; set; }
+        public double PercentMagicalDD { get; set; } = 0;
         public string PhysicalDamage { get; set; }
-        public double PercentPhysicalDD { get; set; }
+        public double PercentPhysicalDD { get; set; } = 0;
         public double SkillCooldown { get; set; }
         public double AttackSpeed { get; set; }
         public double CriticalHit { get; set; }
@@ -60,6 +60,7 @@ namespace Model
         public double AttackStrength { get; set; }
         public double PiercingAttack { get; set; }
         public double Rage { get; set; }
+        public double Facilitation { get; set; }
         public double Protection { get; set; }
         public double Dodge { get; set; }
         public double Resilience { get; set; }
@@ -69,6 +70,11 @@ namespace Model
         public bool CrushingWill { get; set; }
         public bool IrreversibleAnger { get; set; }
         public string NumberCastle { get; set; } = "Без замка";
+        public bool BPDungeon { get; set; } = false;
+        public bool SacredShieldHeroActive = false;
+        public bool SacredShieldLunaActive = false;
+
+        public bool Counterstand = false;
 
         #endregion
         #region active

@@ -37,6 +37,8 @@ namespace Model
                 NotifyPropertyChanged("Level"); }
         }
         private bool hasTalantPowerOfNature = false;
+        public const int TimeActive = 10;
+        public const int Delay = 2;
         public bool HasTalantPowerOfNature
         {
             get => hasTalantPowerOfNature;
