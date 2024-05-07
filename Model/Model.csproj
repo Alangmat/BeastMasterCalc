@@ -208,6 +208,7 @@
     <Compile Include="AuraOfTheForest.cs" />
     <Compile Include="BeastAwakening.cs" />
     <Compile Include="BestialRampage.cs" />
+    <Compile Include="BlessingOfTheMoon.cs" />
     <Compile Include="Build.cs" />
     <Compile Include="ChainLightning.cs" />
     <Compile Include="Moonlight.cs" />

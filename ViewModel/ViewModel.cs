@@ -113,38 +113,33 @@ namespace ViewModel
 
             DataSet.Attack = new Attack();
             attack = DataSet.Attack;
-            //attack = new Attack();
             DataSet.MaceSelected = true;
             MaceSelected = DataSet.MaceSelected;
             DataSet.BeastAwakening = new BeastAwakening();
 
             DataSet.BeastAwakening = new BeastAwakening();
-            //beastAwakening = new BeastAwakening();
             Beast_Awakening.Level = 1;
 
             DataSet.OrderToAttack = new OrderToAttack(DataSet.BeastAwakening);
-            //orderToAttack = new OrderToAttack(beastAwakening);
             OrderToAttack.Level = 1;
 
             DataSet.MoonTouch = new MoonTouch();
-            //moonTouch = new MoonTouch();
             Moon_Touch.Level = 1;
 
             DataSet.ChainLightning = new ChainLightning();
-            //chainLightning = new ChainLightning();
             Chain_Lightning.Level = 1;
 
             DataSet.BestialRampage = new BestialRampage(DataSet.BeastAwakening);
-            //bestialRampage = new BestialRampage(Beast_Awakening);
             Bestial_Rampage.Level = 1;
 
             DataSet.AuraOfTheForest = new AuraOfTheForest();
-            //auraOfTheForest = new AuraOfTheForest();
             AuraOfTheForest.Level = 1;
 
             DataSet.Moonlight = new Moonlight();
-            //moonlight = new Moonlight();
             Moonlight.Level = 1;
+
+            DataSet.BlessingOfTheMoon = new BlessingOfTheMoon();
+            BlessingOfTheMoon.Level = 1;
 
             DataSet.MagicalDamage = "0";
             DataSet.PhysicalDamage = "0";
@@ -152,13 +147,6 @@ namespace ViewModel
             updateStateDataSet();
         }
 
-        /*public void Load()
-        {
-            
-            string jsonFromFile = File.ReadAllText("save.json");
-            DataSet = JsonConvert.DeserializeObject<Build>(jsonFromFile);
-            updateStateDataSet();
-        }*/
         private void updateStateDataSet()
         {
 
@@ -674,7 +662,7 @@ namespace ViewModel
 
             double Tp = AttackDelay();
             double Tl = Beast_Awakening.BaseDelay;
-            double T = Math.Max(Tp, Tl)
+            double T = Math.Max(Tp, Tl);
             double DpmHero = 0.1 * 60 / T * (
                     Beast_Awakening.Formula(magedd, physdd)
                     * FormulaCoefficientOfCriticalHitLuna()
@@ -1334,6 +1322,16 @@ namespace ViewModel
             set { //moonlight = value;
                 DataSet.Moonlight = value;
                 NotifyPropertyChanged("Moonlight"); }
+        }
+
+        public BlessingOfTheMoon BlessingOfTheMoon
+        {
+            get => DataSet.BlessingOfTheMoon;
+            set
+            {
+                DataSet.BlessingOfTheMoon = value;
+                NotifyPropertyChanged(nameof(BlessingOfTheMoon));
+            }
         }
         #endregion
 
@@ -2443,6 +2441,52 @@ namespace ViewModel
             get => decreaseLvlMoonlightCommand == null ? new RelayCommand(DecreaseMoonlight) : decreaseLvlMoonlightCommand;
         }
         #endregion
+        #region Благословение луны
+        /// <summary>
+        /// Свойство связывающее бизнес логику со свойством Level навыка Благословение луны
+        /// </summary>
+        public int LvlBlessingOfTheMoon
+        {
+            get => BlessingOfTheMoon.Level;
+            set
+            {
+                BlessingOfTheMoon.Level = value;
+                Calculate();
+                NotifyPropertyChanged(nameof(BlessingOfTheMoon));
+            }
+        }
+        /// <summary>
+        /// Увеличение уровня навыка Благословение луны
+        /// </summary>
+        public void IncreaseBlessingOfTheMoon()
+        {
+            if (LvlBlessingOfTheMoon < 4)
+            {
+                LvlBlessingOfTheMoon = LvlBlessingOfTheMoon + 1;
+            }
+        }
+        private ICommand increaseLvlBlessingOfTheMoonCommand;
+        public ICommand IncreaseLvlBlessingOfTheMoonCommand
+        {
+            get => increaseLvlBlessingOfTheMoonCommand == null ? new RelayCommand(IncreaseBlessingOfTheMoon) : increaseLvlBlessingOfTheMoonCommand;
+        }
+        /// <summary>
+        /// Снижение уровня навыка Благословение луны
+        /// </summary>
+        public void DecreaseBlessingOfTheMoon()
+        {
+            if (LvlBlessingOfTheMoon > 1)
+            {
+                LvlBlessingOfTheMoon = LvlBlessingOfTheMoon - 1;
+            }
+        }
+        private ICommand decreaseLvlBlessingOfTheMoonCommand;
+        public ICommand DecreaseLvlBlessingOfTheMoonCommand
+        {
+            get => decreaseLvlBlessingOfTheMoonCommand == null ? new RelayCommand(DecreaseBlessingOfTheMoon) : decreaseLvlBlessingOfTheMoonCommand;
+        }
+
+        #endregion
 
         #endregion
 
@@ -2761,22 +2805,9 @@ namespace ViewModel
         private bool staffSelected = false;
         public bool StaffSelected
         {
-            //get => staffSelected;
             get => DataSet.StaffSelected;
             set
             {
-                /*staffSelected = value;
-                
-                spearSelected = !staffSelected;
-                maceSelected = !staffSelected;
-                swordSelected = !staffSelected;
-                axeSelected = !staffSelected;
-
-                Attack.IsStaff = staffSelected;
-                if (staffSelected)
-                {
-                    Attack.TimeDelay = 3.1;
-                }*/
 
                 if (value)
                 {
@@ -2788,19 +2819,6 @@ namespace ViewModel
                     Attack.IsStaff = true;
                     Attack.TimeDelay = 3.1;
                 }
-
-                /*DataSet.StaffSelected = value;
-
-                DataSet.SpearSelected = !DataSet.StaffSelected;
-                DataSet.MaceSelected = !DataSet.StaffSelected;
-                DataSet.SwordSelected = !DataSet.StaffSelected;
-                DataSet.AxeSelected = !DataSet.StaffSelected;
-
-                Attack.IsStaff = DataSet.StaffSelected;
-                if (DataSet.StaffSelected)
-                {
-                    Attack.TimeDelay = 3.1;
-                }*/
                 Calculate();
                 NotifyPropertyChanged("StaffSelected");
             }
@@ -2808,23 +2826,9 @@ namespace ViewModel
         private bool spearSelected = false;
         public bool SpearSelected
         {
-            //get => spearSelected;
             get => DataSet.SpearSelected;
             set
             {
-                /*spearSelected = value;
-
-                staffSelected = !spearSelected;
-                maceSelected = !spearSelected;
-                swordSelected = !spearSelected;
-                axeSelected = !spearSelected;
-
-                Attack.IsStaff = staffSelected;
-                if (spearSelected)
-                {
-                    Attack.TimeDelay = 3.4;
-                }*/
-
                 if (value)
                 {
                     DataSet.SpearSelected = value;
@@ -2835,19 +2839,6 @@ namespace ViewModel
                     Attack.IsStaff = false;
                     Attack.TimeDelay = 3.4;
                 }
-
-                /*DataSet.SpearSelected = value;
-
-                DataSet.StaffSelected = !DataSet.SpearSelected;
-                DataSet.MaceSelected = !DataSet.SpearSelected;
-                DataSet.SwordSelected = !DataSet.SpearSelected;
-                DataSet.AxeSelected = !DataSet.SpearSelected;
-
-                Attack.IsStaff = DataSet.StaffSelected;
-                if (DataSet.SpearSelected)
-                {
-                    Attack.TimeDelay = 3.4;
-                }*/
                 Calculate();
                 NotifyPropertyChanged(nameof(SpearSelected));
             }
@@ -2860,18 +2851,6 @@ namespace ViewModel
             get => DataSet.MaceSelected;
             set
             {
-                /*maceSelected = value;
-
-                staffSelected = !maceSelected;
-                spearSelected = !maceSelected;
-                swordSelected = !maceSelected;
-                axeSelected = !maceSelected;
-
-                Attack.IsStaff = staffSelected;
-                if (maceSelected)
-                {
-                    Attack.TimeDelay = 3.2;
-                }*/
                 if (value)
                 {
                     DataSet.MaceSelected = value;
@@ -2882,16 +2861,6 @@ namespace ViewModel
                     Attack.IsStaff = false;
                     Attack.TimeDelay = 3.2;
                 }
-
-                /*DataSet.StaffSelected = !DataSet.MaceSelected;
-                DataSet.SpearSelected = !DataSet.MaceSelected;
-                DataSet.SwordSelected = !DataSet.MaceSelected;
-                DataSet.AxeSelected = !DataSet.MaceSelected;*/
-
-                /*if (DataSet.MaceSelected)
-                {
-                    Attack.TimeDelay = 3.2;
-                }*/
                 Calculate();
                 NotifyPropertyChanged(nameof(MaceSelected));
             }
@@ -2914,30 +2883,6 @@ namespace ViewModel
                     Attack.IsStaff = false;
                     Attack.TimeDelay = 3.2;
                 }
-                /*swordSelected = value;
-
-                staffSelected = !swordSelected;
-                maceSelected = !swordSelected;
-                spearSelected = !swordSelected;
-                axeSelected = !swordSelected;
-
-                Attack.IsStaff = staffSelected;
-                if (swordSelected)
-                {
-                    Attack.TimeDelay = 3.2;
-                }*/
-                /*DataSet.SwordSelected = value;
-
-                DataSet.StaffSelected = !DataSet.SwordSelected;
-                DataSet.MaceSelected = !DataSet.SwordSelected;
-                DataSet.SpearSelected = !DataSet.SwordSelected;
-                DataSet.AxeSelected = !DataSet.SwordSelected;
-
-                Attack.IsStaff = DataSet.StaffSelected;
-                if (DataSet.SwordSelected)
-                {
-                    Attack.TimeDelay = 3.2;
-                }*/
                 Calculate();
                 NotifyPropertyChanged(nameof(swordSelected));
             }
@@ -2946,23 +2891,9 @@ namespace ViewModel
         private bool axeSelected = false;
         public bool AxeSelected
         {
-            //get => axeSelected;
             get => DataSet.AxeSelected;
             set
             {
-                /*axeSelected = value;
-
-                staffSelected = !axeSelected;
-                maceSelected = !axeSelected;
-                swordSelected = !axeSelected;
-                spearSelected = !axeSelected;
-
-                Attack.IsStaff = staffSelected;
-                if (axeSelected)
-                {
-                    Attack.TimeDelay = 3.2;
-                }*/
-
                 if (value)
                 {
                     DataSet.AxeSelected = value;
@@ -2973,19 +2904,6 @@ namespace ViewModel
                     Attack.IsStaff = false;
                     Attack.TimeDelay = 3.2;
                 }
-
-                /*DataSet.AxeSelected = value;
-
-                DataSet.StaffSelected = !DataSet.AxeSelected;
-                DataSet.MaceSelected = !DataSet.AxeSelected;
-                DataSet.SwordSelected = !DataSet.AxeSelected;
-                DataSet.SpearSelected = !DataSet.AxeSelected;
-
-                Attack.IsStaff = DataSet.StaffSelected;
-                if (DataSet.AxeSelected)
-                {
-                    Attack.TimeDelay = 3.2;
-                }*/
                 Calculate();
                 NotifyPropertyChanged(nameof(AxeSelected));
             }
@@ -2996,9 +2914,8 @@ namespace ViewModel
         private bool attackActive = true;
         public bool AttackActive
         {
-            //get => attackActive;
             get => DataSet.AttackActive;
-            set { //attackActive = value; 
+            set {  
                 DataSet.AttackActive = value; 
                 Calculate(); NotifyPropertyChanged("AttackActive"); }
         }
@@ -3006,18 +2923,16 @@ namespace ViewModel
         private bool moonTouchActive = true;
         public bool MoonTouchActive
         {
-            //get => moonTouchActive;
             get => DataSet.MoonTouchActive;
-            set { //moonTouchActive = value;
+            set { 
                 DataSet.MoonTouchActive = value; 
                 Calculate(); NotifyPropertyChanged("MoonTouchActive"); }
         }
         private bool beastAwakeningActive = true;
         public bool BeastAwakeningActive
         {
-            //get => beastAwakeningActive;
             get => DataSet.BeastAwakeningActive;
-            set { //beastAwakeningActive = value; 
+            set { 
                 DataSet.BeastAwakeningActive = value; 
                 Calculate(); NotifyPropertyChanged("BeastAwakeningActive"); }
         }

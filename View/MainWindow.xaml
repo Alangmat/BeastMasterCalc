@@ -22,14 +22,14 @@
                         <Border Background="{TemplateBinding Background}">
                             <ContentPresenter/>
                         </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="Transparent" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.5"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <Style x:Key="HintButtonStyle" TargetType="Button">
@@ -175,7 +175,7 @@
                            Width="166" FontSize="20"/>
                     <Button Grid.Column="1"
                             Command="{Binding IncreaseLvlMoonTouchCommand}"
-                        HorizontalAlignment="Left"
+                            HorizontalAlignment="Left"
                         Height="28" 
                         Margin="49,52,0,0"
                         Grid.Row="1" 
@@ -295,35 +295,6 @@
                             <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
                         </Button.Background>
                     </Button>
-                    <!--
-                    <CheckBox Grid.Column="2"
-                        IsChecked="{Binding HasTalantBeastAwakeningMage}"
-                        HorizontalAlignment="Left" 
-                        Height="20" 
-                        Margin="43,133,0,0"
-                        Grid.Row="2" 
-                        VerticalAlignment="Top" 
-                        Width="194">
-                        <TextBlock Text="Пробуждение зверя + (маг)"
-                            TextWrapping="Wrap" Height="20"/>
-                    </CheckBox>
-                    
-                    <ComboBox Grid.Column="2"
-                        ItemsSource="{Binding ThreeLevels}"
-                        SelectedItem="{Binding LvlTalantBeastAwakeningPhysical}"
-                        HorizontalAlignment="Left"
-                        Margin="42,134,0,0" Grid.Row="2" VerticalAlignment="Top" Width="39" Height="22">
-                        <ComboBox.Background>
-                            <LinearGradientBrush EndPoint="0,1">
-                                <GradientStop Color="#FFF0F0F0"/>
-                                <GradientStop Color="#FFC7C6BB" Offset="1"/>
-                            </LinearGradientBrush>
-                        </ComboBox.Background>
-                    </ComboBox> 
-                    <Label Grid.Column="2" Content="Пробуждение зверя + (физ)" HorizontalAlignment="Left" Height="27" Margin="85,131,0,0" Grid.Row="2" VerticalAlignment="Top" Width="167"/>
-                    -->
-
-
 
                     <Image HorizontalAlignment="Left" 
                                Source="icons/other/background.jpg"
@@ -623,7 +594,7 @@
                     <Button Grid.Column="2"
                         HorizontalAlignment="Center"
                         Height="70" 
-                        Margin="0,182,0,0"
+                        Margin="0,175,0,0"
                         Grid.Row="2" 
                         VerticalAlignment="Top"
                         Width="70" IsCancel="True"
@@ -632,11 +603,43 @@
                         <Button.Background>
                             <ImageBrush Stretch="Uniform" ImageSource="/icons/expert/BlessingOfTheMoonFramed.png"/>
                         </Button.Background>
+                        <Image x:Name="blessingOfTheMoonLvlIcon" 
+                               Height="20" 
+                               Width="30" 
+                               HorizontalAlignment="Right" 
+                               VerticalAlignment="Bottom" 
+                               Margin="0,0,12,13"/>
+                    </Button>
+                    <Button Grid.Column="2"
+                        Command="{Binding DecreaseLvlBlessingOfTheMoonCommand}"
+                        HorizontalAlignment="Left"
+                        Margin="116,245,0,0"
+                        Grid.Row="2" 
+                        VerticalAlignment="Top"
+                        Height="23" 
+                        x:Name="decreaseLvlBlessingOfTheMoonButton"
+                        Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="decreaseLvlBlessingOfTheMoonButton_Click">
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button Grid.Column="2"
+                        Command="{Binding IncreaseLvlBlessingOfTheMoonCommand}"
+                        HorizontalAlignment="Left"
+                        Margin="145,245,0,0"
+                        Grid.Row="2" 
+                        VerticalAlignment="Top"
+                        Height="23" 
+                        x:Name="increaseLvlBlessingOfTheMoonButton"
+                        Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlBlessingOfTheMoonButton_Click" >
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
+                        </Button.Background>
                     </Button>
                     <Button Grid.Column="2"
                         HorizontalAlignment="Left"
                         Height="70" 
-                        Margin="195,182,0,0"
+                        Margin="195,175,0,0"
                         Grid.Row="2" 
                         VerticalAlignment="Top"
                         Width="70" IsCancel="True"
@@ -842,7 +845,8 @@
                     <TextBlock
                         TextWrapping="Wrap" Margin="161,102,8,152" Grid.Column="3" Grid.Row="2"><Run Text="урон скиллов"/><LineBreak/><Run Text="от замка"/></TextBlock>
                     -->
-                    <Label Grid.Column="1" Content="By Alangmat" HorizontalAlignment="Left" Height="37" Margin="65,245,0,0" Grid.Row="2" VerticalAlignment="Top" Width="108" Foreground="White" FontSize="16" Grid.ColumnSpan="2"/>
+                    <Label Grid.Column="1" Content="By Alangmat" HorizontalAlignment="Left" Height="37" Margin="18,247,0,0" Grid.Row="2" VerticalAlignment="Top" Width="108" Foreground="White" FontSize="16"/>
+
 
                 </Grid>
             </TabItem>

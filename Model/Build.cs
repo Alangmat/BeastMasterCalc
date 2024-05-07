@@ -26,7 +26,6 @@ namespace Model
 
         #endregion
 
-
         #region skills
         public Attack Attack { get; set; }
         public MoonTouch MoonTouch { get; set; }
@@ -36,6 +35,7 @@ namespace Model
         public AuraOfTheForest AuraOfTheForest { get; set; }
         public BestialRampage BestialRampage { get; set; }
         public Moonlight Moonlight { get; set; }
+        public BlessingOfTheMoon BlessingOfTheMoon { get; set; } = new BlessingOfTheMoon();
         #endregion
         #region Stats
         //private string magicalDamage;
@@ -67,8 +67,8 @@ namespace Model
         #endregion
         #region other
 
-        public bool CrushingWill { get; set; }
-        public bool IrreversibleAnger { get; set; }
+        public bool CrushingWill { get; set; } = false;
+        public bool IrreversibleAnger { get; set; } = false;
         public string NumberCastle { get; set; } = "Без замка";
         public bool BPDungeon { get; set; } = false;
         public bool SacredShieldHeroActive = false;

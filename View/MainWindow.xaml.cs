@@ -132,23 +132,12 @@ namespace View
                 MessageBox.Show("Для начала создайте запись данного билда");
             }
         }
-        /*private void copyDataSetButton_Click(object sender, RoutedEventArgs e)
-        {
-            Logic.CopyDataSet();
-            Load();
-            Logic.SaveBuilds();
-        }*/
         private void addDataSetButton_Click(object sender, RoutedEventArgs e)
         {
             Logic.AddCurrentDataSet();
             Load();
             Logic.SaveBuilds();
         }
-        /*private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            Logic.Load();
-            Load();
-        }*/
         private void Load()
         {
             #region Выключение всех самописных кнопок в виде радиобатанов при запуске
@@ -243,7 +232,7 @@ namespace View
             //moonlightLvlIcon.Source = lvlOneOfTheFourIcon;
             moonlightLvlIcon_Copy.Source = moonlightLvlIcon.Source;
 
-
+            updateStateButtonFourLvl(Logic.LvlBlessingOfTheMoon, blessingOfTheMoonLvlIcon);
 
 
             updateIconAuraOfTheForest();
@@ -1025,8 +1014,39 @@ namespace View
                     break;
             }
         }
-
-
+        private void increaseLvlBlessingOfTheMoonButton_Click(object sender, RoutedEventArgs e)
+        {
+            switch (Logic.LvlBlessingOfTheMoon)
+            {
+                case 0:
+                    blessingOfTheMoonLvlIcon.Source = lvlOneOfTheFourIcon;
+                    break;
+                case 1:
+                    blessingOfTheMoonLvlIcon.Source = lvlTwoOfTheFourIcon;
+                    break;
+                case 2:
+                    blessingOfTheMoonLvlIcon.Source = lvlThreeOfTheFourIcon;
+                    break;
+                case 3:
+                    blessingOfTheMoonLvlIcon.Source = lvlFourOfTheFourIcon;
+                    break;
+            }
+        }
+        private void decreaseLvlBlessingOfTheMoonButton_Click(object sender, RoutedEventArgs e)
+        {
+            switch (Logic.LvlBlessingOfTheMoon)
+            {
+                case 2:
+                    blessingOfTheMoonLvlIcon.Source = lvlOneOfTheFourIcon;
+                    break;
+                case 3:
+                    blessingOfTheMoonLvlIcon.Source = lvlTwoOfTheFourIcon;
+                    break;
+                case 4:
+                    blessingOfTheMoonLvlIcon.Source = lvlThreeOfTheFourIcon;
+                    break;
+            }
+        }
 
 
 
@@ -1128,6 +1148,7 @@ namespace View
             Keyboard.ClearFocus();
         }
 
+        
     }
 
 
