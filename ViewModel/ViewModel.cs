@@ -275,6 +275,9 @@ namespace ViewModel
         {
             int magicdd = 0;
             int physdd = 0;
+
+            IsUsingBlessingOfTheMoonOnLuna = DataSet.IsUsingBlessingOfTheMoonOnLuna;
+
             if (int.TryParse(MagicalDD, out magicdd))
             {
                 if (int.TryParse(PhysicalDD, out physdd))
@@ -786,6 +789,7 @@ namespace ViewModel
                 if (DataSet.CriticalHit < minCriticalHit) DataSet.CriticalHit = minCriticalHit;
                 if (DataSet.CriticalHit > maxCriticalHitHero) criticalHitHero = maxCriticalHitHero;
                 else criticalHitHero = DataSet.CriticalHit;
+                criticalHitLuna = CriticalHit;
                 IsUsingBlessingOfTheMoonOnLuna = IsUsingBlessingOfTheMoonOnLuna;
                 IrreversibleAngerActive = IrreversibleAngerActive;
                 Calculate(); NotifyPropertyChanged("CriticalHit");
@@ -821,16 +825,6 @@ namespace ViewModel
             get => DataSet.Penetration;
             set
             {
-                /*penetration = value;
-                if (penetration > maxPenetration) penetration = maxPenetration;
-                penetrationHero = penetration;
-
-                if (DualRageActive)
-                {
-                    if (penetrationHero > maxPenetrationHero + 1.5) penetrationHero = maxPenetrationHero + 1.5;
-                }
-                else if (penetrationHero > maxPenetrationHero) penetrationHero = maxPenetrationHero;
-                if (penetration < minPenetration) penetration = minPenetration;*/
                 DataSet.Penetration = value;
                 if (DataSet.Penetration > maxPenetration) DataSet.Penetration = maxPenetration;
                 penetrationHero = DataSet.Penetration;
@@ -841,6 +835,7 @@ namespace ViewModel
                 }
                 else if (penetrationHero > maxPenetrationHero) penetrationHero = maxPenetrationHero;
                 if (DataSet.Penetration < minPenetration) DataSet.Penetration = minPenetration;
+                penetrationLuna = Penetration;
                 IsUsingBlessingOfTheMoonOnLuna = IsUsingBlessingOfTheMoonOnLuna;
                 Calculate(); NotifyPropertyChanged("Penetration");
             }
@@ -1786,24 +1781,32 @@ namespace ViewModel
             set
             {
                 //isUsingBlessingOfTheMoonOnLuna = value;
-                DataSet.IsUsingBlessingOfTheMoonOnLuna = value;
-                if (value)
+
+                if (BlessingOfTheMoonActive) 
                 {
-                    //criticalHitLuna = criticalHit + 16;
-                    criticalHitLuna = DataSet.CriticalHit + 16;
-                    //penetrationLuna = penetration + 8;
-                    penetrationLuna = DataSet.Penetration + 8;
+                    DataSet.IsUsingBlessingOfTheMoonOnLuna = value;
+                    if (value)
+                    {
+                        //criticalHitLuna = criticalHit + 16;
+                        //criticalHitLuna = DataSet.CriticalHit + 16;
+                        criticalHitLuna = DataSet.CriticalHit + BlessingOfTheMoon.AdditionCriticalHit;
+                        //penetrationLuna = penetration + 8;
+                        //penetrationLuna = DataSet.Penetration + 8;
+                        penetrationLuna = DataSet.Penetration + BlessingOfTheMoon.AdditionPenetration;
+                    }
+                    else
+                    {
+                        //criticalHitLuna = criticalHit;
+                        criticalHitLuna = DataSet.CriticalHit;
+                        //penetrationLuna = penetration;
+                        penetrationLuna = DataSet.Penetration;
+                    }
+                    if (criticalHitLuna > maxCriticalHit) criticalHitLuna = maxCriticalHit;
+                    if (penetrationLuna > maxPenetration) penetrationLuna = maxPenetration;
+
                 }
-                else
-                {
-                    //criticalHitLuna = criticalHit;
-                    criticalHitLuna = DataSet.CriticalHit;
-                    //penetrationLuna = penetration;
-                    penetrationLuna = DataSet.Penetration;
-                }
-                if (criticalHitLuna > maxCriticalHit) criticalHitLuna = maxCriticalHit;
-                if (penetrationLuna > maxPenetration) penetrationLuna = maxPenetration;
-                Calculate(); NotifyPropertyChanged("IsUsingBlessingOfTheMoonOnLuna");
+
+                NotifyPropertyChanged("IsUsingBlessingOfTheMoonOnLuna");
             }
         }
 
@@ -3012,6 +3015,10 @@ namespace ViewModel
             set
             {
                 //blessingOfTheMoonActive = value; 
+                if (!value)
+                {
+                    IsUsingBlessingOfTheMoonOnLuna = false;
+                }
                 DataSet.BlessingOfTheMoonActive = value; 
                 Calculate(); NotifyPropertyChanged(nameof(BlessingOfTheMoonActive));
             }
