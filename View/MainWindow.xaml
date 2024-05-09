@@ -604,11 +604,11 @@
                             <ImageBrush Stretch="Uniform" ImageSource="/icons/expert/BlessingOfTheMoonFramed.png"/>
                         </Button.Background>
                         <Image x:Name="blessingOfTheMoonLvlIcon" 
-                               Height="20" 
-                               Width="30" 
-                               HorizontalAlignment="Right" 
-                               VerticalAlignment="Bottom" 
-                               Margin="0,0,12,13"/>
+                            Height="20" 
+                            Width="30" 
+                            HorizontalAlignment="Right" 
+                            VerticalAlignment="Bottom" 
+                            Margin="0,0,12,13"/>
                     </Button>
                     <Button Grid.Column="2"
                         Command="{Binding DecreaseLvlBlessingOfTheMoonCommand}"
@@ -648,6 +648,12 @@
                         <Button.Background>
                             <ImageBrush Stretch="Uniform" ImageSource="/icons/expert/DoubleConcentrationFramed.png"/>
                         </Button.Background>
+                        <Image x:Name="doubleConcentrationLvlIcon" 
+                            Height="20" 
+                            Width="30" 
+                            HorizontalAlignment="Right" 
+                            VerticalAlignment="Bottom" 
+                            Margin="0,0,12,13"/>
                     </Button>
 
 
@@ -846,6 +852,32 @@
                         TextWrapping="Wrap" Margin="161,102,8,152" Grid.Column="3" Grid.Row="2"><Run Text="урон скиллов"/><LineBreak/><Run Text="от замка"/></TextBlock>
                     -->
                     <Label Grid.Column="1" Content="By Alangmat" HorizontalAlignment="Left" Height="37" Margin="18,247,0,0" Grid.Row="2" VerticalAlignment="Top" Width="108" Foreground="White" FontSize="16"/>
+                    <Button Grid.Column="2"
+                        Command="{Binding DecreaseLvlDoubleConcentrationCommand}"
+                        HorizontalAlignment="Left"
+                        Margin="199,245,0,0"
+                        Grid.Row="2" 
+                        VerticalAlignment="Top"
+                        Height="23" 
+                        x:Name="decreaseLvlDoubleConcentrationButton"
+                        Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="decreaseLvlDoubleConcentrationButton_Click" >
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
+                        </Button.Background>
+                    </Button>
+                    <Button Grid.Column="2"
+                        Command="{Binding IncreaseLvlDoubleConcentrationCommand}"
+                        HorizontalAlignment="Left"
+                        Margin="228,245,0,0"
+                        Grid.Row="2" 
+                        VerticalAlignment="Top"
+                        Height="23" 
+                        x:Name="increaseLvlDoubleConcentrationButton"
+                        Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlDoubleConcentrationButton_Click"  >
+                        <Button.Background>
+                            <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
+                        </Button.Background>
+                    </Button>
 
 
                 </Grid>

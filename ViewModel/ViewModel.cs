@@ -141,6 +141,9 @@ namespace ViewModel
             DataSet.BlessingOfTheMoon = new BlessingOfTheMoon();
             BlessingOfTheMoon.Level = 1;
 
+            DataSet.DoubleConcentration = new DoubleConcentration();
+            DoubleConcentration.Level = 1;
+
             DataSet.MagicalDamage = "0";
             DataSet.PhysicalDamage = "0";
 
@@ -1328,6 +1331,15 @@ namespace ViewModel
                 NotifyPropertyChanged(nameof(BlessingOfTheMoon));
             }
         }
+        public DoubleConcentration DoubleConcentration
+        {
+            get => DataSet.DoubleConcentration;
+            set
+            {
+                DataSet.DoubleConcentration = value;
+                NotifyPropertyChanged(nameof(DoubleConcentration));
+            }
+        }
         #endregion
 
         #region неотобранные элементы 
@@ -2455,7 +2467,7 @@ namespace ViewModel
             {
                 BlessingOfTheMoon.Level = value;
                 Calculate();
-                NotifyPropertyChanged(nameof(BlessingOfTheMoon));
+                NotifyPropertyChanged(nameof(LvlBlessingOfTheMoon));
             }
         }
         /// <summary>
@@ -2490,6 +2502,53 @@ namespace ViewModel
         }
 
         #endregion
+        #region Двойная концентрация
+        /// <summary>
+        /// Свойство связывающее бизнес логику со свойством Level навыка Двойная концентрация
+        /// </summary>
+        public int LvlDoubleConcentration
+        {
+            get => DoubleConcentration.Level;
+            set
+            {
+                DoubleConcentration.Level = value;
+                Calculate();
+                NotifyPropertyChanged(nameof(LvlDoubleConcentration));
+            }
+        }
+        /// <summary>
+        /// Увеличение уровня навыка Двойная концентрация
+        /// </summary>
+        public void IncreaseDoubleConcentration()
+        {
+            if (LvlDoubleConcentration < 4)
+            {
+                LvlDoubleConcentration = LvlDoubleConcentration + 1;
+            }
+        }
+        private ICommand increaseLvlDoubleConcentrationCommand;
+        public ICommand IncreaseLvlDoubleConcentrationCommand
+        {
+            get => increaseLvlDoubleConcentrationCommand == null ? new RelayCommand(IncreaseDoubleConcentration) : increaseLvlDoubleConcentrationCommand;
+        }
+        /// <summary>
+        /// Снижение уровня навыка Двойная концентрация
+        /// </summary>
+        public void DecreaseDoubleConcentration()
+        {
+            if (LvlDoubleConcentration > 1)
+            {
+                LvlDoubleConcentration = LvlDoubleConcentration - 1;
+            }
+        }
+        private ICommand decreaseLvlDoubleConcentrationCommand;
+        public ICommand DecreaseLvlDoubleConcentrationCommand
+        {
+            get => decreaseLvlDoubleConcentrationCommand == null ? new RelayCommand(DecreaseDoubleConcentration) : decreaseLvlDoubleConcentrationCommand;
+        }
+        #endregion
+
+
 
         #endregion
 

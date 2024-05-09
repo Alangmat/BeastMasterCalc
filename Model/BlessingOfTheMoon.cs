@@ -15,7 +15,7 @@ namespace Model
     /// Класс определяющий навык Благословение луны. 
     /// Cодержит поля добавляющие статы Крит и пробив, а так же свойство Level
     /// </summary>
-    public class BlessingOfTheMoon
+    public class BlessingOfTheMoon : INotifyPropertyChanged
     {
         /// <summary>
         /// Прибавка шанса крита
