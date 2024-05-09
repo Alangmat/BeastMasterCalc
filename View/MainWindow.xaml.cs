@@ -233,6 +233,7 @@ namespace View
             moonlightLvlIcon_Copy.Source = moonlightLvlIcon.Source;
 
             updateStateButtonFourLvl(Logic.LvlBlessingOfTheMoon, blessingOfTheMoonLvlIcon);
+            updateStateButtonFourLvl(Logic.LvlDoubleConcentration, doubleConcentrationLvlIcon);
 
 
             updateIconAuraOfTheForest();
@@ -1047,7 +1048,40 @@ namespace View
                     break;
             }
         }
+        private void increaseLvlDoubleConcentrationButton_Click(object sender, RoutedEventArgs e)
+        {
+            switch (Logic.LvlDoubleConcentration)
+            {
+                case 0:
+                    doubleConcentrationLvlIcon.Source = lvlOneOfTheFourIcon;
+                    break;
+                case 1:
+                    doubleConcentrationLvlIcon.Source = lvlTwoOfTheFourIcon;
+                    break;
+                case 2:
+                    doubleConcentrationLvlIcon.Source = lvlThreeOfTheFourIcon;
+                    break;
+                case 3:
+                    doubleConcentrationLvlIcon.Source = lvlFourOfTheFourIcon;
+                    break;
+            }
+        }
 
+        private void decreaseLvlDoubleConcentrationButton_Click(object sender, RoutedEventArgs e)
+        {
+            switch (Logic.LvlDoubleConcentration)
+            {
+                case 2:
+                    doubleConcentrationLvlIcon.Source = lvlOneOfTheFourIcon;
+                    break;
+                case 3:
+                    doubleConcentrationLvlIcon.Source = lvlTwoOfTheFourIcon;
+                    break;
+                case 4:
+                    doubleConcentrationLvlIcon.Source = lvlThreeOfTheFourIcon;
+                    break;
+            }
+        }
 
 
         private void increaseLvlOrderToAttackButton_Click(object sender, RoutedEventArgs e)
@@ -1165,6 +1199,7 @@ namespace View
                 textBox.SelectAll();
             }
         }
+
     }
 
 

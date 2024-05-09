@@ -36,6 +36,7 @@ namespace Model
         public BestialRampage BestialRampage { get; set; }
         public Moonlight Moonlight { get; set; }
         public BlessingOfTheMoon BlessingOfTheMoon { get; set; } = new BlessingOfTheMoon();
+        public DoubleConcentration DoubleConcentration { get; set; } = new DoubleConcentration();
         #endregion
         #region Stats
         //private string magicalDamage;

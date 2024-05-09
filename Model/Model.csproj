@@ -211,6 +211,7 @@
     <Compile Include="BlessingOfTheMoon.cs" />
     <Compile Include="Build.cs" />
     <Compile Include="ChainLightning.cs" />
+    <Compile Include="DoubleConcentration.cs" />
     <Compile Include="Moonlight.cs" />
     <Compile Include="MoonTouch.cs" />
     <Compile Include="OrderToAttack.cs" />
