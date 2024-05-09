@@ -166,7 +166,7 @@
                              Text="{Binding MagicalDD, UpdateSourceTrigger=PropertyChanged}"
                              TextAlignment="Center"
                              HorizontalAlignment="Left"
-                             Height="22" Margin="7,26,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="89"/>
+                             Height="22" Margin="7,26,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="89" GotKeyboardFocus="TextBox_GotKeyboardFocus"/>
                     <Label Grid.Column="3" x:Name="outLabel"
                            Content="{Binding OutDD}"
                            HorizontalAlignment="Left" Height="34"
@@ -549,7 +549,7 @@
                         Margin="0,153,0,0"
                         Grid.Row="2" 
                         VerticalAlignment="Top" 
-                        Width="194">
+                        Width="194" Click="CheckBox_Checked">
                         <TextBlock Text="Использование блага на себя и на собаку "
                             TextWrapping="Wrap" Height="35"/>
                     </CheckBox>

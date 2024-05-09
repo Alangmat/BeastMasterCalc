@@ -68,7 +68,7 @@ namespace Model
             get => level;
             set
             {
-                if (value > 0 && value < 5)
+                if (value >= 1 && value <= 4)
                 {
                     level = value;
                     switch(level)
