@@ -27,6 +27,7 @@ namespace Model
         /// Свойство определяющее наличие таланта на скорость атаки вместо кд
         /// </summary>
         public bool HasTalentDeadlyDexterity = false;
+        public int BaseTimeCooldown = 22;
 
         private int level = 1;
         /// <summary>
