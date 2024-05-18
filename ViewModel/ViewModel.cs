@@ -279,7 +279,7 @@ namespace ViewModel
             int magicdd = 0;
             int physdd = 0;
 
-            IsUsingBlessingOfTheMoonOnLuna = DataSet.IsUsingBlessingOfTheMoonOnLuna;
+            //IsUsingBlessingOfTheMoonOnLuna = DataSet.IsUsingBlessingOfTheMoonOnLuna;
 
             if (int.TryParse(MagicalDD, out magicdd))
             {
@@ -292,12 +292,20 @@ namespace ViewModel
 
                     // пока что добавлен только прок тритонов
 
+                    CalcSkillCooldown();
+                    CalcCriticalDamage();
+                    CalcCriticalHit();
+                    CalcPenetration();
+
+
                     double coefRage = FormulaCoefficientOfRage() * 0.1;
 
                     int pureMagicalDD = (int)(magicdd / legendaryCoefficientMagicalDD);
                     magicdd = (int)(pureMagicalDD * (coefficientTriton  * MermanDuration() + coefRage)  + magicdd);
                     int purePhysicalDD = (int)(physdd / legendaryCoefficientPhysicalDD);
                     physdd = (int)(purePhysicalDD * coefRage + physdd);
+
+                    
 
                     int dpmAttack = CalcAttack(magicdd, physdd);
                     int dpmMoonTouch = CalcMoonTouch(magicdd);
@@ -398,7 +406,7 @@ namespace ViewModel
         }
         private double MoonTouchCooldown()
         {
-            double result = ((Moon_Touch.BaseTimeCooldown / (1 + SkillCooldown / 100)) + timeCast);
+            double result = ((Moon_Touch.BaseTimeCooldown / (1 + skillCooldown / 100)) + timeCast);
             return result;
         }
         public int CalcMoonTouch(int magedd)
@@ -429,7 +437,7 @@ namespace ViewModel
 
         private double ChainLightningCooldown()
         {
-            double result = ((Chain_Lightning.BaseTimeCooldown / (1 + SkillCooldown / 100)) + timeCast);
+            double result = ((Chain_Lightning.BaseTimeCooldown / (1 + skillCooldown / 100)) + timeCast);
             return result;
         }
         public int CalcChainLightning(int magedd, int physdd)
@@ -466,7 +474,7 @@ namespace ViewModel
         }
         public double BestialRampageCooldown()
         {
-            double result = (Bestial_Rampage.BaseTimeCooldown / (1 + SkillCooldown / 100)) + timeCast;
+            double result = (Bestial_Rampage.BaseTimeCooldown / (1 + skillCooldown / 100)) + timeCast;
 
             return result;
         }
@@ -513,7 +521,7 @@ namespace ViewModel
         }
         public double AuraOfTheForestCooldown()
         {
-            double result = AuraOfTheForest.BaseTimeCooldown / (1 + SkillCooldown / 100) + timeCast;
+            double result = AuraOfTheForest.BaseTimeCooldown / (1 + skillCooldown / 100) + timeCast;
 
             return result;
         }
@@ -532,7 +540,7 @@ namespace ViewModel
                 * coefficientPredatoryDeliriumTalant 
                 * coefficientMomentOfPowerTalant 
                 * FormulaCoefficientOfPenetration());
-            double realCooldown = AuraOfTheForest.BaseTimeCooldown / (1 + SkillCooldown / 100) + timeCast;
+            double realCooldown = AuraOfTheForest.BaseTimeCooldown / (1 + skillCooldown / 100) + timeCast;
             if (HasTalantGrandeurOfTheLotus)
             {
                 if (BeastAwakeningActive)
@@ -590,7 +598,7 @@ namespace ViewModel
 
         public double MoonLightCooldown()
         {
-            double result = Moonlight.BaseTimeCooldown / (1 + SkillCooldown / 100) + timeCast;
+            double result = Moonlight.BaseTimeCooldown / (1 + skillCooldown / 100) + timeCast;
 
             return result;
         }
@@ -613,7 +621,7 @@ namespace ViewModel
             }
             if (MoonlightNonPermanentActive)
             {
-                double realCooldown = Moonlight.BaseTimeCooldown / (1 + SkillCooldown / 100) + timeCast;
+                double realCooldown = Moonlight.BaseTimeCooldown / (1 + skillCooldown / 100) + timeCast;
 
                 int nonPermanentDD = (int)(Moonlight.Formula(magicaldd) 
                     * coefficientCastle
@@ -634,7 +642,7 @@ namespace ViewModel
         }
         private double OrderToAttackCooldown()
         {
-            double result = ((OrderToAttack.BaseTimeCooldown / (1 + SkillCooldown / 100)) + timeCast);
+            double result = ((OrderToAttack.BaseTimeCooldown / (1 + skillCooldown / 100)) + timeCast);
             return result;
         }
         public int CalcOrderToAttack(int magedd, int physdd)
@@ -742,66 +750,83 @@ namespace ViewModel
 
         #region Характеристики персонажа
 
+        #region КД
         private double maxSkillCooldowm = 200;
-        private double skillCooldown = 88.2;
+        private double skillCooldown = 0;
         public double SkillCooldown
         {
             //get => skillCooldown;
             get => DataSet.SkillCooldown;
-            set { /*skillCooldown = value;
-                if (skillCooldown > maxSkillCooldowm) skillCooldown = maxSkillCooldowm;*/
+            set {
                 DataSet.SkillCooldown = value;
                 if (DataSet.SkillCooldown > maxSkillCooldowm) DataSet.SkillCooldown = maxSkillCooldowm;
                 Calculate();
                 NotifyPropertyChanged("SkillCooldown"); }
         }
 
+        private void CalcSkillCooldown()
+        {
+            skillCooldown = 0;
+            skillCooldown += SkillCooldown;
+            if (DoubleConcentrationActive)
+                skillCooldown += DoubleConcentration.AdditionSkillCooldown;
+            if (skillCooldown > maxSkillCooldowm) skillCooldown = maxSkillCooldowm;
+        }
+        #endregion
+        #region Скорость атаки
         private double maxAttackSpeed = 70;
         private double attackSpeed = 16.5;
         public double AttackSpeed
         {
-            //get => attackSpeed;
             get => DataSet.AttackSpeed;
-            set { /*attackSpeed = value;
-                if (attackSpeed > maxAttackSpeed) attackSpeed = maxAttackSpeed;*/
+            set {
                 DataSet.AttackSpeed = value;
                 if (DataSet.AttackSpeed > maxAttackSpeed) DataSet.AttackSpeed = maxAttackSpeed;
                 Calculate(); NotifyPropertyChanged("AttackSpeed");
             }
         }
-
+        #endregion
+        #region Крит
         private double maxCriticalHit = 100;
         private double maxCriticalHitHero = 53;
         private double minCriticalHit = 0;
-        private double criticalHitHero = 50;
+        private double criticalHitHero = 0;
         private double additionCriticalHitHeroAttack = 0;
-        private double criticalHit = 60.3;
+        private double criticalHit = 0;
+        private double criticalHitLuna = 50;
         public double CriticalHit
         {
-            //get => criticalHit;
             get => DataSet.CriticalHit;
             set
             {
-                /*criticalHit = value;
-                if (criticalHit > maxCriticalHit) criticalHit = maxCriticalHit;
-                if (criticalHit < minCriticalHit) criticalHit = minCriticalHit;
-                if (criticalHit > maxCriticalHitHero) criticalHitHero = maxCriticalHitHero;
-                else criticalHitHero = criticalHit;*/
                 DataSet.CriticalHit = value;
                 if (DataSet.CriticalHit > maxCriticalHit) DataSet.CriticalHit = maxCriticalHit;
                 if (DataSet.CriticalHit < minCriticalHit) DataSet.CriticalHit = minCriticalHit;
-                if (DataSet.CriticalHit > maxCriticalHitHero) criticalHitHero = maxCriticalHitHero;
+                /*if (DataSet.CriticalHit > maxCriticalHitHero) criticalHitHero = maxCriticalHitHero;
                 else criticalHitHero = DataSet.CriticalHit;
                 criticalHitLuna = CriticalHit;
-                IsUsingBlessingOfTheMoonOnLuna = IsUsingBlessingOfTheMoonOnLuna;
-                IrreversibleAngerActive = IrreversibleAngerActive;
+                IsUsingBlessingOfTheMoonOnLuna = IsUsingBlessingOfTheMoonOnLuna;*/
+                //IrreversibleAngerActive = IrreversibleAngerActive;
                 Calculate(); NotifyPropertyChanged("CriticalHit");
             }
         }
-        private double criticalHitLuna = 50;
-
+        /// <summary>
+        /// Метод для пересчета характеристики персонажа "Критический урон"
+        /// </summary>
+        private void CalcCriticalHit()
+        {
+            criticalHitHero = 0;
+            criticalHitHero += CriticalHit;
+            if (BlessingOfTheMoonActive) criticalHitHero += BlessingOfTheMoon.AdditionCriticalHit;
+            if (CrushingWillActive) criticalHitHero += crushingWillAdditionalCriticalHit;
+            criticalHit = criticalHitHero;
+            IsUsingBlessingOfTheMoonOnLuna = IsUsingBlessingOfTheMoonOnLuna;
+            if (criticalHitHero > maxCriticalHitHero) criticalHitHero = maxCriticalHitHero;
+        }
+        #endregion
+        #region Крит урон
         private double maxCriticalDamage = 200;
-        private double criticalDamage = 45.5;
+        private double criticalDamage = 0;
         public double CriticalDamage
         {
             //get => criticalDamage;
@@ -816,12 +841,25 @@ namespace ViewModel
                 Calculate(); NotifyPropertyChanged("CriticalDamage");
             }
         }
-
+        /// <summary>
+        /// Метод пересчета характеристики персонажа "критический урон"
+        /// </summary>
+        private void CalcCriticalDamage()
+        {
+            criticalDamage = 0;
+            criticalDamage += CriticalDamage;
+            if (DoubleConcentrationActive)
+                criticalDamage += DoubleConcentration.AdditionCriticalDamage;
+            if (criticalDamage > maxCriticalDamage) criticalDamage = maxCriticalDamage;
+        }
+        #endregion
+        #region Пробив
         private double maxPenetration = 100;
-        private double penetration = 38.8;
+        private double penetration = 0;
         private double maxPenetrationHero = 50;
         private double penetrationHero = 35;
         private double minPenetration = 0;
+        private double penetrationLuna = 35;
         public double Penetration
         {
             //get => penetration;
@@ -830,21 +868,35 @@ namespace ViewModel
             {
                 DataSet.Penetration = value;
                 if (DataSet.Penetration > maxPenetration) DataSet.Penetration = maxPenetration;
-                penetrationHero = DataSet.Penetration;
+                /*penetrationHero = DataSet.Penetration;
 
                 if (DualRageActive)
                 {
                     if (penetrationHero > maxPenetrationHero + 1.5) penetrationHero = maxPenetrationHero + 1.5;
                 }
-                else if (penetrationHero > maxPenetrationHero) penetrationHero = maxPenetrationHero;
+                else if (penetrationHero > maxPenetrationHero) penetrationHero = maxPenetrationHero;*/
                 if (DataSet.Penetration < minPenetration) DataSet.Penetration = minPenetration;
-                penetrationLuna = Penetration;
-                IsUsingBlessingOfTheMoonOnLuna = IsUsingBlessingOfTheMoonOnLuna;
+                //penetrationLuna = Penetration;
+                //IsUsingBlessingOfTheMoonOnLuna = IsUsingBlessingOfTheMoonOnLuna;
                 Calculate(); NotifyPropertyChanged("Penetration");
             }
         }
-        private double penetrationLuna = 35;
-
+        /// <summary>
+        /// Метод для пересчета характеристики персонажа "Пробивная способность"
+        /// </summary>
+        private void CalcPenetration()
+        {
+            penetrationHero = 0;
+            penetrationHero += Penetration;
+            if (BlessingOfTheMoonActive) penetrationHero += BlessingOfTheMoon.AdditionPenetration;
+            if (IrreversibleAngerActive) penetrationHero += irreversibleAngerAdditionalPenetration;
+            //penetrationLuna = penetrationHero;
+            penetration = penetrationHero;
+            IsUsingBlessingOfTheMoonOnLuna = IsUsingBlessingOfTheMoonOnLuna;
+            if (penetrationHero > maxPenetrationHero) penetrationHero = maxPenetrationHero;
+        }
+        #endregion
+        #region Точность
         private double maxAccuracy = 100;
         private double maxAccuracyHero = 50;
         private double accuracy = 35.3;
@@ -870,7 +922,8 @@ namespace ViewModel
                 Calculate(); NotifyPropertyChanged("Accuracy");
             }
         }
-
+        #endregion
+        #region Сила атаки
         private double maxAttackStrength = 100;
         private double attackStrength = 10;
         private double minAttackStrength = 0;
@@ -889,7 +942,8 @@ namespace ViewModel
                 Calculate(); NotifyPropertyChanged("AttackStrength");
             }
         }
-
+        #endregion
+        #region Пронза
         private double maxPiercingAttack = 50;
         private double piercingAttack = 0;
         private double minPiercingAttack = 0;
@@ -909,6 +963,8 @@ namespace ViewModel
                 Calculate(); NotifyPropertyChanged("PiercingAttack");
             }
         }
+        #endregion
+        #region Ярость
         private double maxRage = 50;
         private double rage = 14.7;
         private double minRage = 0;
@@ -927,7 +983,8 @@ namespace ViewModel
                 Calculate(); NotifyPropertyChanged("Rage");
             }
         }
-
+        #endregion
+        #region Орк
         private double maxFacilitation = 50;
         private double minFacilitation = 0;
         public double Facilitation
@@ -941,17 +998,14 @@ namespace ViewModel
                 Calculate(); NotifyPropertyChanged(nameof(Facilitation));
             }
         }
-
+        #endregion
+        #region Проценты дд
         private double percentMagicalDD = 56.75;
         public double PercentMagicalDD
         {
-            //get => percentMagicalDD;
             get => DataSet.PercentMagicalDD;
             set
             {
-                /*if (value >= 0)
-                    percentMagicalDD = value;
-                legendaryCoefficientMagicalDD = 1 + percentMagicalDD / 100;*/
                 if (value >= 0)
                     DataSet.PercentMagicalDD = value;
                 legendaryCoefficientMagicalDD = 1 + DataSet.PercentMagicalDD / 100;
@@ -961,19 +1015,17 @@ namespace ViewModel
         private double percentPhysicalDD = 18.75;
         public double PercentPhysicalDD
         {
-            //get => percentPhysicalDD;
             get => DataSet.PercentPhysicalDD;
             set
             {
-                /*if (value >= 0)
-                    percentPhysicalDD = value;
-                legendaryCoefficientPhysicalDD = 1 + percentPhysicalDD / 100;*/
                 if (value >= 0)
                     DataSet.PercentPhysicalDD = value;
                 legendaryCoefficientPhysicalDD = 1 + DataSet.PercentPhysicalDD / 100;
                 Calculate(); NotifyPropertyChanged("PercentPhysicalDD");
             }
         }
+
+        #endregion
 
         #endregion
 
@@ -1398,22 +1450,22 @@ namespace ViewModel
 
         private double blessingOfTheMoonCooldown()
         {
-            double cooldown = 25;
-            double result = ((cooldown / (1 + SkillCooldown / 100)) + timeCast);
+            double cooldown = BlessingOfTheMoon.BaseTimeCooldown;
+            double result = ((cooldown / (1 + skillCooldown / 100)) + timeCast);
 
             return result;
         }
         private double doubleConcentrationCooldown()
         {
-            double cooldown = 22;
-            double result = ((cooldown / (1 + SkillCooldown / 100)) + timeCast);
+            double cooldown = DoubleConcentration.BaseTimeCooldown;
+            double result = ((cooldown / (1 + skillCooldown / 100)) + timeCast);
 
             return result;
         }
         private double healingCooldown()
         {
             double cooldown = 14;
-            double result = ((cooldown / (1 + SkillCooldown / 100)) + timeCast);
+            double result = ((cooldown / (1 + skillCooldown / 100)) + timeCast);
 
             return result;
         }
@@ -1452,6 +1504,8 @@ namespace ViewModel
 
         #region Triton
         private bool crushingWillActive = false;
+        private int crushingWillAdditionalCriticalHit = 20;
+
         public bool CrushingWillActive
         {
             //get => crushingWillActive;
@@ -1493,13 +1547,11 @@ namespace ViewModel
                 /*irreversibleAngerActive = value;
                 if (irreversibleAngerActive)*/
                 DataSet.IrreversibleAnger = value;
-                if (DataSet.IrreversibleAnger)
-                    additionCriticalHitHeroAttack = 20 * (1 - criticalHitHero / 100);
-                else
-                    additionCriticalHitHeroAttack = 0;
                 Calculate(); NotifyPropertyChanged("IrreversibleAngerActive");
             }
         }
+        private int irreversibleAngerAdditionalPenetration = 15;
+        private int irreversibleAngerAdditionalAccuracy = 15;
 
 
         #endregion
@@ -1801,17 +1853,18 @@ namespace ViewModel
                     {
                         //criticalHitLuna = criticalHit + 16;
                         //criticalHitLuna = DataSet.CriticalHit + 16;
-                        criticalHitLuna = DataSet.CriticalHit + BlessingOfTheMoon.AdditionCriticalHit;
+                        //criticalHitLuna = DataSet.CriticalHit + BlessingOfTheMoon.AdditionCriticalHit;
+                        criticalHitLuna = criticalHit + BlessingOfTheMoon.AdditionCriticalHit;
                         //penetrationLuna = penetration + 8;
                         //penetrationLuna = DataSet.Penetration + 8;
-                        penetrationLuna = DataSet.Penetration + BlessingOfTheMoon.AdditionPenetration;
+                        penetrationLuna = penetration + BlessingOfTheMoon.AdditionPenetration;
                     }
                     else
                     {
                         //criticalHitLuna = criticalHit;
-                        criticalHitLuna = DataSet.CriticalHit;
+                        criticalHitLuna = criticalHit;
                         //penetrationLuna = penetration;
-                        penetrationLuna = DataSet.Penetration;
+                        penetrationLuna = penetration;
                     }
                     if (criticalHitLuna > maxCriticalHit) criticalHitLuna = maxCriticalHit;
                     if (penetrationLuna > maxPenetration) penetrationLuna = maxPenetration;
@@ -1827,17 +1880,22 @@ namespace ViewModel
             double criticalHitWithResilience = (criticalHitHero - Resilience) / 100;
             if (criticalHitWithResilience < 0) criticalHitWithResilience = 0;
             if (criticalHitWithResilience > 1) criticalHitWithResilience = 1;
-            double result = (1 - Resilience / 100) * (1 - criticalHitWithResilience) + Math.Pow((1 - Resilience / 100), 2) * criticalHitWithResilience * (2 + CriticalDamage / 100);
+            double result = (1 - Resilience / 100) * (1 - criticalHitWithResilience) + Math.Pow((1 - Resilience / 100), 2) * criticalHitWithResilience * (2 + criticalDamage / 100);
 
             //double result = 1 + (criticalHitHero / 100 * (1 + CriticalDamage / 100));
             return result;
         }
         private double FormulaCoefficientOfCriticalHitHeroForAutoattack()
         {
+            if (IrreversibleAngerActive)
+                additionCriticalHitHeroAttack = 20 * (1 - criticalHitHero / 100);
+            else additionCriticalHitHeroAttack = 0;
+
+
             double criticalHitWithResilience = ((criticalHitHero + additionCriticalHitHeroAttack) - Resilience) / 100;
             if (criticalHitWithResilience < 0) criticalHitWithResilience = 0;
             if (criticalHitWithResilience > 1) criticalHitWithResilience = 1;
-            double result = (1 - Resilience / 100) * (1 - criticalHitWithResilience) + Math.Pow((1 - Resilience / 100), 2) * criticalHitWithResilience * (2 + CriticalDamage / 100);
+            double result = (1 - Resilience / 100) * (1 - criticalHitWithResilience) + Math.Pow((1 - Resilience / 100), 2) * criticalHitWithResilience * (2 + criticalDamage / 100);
 
             //double result = 1 + (criticalHitHero / 100 * (1 + CriticalDamage / 100));
             return result;
@@ -1845,7 +1903,7 @@ namespace ViewModel
         private double FormulaCoefficientOfCriticalHitLuna()
         {
             double criticalHitWithResilience = (criticalHitLuna - Resilience) / 100;
-            double critDamage = CriticalDamage;
+            double critDamage = criticalDamage;
             if (CrushingWillActive) critDamage += 30;
             if (criticalHitWithResilience < 0) criticalHitWithResilience = 0;
             if (criticalHitWithResilience > 1) criticalHitWithResilience = 1;
@@ -1857,7 +1915,7 @@ namespace ViewModel
         private double FormulaCoefficientOfCriticalHitForSkill()
         {
             double criticalHitWithResilience = (criticalHitHero - Resilience) / 100;
-            double critDamage = CriticalDamage;
+            double critDamage = criticalDamage;
             if (CrushingWillActive) critDamage += 30;
             if (criticalHitWithResilience < 0) criticalHitWithResilience = 0;
             if (criticalHitWithResilience > 1) criticalHitWithResilience = 1;
