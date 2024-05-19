@@ -296,7 +296,9 @@ namespace ViewModel
                     CalcCriticalDamage();
                     CalcCriticalHit();
                     CalcPenetration();
-
+                    CalcAccuracy();
+                    CalcAttackStrength();
+                    CalcPiercingAttack();
 
                     double coefRage = FormulaCoefficientOfRage() * 0.1;
 
@@ -899,7 +901,7 @@ namespace ViewModel
         #region Точность
         private double maxAccuracy = 100;
         private double maxAccuracyHero = 50;
-        private double accuracy = 35.3;
+        private double accuracy = 0;
         private double accuracyHero = 0;
         private double minAccuracy = 0;
         public double Accuracy
@@ -922,10 +924,22 @@ namespace ViewModel
                 Calculate(); NotifyPropertyChanged("Accuracy");
             }
         }
+        /// <summary>
+        /// Метод для пересчета характеристики персонажа "Точность"
+        /// </summary>
+        private void CalcAccuracy()
+        {
+            accuracyHero = 0;
+            accuracyHero += Accuracy;
+            if (IrreversibleAngerActive) accuracyHero += irreversibleAngerAdditionalAccuracy;
+            accuracy = accuracyHero;
+            if (accuracyHero > maxAccuracyHero) accuracyHero = maxAccuracyHero;
+
+        }
         #endregion
         #region Сила атаки
         private double maxAttackStrength = 100;
-        private double attackStrength = 10;
+        private double attackStrength = 0;
         private double minAttackStrength = 0;
         public double AttackStrength
         {
@@ -941,6 +955,15 @@ namespace ViewModel
                 if (DataSet.AttackStrength < minAttackStrength) DataSet.AttackStrength = minAttackStrength;
                 Calculate(); NotifyPropertyChanged("AttackStrength");
             }
+        }
+        /// <summary>
+        /// Метод для пересчета характеристики персонажа "Сила атаки"
+        /// </summary>
+        private void CalcAttackStrength()
+        {
+            attackStrength = 0;
+            attackStrength += AttackStrength;
+            if (attackStrength > maxAttackStrength) attackStrength = maxAttackStrength;
         }
         #endregion
         #region Пронза
@@ -962,6 +985,15 @@ namespace ViewModel
                 if (DataSet.PiercingAttack < minPiercingAttack) DataSet.PiercingAttack = minPiercingAttack;
                 Calculate(); NotifyPropertyChanged("PiercingAttack");
             }
+        }
+        /// <summary>
+        /// Метод для пересчета характеристики персонажа "Пронзающая атака"
+        /// </summary>
+        private void CalcPiercingAttack()
+        {
+            piercingAttack = 0;
+            piercingAttack += PiercingAttack;
+            if (piercingAttack > maxPiercingAttack) piercingAttack = maxPiercingAttack;
         }
         #endregion
         #region Ярость
@@ -1598,7 +1630,10 @@ namespace ViewModel
                     LvlTalantBeastAwakeningPhysical = 0;
                     LvlTalantOrderToAttackPlus = 0;
                     HasTalantSymbiosis = false;
+
+                    maxPenetrationHero = 50;
                 }
+                else maxPenetrationHero = 51.5;
             }
         }
 
@@ -1927,7 +1962,7 @@ namespace ViewModel
 
         private double FormulaCoefficientOfAttackStrength()
         {
-            double result = 1 + AttackStrength / 100;
+            double result = 1 + attackStrength / 100;
             return result;
         }
 
@@ -1948,7 +1983,7 @@ namespace ViewModel
         }
         private double FormulaCoefficientOfAccuracyLuna()
         {
-            double result = 1 - Math.Max(0, Dodge - Accuracy) / 100;
+            double result = 1 - Math.Max(0, Dodge - accuracy) / 100;
             return result;
         }
 
