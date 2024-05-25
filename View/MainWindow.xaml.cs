@@ -178,8 +178,11 @@ namespace View
             updateStateButtonTalant(Logic.LvlTalantMoonlightPlus, moonlightPlusTalantButton);
             updateLvlThree(Logic.LvlTalantMoonlightPlus, moonlightPlusLvlIcon);
 
-            updateStateButtonTalant(Logic.LvlTalantOrderToAttackPlus, orderToAttackTalantButton);
-            updateLvlThree(Logic.LvlTalantOrderToAttackPlus, orderToAttackLvlIcon);
+            
+
+            updateStateButtonTalant(Logic.LvlTalantOrderToAttackPlusDualRage, orderToAttackTalantButton);
+            updateLvlThree(Logic.LvlTalantOrderToAttackPlusDualRage, orderToAttackPlusLvlIcon);
+
             updateStateButtonTalant(Logic.LvlTalantBeastAwakeningPhysical, beastAwakeningPlusPhysicalTalantButton);
             updateLvlThree(Logic.LvlTalantBeastAwakeningPhysical, beastAwakeningPlusPhysicalLvlIcon);
 
@@ -189,6 +192,13 @@ namespace View
             updateStateButtonTalant(Logic.LvlTalantLongDeath, longDeathTalantButton);
             updateLvlFour(Logic.LvlTalantLongDeath, longDeathLvlIcon);
 
+
+            #region 1 ветка
+
+            updateStateButtonTalant(Logic.LvlTalantOrderToAttackPlusGuardianUnity, orderToAttackGuardianUnityTalantButton);
+            updateLvlThree(Logic.LvlTalantOrderToAttackPlusGuardianUnity, orderToAttackPlusGuardianUnityLvlIcon);
+
+            #endregion
             #endregion
 
             updateStateButton(Logic.HasTalantGrandeurOfTheLotus, grandeurOfTheLotusTalantButton);
@@ -748,7 +758,7 @@ namespace View
             updateStateButton(Logic.DualRageActive, dualRageActiveButton);
             updateStateButton(Logic.HasTalantBestialRampage, bestialRampageTalantButton);
             updateStateButtonTalant(Logic.LvlTalantBeastAwakeningPhysical - 1, beastAwakeningPlusPhysicalTalantButton);
-            updateStateButtonTalant(Logic.LvlTalantOrderToAttackPlus - 1, orderToAttackTalantButton);
+            updateStateButtonTalant(Logic.LvlTalantOrderToAttackPlusDualRage - 1, orderToAttackTalantButton);
             updateStateButton(Logic.HasTalantSymbiosis, symbiosisTalantButton);
             if (Logic.DualRageActive && Logic.ForestInspirationActive)
             {
@@ -760,12 +770,12 @@ namespace View
         private void increaseLvlOrderToAttackPlusTalantButton_Click(object sender, RoutedEventArgs e)
         {
             if (Logic.DualRageActive)
-                increaseLvlThree(Logic.LvlTalantOrderToAttackPlus, orderToAttackTalantButton, orderToAttackPlusLvlIcon);
+                increaseLvlThree(Logic.LvlTalantOrderToAttackPlusDualRage, orderToAttackTalantButton, orderToAttackPlusLvlIcon);
         }
         private void decreaseLvlOrderToAttackPlusTalantButton_Click(object sender, RoutedEventArgs e)
         {
             if (Logic.DualRageActive)
-                decreaseLvlThree(Logic.LvlTalantOrderToAttackPlus, orderToAttackTalantButton, orderToAttackPlusLvlIcon);
+                decreaseLvlThree(Logic.LvlTalantOrderToAttackPlusDualRage, orderToAttackTalantButton, orderToAttackPlusLvlIcon);
         }
 
         private void symbiosisTalantButton_Click(object sender, RoutedEventArgs e)
