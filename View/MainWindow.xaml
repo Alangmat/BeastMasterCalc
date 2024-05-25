@@ -1213,6 +1213,8 @@
 
                 <Grid Margin="0,0,0,0">
 
+                    <!--
+                    <Label Content="Лунное касание +" HorizontalAlignment="Left" Margin="416,383,0,0" VerticalAlignment="Top"/>
                     <Button
                         HorizontalAlignment="Left"
                         Height="90" 
@@ -1226,7 +1228,6 @@
                         </Button.Background>
 
                     </Button>
-                    <!--
                     <Label Content="Могущество природы" HorizontalAlignment="Left" Margin="556,384,0,0" VerticalAlignment="Top"/>
                     <Button
                         HorizontalAlignment="Left"
@@ -1242,7 +1243,6 @@
 
                     </Button>
                     -->
-                    <Label Content="Лунное касание +" HorizontalAlignment="Left" Margin="416,383,0,0" VerticalAlignment="Top"/>
 
                     <!--
                     <GroupBox HorizontalAlignment="Left" BorderBrush="#FF400984" Height="349" Margin="10,11,0,0" VerticalAlignment="Top" Width="285">
@@ -1469,7 +1469,7 @@
                             
                         </Grid>
                     </GroupBox>
-                    -->      
+                    <Label Content="Звериная ярость" HorizontalAlignment="Left" Margin="288,383,0,0" VerticalAlignment="Top"/>
                     <Button
                         HorizontalAlignment="Left"
                         Height="72" 
@@ -1483,7 +1483,6 @@
                         <Image x:Name="bestialRageLvlIcon" Height="19" Width="29" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,14,14"/>
 
                     </Button>
-                    <Label Content="Звериная ярость" HorizontalAlignment="Left" Margin="288,383,0,0" VerticalAlignment="Top"/>
                     <Button Command="{Binding DecreaseLvlTalantBestialRageCommand}"
                         HorizontalAlignment="Left"
                         Margin="310,489,0,0" 
@@ -1507,6 +1506,9 @@
                             <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
                         </Button.Background>
                     </Button>
+                    
+                    
+                    <Label Content="Исступление хищника" HorizontalAlignment="Left" Margin="366,214,0,0" VerticalAlignment="Top"/>
                     <Button
                         HorizontalAlignment="Left"
                         Height="72" 
@@ -1520,7 +1522,6 @@
                         <Image x:Name="predatoryDeliriumLvlIcon" Height="19" Width="29" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,14,14"/>
 
                     </Button>
-                    <Label Content="Исступление хищника" HorizontalAlignment="Left" Margin="366,214,0,0" VerticalAlignment="Top"/>
                     <Button Command="{Binding DecreaseLvlTalantPredatoryDeliriumCommand}"
                         HorizontalAlignment="Left"
                         Margin="402,320,0,0" 
@@ -1544,6 +1545,8 @@
                             <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
                         </Button.Background>
                     </Button>
+                    
+                    <Label Content="Момент силы" HorizontalAlignment="Left" Margin="507,214,0,0" VerticalAlignment="Top"/>
                     <Button
                         HorizontalAlignment="Left"
                         Height="72" 
@@ -1557,7 +1560,6 @@
                         <Image x:Name="momentOfPowerLvlIcon" Height="19" Width="29" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,14,14"/>
 
                     </Button>
-                    <Label Content="Момент силы" HorizontalAlignment="Left" Margin="507,214,0,0" VerticalAlignment="Top"/>
                     <Button Command="{Binding DecreaseLvlTalantMomentOfPowerCommand}"
                         HorizontalAlignment="Left"
                         Margin="521,320,0,0" 
@@ -1581,6 +1583,9 @@
                             <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
                         </Button.Background>
                     </Button>
+                    -->      
+                    
+                    
                     <Button
                         HorizontalAlignment="Left"
                         Height="72" 
@@ -1618,6 +1623,8 @@
                             <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
                         </Button.Background>
                     </Button>
+                    
+                    <Label Content="Животный гнев" HorizontalAlignment="Left" Margin="28,381,0,0" VerticalAlignment="Top"/>
                     <Button
                         HorizontalAlignment="Left"
                         Height="72" 
@@ -1635,7 +1642,6 @@
                                VerticalAlignment="Bottom" Margin="0,0,14,14"/>
 
                     </Button>
-                    <Label Content="Животный гнев" HorizontalAlignment="Left" Margin="28,381,0,0" VerticalAlignment="Top"/>
                     <Button Command="{Binding DecreaseLvlTalantAnimalRageCommand}"
                         HorizontalAlignment="Left"
                         Margin="47,487,0,0" 
@@ -1659,6 +1665,8 @@
                             <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
                         </Button.Background>
                     </Button>
+                    <!--
+                    <Label Content="Длительная неистовость" HorizontalAlignment="Left" Margin="131,381,0,0" VerticalAlignment="Top"/>
                     <Button
                         HorizontalAlignment="Left"
                         Height="72" 
@@ -1676,7 +1684,6 @@
                                VerticalAlignment="Bottom" Margin="0,0,14,14"/>
 
                     </Button>
-                    <Label Content="Длительная неистовость" HorizontalAlignment="Left" Margin="131,381,0,0" VerticalAlignment="Top"/>
                     <Button Command="{Binding DecreaseLvlTalantContinuousFuryCommand}"
                         HorizontalAlignment="Left"
                         Margin="173,487,0,0" 
@@ -1700,7 +1707,7 @@
                             <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
                         </Button.Background>
                     </Button>
-
+                    -->
                 </Grid>
 
             </TabItem>
@@ -2004,18 +2011,81 @@
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
 
-                        <Grid Background="Blue" Grid.Column="0">
-                            
+                        <Grid Grid.Column="0">
+                            <Label HorizontalAlignment="Center" VerticalAlignment="Top">
+                                <TextBlock Text="Лунное касание +"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"/>
+                            </Label>
+                            <Button
+                                    HorizontalAlignment="Center"
+                                    Height="90" 
+                                    Margin="0,15,0,0" 
+                                    VerticalAlignment="Center"
+                                    Width="90" IsCancel="True" 
+                                    x:Name="moonTouchPlusTalantButton"
+                                    Style="{StaticResource CustomButtonStyle}" Click="moonTouchPlusTalantButton_Click" >
+                                <Button.Background>
+                                    <ImageBrush Stretch="Uniform" ImageSource="/icons/talents/MoonTouchPlusFramed.png"/>
+                                </Button.Background>
+
+                            </Button>
                         </Grid>
 
                         <Grid Grid.Column="1">
-                            <Label HorizontalContentAlignment="Center"
-                                   HorizontalAlignment="Center" Margin="0,0,0,0" VerticalAlignment="Top"
-                                >
+                            <Label HorizontalAlignment="Center" VerticalAlignment="Top">
+                                <TextBlock Text="Длительная неистовость"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"/>
+                            </Label>
+                            <Button
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Margin="0,15,0,0" 
+                                    x:Name="continuousFuryTalantButton"
+                                    Width="72" IsCancel="True" 
+                                    Height="72" 
+                                    Style="{StaticResource CustomButtonStyle}">
+                                <Button.Background>
+                                    <ImageBrush Stretch="Uniform" ImageSource="/icons/talents/RageTalent.png"/>
+                                </Button.Background>
+                                <Image x:Name="continuousFuryLvlIcon" 
+                            Height="19" 
+                               Width="29" 
+                               HorizontalAlignment="Right" 
+                               VerticalAlignment="Bottom" Margin="0,0,14,14"/>
+
+                            </Button>
+                            <Button Command="{Binding DecreaseLvlTalantContinuousFuryCommand}"
+                                    HorizontalAlignment="Center"
+                                    Margin="0,0,30,5" 
+                                    VerticalAlignment="Bottom"
+                                    Height="23" 
+                                    x:Name="decreaseLvlContinuousFuryTalantButton"
+                                    Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="decreaseLvlContinuousFuryTalantButton_Click" >
+                                <Button.Background>
+                                    <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
+                                </Button.Background>
+                            </Button>
+                            <Button
+                                    Command="{Binding IncreaseLvlTalantContinuousFuryCommand}"
+                                    HorizontalAlignment="Center"
+                                    Margin="30,0,0,5" 
+                                    VerticalAlignment="Bottom"
+                                    Height="23" 
+                                    x:Name="increaseLvlContinuousFuryTalantButton"
+                                    Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlContinuousFuryTalantButton_Click"  >
+                                <Button.Background>
+                                    <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
+                                </Button.Background>
+                            </Button>
+                        </Grid>
+
+                        <Grid Grid.Column="2">
+                            <Label HorizontalAlignment="Center" VerticalAlignment="Top">
                                 <TextBlock Text="Могущество природы"
-                                           TextWrapping="Wrap"
-                                           
-                                           />
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"/>
                             </Label>
                             <Button
                                     HorizontalAlignment="Center"
@@ -2032,9 +2102,149 @@
                             </Button>
                         </Grid>
 
-                        <Grid Background="Yellow" Grid.Column="2">
+                        <Grid Grid.Column="3">
+                            <Label HorizontalAlignment="Center" VerticalAlignment="Top">
+                                <TextBlock Text="Звериная ярость"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"/>
+                            </Label>
+                            <Button
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Margin="0,15,0,0" 
+                                    x:Name="bestialRageTalantButton"
+                                    Height="72" 
+                                    Width="72" IsCancel="True" 
+                                    Style="{StaticResource CustomButtonStyle}" >
+                                            <Button.Background>
+                                    <ImageBrush Stretch="Uniform" ImageSource="/icons/talents/BestialRageFramed.png"/>
+                                </Button.Background>
+                                <Image x:Name="bestialRageLvlIcon" Height="19" Width="29" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,14,14"/>
+
+                            </Button>
+                            <Button Command="{Binding DecreaseLvlTalantBestialRageCommand}"
+                                    HorizontalAlignment="Center"
+                                    Margin="0,0,30,5"
+                                    VerticalAlignment="Bottom"
+                                    Height="23" 
+                                    x:Name="decreaseLvlBestialRageTalantButton"
+                                    Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="decreaseLvlBestialRageTalantButton_Click">
+                                <Button.Background>
+                                    <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
+                                </Button.Background>
+                            </Button>
+                            <Button
+                                    Command="{Binding IncreaseLvlTalantBestialRageCommand}"
+                                    HorizontalAlignment="Center"
+                                    Margin="30,0,0,5" 
+                                    VerticalAlignment="Bottom"
+                                    Height="23" 
+                                    x:Name="increaseLvlBestialRageTalantButton"
+                                    Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlBestialRageTalantButton_Click">
+                                <Button.Background>
+                                    <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
+                                </Button.Background>
+                            </Button>
+                        </Grid>
+
+                        <Grid Grid.Column="4">
+                            
+                        </Grid>
+
+                        <Grid Grid.Column="5">
+                            <Label HorizontalAlignment="Center" VerticalAlignment="Top">
+                                <TextBlock Text="Исступление хищника"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"/>
+                            </Label>
+                            <Button
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Margin="0,15,0,0" 
+                                    x:Name="predatoryDeliriumTalantButton"
+                                    Height="72" 
+                                    Width="72" IsCancel="True" 
+                                    Style="{StaticResource CustomButtonStyle}">
+                                <Button.Background>
+                                    <ImageBrush Stretch="Uniform" ImageSource="/icons/talents/PredatoryDeliriumFramed.png"/>
+                                </Button.Background>
+                                <Image x:Name="predatoryDeliriumLvlIcon" Height="19" Width="29" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,14,14"/>
+
+                            </Button>
+                            <Button Command="{Binding DecreaseLvlTalantPredatoryDeliriumCommand}"
+                                    HorizontalAlignment="Center"
+                                    Margin="0,0,30,5"
+                                    VerticalAlignment="Bottom"
+                                    Height="23" 
+                                    x:Name="decreaseLvlPredatoryDeliriumTalantButton"
+                                    Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="decreaseLvlPredatoryDeliriumTalantButton_Click">
+                                <Button.Background>
+                                    <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
+                                </Button.Background>
+                            </Button>
+                            <Button
+                                    Command="{Binding IncreaseLvlTalantPredatoryDeliriumCommand}"
+                                    HorizontalAlignment="Center"
+                                    Margin="30,0,0,5" 
+                                    VerticalAlignment="Bottom"
+                                    Height="23" 
+                                    x:Name="increaseLvlPredatoryDeliriumTalantButton"
+                                    Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlPredatoryDeliriumTalantButton_Click">
+                                <Button.Background>
+                                    <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
+                                </Button.Background>
+                            </Button>
+                        </Grid>
+
+                        <Grid Grid.Column="6">
 
                         </Grid>
+
+                        <Grid Grid.Column="7">
+                            <Label HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,9,0,0">
+                                <TextBlock Text="Момент силы"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"/>
+                            </Label>
+                            <Button
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    Margin="0,15,0,0" 
+                                    x:Name="momentOfPowerTalantButton"
+                                    Height="72" 
+                                    Width="72" IsCancel="True" 
+                                    Style="{StaticResource CustomButtonStyle}">
+                                <Button.Background>
+                                    <ImageBrush Stretch="Uniform" ImageSource="/icons/talents/MomentOfPowerFramed.png"/>
+                                </Button.Background>
+                                <Image x:Name="momentOfPowerLvlIcon" Height="19" Width="29" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,14,14"/>
+
+                            </Button>
+                            <Button Command="{Binding DecreaseLvlTalantMomentOfPowerCommand}"
+                                   HorizontalAlignment="Center"
+                                    Margin="0,0,30,5" 
+                                    VerticalAlignment="Bottom"
+                                    Height="23" 
+                                    x:Name="decreaseLvlMomentOfPowerTalantButton"
+                                    Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="decreaseLvlMomentOfPowerTalantButton_Click" >
+                                <Button.Background>
+                                    <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
+                                </Button.Background>
+                            </Button>
+                            <Button
+                                    Command="{Binding IncreaseLvlTalantMomentOfPowerCommand}"
+                                    HorizontalAlignment="Center"
+                                    Margin="30,0,0,5" 
+                                    VerticalAlignment="Bottom"
+                                    Height="23" 
+                                    x:Name="increaseLvlMomentOfPowerTalantButton"
+                                    Width="28" IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlMomentOfPowerTalantButton_Click">
+                                <Button.Background>
+                                    <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
+                                </Button.Background>
+                            </Button>
+                        </Grid>
+
 
                     </Grid>
                 </Grid>
