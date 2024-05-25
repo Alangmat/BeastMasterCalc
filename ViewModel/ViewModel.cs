@@ -214,7 +214,7 @@ namespace ViewModel
             NotifyPropertyChanged("HasTalantGrandeurOfTheLotus");
             NotifyPropertyChanged("LvlTalantMoonlightPlus");
             NotifyPropertyChanged("HasTalantSymbiosis");
-            NotifyPropertyChanged("LvlTalantOrderToAttackPlus");
+            NotifyPropertyChanged("LvlTalantOrderToAttackPlusDualRage");
 
             LvlTalantBestialRage = DataSet.LvlTalantBestialRage;
             LvlTalantPredatoryDelirium = DataSet.LvlTalantPredatoryDelirium;
@@ -1628,12 +1628,30 @@ namespace ViewModel
                 {
                     HasTalantBestialRampage = false;
                     LvlTalantBeastAwakeningPhysical = 0;
-                    LvlTalantOrderToAttackPlus = 0;
+                    LvlTalantOrderToAttackPlusDualRage = 0;
                     HasTalantSymbiosis = false;
 
                     maxPenetrationHero = 50;
                 }
                 else maxPenetrationHero = 51.5;
+            }
+        }
+
+        #endregion
+
+        #region 1 ветка
+
+        private bool guardianUnityActive = false;
+        
+        public bool GuardianUnityActive
+        {
+            get => guardianUnityActive;
+            set
+            {
+                GuardianUnityActive = value;
+                // TODO
+                // прописать логику выключения других веток,
+                // взаимодействие с сейвом
             }
         }
 
@@ -2162,14 +2180,34 @@ namespace ViewModel
                 NotifyPropertyChanged("LvlTalantMoonlightPlus");
             }
         }
-        public int LvlTalantOrderToAttackPlus
+        public int LvlTalantOrderToAttackPlusDualRage
         {
-            get => OrderToAttack.LvlTalant;
+            //get => OrderToAttack.LvlTalant;
+            get
+            {
+                if (DualRageActive) return OrderToAttack.LvlTalant;
+                return 0;
+            }
             set
             {
                 OrderToAttack.LvlTalant = value;
                 Calculate();
-                NotifyPropertyChanged("LvlTalantOrderToAttackPlus");
+                NotifyPropertyChanged("LvlTalantOrderToAttackPlusDualRage");
+            }
+        }
+        public int LvlTalantOrderToAttackPlusGuardianUnity
+        {
+            //get => OrderToAttack.LvlTalant;
+            get
+            {
+                if (GuardianUnityActive) return OrderToAttack.LvlTalant;
+                return 0;
+            }
+            set
+            {
+                OrderToAttack.LvlTalant = value;
+                Calculate();
+                NotifyPropertyChanged("LvlTalantOrderToAttackPlusGuardianUnity");
             }
         }
         private bool hasTalantSymbiosis = false;
@@ -2880,9 +2918,9 @@ namespace ViewModel
         {
             if (DualRageActive)
             {
-                if (LvlTalantOrderToAttackPlus < 3)
+                if (LvlTalantOrderToAttackPlusDualRage < 3)
                 {
-                    LvlTalantOrderToAttackPlus = LvlTalantOrderToAttackPlus + 1;
+                    LvlTalantOrderToAttackPlusDualRage = LvlTalantOrderToAttackPlusDualRage + 1;
                 }
                 Calculate();
             }
@@ -2897,9 +2935,9 @@ namespace ViewModel
         {
             if (DualRageActive)
             {
-                if (LvlTalantOrderToAttackPlus > 0)
+                if (LvlTalantOrderToAttackPlusDualRage > 0)
                 {
-                    LvlTalantOrderToAttackPlus = LvlTalantOrderToAttackPlus - 1;
+                    LvlTalantOrderToAttackPlusDualRage = LvlTalantOrderToAttackPlusDualRage - 1;
                 }
                 Calculate();
             }
@@ -2911,7 +2949,7 @@ namespace ViewModel
 
         }
 
-        //LvlTalantOrderToAttackPlus
+        //LvlTalantOrderToAttackPlusDualRage
         #endregion
 
         #region ивенты
