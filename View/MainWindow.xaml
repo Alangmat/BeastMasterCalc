@@ -387,7 +387,7 @@
                         Margin="8,83,0,0"
                         Grid.Row="1" 
                         VerticalAlignment="Top" 
-                        Width="126">
+                        Width="84">
                         <TextBlock
                             TextWrapping="Wrap" Height="17"><Run Language="ru-ru" Text="Автоатака"/></TextBlock>
                     </CheckBox>
@@ -1226,9 +1226,9 @@
                                    BorderBrush="#FF400984"
                                   Margin="5">
                             <GroupBox.Header>
-                                <Button Height="15" Style="{StaticResource CustomButtonStyle}" Background="White"
-                                        VerticalContentAlignment="Center">
-                                    <TextBlock Text="В РАЗРАБОТКЕ" TextAlignment="Center"/>
+                                <Button Height="40" Style="{StaticResource CustomButtonStyle}"
+                                        x:Name="guardianUnityActiveButton" Click="guardianUnityActiveButton_Click">
+                                    <Image Source="/icons/talents/GuardianUnity.jpg" Stretch="Uniform"/>
                                 </Button>
                             </GroupBox.Header>
                             <Grid Margin="2, 5, 2, 2">
@@ -1253,26 +1253,26 @@
                                         <Image x:Name="orderToAttackPlusGuardianUnityLvlIcon" Height="18" Width="27" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,23,23"/>
 
                                     </Button>
-                                    <Button 
+                                    <Button Command="{Binding DecreaseLvlTalantOrderToAttackPlusGuardianUnityCommand}"
                                              HorizontalAlignment="Left"
                                             Margin="5,58,0,0"
                                             VerticalAlignment="Top"
                                             Height="25" 
                                             Width="31" 
                                             x:Name="decreaseLvlOrderToAttackPlusGuardianUnityTalantButton"
-                                            IsCancel="True" BorderBrush="{x:Null}" Grid.Row="2">
+                                            IsCancel="True" BorderBrush="{x:Null}" Grid.Row="2" Click="decreaseLvlOrderToAttackPlusGuardianUnityTalantButton_Click">
                                         <Button.Background>
                                             <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
                                         </Button.Background>
                                     </Button>
-                                    <Button 
+                                    <Button Command="{Binding IncreaseLvlTalantOrderToAttackPlusGuardianUnityCommand}"
                                             HorizontalAlignment="Right"
                                             Margin="0,58,5,0" 
                                             VerticalAlignment="Top"
                                             Height="25" 
                                             Width="31"
                                             x:Name="increaseLvlOrderToAttackPlusGuardianUnityTalantButton"
-                                            IsCancel="True" BorderBrush="{x:Null}" Grid.Row="2">
+                                            IsCancel="True" BorderBrush="{x:Null}" Grid.Row="2" Click="increaseLvlOrderToAttackPlusGuardianUnityTalantButton_Click">
                                         <Button.Background>
                                             <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
                                         </Button.Background>
@@ -1280,9 +1280,19 @@
                                 </Grid>
                                 
                                 <Grid Grid.Row="1">
-                                    <TextBlock HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"
-                                        Text="В РАЗРАБОТКЕ" TextAlignment="Center"/>
+                                    <Label Content="Благословение луны +" HorizontalAlignment="Center" VerticalAlignment="Top" Height="26" Foreground="Black" />
+                                    <Button HorizontalAlignment="Center"
+                                            Height="90" 
+                                            Margin="0,15,0,0"
+                                            VerticalAlignment="Center"
+                                            x:Name="blessingOfTheMoonPlusPenetrationTalantButton"
+                                            Width="90" IsCancel="True" 
+                                            Style="{StaticResource CustomButtonStyle}" Click="blessingOfTheMoonPlusPenetrationTalantButton_Click">
+                                        <Button.Background>
+                                            <ImageBrush Stretch="Uniform" ImageSource="/icons/expert/BlessingOfTheMoonFramed.png"/>
+                                        </Button.Background>
+
+                                    </Button>
                                 </Grid>
 
                                 <Grid Grid.Row="2">
@@ -1394,7 +1404,7 @@
                                         <Image x:Name="orderToAttackPlusLvlIcon" Height="18" Width="27" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,23,23"/>
 
                                     </Button>
-                                    <Button Command="{Binding DecreaseLvlTalantOrderToAttackPlusCommand}"
+                                    <Button Command="{Binding DecreaseLvlTalantOrderToAttackPlusDualRageCommand}"
                                              HorizontalAlignment="Left"
                                             Margin="12,58,0,0" 
                                             VerticalAlignment="Top"
@@ -1406,7 +1416,7 @@
                                             <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
                                         </Button.Background>
                                     </Button>
-                                    <Button Command="{Binding IncreaseLvlTalantOrderToAttackPlusCommand}"
+                                    <Button Command="{Binding IncreaseLvlTalantOrderToAttackPlusDualRageCommand}"
                                             HorizontalAlignment="Right"
                                             Margin="0,58,12,0" 
                                             VerticalAlignment="Top"
@@ -1421,9 +1431,19 @@
                                 </Grid>
 
                                 <Grid Grid.Row="2" Grid.Column="0">
-                                    <TextBlock HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"
-                                        Text="В РАЗРАБОТКЕ" TextAlignment="Center"/>
+                                    <Label Content="Благословение луны +" HorizontalAlignment="Center" VerticalAlignment="Top" Height="26" Foreground="Black" />
+                                    <Button HorizontalAlignment="Center"
+                                            Height="90" 
+                                            Margin="0,15,0,0"
+                                            VerticalAlignment="Center"
+                                            x:Name="blessingOfTheMoonPlusCriticalHitTalantButton"
+                                            Width="90" IsCancel="True" 
+                                            Style="{StaticResource CustomButtonStyle}" Grid.Row="1" Click="blessingOfTheMoonPlusCriticalHitTalantButton_Click">
+                                        <Button.Background>
+                                            <ImageBrush Stretch="Uniform" ImageSource="/icons/expert/BlessingOfTheMoonFramed.png"/>
+                                        </Button.Background>
+
+                                    </Button>
                                 </Grid>
 
                                 <Grid Grid.Row="2" Grid.Column="1">
