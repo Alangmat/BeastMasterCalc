@@ -299,6 +299,8 @@ namespace ViewModel
                     CalcAccuracy();
                     CalcAttackStrength();
                     CalcPiercingAttack();
+                    CalcRage();
+                    CalcFacilitation();
 
                     double coefRage = FormulaCoefficientOfRage() * 0.1;
 
@@ -482,7 +484,7 @@ namespace ViewModel
         }
         public double TimeBestialRampage()
         {
-            double result = (Bestial_Rampage.TimeActive * (1 + Facilitation / 100 ) / BestialRampageCooldown());
+            double result = (Bestial_Rampage.TimeActive * (1 + facilitation / 100 ) / BestialRampageCooldown());
             if (result < 0)
             {
                 return 0;
@@ -493,7 +495,7 @@ namespace ViewModel
         }
         public double TimeWithoutBestialRampage()
         {
-            double result = (BestialRampageCooldown() - Bestial_Rampage.TimeActive) * (1 + Facilitation / 100) / BestialRampageCooldown();
+            double result = (BestialRampageCooldown() - Bestial_Rampage.TimeActive) * (1 + facilitation / 100) / BestialRampageCooldown();
             if (result < 0)
             {
                 return 0;
@@ -533,7 +535,7 @@ namespace ViewModel
             var result = new Dictionary<string, int>();
             result.Add("Hero", 0);
             result.Add("Luna", 0);  
-            int countHit = (int)(AuraOfTheForest.TimeActive * (1 + Facilitation / 100) / AuraOfTheForest.Delay);
+            int countHit = (int)(AuraOfTheForest.TimeActive * (1 + facilitation / 100) / AuraOfTheForest.Delay);
             int LunaAura = (int)(AuraOfTheForest.Formula(magedd) 
                 * FormulaCoefficientOfPenetrationLuna()); 
             int HeroesAura = (int)(AuraOfTheForest.Formula(magedd) 
@@ -998,7 +1000,7 @@ namespace ViewModel
         #endregion
         #region Ярость
         private double maxRage = 50;
-        private double rage = 14.7;
+        private double rage = 0;
         private double minRage = 0;
         public double Rage
         {
@@ -1015,9 +1017,19 @@ namespace ViewModel
                 Calculate(); NotifyPropertyChanged("Rage");
             }
         }
+        /// <summary>
+        /// Метод для пересчета характеристики персонажа "Ярость"
+        /// </summary>
+        private void CalcRage()
+        {
+            rage = 0;
+            rage += Rage;
+            if (rage >= maxRage) rage = maxRage;
+        }
         #endregion
         #region Орк
         private double maxFacilitation = 50;
+        private double facilitation = 0;
         private double minFacilitation = 0;
         public double Facilitation
         {
@@ -1029,6 +1041,15 @@ namespace ViewModel
                 if (DataSet.Facilitation < minFacilitation) DataSet.Facilitation = minFacilitation;
                 Calculate(); NotifyPropertyChanged(nameof(Facilitation));
             }
+        }
+        /// <summary>
+        /// Метод для пересчета характеристики персонажа "Содействие"
+        /// </summary>
+        private void CalcFacilitation()
+        {
+            facilitation = 0;
+            facilitation += Facilitation;
+            if (facilitation >= maxFacilitation) facilitation = maxFacilitation;
         }
         #endregion
         #region Проценты дд
@@ -1563,7 +1584,7 @@ namespace ViewModel
 
         private double MermanDuration() 
         {
-            double result = SingleMermanDuration * (1 + Facilitation / 100 ) / mermanCD * 0.9;
+            double result = SingleMermanDuration * (1 + facilitation / 100 ) / mermanCD * 0.9;
 
             return result;
         }
@@ -1618,11 +1639,8 @@ namespace ViewModel
         private bool dualRageActive = false;
         public bool DualRageActive
         {
-            //get => dualRageActive;
             get => DataSet.DualRageActive;
             set {
-                /*dualRageActive = value;
-                if (!dualRageActive)*/
                 DataSet.DualRageActive = value;
                 if (!DataSet.DualRageActive)
                 {
@@ -1630,6 +1648,7 @@ namespace ViewModel
                     LvlTalantBeastAwakeningPhysical = 0;
                     LvlTalantOrderToAttackPlusDualRage = 0;
                     HasTalantSymbiosis = false;
+                    HasTalantBlessingOfTheMoonPlusCriticalHit = false;
 
                     maxPenetrationHero = 50;
                 }
@@ -1648,10 +1667,16 @@ namespace ViewModel
             get => guardianUnityActive;
             set
             {
-                GuardianUnityActive = value;
+                guardianUnityActive = value;
                 // TODO
                 // прописать логику выключения других веток,
                 // взаимодействие с сейвом
+                if (!guardianUnityActive)
+                {
+                    HasTalantBlessingOfTheMoonPlusPenetration = false;
+                    LvlTalantOrderToAttackPlusGuardianUnity = 0;
+                }
+
             }
         }
 
@@ -2018,7 +2043,7 @@ namespace ViewModel
         private double FormulaCoefficientOfRage()
         {
             double result = 0;
-            double t = (10 + additionalContinuousFuryTalant) * (1 + Facilitation / 100);
+            double t = (10 + additionalContinuousFuryTalant) * (1 + facilitation / 100);
             double s = 0;
             if (AttackActive)
             {
@@ -2032,9 +2057,9 @@ namespace ViewModel
             {
                 s += 1 / ChainLightningCooldown();
             }
-            if (s == 0 || Rage == 0)
+            if (s == 0 || rage == 0)
                 return 0;
-            result = t * Rage / 100 * s;
+            result = t * rage / 100 * s;
             if (result > 1) result = 1;
             if (result < 0) result = 0;
             return result;
@@ -2210,6 +2235,13 @@ namespace ViewModel
                 NotifyPropertyChanged("LvlTalantOrderToAttackPlusGuardianUnity");
             }
         }
+
+        public bool HasTalantBlessingOfTheMoonPlusCriticalHit
+        {
+            get => BlessingOfTheMoon.HasTalantPlusCriticalHit;
+            set { BlessingOfTheMoon.HasTalantPlusCriticalHit = value; Calculate(); NotifyPropertyChanged("HasTalantBlessingOfTheMoonPlusCriticalHit"); }
+        }
+
         private bool hasTalantSymbiosis = false;
         public bool HasTalantSymbiosis
         {
@@ -2222,6 +2254,13 @@ namespace ViewModel
                 Calculate(); 
                 NotifyPropertyChanged("HasTalantSymbiosis");
             }
+        }
+
+
+        public bool HasTalantBlessingOfTheMoonPlusPenetration
+        {
+            get => BlessingOfTheMoon.HasTalantPlusPenetration;
+            set { BlessingOfTheMoon.HasTalantPlusPenetration = value; Calculate(); NotifyPropertyChanged("HasTalantBlessingOfTheMoonPlusPenetration"); }
         }
         #endregion
 
@@ -2758,6 +2797,44 @@ namespace ViewModel
 
         #endregion
 
+        /*#region Пробуждение зверя + (физ) 1 ветка
+        public void IncreaseTalantBeastAwakeningPlusPhysical()
+        {
+            if (DualRageActive)
+            {
+                if (LvlTalantBeastAwakeningPhysical < 3)
+                {
+                    LvlTalantBeastAwakeningPhysical = LvlTalantBeastAwakeningPhysical + 1;
+                }
+                Calculate();
+            }
+        }
+        private ICommand increaseLvlTalantBeastAwakeningPlusPhysicalCommand;
+        public ICommand IncreaseLvlTalantBeastAwakeningPlusPhysicalCommand
+        {
+            get => increaseLvlTalantBeastAwakeningPlusPhysicalCommand == null ? new RelayCommand(IncreaseTalantBeastAwakeningPlusPhysical) : increaseLvlTalantBeastAwakeningPlusPhysicalCommand;
+
+        }
+        public void DecreaseTalantBeastAwakeningPlusPhysical()
+        {
+            if (DualRageActive)
+            {
+                if (LvlTalantBeastAwakeningPhysical > 0)
+                {
+                    LvlTalantBeastAwakeningPhysical = LvlTalantBeastAwakeningPhysical - 1;
+                }
+                Calculate();
+            }
+        }
+        private ICommand decreaseLvlTalantBeastAwakeningPlusPhysicalCommand;
+        public ICommand DecreaseLvlTalantBeastAwakeningPlusPhysicalCommand
+        {
+            get => decreaseLvlTalantBeastAwakeningPlusPhysicalCommand == null ? new RelayCommand(DecreaseTalantBeastAwakeningPlusPhysical) : decreaseLvlTalantBeastAwakeningPlusPhysicalCommand;
+
+        }
+
+        #endregion*/
+
         #region Звериный гнев 
 
         public void IncreaseTalantBestialRage()
@@ -2912,9 +2989,9 @@ namespace ViewModel
 
         #endregion
 
-        #region Приказ к атаке +
+        #region Приказ к атаке + 2 ветка
 
-        public void IncreaseTalantOrderToAttackPlus()
+        public void IncreaseTalantOrderToAttackPlusDualRage()
         {
             if (DualRageActive)
             {
@@ -2925,13 +3002,13 @@ namespace ViewModel
                 Calculate();
             }
         }
-        private ICommand increaseLvlTalantOrderToAttackPlusCommand;
-        public ICommand IncreaseLvlTalantOrderToAttackPlusCommand
+        private ICommand increaseLvlTalantOrderToAttackPlusDualRageCommand;
+        public ICommand IncreaseLvlTalantOrderToAttackPlusDualRageCommand
         {
-            get => increaseLvlTalantOrderToAttackPlusCommand == null ? new RelayCommand(IncreaseTalantOrderToAttackPlus) : increaseLvlTalantOrderToAttackPlusCommand;
+            get => increaseLvlTalantOrderToAttackPlusDualRageCommand == null ? new RelayCommand(IncreaseTalantOrderToAttackPlusDualRage) : increaseLvlTalantOrderToAttackPlusDualRageCommand;
 
         }
-        public void DecreaseTalantOrderToAttackPlus()
+        public void DecreaseTalantOrderToAttackPlusDualRage()
         {
             if (DualRageActive)
             {
@@ -2942,14 +3019,52 @@ namespace ViewModel
                 Calculate();
             }
         }
-        private ICommand decreaseLvlTalantOrderToAttackPlusCommand;
-        public ICommand DecreaseLvlTalantOrderToAttackPlusCommand
+        private ICommand decreaseLvlTalantOrderToAttackPlusDualRageCommand;
+        public ICommand DecreaseLvlTalantOrderToAttackPlusDualRageCommand
         {
-            get => decreaseLvlTalantOrderToAttackPlusCommand == null ? new RelayCommand(DecreaseTalantOrderToAttackPlus) : decreaseLvlTalantOrderToAttackPlusCommand;
+            get => decreaseLvlTalantOrderToAttackPlusDualRageCommand == null ? new RelayCommand(DecreaseTalantOrderToAttackPlusDualRage) : decreaseLvlTalantOrderToAttackPlusDualRageCommand;
 
         }
 
-        //LvlTalantOrderToAttackPlusDualRage
+        #endregion
+
+        #region Приказ к атаке + 1 ветка
+
+        public void IncreaseTalantOrderToAttackPlusGuardianUnity()
+        {
+            if (GuardianUnityActive)
+            {
+                if (LvlTalantOrderToAttackPlusGuardianUnity < 3)
+                {
+                    LvlTalantOrderToAttackPlusGuardianUnity = LvlTalantOrderToAttackPlusGuardianUnity + 1;
+                }
+                Calculate();
+            }
+        }
+        private ICommand increaseLvlTalantOrderToAttackPlusGuardianUnityCommand;
+        public ICommand IncreaseLvlTalantOrderToAttackPlusGuardianUnityCommand
+        {
+            get => increaseLvlTalantOrderToAttackPlusGuardianUnityCommand == null ? new RelayCommand(IncreaseTalantOrderToAttackPlusGuardianUnity) : increaseLvlTalantOrderToAttackPlusGuardianUnityCommand;
+
+        }
+        public void DecreaseTalantOrderToAttackPlusGuardianUnity()
+        {
+            if (GuardianUnityActive)
+            {
+                if (LvlTalantOrderToAttackPlusGuardianUnity > 0)
+                {
+                    LvlTalantOrderToAttackPlusGuardianUnity = LvlTalantOrderToAttackPlusGuardianUnity - 1;
+                }
+                Calculate();
+            }
+        }
+        private ICommand decreaseLvlTalantOrderToAttackPlusGuardianUnityCommand;
+        public ICommand DecreaseLvlTalantOrderToAttackPlusGuardianUnityCommand
+        {
+            get => decreaseLvlTalantOrderToAttackPlusGuardianUnityCommand == null ? new RelayCommand(DecreaseTalantOrderToAttackPlusGuardianUnity) : decreaseLvlTalantOrderToAttackPlusGuardianUnityCommand;
+
+        }
+
         #endregion
 
         #region ивенты

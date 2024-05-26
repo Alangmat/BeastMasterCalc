@@ -194,15 +194,20 @@ namespace View
 
 
             #region 1 ветка
+            updateStateButton(Logic.GuardianUnityActive, guardianUnityActiveButton);
 
             updateStateButtonTalant(Logic.LvlTalantOrderToAttackPlusGuardianUnity, orderToAttackGuardianUnityTalantButton);
             updateLvlThree(Logic.LvlTalantOrderToAttackPlusGuardianUnity, orderToAttackPlusGuardianUnityLvlIcon);
 
+            updateStateButton(Logic.HasTalantBlessingOfTheMoonPlusPenetration, blessingOfTheMoonPlusPenetrationTalantButton);
             #endregion
             #endregion
 
             updateStateButton(Logic.HasTalantGrandeurOfTheLotus, grandeurOfTheLotusTalantButton);
             updateStateButton(Logic.HasTalantSymbiosis, symbiosisTalantButton);
+
+            updateStateButton(Logic.HasTalantBlessingOfTheMoonPlusCriticalHit, blessingOfTheMoonPlusCriticalHitTalantButton);
+
             //grandeurOfTheLotusTalantButton.Opacity = nonActiveOpacity;
 
 
@@ -632,6 +637,10 @@ namespace View
             {
                 dualRageActiveButton_Click(sender, e);
             }
+            if (Logic.GuardianUnityActive && Logic.ForestInspirationActive)
+            {
+                guardianUnityActiveButton_Click(sender, e);
+            }
         }
         private void grandeurOfTheLotusTalantButton_Click(object sender, RoutedEventArgs e)
         {
@@ -760,9 +769,14 @@ namespace View
             updateStateButtonTalant(Logic.LvlTalantBeastAwakeningPhysical - 1, beastAwakeningPlusPhysicalTalantButton);
             updateStateButtonTalant(Logic.LvlTalantOrderToAttackPlusDualRage - 1, orderToAttackTalantButton);
             updateStateButton(Logic.HasTalantSymbiosis, symbiosisTalantButton);
+            updateStateButton(Logic.HasTalantBlessingOfTheMoonPlusCriticalHit, blessingOfTheMoonPlusCriticalHitTalantButton);
             if (Logic.DualRageActive && Logic.ForestInspirationActive)
             {
                 forestInspirationActiveButton_Click(sender, e);
+            }
+            if (Logic.DualRageActive && Logic.GuardianUnityActive)
+            {
+                guardianUnityActiveButton_Click(sender, e);
             }
         }
 
@@ -1210,6 +1224,64 @@ namespace View
             }
         }
 
+        private void blessingOfTheMoonPlusCriticalHitTalantButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (Logic.DualRageActive)
+            {
+                Logic.HasTalantBlessingOfTheMoonPlusCriticalHit = !Logic.HasTalantBlessingOfTheMoonPlusCriticalHit;
+
+                updateStateButton(Logic.HasTalantBlessingOfTheMoonPlusCriticalHit, blessingOfTheMoonPlusCriticalHitTalantButton);
+            }
+        }
+
+        private void blessingOfTheMoonPlusPenetrationTalantButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (Logic.GuardianUnityActive)
+            {
+                Logic.HasTalantBlessingOfTheMoonPlusPenetration = !Logic.HasTalantBlessingOfTheMoonPlusPenetration;
+
+                updateStateButton(Logic.HasTalantBlessingOfTheMoonPlusPenetration, blessingOfTheMoonPlusPenetrationTalantButton);
+            }
+        }
+
+        private void guardianUnityActiveButton_Click(object sender, RoutedEventArgs e)
+        {
+            Logic.GuardianUnityActive = !Logic.GuardianUnityActive;
+            if (!Logic.GuardianUnityActive)
+            {
+                orderToAttackPlusGuardianUnityLvlIcon.Source = null;
+            }
+
+            updateStateButton(Logic.GuardianUnityActive, guardianUnityActiveButton);
+            updateStateButtonTalant(Logic.LvlTalantOrderToAttackPlusGuardianUnity, orderToAttackGuardianUnityTalantButton);
+            updateStateButton(Logic.HasTalantBlessingOfTheMoonPlusPenetration, blessingOfTheMoonPlusPenetrationTalantButton);
+
+
+            if (Logic.GuardianUnityActive && Logic.ForestInspirationActive)
+            {
+                forestInspirationActiveButton_Click(sender, e);
+            }
+            if (Logic.GuardianUnityActive && Logic.DualRageActive)
+            {
+                dualRageActiveButton_Click(sender, e);
+            }
+        }
+
+        private void decreaseLvlOrderToAttackPlusGuardianUnityTalantButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (Logic.GuardianUnityActive)
+            {
+                decreaseLvlThree(Logic.LvlTalantOrderToAttackPlusGuardianUnity, orderToAttackGuardianUnityTalantButton, orderToAttackPlusGuardianUnityLvlIcon);
+            }
+        }
+
+        private void increaseLvlOrderToAttackPlusGuardianUnityTalantButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (Logic.GuardianUnityActive)
+            {
+                increaseLvlThree(Logic.LvlTalantOrderToAttackPlusGuardianUnity, orderToAttackGuardianUnityTalantButton, orderToAttackPlusGuardianUnityLvlIcon);
+            }
+        }
     }
 
 
