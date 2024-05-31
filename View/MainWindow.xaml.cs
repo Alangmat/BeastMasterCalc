@@ -759,6 +759,14 @@ namespace View
         private void dualRageActiveButton_Click(object sender, RoutedEventArgs e)
         {
             Logic.DualRageActive = !Logic.DualRageActive;
+            if (Logic.DualRageActive && Logic.ForestInspirationActive)
+            {
+                forestInspirationActiveButton_Click(sender, e);
+            }
+            if (Logic.DualRageActive && Logic.GuardianUnityActive)
+            {
+                guardianUnityActiveButton_Click(sender, e);
+            }
             if (!Logic.DualRageActive)
             {
                 beastAwakeningPlusPhysicalLvlIcon.Source = null;
@@ -770,14 +778,6 @@ namespace View
             updateStateButtonTalant(Logic.LvlTalantOrderToAttackPlusDualRage - 1, orderToAttackTalantButton);
             updateStateButton(Logic.HasTalantSymbiosis, symbiosisTalantButton);
             updateStateButton(Logic.HasTalantBlessingOfTheMoonPlusCriticalHit, blessingOfTheMoonPlusCriticalHitTalantButton);
-            if (Logic.DualRageActive && Logic.ForestInspirationActive)
-            {
-                forestInspirationActiveButton_Click(sender, e);
-            }
-            if (Logic.DualRageActive && Logic.GuardianUnityActive)
-            {
-                guardianUnityActiveButton_Click(sender, e);
-            }
         }
 
 
@@ -1247,6 +1247,14 @@ namespace View
         private void guardianUnityActiveButton_Click(object sender, RoutedEventArgs e)
         {
             Logic.GuardianUnityActive = !Logic.GuardianUnityActive;
+            if (Logic.GuardianUnityActive && Logic.ForestInspirationActive)
+            {
+                forestInspirationActiveButton_Click(sender, e);
+            }
+            if (Logic.GuardianUnityActive && Logic.DualRageActive)
+            {
+                dualRageActiveButton_Click(sender, e);
+            }
             if (!Logic.GuardianUnityActive)
             {
                 orderToAttackPlusGuardianUnityLvlIcon.Source = null;
@@ -1257,14 +1265,6 @@ namespace View
             updateStateButton(Logic.HasTalantBlessingOfTheMoonPlusPenetration, blessingOfTheMoonPlusPenetrationTalantButton);
 
 
-            if (Logic.GuardianUnityActive && Logic.ForestInspirationActive)
-            {
-                forestInspirationActiveButton_Click(sender, e);
-            }
-            if (Logic.GuardianUnityActive && Logic.DualRageActive)
-            {
-                dualRageActiveButton_Click(sender, e);
-            }
         }
 
         private void decreaseLvlOrderToAttackPlusGuardianUnityTalantButton_Click(object sender, RoutedEventArgs e)
