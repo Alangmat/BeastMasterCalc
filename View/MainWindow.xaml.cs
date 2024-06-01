@@ -205,6 +205,7 @@ namespace View
 
             updateStateButton(Logic.HasTalantGrandeurOfTheLotus, grandeurOfTheLotusTalantButton);
             updateStateButton(Logic.HasTalantSymbiosis, symbiosisTalantButton);
+            updateStateButton(Logic.HasTalentDeadlyDexterity, deadlyDexterityTalantButton);
 
             updateStateButton(Logic.HasTalantBlessingOfTheMoonPlusCriticalHit, blessingOfTheMoonPlusCriticalHitTalantButton);
 
@@ -778,6 +779,7 @@ namespace View
             updateStateButtonTalant(Logic.LvlTalantOrderToAttackPlusDualRage - 1, orderToAttackTalantButton);
             updateStateButton(Logic.HasTalantSymbiosis, symbiosisTalantButton);
             updateStateButton(Logic.HasTalantBlessingOfTheMoonPlusCriticalHit, blessingOfTheMoonPlusCriticalHitTalantButton);
+            updateStateButton(Logic.HasTalentDeadlyDexterity, deadlyDexterityTalantButton);
         }
 
 
@@ -1280,6 +1282,16 @@ namespace View
             if (Logic.GuardianUnityActive)
             {
                 increaseLvlThree(Logic.LvlTalantOrderToAttackPlusGuardianUnity, orderToAttackGuardianUnityTalantButton, orderToAttackPlusGuardianUnityLvlIcon);
+            }
+        }
+
+        private void deadlyDexterityTalantButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (Logic.DualRageActive)
+            {
+                Logic.HasTalentDeadlyDexterity = !Logic.HasTalentDeadlyDexterity;
+
+                updateStateButton(Logic.HasTalentDeadlyDexterity, deadlyDexterityTalantButton);
             }
         }
     }

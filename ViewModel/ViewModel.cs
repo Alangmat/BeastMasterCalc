@@ -293,6 +293,7 @@ namespace ViewModel
                     // пока что добавлен только прок тритонов
 
                     CalcSkillCooldown();
+                    CalcAttackSpeed();
                     CalcCriticalDamage();
                     CalcCriticalHit();
                     CalcPenetration();
@@ -388,7 +389,7 @@ namespace ViewModel
 
         private double AttackDelay()
         {
-            double result = ((Attack.TimeDelay * (100 - AttackSpeed) / 100) / LegendaryCoefficientAttackSpeed());
+            double result = ((Attack.TimeDelay * (100 - attackSpeed) / 100) / LegendaryCoefficientAttackSpeed());
             return result;
         }
         public int CalcAttack(int magedd, int physdd)
@@ -773,13 +774,13 @@ namespace ViewModel
             skillCooldown = 0;
             skillCooldown += SkillCooldown;
             if (DoubleConcentrationActive)
-                skillCooldown += DoubleConcentration.AdditionSkillCooldown;
+                skillCooldown += DoubleConcentration.AddSkillCooldown();
             if (skillCooldown > maxSkillCooldowm) skillCooldown = maxSkillCooldowm;
         }
         #endregion
         #region Скорость атаки
         private double maxAttackSpeed = 70;
-        private double attackSpeed = 16.5;
+        private double attackSpeed = 0;
         public double AttackSpeed
         {
             get => DataSet.AttackSpeed;
@@ -788,6 +789,15 @@ namespace ViewModel
                 if (DataSet.AttackSpeed > maxAttackSpeed) DataSet.AttackSpeed = maxAttackSpeed;
                 Calculate(); NotifyPropertyChanged("AttackSpeed");
             }
+        }
+        private void CalcAttackSpeed()
+        {
+            attackSpeed = 0;
+            attackSpeed += AttackSpeed;
+            if (DoubleConcentrationActive)
+                attackSpeed += DoubleConcentration.AddAttackSpeed();
+            if (attackSpeed > maxAttackSpeed) attackSpeed = maxAttackSpeed;
+            
         }
         #endregion
         #region Крит
@@ -1649,10 +1659,24 @@ namespace ViewModel
                     LvlTalantOrderToAttackPlusDualRage = 0;
                     HasTalantSymbiosis = false;
                     HasTalantBlessingOfTheMoonPlusCriticalHit = false;
+                    HasTalentDeadlyDexterity = false;
 
                     maxPenetrationHero = 50;
                 }
                 else maxPenetrationHero = 51.5;
+            }
+        }
+
+        public bool HasTalentDeadlyDexterity
+        {
+            //get => hasTalantSymbiosis;
+            get => DoubleConcentration.HasTalentDeadlyDexterity;
+            set
+            {
+                //hasTalantSymbiosis = value; 
+                DoubleConcentration.HasTalentDeadlyDexterity = value;
+                Calculate();
+                NotifyPropertyChanged("HasTalentDeadlyDexterity");
             }
         }
 
