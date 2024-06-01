@@ -1148,12 +1148,11 @@
                                   BorderBrush="#FF400984"
                                   Grid.Row="1"
                                   Header="Статы цели" Margin="10,0,0,0" VerticalAlignment="Top" Width="320">
-                            <Grid Height="168">
+                            <Grid Height="135">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="*"/>
-
                                 </Grid.RowDefinitions>
                                 <Image Height="36"
                                    Width="36"
@@ -1194,6 +1193,8 @@
                                     TextWrapping="Wrap"
                                     VerticalAlignment="Center"
                                     Width="70" Grid.Row="2"/>
+                                
+                               
 
                             </Grid>
                         </GroupBox>
@@ -1384,9 +1385,19 @@
                                 </Grid>
 
                                 <Grid Grid.Row="1" Grid.Column="0">
-                                    <TextBlock HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"
-                                        Text="В РАЗРАБОТКЕ" TextAlignment="Center"/>
+                                    <Label Content="Смертельная ловкость" HorizontalAlignment="Center" VerticalAlignment="Top" Height="26" Foreground="Black" />
+                                    <Button HorizontalAlignment="Center"
+                                            Height="90" 
+                                            Margin="0,15,0,0"
+                                            VerticalAlignment="Center"
+                                            x:Name="deadlyDexterityTalantButton"
+                                            Width="90" IsCancel="True" 
+                                            Style="{StaticResource CustomButtonStyle}" Grid.Row="1" Click="deadlyDexterityTalantButton_Click"  >
+                                        <Button.Background>
+                                            <ImageBrush Stretch="Uniform" ImageSource="/icons/talents/DeadlyDexterity.jpg"/>
+                                        </Button.Background>
+
+                                    </Button>
                                 </Grid>
 
                                 <Grid Grid.Row="1" Grid.Column="1">

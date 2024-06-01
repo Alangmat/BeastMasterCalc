@@ -29,6 +29,24 @@ namespace Model
         public bool HasTalentDeadlyDexterity = false;
         public int BaseTimeCooldown = 22;
 
+        /// <summary>
+        /// Метод, для проверки таланта второй ветки и изменения прибавки кд
+        /// </summary>
+        /// <returns>Прибавляемое значение кд</returns>
+        public double AddSkillCooldown()
+        {
+            return (HasTalentDeadlyDexterity ? 0 : AdditionSkillCooldown);
+        }
+        /// <summary>
+        /// Метод, для проверки таланта второй ветки и изменения прибавки Скорости атаки
+        /// </summary>
+        /// <returns>Прибавляемое значение Скорости атаки</returns>
+        public double AddAttackSpeed()
+        {
+            return (HasTalentDeadlyDexterity ? (AdditionSkillCooldown * 0.4) : 0);
+        }
+
+
         private int level = 1;
         /// <summary>
         /// Свойство для обновления уровня навыка, при изменении значения обновляет прибавки статов.
