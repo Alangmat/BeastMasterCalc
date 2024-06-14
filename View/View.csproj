@@ -533,6 +533,17 @@
   <ItemGroup>
     <Resource Include="icons\talents\DeadlyDexterity.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\temporary\amulets\10mag.jpg" />
+    <Resource Include="icons\temporary\amulets\15mag.jpg" />
+    <Resource Include="icons\temporary\amulets\4phys.jpg" />
+    <Resource Include="icons\temporary\amulets\6mag.jpg" />
+    <Resource Include="icons\temporary\amulets\7phys.jpg" />
+    <Resource Include="icons\temporary\amulets\empty.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\temporary\amulets\example.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.6.5.5\build\Fody.targets" Condition="Exists('..\packages\Fody.6.5.5\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -33,8 +33,12 @@ namespace View
             DataContext = Logic;
             LoadHints();
 
+            iconsAmulet = new List<BitmapImage> { emptyAmulet, sixMagicalAmulet, tenMagicalAmulet, fifteenMagicalAmulet, fourPhysicalAmulet, sevenPhysicalAmulet };
 
             Load();
+
+
+
         }
         private void LoadHints()
         {
@@ -253,6 +257,9 @@ namespace View
 
 
             updateIconAuraOfTheForest();
+
+
+            updateAmulet();
             #endregion
         }
 
@@ -432,8 +439,26 @@ namespace View
         private BitmapImage auraOfTheForestIcon = new BitmapImage(new Uri("/icons/expert/AuraOfTheForestFramed.png", UriKind.Relative));
         private BitmapImage grandeurOfTheLotusIcon = new BitmapImage(new Uri("/icons/expert/AuraOfTheForestUpgradeFramed.png", UriKind.Relative));
         private BitmapImage powerOfNatureIcon = new BitmapImage(new Uri("/icons/expert/AuraOfTheForestChoiceFramed.png", UriKind.Relative));
-        
+
         //private BitmapImage testLvlIcon = new BitmapImage(new Uri("/icons/numbers/1.4.png",UriKind.Relative));
+
+        private BitmapImage test1 = new BitmapImage(new Uri("/icons/expert/AuraOfTheForestChoiceFramed.png", UriKind.Relative));
+        private BitmapImage test2 = new BitmapImage(new Uri("/icons/expert/AuraOfTheForestFramed.png", UriKind.Relative));
+        private BitmapImage test3 = new BitmapImage(new Uri("/icons/expert/AuraOfTheForestUpgradeFramed.png", UriKind.Relative));
+
+
+
+        private BitmapImage emptyAmulet = new BitmapImage(new Uri("/icons/temporary/amulets/empty.jpg", UriKind.Relative));
+        private BitmapImage sixMagicalAmulet = new BitmapImage(new Uri("/icons/temporary/amulets/6mag.jpg", UriKind.Relative));
+        private BitmapImage tenMagicalAmulet = new BitmapImage(new Uri("/icons/temporary/amulets/10mag.jpg", UriKind.Relative));
+        private BitmapImage fifteenMagicalAmulet = new BitmapImage(new Uri("/icons/temporary/amulets/15mag.jpg", UriKind.Relative));
+        private BitmapImage fourPhysicalAmulet = new BitmapImage(new Uri("/icons/temporary/amulets/4phys.jpg", UriKind.Relative));
+        private BitmapImage sevenPhysicalAmulet = new BitmapImage(new Uri("/icons/temporary/amulets/7phys.jpg", UriKind.Relative));
+
+        private List<BitmapImage> iconsAmulet = new List<BitmapImage>();
+
+
+
 
         #endregion
 
@@ -1293,6 +1318,34 @@ namespace View
 
                 updateStateButton(Logic.HasTalentDeadlyDexterity, deadlyDexterityTalantButton);
             }
+        }
+        private void updateAmulet()
+        {
+            amuletChoiceIcon.Source = iconsAmulet[Logic.Amulets.IndexOf(Logic.SelectedAmulet)];
+            
+        }
+        private void amuletChoiceButton_MouseLeftButtonDown(object sender, RoutedEventArgs e)
+        {
+            int idPrev = Logic.Amulets.IndexOf(Logic.SelectedAmulet);
+            if (++idPrev < Logic.Amulets.Count)
+            {
+                Logic.SelectedAmulet = Logic.Amulets[idPrev];
+            }
+            else Logic.SelectedAmulet = Logic.Amulets[0];
+
+            updateAmulet();
+        }
+
+        private void amuletChoiceButton_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            int idPrev = Logic.Amulets.IndexOf(Logic.SelectedAmulet);
+            if (--idPrev > -1)
+            {
+                Logic.SelectedAmulet = Logic.Amulets[idPrev];
+            }
+            else Logic.SelectedAmulet = Logic.Amulets[Logic.Amulets.Count - 1];
+
+            updateAmulet();
         }
     }
 
