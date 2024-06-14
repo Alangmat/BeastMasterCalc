@@ -1193,8 +1193,8 @@
                                     TextWrapping="Wrap"
                                     VerticalAlignment="Center"
                                     Width="70" Grid.Row="2"/>
-                                
-                               
+
+
 
                             </Grid>
                         </GroupBox>
@@ -1209,7 +1209,7 @@
                     -->
                 </Grid>
             </TabItem>
-            
+
             <TabItem Header="Таланты">
                 <Grid>
                     <Grid.RowDefinitions>
@@ -1279,7 +1279,7 @@
                                         </Button.Background>
                                     </Button>
                                 </Grid>
-                                
+
                                 <Grid Grid.Row="1">
                                     <Label Content="Благословение луны +" HorizontalAlignment="Center" VerticalAlignment="Top" Height="26" Foreground="Black" />
                                     <Button HorizontalAlignment="Center"
@@ -1693,7 +1693,7 @@
                                     Height="72" 
                                     Width="72" IsCancel="True" 
                                     Style="{StaticResource CustomButtonStyle}" >
-                                            <Button.Background>
+                                <Button.Background>
                                     <ImageBrush Stretch="Uniform" ImageSource="/icons/talents/BestialRageFramed.png"/>
                                 </Button.Background>
                                 <Image x:Name="bestialRageLvlIcon" Height="19" Width="29" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,14,14"/>
@@ -2022,6 +2022,192 @@
                     </Border>
                 </Grid>
             </TabItem>
+
+            <TabItem Header="Исходные проценты дд">
+                <!--<Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <ComboBox
+                                    ItemsSource="{Binding Amulets}"
+                                    SelectedItem="{Binding SelectedAmulet}"
+                                    HorizontalAlignment="Right"
+                                    Margin="10" VerticalAlignment="Center" Width="111" Height="22">
+                                    <ComboBox.Background>
+                                        <LinearGradientBrush EndPoint="0,1">
+                                            <GradientStop Color="#FFF0F0F0"/>
+                                            <GradientStop Color="#FFC7C6BB" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </ComboBox.Background>
+                                </ComboBox>
+                            </Grid>
+
+                            <Grid Grid.Column="1">
+                                <Label Content="АМУЛЕТ"
+                                    HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       FontSize="18"
+                                    />
+                            </Grid>
+                        </Grid>
+
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <ComboBox
+                                    ItemsSource="{Binding Cloaks}"
+                                    SelectedItem="{Binding SelectedCloak}"
+                                    HorizontalAlignment="Right"
+                                    Margin="10" VerticalAlignment="Center" Width="111" Height="22">
+                                    <ComboBox.Background>
+                                        <LinearGradientBrush EndPoint="0,1">
+                                            <GradientStop Color="#FFF0F0F0"/>
+                                            <GradientStop Color="#FFC7C6BB" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </ComboBox.Background>
+                                </ComboBox>
+                            </Grid>
+
+                            <Grid Grid.Column="1">
+                                <Label Content="ПЛАЩ"
+                                    HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       FontSize="18"
+                                    />
+                            </Grid>
+                        </Grid>
+
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <ComboBox
+                                    ItemsSource="{Binding Rings}"
+                                    SelectedItem="{Binding SelectedRingL}"
+                                    HorizontalAlignment="Right"
+                                    Margin="10" VerticalAlignment="Center" Width="111" Height="22">
+                                        <ComboBox.Background>
+                                            <LinearGradientBrush EndPoint="0,1">
+                                                <GradientStop Color="#FFF0F0F0"/>
+                                                <GradientStop Color="#FFC7C6BB" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </ComboBox.Background>
+                                    </ComboBox>
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <ComboBox
+                                    ItemsSource="{Binding Rings}"
+                                    SelectedItem="{Binding SelectedRingR}"
+                                    HorizontalAlignment="Right"
+                                    Margin="10" VerticalAlignment="Center" Width="111" Height="22">
+                                        <ComboBox.Background>
+                                            <LinearGradientBrush EndPoint="0,1">
+                                                <GradientStop Color="#FFF0F0F0"/>
+                                                <GradientStop Color="#FFC7C6BB" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </ComboBox.Background>
+                                    </ComboBox>
+                                </Grid>
+                            </Grid>
+
+                            <Grid Grid.Column="1">
+                                <Label Content="КОЛЬЦА"
+                                    HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       FontSize="18"
+                                    />
+                            </Grid>
+                            
+                        </Grid>
+
+                    </Grid>
+                    
+                    
+                </Grid>-->
+
+                <Grid Margin="10">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10*"/>
+                        <ColumnDefinition Width="5*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="3*"/>
+                        </Grid.RowDefinitions>
+
+
+                        <Grid Grid.Row="0" Grid.Column="3">
+                            <Image Source="icons/temporary/amulets/example.jpg" Width="60"/>
+                        </Grid>
+                        
+                        <Grid Grid.Row="0" Grid.Column="4">
+                            <Button 
+                        HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Width="60"
+                            Height="60"
+                                Margin="5"
+                            x:Name="amuletChoiceButton" Click="amuletChoiceButton_MouseLeftButtonDown" MouseRightButtonDown="amuletChoiceButton_MouseRightButtonDown">
+                                <Grid>
+                                    <Image x:Name="amuletChoiceIcon"/>
+                                </Grid>
+                            </Button>
+                        </Grid>
+                        
+                        
+                        
+                        
+                    </Grid>
+                    
+                    
+                    
+
+                </Grid>
+
+
+            </TabItem>
+
             <TabItem Header="Билды" >
                 <Grid >
                     <Grid.Background>

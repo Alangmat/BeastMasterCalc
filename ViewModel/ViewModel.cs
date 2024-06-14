@@ -27,6 +27,8 @@ namespace ViewModel
             Calculate();
         }
 
+        private ModifiersDamage ModifiersDamage = new ModifiersDamage();
+
         #region работа с билдами
         private ObservableCollection<Build> builds = new ObservableCollection<Build>();
         public ObservableCollection<Build> Builds
@@ -305,10 +307,16 @@ namespace ViewModel
 
                     double coefRage = FormulaCoefficientOfRage() * 0.1;
 
+
+                    // TODO
+                    // переписать
+
                     int pureMagicalDD = (int)(magicdd / legendaryCoefficientMagicalDD);
                     magicdd = (int)(pureMagicalDD * (coefficientTriton  * MermanDuration() + coefRage)  + magicdd);
                     int purePhysicalDD = (int)(physdd / legendaryCoefficientPhysicalDD);
                     physdd = (int)(purePhysicalDD * coefRage + physdd);
+
+
 
                     
 
@@ -1063,7 +1071,7 @@ namespace ViewModel
         }
         #endregion
         #region Проценты дд
-        private double percentMagicalDD = 56.75;
+        private double percentMagicalDD = 0;
         public double PercentMagicalDD
         {
             get => DataSet.PercentMagicalDD;
@@ -1075,6 +1083,13 @@ namespace ViewModel
                 Calculate(); NotifyPropertyChanged("PercentMagicalDD");
             }
         }
+
+        private void CalcPercentMagicalDD()
+        {
+            percentMagicalDD = 0;
+            
+        }
+
         private double percentPhysicalDD = 18.75;
         public double PercentPhysicalDD
         {
@@ -1087,6 +1102,28 @@ namespace ViewModel
                 Calculate(); NotifyPropertyChanged("PercentPhysicalDD");
             }
         }
+
+        private int pureMagicalDD = 0;
+        public int PureMagicalDD
+        {
+            get => pureMagicalDD;
+            set
+            {
+                pureMagicalDD = value;
+                Calculate(); NotifyPropertyChanged(nameof(PureMagicalDD));
+            }
+        }
+        private int MagicalDDFinal = 0;
+        private void CalcMagicalDD()
+        {
+            MagicalDDFinal = 0; 
+
+        }
+
+
+
+
+
 
         #endregion
 
@@ -1355,6 +1392,96 @@ namespace ViewModel
 
         #endregion
 
+        #region Списки
+            
+        public List<string> Amulets
+        {
+            get => ModifiersDamage.Amulets;
+
+        }
+
+        private string selectedAmulet = "0%";
+        public string SelectedAmulet
+        {
+            get => selectedAmulet;
+            set
+            {
+                selectedAmulet = value;
+                NotifyPropertyChanged(nameof(SelectedAmulet));
+            }
+        }
+
+        public List<string> Cloaks
+        {
+            get => ModifiersDamage.Cloaks;
+
+        }
+
+        private string selectedCloak = "0%";
+        public string SelectedCloak
+        {
+            get => selectedCloak;
+            set
+            {
+                selectedCloak = value;
+                NotifyPropertyChanged(nameof(SelectedCloak));
+            }
+        }
+
+        public List<string> Rings
+        {
+            get => ModifiersDamage.Rings;
+        }
+
+        private string selectedRingL = "0%";
+        public string SelectedRingL
+        {
+            get => selectedRingL;
+            set
+            {
+                selectedRingL = value;
+                NotifyPropertyChanged(nameof(SelectedRingL));
+            }
+        }
+
+        private string selectedRingR = "0%";
+        public string SelectedRingR
+        {
+            get => selectedRingR;
+            set
+            {
+                selectedRingR = value;
+                NotifyPropertyChanged(nameof(SelectedRingR));
+            }
+        }
+        public List<string> Bracelets
+        {
+            get => ModifiersDamage.Rings;
+        }
+
+        private string selectedBraceletL = "0%";
+        public string SelectedBraceletL
+        {
+            get => selectedBraceletL;
+            set
+            {
+                selectedBraceletL = value;
+                NotifyPropertyChanged(nameof(SelectedBraceletL));
+            }
+        }
+
+        private string selectedBraceletR = "0%";
+        public string SelectedBraceletR
+        {
+            get => selectedBraceletR;
+            set
+            {
+                selectedBraceletR = value;
+                NotifyPropertyChanged(nameof(SelectedBraceletR));
+            }
+        }
+
+        #endregion
 
         #endregion
 
