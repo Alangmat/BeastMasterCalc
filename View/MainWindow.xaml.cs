@@ -34,6 +34,9 @@ namespace View
             LoadHints();
 
             iconsAmulet = new List<BitmapImage> { emptyAmulet, sixMagicalAmulet, tenMagicalAmulet, fifteenMagicalAmulet, fourPhysicalAmulet, sevenPhysicalAmulet };
+            iconsCloaks = new List<BitmapImage> { emptyCloak, fiveMagicalCloak, tenMagicalCloak, fifteenMagicalCloak, fourPhysicalCloak, sevenPhysicalCloak };
+            iconsBracelets = new List<BitmapImage> { emptyBracelet, sixMagicalBracelet, sevenMagicalBracelet, fourPhysicalBracelet, fivePhysicalBracelet };
+            iconsRings = new List<BitmapImage> { emptyRing, fiveMagicalRing, nineMagicalRing, tenMagicalRing, threePhysicalRing, sixPhysicalRing };
 
             Load();
 
@@ -260,6 +263,11 @@ namespace View
 
 
             updateAmulet();
+            updateCloak();
+            updateBracelet(0);
+            updateBracelet(1);
+            updateRing(0);
+            updateRing(1);
             #endregion
         }
 
@@ -446,8 +454,8 @@ namespace View
         private BitmapImage test2 = new BitmapImage(new Uri("/icons/expert/AuraOfTheForestFramed.png", UriKind.Relative));
         private BitmapImage test3 = new BitmapImage(new Uri("/icons/expert/AuraOfTheForestUpgradeFramed.png", UriKind.Relative));
 
-
-
+        #region иконки для вкладки со шмотом
+        #region иконки для амулетов
         private BitmapImage emptyAmulet = new BitmapImage(new Uri("/icons/temporary/amulets/empty.jpg", UriKind.Relative));
         private BitmapImage sixMagicalAmulet = new BitmapImage(new Uri("/icons/temporary/amulets/6mag.jpg", UriKind.Relative));
         private BitmapImage tenMagicalAmulet = new BitmapImage(new Uri("/icons/temporary/amulets/10mag.jpg", UriKind.Relative));
@@ -456,10 +464,47 @@ namespace View
         private BitmapImage sevenPhysicalAmulet = new BitmapImage(new Uri("/icons/temporary/amulets/7phys.jpg", UriKind.Relative));
 
         private List<BitmapImage> iconsAmulet = new List<BitmapImage>();
+        #endregion
+        #region плащи
+
+        private BitmapImage emptyCloak= new BitmapImage(new Uri("/icons/temporary/cloaks/empty.jpg", UriKind.Relative));
+        private BitmapImage fiveMagicalCloak= new BitmapImage(new Uri("/icons/temporary/cloaks/5mag.jpg", UriKind.Relative));
+        private BitmapImage tenMagicalCloak= new BitmapImage(new Uri("/icons/temporary/cloaks/10mag.jpg", UriKind.Relative));
+        private BitmapImage fifteenMagicalCloak= new BitmapImage(new Uri("/icons/temporary/cloaks/15mag.jpg", UriKind.Relative));
+        private BitmapImage fourPhysicalCloak= new BitmapImage(new Uri("/icons/temporary/cloaks/4phys.jpg", UriKind.Relative));
+        private BitmapImage sevenPhysicalCloak= new BitmapImage(new Uri("/icons/temporary/cloaks/7phys.jpg", UriKind.Relative));
+
+        private List<BitmapImage> iconsCloaks = new List<BitmapImage>();
+        #endregion
+        #region Браслеты
+        private BitmapImage emptyBracelet = new BitmapImage(new Uri("/icons/temporary/bracelets/empty.jpg", UriKind.Relative));
+        private BitmapImage sixMagicalBracelet = new BitmapImage(new Uri("/icons/temporary/bracelets/6mag.jpg", UriKind.Relative));
+        private BitmapImage sevenMagicalBracelet = new BitmapImage(new Uri("/icons/temporary/bracelets/7.5mag.jpg", UriKind.Relative));
+        private BitmapImage fourPhysicalBracelet = new BitmapImage(new Uri("/icons/temporary/bracelets/4phys.jpg", UriKind.Relative));
+        private BitmapImage fivePhysicalBracelet = new BitmapImage(new Uri("/icons/temporary/bracelets/5phys.jpg", UriKind.Relative));
+
+
+        private List<BitmapImage> iconsBracelets = new List<BitmapImage>();
+        #endregion
+        #region Кольца
+        private BitmapImage emptyRing = new BitmapImage(new Uri("/icons/temporary/rings/empty.jpg", UriKind.Relative));
+        private BitmapImage fiveMagicalRing = new BitmapImage(new Uri("/icons/temporary/rings/5mag.jpg", UriKind.Relative));
+        private BitmapImage nineMagicalRing = new BitmapImage(new Uri("/icons/temporary/rings/9mag.jpg", UriKind.Relative));
+        private BitmapImage tenMagicalRing = new BitmapImage(new Uri("/icons/temporary/rings/10mag.jpg", UriKind.Relative));
+        private BitmapImage threePhysicalRing = new BitmapImage(new Uri("/icons/temporary/rings/3phys.jpg", UriKind.Relative));
+        private BitmapImage sixPhysicalRing = new BitmapImage(new Uri("/icons/temporary/rings/6phys.jpg", UriKind.Relative));
+
+
+        private List<BitmapImage> iconsRings = new List<BitmapImage>();
+        #endregion
 
 
 
 
+
+
+
+        #endregion
         #endregion
 
         #region Видимость элементов
@@ -1319,6 +1364,9 @@ namespace View
                 updateStateButton(Logic.HasTalentDeadlyDexterity, deadlyDexterityTalantButton);
             }
         }
+
+
+
         private void updateAmulet()
         {
             amuletChoiceIcon.Source = iconsAmulet[Logic.Amulets.IndexOf(Logic.SelectedAmulet)];
@@ -1333,6 +1381,7 @@ namespace View
             }
             else Logic.SelectedAmulet = Logic.Amulets[0];
 
+
             updateAmulet();
         }
 
@@ -1346,6 +1395,151 @@ namespace View
             else Logic.SelectedAmulet = Logic.Amulets[Logic.Amulets.Count - 1];
 
             updateAmulet();
+        }
+
+        private void updateCloak()
+        {
+            cloakChoiceIcon.Source = iconsCloaks[Logic.Cloaks.IndexOf(Logic.SelectedCloak)];
+
+        }
+
+        private void cloakChoiceButton_Click(object sender, RoutedEventArgs e)
+        {
+            int idPrev = Logic.Cloaks.IndexOf(Logic.SelectedCloak);
+            if (++idPrev < Logic.Cloaks.Count)
+            {
+                Logic.SelectedCloak = Logic.Cloaks[idPrev];
+            }
+            else Logic.SelectedCloak = Logic.Cloaks[0];
+
+            updateCloak();
+        }
+
+        private void cloakChoiceButton_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            int idPrev = Logic.Cloaks.IndexOf(Logic.SelectedCloak);
+            if (--idPrev > -1)
+            {
+                Logic.SelectedCloak = Logic.Cloaks[idPrev];
+            }
+            else Logic.SelectedCloak = Logic.Cloaks[Logic.Cloaks.Count - 1];
+
+            updateCloak();
+        }
+        
+        /// <summary>
+        /// обновление иконки модификатора от браслета
+        /// </summary>
+        /// <param name="flag">0 - левый браслет, 1 - правый</param>
+        private void updateBracelet(int flag)
+        {
+            if (flag == 0) braceletLeftChoiceIcon.Source = iconsBracelets[Logic.Bracelets.IndexOf(Logic.SelectedBraceletL)];
+            else if (flag == 1) braceletRightChoiceIcon.Source = iconsBracelets[Logic.Bracelets.IndexOf(Logic.SelectedBraceletR)];
+        }
+
+        private void braceletLeftChoiceButton_Click(object sender, RoutedEventArgs e)
+        {
+            int idPrev = Logic.Bracelets.IndexOf(Logic.SelectedBraceletL);
+            if (++idPrev < Logic.Bracelets.Count)
+            {
+                Logic.SelectedBraceletL = Logic.Bracelets[idPrev];
+            }
+            else Logic.SelectedBraceletL = Logic.Bracelets[0];
+
+            updateBracelet(0);
+        }
+
+        private void braceletLeftChoiceButton_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            int idPrev = Logic.Bracelets.IndexOf(Logic.SelectedBraceletL);
+            if (--idPrev > -1)
+            {
+                Logic.SelectedBraceletL = Logic.Bracelets[idPrev];
+            }
+            else Logic.SelectedBraceletL = Logic.Bracelets[Logic.Bracelets.Count - 1];
+
+            updateBracelet(0);
+        }
+
+        private void braceletRightChoiceButton_Click(object sender, RoutedEventArgs e)
+        {
+            int idPrev = Logic.Bracelets.IndexOf(Logic.SelectedBraceletR);
+            if (++idPrev < Logic.Bracelets.Count)
+            {
+                Logic.SelectedBraceletR = Logic.Bracelets[idPrev];
+            }
+            else Logic.SelectedBraceletR = Logic.Bracelets[0];
+
+            updateBracelet(1);
+        }
+
+        private void braceletRightChoiceButton_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            int idPrev = Logic.Bracelets.IndexOf(Logic.SelectedBraceletR);
+            if (--idPrev > -1)
+            {
+                Logic.SelectedBraceletR = Logic.Bracelets[idPrev];
+            }
+            else Logic.SelectedBraceletR = Logic.Bracelets[Logic.Bracelets.Count - 1];
+
+            updateBracelet(1);
+        }
+        /// <summary>
+        /// обновление иконки модификатора кольца
+        /// </summary>
+        /// <param name="flag">0 - левое, 1 - правое</param>
+        private void updateRing(int flag)
+        {
+            if (flag == 0) ringLeftChoiceIcon.Source = iconsRings[Logic.Rings.IndexOf(Logic.SelectedRingL)];
+            else if (flag == 1) ringRightChoiceIcon.Source = iconsRings[Logic.Rings.IndexOf(Logic.SelectedRingR)];
+        }
+
+        private void ringLeftChoiceButton_Click(object sender, RoutedEventArgs e)
+        {
+            int idPrev = Logic.Rings.IndexOf(Logic.SelectedRingL);
+            if (++idPrev < Logic.Rings.Count)
+            {
+                Logic.SelectedRingL = Logic.Rings[idPrev];
+            }
+            else Logic.SelectedRingL = Logic.Rings[0];
+
+            updateRing(0);
+        }
+
+        private void ringLeftChoiceButton_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            int idPrev = Logic.Rings.IndexOf(Logic.SelectedRingL);
+            if (--idPrev > -1)
+            {
+                Logic.SelectedRingL = Logic.Rings[idPrev];
+            }
+            else Logic.SelectedRingL = Logic.Rings[Logic.Rings.Count - 1];
+
+            updateRing(0);
+        }
+
+        private void ringRightChoiceButton_Click(object sender, RoutedEventArgs e)
+        {
+            int idPrev = Logic.Rings.IndexOf(Logic.SelectedRingR);
+            if (++idPrev < Logic.Rings.Count)
+            {
+                Logic.SelectedRingR = Logic.Rings[idPrev];
+            }
+            else Logic.SelectedRingR = Logic.Rings[0];
+
+            updateRing(1);
+        }
+
+        private void ringRightChoiceButton_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            int idPrev = Logic.Rings.IndexOf(Logic.SelectedRingR);
+            if (--idPrev > -1)
+            {
+                Logic.SelectedRingR = Logic.Rings[idPrev];
+            }
+            else Logic.SelectedRingR = Logic.Rings[Logic.Rings.Count - 1];
+
+            updateRing(1);
         }
     }
 

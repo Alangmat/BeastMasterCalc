@@ -1456,7 +1456,7 @@ namespace ViewModel
         }
         public List<string> Bracelets
         {
-            get => ModifiersDamage.Rings;
+            get => ModifiersDamage.Bracelets;
         }
 
         private string selectedBraceletL = "0%";
