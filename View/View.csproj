@@ -544,6 +544,32 @@
   <ItemGroup>
     <Resource Include="icons\temporary\amulets\example.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\temporary\cloaks\10mag.jpg" />
+    <Resource Include="icons\temporary\cloaks\15mag.jpg" />
+    <Resource Include="icons\temporary\cloaks\4phys.jpg" />
+    <Resource Include="icons\temporary\cloaks\5mag.jpg" />
+    <Resource Include="icons\temporary\cloaks\7phys.jpg" />
+    <Resource Include="icons\temporary\cloaks\empty.jpg" />
+    <Resource Include="icons\temporary\cloaks\example.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\temporary\bracelets\4phys.jpg" />
+    <Resource Include="icons\temporary\bracelets\5phys.jpg" />
+    <Resource Include="icons\temporary\bracelets\6mag.jpg" />
+    <Resource Include="icons\temporary\bracelets\7.5mag.jpg" />
+    <Resource Include="icons\temporary\bracelets\empty.jpg" />
+    <Resource Include="icons\temporary\bracelets\example.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\temporary\rings\10mag.jpg" />
+    <Resource Include="icons\temporary\rings\3phys.jpg" />
+    <Resource Include="icons\temporary\rings\5mag.jpg" />
+    <Resource Include="icons\temporary\rings\6phys.jpg" />
+    <Resource Include="icons\temporary\rings\9mag.jpg" />
+    <Resource Include="icons\temporary\rings\empty.jpg" />
+    <Resource Include="icons\temporary\rings\example.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.6.5.5\build\Fody.targets" Condition="Exists('..\packages\Fody.6.5.5\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

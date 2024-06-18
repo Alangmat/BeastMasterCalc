@@ -1983,7 +1983,7 @@
                                         VerticalAlignment="Center" 
                                         Width="284">
                                         <TextBlock
-                                            TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Сакральный щит паладина на Собаку"/></TextBlock>
+                                            TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Сакральный щит паладина на Луну"/></TextBlock>
                                     </CheckBox>
                                 </Grid>
                             </Grid>
@@ -2176,6 +2176,24 @@
                             <RowDefinition Height="3*"/>
                         </Grid.RowDefinitions>
 
+                        <Grid Grid.Row="0" Grid.Column="0">
+                            <Button 
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Width="60"
+                            Height="60"
+                                Margin="5"
+                            x:Name="cloakChoiceButton" Click="cloakChoiceButton_Click" MouseRightButtonDown="cloakChoiceButton_MouseRightButtonDown">
+                                <Grid>
+                                    <Image x:Name="cloakChoiceIcon"/>
+                                </Grid>
+                            </Button>
+                        </Grid>
+
+                        <Grid Grid.Row="0" Grid.Column="1">
+                            <Image Source="icons/temporary/cloaks/example.jpg" Width="60"/>
+                        </Grid>
+
 
                         <Grid Grid.Row="0" Grid.Column="3">
                             <Image Source="icons/temporary/amulets/example.jpg" Width="60"/>
@@ -2183,7 +2201,7 @@
                         
                         <Grid Grid.Row="0" Grid.Column="4">
                             <Button 
-                        HorizontalAlignment="Left"
+                            HorizontalAlignment="Left"
                             VerticalAlignment="Center"
                             Width="60"
                             Height="60"
@@ -2194,10 +2212,83 @@
                                 </Grid>
                             </Button>
                         </Grid>
+
                         
-                        
-                        
-                        
+                        <Grid Grid.Row="2" Grid.Column="1">
+                            <Image Source="icons/temporary/bracelets/example.jpg" Width="60"/>
+                        </Grid>
+
+                        <Grid Grid.Row="2" Grid.Column="0">
+                            <Button 
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Width="60"
+                            Height="60"
+                                Margin="5"
+                            x:Name="braceletLeftChoiceButton" Click="braceletLeftChoiceButton_Click" MouseRightButtonDown="braceletLeftChoiceButton_MouseRightButtonDown">
+                                <Grid>
+                                    <Image x:Name="braceletLeftChoiceIcon"/>
+                                </Grid>
+                            </Button>
+                        </Grid>
+
+                        <Grid Grid.Row="2" Grid.Column="3">
+                            <Image Source="icons/temporary/bracelets/example.jpg" Width="60"/>
+                        </Grid>
+
+                        <Grid Grid.Row="2" Grid.Column="4">
+                            <Button 
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Width="60"
+                            Height="60"
+                                Margin="5"
+                            x:Name="braceletRightChoiceButton" Click="braceletRightChoiceButton_Click" MouseRightButtonDown="braceletRightChoiceButton_MouseRightButtonDown">
+                                <Grid>
+                                    <Image x:Name="braceletRightChoiceIcon"/>
+                                </Grid>
+                            </Button>
+                        </Grid>
+
+
+                        <Grid Grid.Row="3" Grid.Column="1">
+                            <Image Source="icons/temporary/rings/example.jpg" Width="60"/>
+                        </Grid>
+
+                        <Grid Grid.Row="3" Grid.Column="0">
+                            <Button 
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Width="60"
+                            Height="60"
+                                Margin="5"
+                            x:Name="ringLeftChoiceButton" Click="ringLeftChoiceButton_Click" MouseRightButtonDown="ringLeftChoiceButton_MouseRightButtonDown">
+                                <Grid>
+                                    <Image x:Name="ringLeftChoiceIcon"/>
+                                </Grid>
+                            </Button>
+                        </Grid>
+
+
+                        <Grid Grid.Row="3" Grid.Column="3">
+                            <Image Source="icons/temporary/rings/example.jpg" Width="60"/>
+                        </Grid>
+
+                        <Grid Grid.Row="3" Grid.Column="4">
+                            <Button 
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Width="60"
+                            Height="60"
+                                Margin="5"
+                            x:Name="ringRightChoiceButton" Click="ringRightChoiceButton_Click" MouseRightButtonDown="ringRightChoiceButton_MouseRightButtonDown">
+                                <Grid>
+                                    <Image x:Name="ringRightChoiceIcon"/>
+                                </Grid>
+                            </Button>
+                        </Grid>
+
+
                     </Grid>
                     
                     
