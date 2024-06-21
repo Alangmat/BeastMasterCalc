@@ -1392,8 +1392,9 @@ namespace ViewModel
 
         #endregion
 
+
         #region Списки
-            
+
         public List<string> Amulets
         {
             get => ModifiersDamage.Amulets;
@@ -1407,6 +1408,7 @@ namespace ViewModel
             set
             {
                 selectedAmulet = value;
+                Calculate();
                 NotifyPropertyChanged(nameof(SelectedAmulet));
             }
         }
@@ -1424,6 +1426,7 @@ namespace ViewModel
             set
             {
                 selectedCloak = value;
+                Calculate();
                 NotifyPropertyChanged(nameof(SelectedCloak));
             }
         }
@@ -1440,6 +1443,7 @@ namespace ViewModel
             set
             {
                 selectedRingL = value;
+                Calculate();
                 NotifyPropertyChanged(nameof(SelectedRingL));
             }
         }
@@ -1451,6 +1455,7 @@ namespace ViewModel
             set
             {
                 selectedRingR = value;
+                Calculate();
                 NotifyPropertyChanged(nameof(SelectedRingR));
             }
         }
@@ -1466,6 +1471,7 @@ namespace ViewModel
             set
             {
                 selectedBraceletL = value;
+                Calculate();
                 NotifyPropertyChanged(nameof(SelectedBraceletL));
             }
         }
@@ -1477,9 +1483,77 @@ namespace ViewModel
             set
             {
                 selectedBraceletR = value;
+                Calculate();
                 NotifyPropertyChanged(nameof(SelectedBraceletR));
             }
         }
+
+        public List<string> Equipments
+        {
+            get => ModifiersDamage.Equipments;
+        }
+        private string selectedHelmet = "Empty";
+        public string SelectedHelmet
+        {
+            get => selectedHelmet;
+            set
+            {
+                selectedHelmet = value;
+                Calculate();
+                NotifyPropertyChanged(nameof(SelectedHelmet));
+            }
+        }
+
+        private string selectedBody = "Empty";
+        public string SelectedBody
+        {
+            get => selectedBody;
+            set
+            {
+                selectedBody = value;
+                Calculate();
+                NotifyPropertyChanged(nameof(SelectedBody));
+            }
+        }
+
+        private string selectedHands = "Empty";
+        public string SelectedHands
+        {
+            get => selectedHands;
+            set
+            {
+                selectedHands = value;
+                Calculate();
+                NotifyPropertyChanged(nameof(SelectedHands));
+            }
+        }
+
+        private string selectedBelt = "Empty";
+        public string SelectedBelt
+        {
+            get => selectedBelt;
+            set
+            {
+                selectedBelt = value;
+                Calculate();
+                NotifyPropertyChanged(nameof(SelectedBelt));
+            }
+        }
+
+        private string selectedFoots = "Empty";
+        public string SelectedFoots
+        {
+            get => selectedFoots;
+            set
+            {
+                selectedFoots = value;
+                Calculate();
+                NotifyPropertyChanged(nameof(SelectedFoots));
+            }
+        }
+
+
+
 
         #endregion
 

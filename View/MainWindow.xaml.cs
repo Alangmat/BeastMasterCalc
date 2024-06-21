@@ -268,6 +268,12 @@ namespace View
             updateBracelet(1);
             updateRing(0);
             updateRing(1);
+
+            updateHelmet();
+            updateBody();
+            updateHands();
+            updateBelt();
+            updateFoots();
             #endregion
         }
 
@@ -496,6 +502,19 @@ namespace View
 
 
         private List<BitmapImage> iconsRings = new List<BitmapImage>();
+        #endregion
+        #region шмот
+        private BitmapImage cloathEquipment = new BitmapImage(new Uri("/icons/temporary/equipments/cloath.jpg", UriKind.Relative));
+        private BitmapImage leatherEquipment = new BitmapImage(new Uri("/icons/temporary/equipments/leather.jpg", UriKind.Relative));
+        private BitmapImage helmetEquipment = new BitmapImage(new Uri("/icons/temporary/equipments/helmet.jpg", UriKind.Relative));
+        private BitmapImage bodyEquipment = new BitmapImage(new Uri("/icons/temporary/equipments/body.jpg", UriKind.Relative));
+        private BitmapImage handsEquipment = new BitmapImage(new Uri("/icons/temporary/equipments/hands.jpg", UriKind.Relative));
+        private BitmapImage beltEquipment = new BitmapImage(new Uri("/icons/temporary/equipments/belt.jpg", UriKind.Relative));
+        private BitmapImage footsEquipment = new BitmapImage(new Uri("/icons/temporary/equipments/foots.jpg", UriKind.Relative));
+
+        
+
+
         #endregion
 
 
@@ -1540,6 +1559,205 @@ namespace View
             else Logic.SelectedRingR = Logic.Rings[Logic.Rings.Count - 1];
 
             updateRing(1);
+        }
+        
+        private void updateHelmet()
+        {
+            switch (Logic.SelectedHelmet)
+            {
+                case "Leather":
+                    helmetChoiceIcon.Source = leatherEquipment;
+                    break;
+                case "Cloath":
+                    helmetChoiceIcon.Source = cloathEquipment;
+                    break;
+                default:
+                    helmetChoiceIcon.Source = helmetEquipment;
+                    break;
+            }
+        }
+
+        private void helmetChoiceButton_Click(object sender, RoutedEventArgs e)
+        {
+            int idPrev = Logic.Equipments.IndexOf(Logic.SelectedHelmet);
+            if (++idPrev >= Logic.Equipments.Count)
+            {
+                idPrev = 0;
+            }
+            Logic.SelectedHelmet = Logic.Equipments[idPrev];
+
+            updateHelmet();
+        }
+
+        private void helmetChoiceButton_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            int idPrev = Logic.Equipments.IndexOf(Logic.SelectedHelmet);
+            if (--idPrev < 0)
+            {
+                idPrev = Logic.Equipments.Count - 1;
+            }
+            Logic.SelectedHelmet = Logic.Equipments[idPrev];
+
+            updateHelmet();
+        }
+
+        private void updateBody()
+        {
+            switch (Logic.SelectedBody)
+            {
+                case "Leather":
+                    bodyChoiceIcon.Source = leatherEquipment;
+                    break;
+                case "Cloath":
+                    bodyChoiceIcon.Source = cloathEquipment;
+                    break;
+                default:
+                    bodyChoiceIcon.Source = bodyEquipment;
+                    break;
+            }
+        }
+        private void bodyChoiceButton_Click(object sender, RoutedEventArgs e)
+        {
+            int idPrev = Logic.Equipments.IndexOf(Logic.SelectedBody);
+            if (++idPrev >= Logic.Equipments.Count)
+            {
+                idPrev = 0;
+            }
+            Logic.SelectedBody = Logic.Equipments[idPrev];
+
+            updateBody();
+        }
+
+        private void bodyChoiceButton_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            int idPrev = Logic.Equipments.IndexOf(Logic.SelectedBody);
+            if (--idPrev < 0)
+            {
+                idPrev = Logic.Equipments.Count - 1;
+            }
+            Logic.SelectedBody = Logic.Equipments[idPrev];
+
+            updateBody();
+        }
+        
+        private void updateHands()
+        {
+            switch (Logic.SelectedHands)
+            {
+                case "Leather":
+                    handsChoiceIcon.Source = leatherEquipment;
+                    break;
+                case "Cloath":
+                    handsChoiceIcon.Source = cloathEquipment;
+                    break;
+                default:
+                    handsChoiceIcon.Source = handsEquipment;
+                    break;
+            }
+        }
+
+        private void handsChoiceButton_Click(object sender, RoutedEventArgs e)
+        {
+            int idPrev = Logic.Equipments.IndexOf(Logic.SelectedHands);
+            if (++idPrev >= Logic.Equipments.Count)
+            {
+                idPrev = 0;
+            }
+            Logic.SelectedHands = Logic.Equipments[idPrev];
+
+            updateHands();
+        }
+
+        private void handsChoiceButton_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            int idPrev = Logic.Equipments.IndexOf(Logic.SelectedHands);
+            if (--idPrev < 0)
+            {
+                idPrev = Logic.Equipments.Count - 1;
+            }
+            Logic.SelectedHands = Logic.Equipments[idPrev];
+
+            updateHands();
+        }
+
+        private void updateBelt()
+        {
+            switch (Logic.SelectedBelt)
+            {
+                case "Leather":
+                    beltChoiceIcon.Source = leatherEquipment;
+                    break;
+                case "Cloath":
+                    beltChoiceIcon.Source = cloathEquipment;
+                    break;
+                default:
+                    beltChoiceIcon.Source = beltEquipment;
+                    break;
+            }
+        }
+
+        private void beltChoiceButton_Click(object sender, RoutedEventArgs e)
+        {
+            int idPrev = Logic.Equipments.IndexOf(Logic.SelectedBelt);
+            if (++idPrev >= Logic.Equipments.Count)
+            {
+                idPrev = 0;
+            }
+            Logic.SelectedBelt = Logic.Equipments[idPrev];
+
+            updateBelt();
+        }
+
+        private void beltChoiceButton_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            int idPrev = Logic.Equipments.IndexOf(Logic.SelectedBelt);
+            if (--idPrev < 0)
+            {
+                idPrev = Logic.Equipments.Count - 1;
+            }
+            Logic.SelectedBelt = Logic.Equipments[idPrev];
+
+            updateBelt();
+        }
+
+        private void updateFoots()
+        {
+            switch (Logic.SelectedFoots)
+            {
+                case "Leather":
+                    footsChoiceIcon.Source = leatherEquipment;
+                    break;
+                case "Cloath":
+                    footsChoiceIcon.Source = cloathEquipment;
+                    break;
+                default:
+                    footsChoiceIcon.Source = footsEquipment;
+                    break;
+            }
+        }
+
+        private void footsChoiceButton_Click(object sender, RoutedEventArgs e)
+        {
+            int idPrev = Logic.Equipments.IndexOf(Logic.SelectedFoots);
+            if (++idPrev >= Logic.Equipments.Count)
+            {
+                idPrev = 0;
+            }
+            Logic.SelectedFoots = Logic.Equipments[idPrev];
+
+            updateFoots();
+        }
+
+        private void footsChoiceButton_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            int idPrev = Logic.Equipments.IndexOf(Logic.SelectedFoots);
+            if (--idPrev < 0)
+            {
+                idPrev = Logic.Equipments.Count - 1;
+            }
+            Logic.SelectedFoots = Logic.Equipments[idPrev];
+
+            updateFoots();
         }
     }
 
