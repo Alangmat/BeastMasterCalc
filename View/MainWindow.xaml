@@ -2194,6 +2194,19 @@
                             <Image Source="icons/temporary/cloaks/example.jpg" Width="60"/>
                         </Grid>
 
+                        <Grid Grid.Row="0" Grid.Column="2">
+                            <Button 
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Width="60"
+                            Height="60"
+                                Margin="5"
+                            x:Name="helmetChoiceButton" Click="helmetChoiceButton_Click" MouseRightButtonDown="helmetChoiceButton_MouseRightButtonDown">
+                                <Grid>
+                                    <Image x:Name="helmetChoiceIcon"/>
+                                </Grid>
+                            </Button>
+                        </Grid>
 
                         <Grid Grid.Row="0" Grid.Column="3">
                             <Image Source="icons/temporary/amulets/example.jpg" Width="60"/>
@@ -2213,7 +2226,36 @@
                             </Button>
                         </Grid>
 
-                        
+                        <Grid Grid.Row="1" Grid.Column="2">
+                            <Button 
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Width="60"
+                            Height="60"
+                                Margin="5"
+                            x:Name="bodyChoiceButton" Click="bodyChoiceButton_Click" MouseRightButtonDown="bodyChoiceButton_MouseRightButtonDown" >
+                                <Grid>
+                                    <Image x:Name="bodyChoiceIcon"/>
+                                </Grid>
+                            </Button>
+                        </Grid>
+
+                        <Grid Grid.Row="1" Grid.Column="3">
+                            <Button 
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Width="60"
+                            Height="60"
+                                Margin="5"
+                            x:Name="handsChoiceButton" Click="handsChoiceButton_Click" MouseRightButtonDown="handsChoiceButton_MouseRightButtonDown" >
+                                <Grid>
+                                    <Image x:Name="handsChoiceIcon"/>
+                                </Grid>
+                            </Button>
+                        </Grid>
+
+
+
                         <Grid Grid.Row="2" Grid.Column="1">
                             <Image Source="icons/temporary/bracelets/example.jpg" Width="60"/>
                         </Grid>
@@ -2228,6 +2270,20 @@
                             x:Name="braceletLeftChoiceButton" Click="braceletLeftChoiceButton_Click" MouseRightButtonDown="braceletLeftChoiceButton_MouseRightButtonDown">
                                 <Grid>
                                     <Image x:Name="braceletLeftChoiceIcon"/>
+                                </Grid>
+                            </Button>
+                        </Grid>
+
+                        <Grid Grid.Row="2" Grid.Column="2">
+                            <Button 
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Width="60"
+                            Height="60"
+                                Margin="5"
+                            x:Name="beltChoiceButton" Click="beltChoiceButton_Click" MouseRightButtonDown="beltChoiceButton_MouseRightButtonDown" >
+                                <Grid>
+                                    <Image x:Name="beltChoiceIcon"/>
                                 </Grid>
                             </Button>
                         </Grid>
@@ -2269,6 +2325,19 @@
                             </Button>
                         </Grid>
 
+                        <Grid Grid.Row="3" Grid.Column="2">
+                            <Button 
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Width="60"
+                            Height="60"
+                                Margin="5"
+                            x:Name="footsChoiceButton" Click="footsChoiceButton_Click" MouseRightButtonDown="footsChoiceButton_MouseRightButtonDown" >
+                                <Grid>
+                                    <Image x:Name="footsChoiceIcon"/>
+                                </Grid>
+                            </Button>
+                        </Grid>
 
                         <Grid Grid.Row="3" Grid.Column="3">
                             <Image Source="icons/temporary/rings/example.jpg" Width="60"/>

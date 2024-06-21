@@ -57,6 +57,13 @@ namespace Model
             "5 сектор, 15%",
         };
 
+        public List<string> Equipments = new List<string>
+        {
+            "Empty",
+            "Cloath",
+            "Leather"
+        };
+
 
         public Dictionary<string, double> ConvertInModifiers(string inp)
         {
