@@ -37,6 +37,8 @@ namespace View
             iconsCloaks = new List<BitmapImage> { emptyCloak, fiveMagicalCloak, tenMagicalCloak, fifteenMagicalCloak, fourPhysicalCloak, sevenPhysicalCloak };
             iconsBracelets = new List<BitmapImage> { emptyBracelet, sixMagicalBracelet, sevenMagicalBracelet, fourPhysicalBracelet, fivePhysicalBracelet };
             iconsRings = new List<BitmapImage> { emptyRing, fiveMagicalRing, nineMagicalRing, tenMagicalRing, threePhysicalRing, sixPhysicalRing };
+            iconsSets = new List<BitmapImage> { emptySet, magicalSet, physicalSet };
+
 
             Load();
 
@@ -274,6 +276,7 @@ namespace View
             updateHands();
             updateBelt();
             updateFoots();
+            updateSet();
             #endregion
         }
 
@@ -512,13 +515,15 @@ namespace View
         private BitmapImage beltEquipment = new BitmapImage(new Uri("/icons/temporary/equipments/belt.jpg", UriKind.Relative));
         private BitmapImage footsEquipment = new BitmapImage(new Uri("/icons/temporary/equipments/foots.jpg", UriKind.Relative));
 
-        
+        #endregion
+        #region сеты
+        private BitmapImage emptySet = new BitmapImage(new Uri("/icons/temporary/set/empty.jpg", UriKind.Relative));
+        private BitmapImage magicalSet = new BitmapImage(new Uri("/icons/temporary/set/12mag.jpg", UriKind.Relative));
+        private BitmapImage physicalSet = new BitmapImage(new Uri("/icons/temporary/set/8phys.jpg", UriKind.Relative));
 
+        private List<BitmapImage> iconsSets = new List<BitmapImage>();
 
         #endregion
-
-
-
 
 
 
@@ -1758,6 +1763,35 @@ namespace View
             Logic.SelectedFoots = Logic.Equipments[idPrev];
 
             updateFoots();
+        }
+
+        private void updateSet()
+        {
+            setChoiceIcon.Source = iconsSets[Logic.Sets.IndexOf(Logic.SelectedSet)];
+        }
+
+        private void setChoiceButton_Click(object sender, RoutedEventArgs e)
+        {
+            int idPrev = Logic.Sets.IndexOf(Logic.SelectedSet);
+            if (++idPrev >= Logic.Sets.Count)
+            {
+                idPrev = 0;
+            }
+            Logic.SelectedSet = Logic.Sets[idPrev];
+
+            updateSet();
+        }
+
+        private void setChoiceButton_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            int idPrev = Logic.Sets.IndexOf(Logic.SelectedSet);
+            if (--idPrev < 0)
+            {
+                idPrev = Logic.Sets.Count - 1;
+            }
+            Logic.SelectedSet = Logic.Sets[idPrev];
+
+            updateSet();
         }
     }
 

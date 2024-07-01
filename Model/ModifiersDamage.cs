@@ -48,6 +48,9 @@ namespace Model
             "12% маг",
             "8% физ"
         };
+        /// <summary>
+        /// Дурак это баф на урон от скиллов
+        /// </summary>
         public List<string> Castle = new List<string>() {
             "Без замка 0%",
             "1 сектор, 5%",
@@ -64,7 +67,11 @@ namespace Model
             "Leather"
         };
 
-
+        /// <summary>
+        /// Конвертирует полученный элемент в прибавку урона
+        /// </summary>
+        /// <param name="inp"></param>
+        /// <returns>Словарь с ключами Magical и Physical</returns>
         public Dictionary<string, double> ConvertInModifiers(string inp)
         {
             var result = new Dictionary<string, double>() { {"Magical", 0 }, {"Physical", 0} };

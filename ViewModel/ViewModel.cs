@@ -305,15 +305,20 @@ namespace ViewModel
                     CalcRage();
                     CalcFacilitation();
 
+                    CalcPercentMagicalDD();
+                    CalcPercentPhysicalDD();
+
                     double coefRage = FormulaCoefficientOfRage() * 0.1;
 
 
                     // TODO
                     // переписать
 
-                    int pureMagicalDD = (int)(magicdd / legendaryCoefficientMagicalDD);
+                    //int pureMagicalDD = (int)(magicdd / legendaryCoefficientMagicalDD);
+                    int pureMagicalDD = (int)(magicdd / (1 + percentMagicalDD / 100));
                     magicdd = (int)(pureMagicalDD * (coefficientTriton  * MermanDuration() + coefRage)  + magicdd);
-                    int purePhysicalDD = (int)(physdd / legendaryCoefficientPhysicalDD);
+                    //int purePhysicalDD = (int)(physdd / legendaryCoefficientPhysicalDD);
+                    int purePhysicalDD = (int)(physdd / (1 + percentPhysicalDD / 100));
                     physdd = (int)(purePhysicalDD * coefRage + physdd);
 
 
@@ -781,6 +786,7 @@ namespace ViewModel
         {
             skillCooldown = 0;
             skillCooldown += SkillCooldown;
+            if (CastleSwordActive) skillCooldown += 5;
             if (DoubleConcentrationActive)
                 skillCooldown += DoubleConcentration.AddSkillCooldown();
             if (skillCooldown > maxSkillCooldowm) skillCooldown = maxSkillCooldowm;
@@ -802,6 +808,7 @@ namespace ViewModel
         {
             attackSpeed = 0;
             attackSpeed += AttackSpeed;
+            if (CastleSwordActive) attackSpeed += 5;
             if (DoubleConcentrationActive)
                 attackSpeed += DoubleConcentration.AddAttackSpeed();
             if (attackSpeed > maxAttackSpeed) attackSpeed = maxAttackSpeed;
@@ -839,6 +846,7 @@ namespace ViewModel
         {
             criticalHitHero = 0;
             criticalHitHero += CriticalHit;
+            if (CastleSwordActive) criticalHitHero += 5;
             if (BlessingOfTheMoonActive) criticalHitHero += BlessingOfTheMoon.AdditionCriticalHit;
             if (CrushingWillActive) criticalHitHero += crushingWillAdditionalCriticalHit;
             criticalHit = criticalHitHero;
@@ -910,6 +918,7 @@ namespace ViewModel
         {
             penetrationHero = 0;
             penetrationHero += Penetration;
+            if (CastleSwordActive) penetrationHero += 5;
             if (BlessingOfTheMoonActive) penetrationHero += BlessingOfTheMoon.AdditionPenetration;
             if (IrreversibleAngerActive) penetrationHero += irreversibleAngerAdditionalPenetration;
             //penetrationLuna = penetrationHero;
@@ -951,6 +960,7 @@ namespace ViewModel
         {
             accuracyHero = 0;
             accuracyHero += Accuracy;
+            if (CastleSwordActive) accuracyHero += 5;
             if (IrreversibleAngerActive) accuracyHero += irreversibleAngerAdditionalAccuracy;
             accuracy = accuracyHero;
             if (accuracyHero > maxAccuracyHero) accuracyHero = maxAccuracyHero;
@@ -1071,6 +1081,33 @@ namespace ViewModel
         }
         #endregion
         #region Проценты дд
+
+        #region базовые модификаторы дд
+
+        private bool guildDamageModifierActive = true;
+        public bool GuildDamageModifierActive
+        {
+            get => guildDamageModifierActive;
+            set
+            {
+                guildDamageModifierActive = value;
+                Calculate(); NotifyPropertyChanged(nameof(GuildDamageModifierActive));
+            }
+        }
+
+        private bool talentDamageModifierActive = true;
+        public bool TalentDamageModifierActive
+        {
+            get => talentDamageModifierActive;
+            set
+            {
+                talentDamageModifierActive = value;
+                Calculate(); NotifyPropertyChanged(nameof(TalentDamageModifierActive));
+            }
+        }
+
+        #endregion
+
         private double percentMagicalDD = 0;
         public double PercentMagicalDD
         {
@@ -1087,7 +1124,20 @@ namespace ViewModel
         private void CalcPercentMagicalDD()
         {
             percentMagicalDD = 0;
-            
+            percentMagicalDD += 4;
+
+            percentMagicalDD += ModifiersDamage.ConvertInModifiers(SelectedCloak)["Magical"];
+            percentMagicalDD += ModifiersDamage.ConvertInModifiers(SelectedAmulet)["Magical"];
+            percentMagicalDD += ModifiersDamage.ConvertInModifiers(SelectedBraceletL)["Magical"];
+            percentMagicalDD += ModifiersDamage.ConvertInModifiers(SelectedBraceletR)["Magical"];
+            percentMagicalDD += ModifiersDamage.ConvertInModifiers(SelectedRingL)["Magical"];
+            percentMagicalDD += ModifiersDamage.ConvertInModifiers(SelectedRingR)["Magical"];
+            percentMagicalDD += ModifiersDamage.ConvertInModifiers(SelectedSet)["Magical"];
+
+            if (GuildDamageModifierActive) percentMagicalDD += 10;
+            if (TalentDamageModifierActive) percentMagicalDD += 4.75;
+            if (CastleSwordActive) percentMagicalDD += 7.5;
+
         }
 
         private double percentPhysicalDD = 18.75;
@@ -1103,6 +1153,26 @@ namespace ViewModel
             }
         }
 
+        private void CalcPercentPhysicalDD()
+        {
+            percentPhysicalDD = 0;
+            percentPhysicalDD += 4;
+
+            percentPhysicalDD += ModifiersDamage.ConvertInModifiers(SelectedCloak)["Physical"];
+            percentPhysicalDD += ModifiersDamage.ConvertInModifiers(SelectedAmulet)["Physical"];
+            percentPhysicalDD += ModifiersDamage.ConvertInModifiers(SelectedBraceletL)["Physical"];
+            percentPhysicalDD += ModifiersDamage.ConvertInModifiers(SelectedBraceletR)["Physical"];
+            percentPhysicalDD += ModifiersDamage.ConvertInModifiers(SelectedRingL)["Physical"];
+            percentPhysicalDD += ModifiersDamage.ConvertInModifiers(SelectedRingR)["Physical"];
+            percentPhysicalDD += ModifiersDamage.ConvertInModifiers(SelectedSet)["Physical"];
+
+            if (GuildDamageModifierActive) percentPhysicalDD += 10;
+            if (TalentDamageModifierActive) percentPhysicalDD += 4.75;
+            if (CastleSwordActive) percentPhysicalDD += 7.5;
+
+        }
+
+
         private int pureMagicalDD = 0;
         public int PureMagicalDD
         {
@@ -1116,6 +1186,9 @@ namespace ViewModel
         private int MagicalDDFinal = 0;
         private void CalcMagicalDD()
         {
+
+
+
             MagicalDDFinal = 0; 
 
         }
@@ -1552,7 +1625,22 @@ namespace ViewModel
             }
         }
 
+        public List<string> Sets
+        {
+            get => ModifiersDamage.Sets;
+        }
 
+        private string selectedSet = "0%";
+        public string SelectedSet
+        {
+            get => selectedSet;
+            set
+            {
+                selectedSet = value;
+                Calculate();
+                NotifyPropertyChanged(nameof(SelectedSet));
+            }
+        }
 
 
         #endregion
@@ -2550,6 +2638,23 @@ namespace ViewModel
                 result += 0.15;
             return result;
         }
+        #endregion
+
+        #region замок
+
+        private bool castleSwordActive = false;
+
+        public bool CastleSwordActive
+        {
+            get => castleSwordActive;
+            set
+            {
+                castleSwordActive = value;
+                Calculate();
+                NotifyPropertyChanged(nameof(CastleSwordActive));
+            }
+        }
+
         #endregion
 
         #region дебафы

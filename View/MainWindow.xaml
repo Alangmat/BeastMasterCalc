@@ -1962,7 +1962,22 @@
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center" Width="174" Text="урон скиллов от замка" Margin="128,0,0,0"/>
                                 </Grid>
+
                                 <Grid Grid.Row="2">
+                                    <CheckBox
+                                        IsChecked="{Binding CastleSwordActive}"
+                                        HorizontalAlignment="Left" 
+                                        Height="18" 
+                                        Margin="10,0,0,0"
+                                        VerticalAlignment="Center" 
+                                        Width="284">
+                                        <TextBlock
+                                            TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Инстинкт Нападения (баф меча с замка)"/></TextBlock>
+                                    </CheckBox>
+                                    
+                                </Grid>
+                                
+                                <Grid Grid.Row="3">
                                     <CheckBox
                                         IsChecked="{Binding SacredShieldHeroActive}"
                                         HorizontalAlignment="Left" 
@@ -1974,7 +1989,7 @@
                                             TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Сакральный щит паладина на персонажа"/></TextBlock>
                                     </CheckBox>
                                 </Grid>
-                                <Grid Grid.Row="3">
+                                <Grid Grid.Row="4">
                                     <CheckBox
                                         IsChecked="{Binding SacredShieldLunaActive}"
                                         HorizontalAlignment="Left" 
@@ -2226,6 +2241,31 @@
                             </Button>
                         </Grid>
 
+                        <Grid Grid.Column="0" Grid.Row="1">
+                            <Label
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                >
+                                <TextBlock Text="Бонусы костюма:"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"/>
+                            </Label>
+                        </Grid>
+
+                        <Grid Grid.Row="1" Grid.Column="1">
+                            <Button 
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Width="60"
+                            Height="60"
+                                Margin="5"
+                            x:Name="setChoiceButton" Click="setChoiceButton_Click" MouseRightButtonDown="setChoiceButton_MouseRightButtonDown">
+                                <Grid>
+                                    <Image x:Name="setChoiceIcon"/>
+                                </Grid>
+                            </Button>
+                        </Grid>
+
                         <Grid Grid.Row="1" Grid.Column="2">
                             <Button 
                             HorizontalAlignment="Center"
@@ -2359,7 +2399,42 @@
 
 
                     </Grid>
-                    
+
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <CheckBox HorizontalAlignment="Left" 
+                                      IsChecked="{Binding GuildDamageModifierActive}"
+                                      VerticalAlignment="Center">
+                                <TextBlock>
+                                    7 уровень гильдии (10%)
+                                </TextBlock>
+                            </CheckBox>
+                        </Grid>
+                        <Grid Grid.Row="1">
+                            <CheckBox HorizontalAlignment="Left" 
+                                      IsChecked="{Binding TalentDamageModifierActive}"
+                                      VerticalAlignment="Center">
+                                <TextBlock>
+                                    Таланты (4.75%)
+                                </TextBlock>
+                            </CheckBox>
+                        </Grid>
+                        
+                    </Grid>
                     
                     
 
