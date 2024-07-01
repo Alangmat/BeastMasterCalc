@@ -579,6 +579,14 @@
     <Resource Include="icons\temporary\equipments\helmet.jpg" />
     <Resource Include="icons\temporary\equipments\leather.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\temporary\set\12mag.jpg" />
+    <Resource Include="icons\temporary\set\8phys.jpg" />
+    <Resource Include="icons\temporary\set\empty.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\temporary\castle\sword.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.6.5.5\build\Fody.targets" Condition="Exists('..\packages\Fody.6.5.5\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
