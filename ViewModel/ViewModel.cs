@@ -15,6 +15,7 @@ using System.Windows.Input;
 using Newtonsoft.Json;
 using System.IO;
 using System.Collections.ObjectModel;
+using Newtonsoft.Json.Linq;
 
 namespace ViewModel
 {
@@ -200,12 +201,25 @@ namespace ViewModel
             NotifyPropertyChanged(nameof(SacredShieldHeroActive));
             NotifyPropertyChanged(nameof(SacredShieldLunaActive));
             NotifyPropertyChanged(nameof(Counterstand));
+
+            NotifyPropertyChanged(nameof(GuildDamageStartModifierActive));
+            NotifyPropertyChanged(nameof(GuildDamageModifierActive));
+            NotifyPropertyChanged(nameof(TalentDamageStartModifierActive));
+            NotifyPropertyChanged(nameof(TalentDamageModifierActive));
+            NotifyPropertyChanged(nameof(CastleStartModifierActive));
+            NotifyPropertyChanged(nameof(CastleSwordActive));
+
             #endregion
 
             #region Обновление талантов
 
+            // ТУТ БАГУЛЯ ЖОСКАЯ С ПРИКАЗОМ К АТАКЕ
+            
             ForestInspirationActive = DataSet.ForestInspirationActive;
             DualRageActive = DataSet.DualRageActive;
+            GuardianUnityActive = DataSet.GuardianUnityActive;
+            
+
             NotifyPropertyChanged("HasTalantMoonTouchPlus");
             NotifyPropertyChanged("HasTalantPowerOfNature");
 
@@ -217,6 +231,8 @@ namespace ViewModel
             NotifyPropertyChanged("LvlTalantMoonlightPlus");
             NotifyPropertyChanged("HasTalantSymbiosis");
             NotifyPropertyChanged("LvlTalantOrderToAttackPlusDualRage");
+            NotifyPropertyChanged("LvlTalantOrderToAttackPlusGuardianUnity");
+
 
             LvlTalantBestialRage = DataSet.LvlTalantBestialRage;
             LvlTalantPredatoryDelirium = DataSet.LvlTalantPredatoryDelirium;
@@ -224,6 +240,7 @@ namespace ViewModel
             LvlTalantMomentOfPower = DataSet.LvlTalantMomentOfPower;
             LvlTalantLongDeath = DataSet.LvlTalantLongDeath;
 
+            HasTalentHarmoniousPower = DataSet.HasTalentHarmoniousPower;
 
             LvlTalantContinuousFury = DataSet.LvlTalantContinuousFury;
 
@@ -231,6 +248,20 @@ namespace ViewModel
             Penetration = DataSet.Penetration;
             Accuracy = DataSet.Accuracy;
 
+            NotifyPropertyChanged(nameof(SelectedAmulet));
+            NotifyPropertyChanged(nameof(SelectedCloak));
+            NotifyPropertyChanged(nameof(SelectedRingL));
+            NotifyPropertyChanged(nameof(SelectedRingR));
+            NotifyPropertyChanged(nameof(SelectedBraceletL));
+            NotifyPropertyChanged(nameof(SelectedBraceletR));
+
+            NotifyPropertyChanged(nameof(SelectedSet));
+
+            NotifyPropertyChanged(nameof(SelectedHelmet));
+            NotifyPropertyChanged(nameof(SelectedBody));
+            NotifyPropertyChanged(nameof(SelectedHands));
+            NotifyPropertyChanged(nameof(SelectedBelt));
+            NotifyPropertyChanged(nameof(SelectedFoots));
 
             #endregion
             #region Свойства, зависимые от изменений
@@ -305,7 +336,11 @@ namespace ViewModel
                     CalcRage();
                     CalcFacilitation();
 
+                    calcHarmoniousPowerDD();
+
+                    CalcPercentMagicalDDStart();
                     CalcPercentMagicalDD();
+                    CalcPercentPhysicalDDStart();
                     CalcPercentPhysicalDD();
 
                     double coefRage = FormulaCoefficientOfRage() * 0.1;
@@ -315,11 +350,11 @@ namespace ViewModel
                     // переписать
 
                     //int pureMagicalDD = (int)(magicdd / legendaryCoefficientMagicalDD);
-                    int pureMagicalDD = (int)(magicdd / (1 + percentMagicalDD / 100));
-                    magicdd = (int)(pureMagicalDD * (coefficientTriton  * MermanDuration() + coefRage)  + magicdd);
+                    int pureMagicalDD = (int)(magicdd / (1 + percentMagicalDDStart / 100));
+                    magicdd = (int)(pureMagicalDD * (coefficientTriton  * MermanDuration() + coefRage)  + pureMagicalDD * (1 + percentMagicalDD / 100));
                     //int purePhysicalDD = (int)(physdd / legendaryCoefficientPhysicalDD);
-                    int purePhysicalDD = (int)(physdd / (1 + percentPhysicalDD / 100));
-                    physdd = (int)(purePhysicalDD * coefRage + physdd);
+                    int purePhysicalDD = (int)(physdd / (1 + percentPhysicalDDStart / 100));
+                    physdd = (int)(purePhysicalDD * coefRage + purePhysicalDD * (1 + percentPhysicalDD / 100));
 
 
 
@@ -686,6 +721,12 @@ namespace ViewModel
             return result;
         }
 
+        /// <summary>
+        /// Метод для расчета урона в минуту таланта симбиоз из 2 ветки
+        /// </summary>
+        /// <param name="magedd"></param>
+        /// <param name="physdd"></param>
+        /// <returns>Hero - урон симбиоза от персонажа, Luna - урон симбиозиса от луны</returns>
         public Dictionary<string, int> CalcSymbiosis(int magedd, int physdd)
         {
             var result = new Dictionary<string, int>();
@@ -822,7 +863,7 @@ namespace ViewModel
         private double criticalHitHero = 0;
         private double additionCriticalHitHeroAttack = 0;
         private double criticalHit = 0;
-        private double criticalHitLuna = 50;
+        private double criticalHitLuna = 0;
         public double CriticalHit
         {
             get => DataSet.CriticalHit;
@@ -887,9 +928,9 @@ namespace ViewModel
         private double maxPenetration = 100;
         private double penetration = 0;
         private double maxPenetrationHero = 50;
-        private double penetrationHero = 35;
+        private double penetrationHero = 0;
         private double minPenetration = 0;
-        private double penetrationLuna = 35;
+        private double penetrationLuna = 0;
         public double Penetration
         {
             //get => penetration;
@@ -1083,31 +1124,74 @@ namespace ViewModel
         #region Проценты дд
 
         #region базовые модификаторы дд
-
+        #region гильдия
+        private bool guildDamageStartModifierActive = true;
+        public bool GuildDamageStartModifierActive
+        {
+            //get => guildDamageStartModifierActive;
+            get => DataSet.GuildDamageStartModifierActive;
+            set
+            {
+                //guildDamageStartModifierActive = value;
+                DataSet.GuildDamageStartModifierActive = value;
+                Calculate(); NotifyPropertyChanged(nameof(GuildDamageStartModifierActive));
+            }
+        }
         private bool guildDamageModifierActive = true;
         public bool GuildDamageModifierActive
         {
-            get => guildDamageModifierActive;
+            //get => guildDamageModifierActive;
+            get => DataSet.GuildDamageModifierActive;
             set
             {
-                guildDamageModifierActive = value;
+                //guildDamageModifierActive = value;
+                DataSet.GuildDamageModifierActive = value;
                 Calculate(); NotifyPropertyChanged(nameof(GuildDamageModifierActive));
+            }
+        }
+        #endregion
+        #region талант на дд
+        private bool talentDamageStartModifierActive = true;
+        public bool TalentDamageStartModifierActive
+        {
+            //get => talentDamageStartModifierActive;
+            get => DataSet.TalentDamageStartModifierActive;
+            set
+            {
+                //talentDamageStartModifierActive = value;
+                DataSet.TalentDamageStartModifierActive = value;
+                Calculate(); NotifyPropertyChanged(nameof(TalentDamageStartModifierActive));
             }
         }
 
         private bool talentDamageModifierActive = true;
         public bool TalentDamageModifierActive
         {
-            get => talentDamageModifierActive;
+            //get => talentDamageModifierActive;
+            get => DataSet.TalentDamageModifierActive;
             set
             {
-                talentDamageModifierActive = value;
+                //talentDamageModifierActive = value;
+                DataSet.TalentDamageModifierActive = value;
                 Calculate(); NotifyPropertyChanged(nameof(TalentDamageModifierActive));
             }
         }
-
+        #endregion
+        private bool castleStartModifierActive = false;
+        public bool CastleStartModifierActive
+        {
+            //get => castleStartModifierActive;
+            get => DataSet.CastleStartModifierActive;
+            set
+            {
+                //castleStartModifierActive = value;
+                DataSet.CastleStartModifierActive = value;
+                Calculate(); NotifyPropertyChanged(nameof(CastleStartModifierActive));
+            }
+        }
         #endregion
 
+        private double percentMagicalDDStart = 0;
         private double percentMagicalDD = 0;
         public double PercentMagicalDD
         {
@@ -1121,6 +1205,24 @@ namespace ViewModel
             }
         }
 
+        private void CalcPercentMagicalDDStart()
+        {
+            percentMagicalDDStart = 0;
+            percentMagicalDDStart += 4;
+
+            percentMagicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedCloak)["Magical"];
+            percentMagicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedAmulet)["Magical"];
+            percentMagicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedBraceletL)["Magical"];
+            percentMagicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedBraceletR)["Magical"];
+            percentMagicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedRingL)["Magical"];
+            percentMagicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedRingR)["Magical"];
+            percentMagicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedSet)["Magical"];
+
+            if (GuildDamageStartModifierActive) percentMagicalDDStart += 10;
+            if (TalentDamageStartModifierActive) percentMagicalDDStart += 4.75;
+            if (CastleStartModifierActive) percentMagicalDDStart += 7.5;
+
+        }
         private void CalcPercentMagicalDD()
         {
             percentMagicalDD = 0;
@@ -1137,10 +1239,12 @@ namespace ViewModel
             if (GuildDamageModifierActive) percentMagicalDD += 10;
             if (TalentDamageModifierActive) percentMagicalDD += 4.75;
             if (CastleSwordActive) percentMagicalDD += 7.5;
-
+            if (HasTalentHarmoniousPower) percentMagicalDD += harmoniousPowerMDD;
         }
 
-        private double percentPhysicalDD = 18.75;
+        private double percentPhysicalDDStart = 0;
+        private double percentPhysicalDD = 0;
+
         public double PercentPhysicalDD
         {
             get => DataSet.PercentPhysicalDD;
@@ -1151,6 +1255,25 @@ namespace ViewModel
                 legendaryCoefficientPhysicalDD = 1 + DataSet.PercentPhysicalDD / 100;
                 Calculate(); NotifyPropertyChanged("PercentPhysicalDD");
             }
+        }
+
+        private void CalcPercentPhysicalDDStart()
+        {
+            percentPhysicalDDStart = 0;
+            percentPhysicalDDStart += 4;
+
+            percentPhysicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedCloak)["Physical"];
+            percentPhysicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedAmulet)["Physical"];
+            percentPhysicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedBraceletL)["Physical"];
+            percentPhysicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedBraceletR)["Physical"];
+            percentPhysicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedRingL)["Physical"];
+            percentPhysicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedRingR)["Physical"];
+            percentPhysicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedSet)["Physical"];
+
+            if (GuildDamageStartModifierActive) percentPhysicalDDStart += 10;
+            if (TalentDamageStartModifierActive) percentPhysicalDDStart += 4.75;
+            if (CastleStartModifierActive) percentPhysicalDDStart += 7.5;
+
         }
 
         private void CalcPercentPhysicalDD()
@@ -1169,6 +1292,7 @@ namespace ViewModel
             if (GuildDamageModifierActive) percentPhysicalDD += 10;
             if (TalentDamageModifierActive) percentPhysicalDD += 4.75;
             if (CastleSwordActive) percentPhysicalDD += 7.5;
+            if (HasTalentHarmoniousPower) percentPhysicalDD += harmoniousPowerPDD;
 
         }
 
@@ -1249,11 +1373,12 @@ namespace ViewModel
                 Calculate(); NotifyPropertyChanged("Resilience");
             }
         }
-        
+
         #endregion
 
         #region Свойства для вывода на View
-
+        #region показатели урона
+        #region дд
         private string outDD;
         public string OutDD
         {
@@ -1273,7 +1398,7 @@ namespace ViewModel
             get => outDDLuna;
             set { outDDLuna = value; NotifyPropertyChanged("OutDDLuna"); }
         }
-
+        #endregion
         #region Attack
 
         private string outAttackDD;
@@ -1290,7 +1415,6 @@ namespace ViewModel
         }
 
         #endregion
-
         #region Moon Touch
         private string outMoonTouchDD;
         public string OutMoonTouchDD
@@ -1428,7 +1552,7 @@ namespace ViewModel
         }
 
         #endregion
-
+        #endregion
 
         #region Вкладка с билдами
 
@@ -1465,22 +1589,20 @@ namespace ViewModel
 
         #endregion
 
-
         #region Списки
 
         public List<string> Amulets
         {
             get => ModifiersDamage.Amulets;
-
         }
 
         private string selectedAmulet = "0%";
         public string SelectedAmulet
         {
-            get => selectedAmulet;
+            get => DataSet.SelectedAmulet;
             set
             {
-                selectedAmulet = value;
+                DataSet.SelectedAmulet = value;
                 Calculate();
                 NotifyPropertyChanged(nameof(SelectedAmulet));
             }
@@ -1495,10 +1617,10 @@ namespace ViewModel
         private string selectedCloak = "0%";
         public string SelectedCloak
         {
-            get => selectedCloak;
+            get => DataSet.SelectedCloak;
             set
             {
-                selectedCloak = value;
+                DataSet.SelectedCloak = value;
                 Calculate();
                 NotifyPropertyChanged(nameof(SelectedCloak));
             }
@@ -1512,10 +1634,10 @@ namespace ViewModel
         private string selectedRingL = "0%";
         public string SelectedRingL
         {
-            get => selectedRingL;
+            get => DataSet.SelectedRingL;
             set
             {
-                selectedRingL = value;
+                DataSet.SelectedRingL = value;
                 Calculate();
                 NotifyPropertyChanged(nameof(SelectedRingL));
             }
@@ -1524,10 +1646,10 @@ namespace ViewModel
         private string selectedRingR = "0%";
         public string SelectedRingR
         {
-            get => selectedRingR;
+            get => DataSet.SelectedRingR;
             set
             {
-                selectedRingR = value;
+                DataSet.SelectedRingR = value;
                 Calculate();
                 NotifyPropertyChanged(nameof(SelectedRingR));
             }
@@ -1540,10 +1662,10 @@ namespace ViewModel
         private string selectedBraceletL = "0%";
         public string SelectedBraceletL
         {
-            get => selectedBraceletL;
+            get => DataSet.SelectedBraceletL;
             set
             {
-                selectedBraceletL = value;
+                DataSet.SelectedBraceletL = value;
                 Calculate();
                 NotifyPropertyChanged(nameof(SelectedBraceletL));
             }
@@ -1552,10 +1674,10 @@ namespace ViewModel
         private string selectedBraceletR = "0%";
         public string SelectedBraceletR
         {
-            get => selectedBraceletR;
+            get => DataSet.SelectedBraceletR;
             set
             {
-                selectedBraceletR = value;
+                DataSet.SelectedBraceletR = value;
                 Calculate();
                 NotifyPropertyChanged(nameof(SelectedBraceletR));
             }
@@ -1568,10 +1690,10 @@ namespace ViewModel
         private string selectedHelmet = "Empty";
         public string SelectedHelmet
         {
-            get => selectedHelmet;
+            get => DataSet.SelectedHelmet;
             set
             {
-                selectedHelmet = value;
+                DataSet.SelectedHelmet = value;
                 Calculate();
                 NotifyPropertyChanged(nameof(SelectedHelmet));
             }
@@ -1580,10 +1702,10 @@ namespace ViewModel
         private string selectedBody = "Empty";
         public string SelectedBody
         {
-            get => selectedBody;
+            get => DataSet.SelectedBody;
             set
             {
-                selectedBody = value;
+                DataSet.SelectedBody = value;
                 Calculate();
                 NotifyPropertyChanged(nameof(SelectedBody));
             }
@@ -1592,10 +1714,10 @@ namespace ViewModel
         private string selectedHands = "Empty";
         public string SelectedHands
         {
-            get => selectedHands;
+            get => DataSet.SelectedHands;
             set
             {
-                selectedHands = value;
+                DataSet.SelectedHands = value;
                 Calculate();
                 NotifyPropertyChanged(nameof(SelectedHands));
             }
@@ -1604,10 +1726,10 @@ namespace ViewModel
         private string selectedBelt = "Empty";
         public string SelectedBelt
         {
-            get => selectedBelt;
+            get => DataSet.SelectedBelt;
             set
             {
-                selectedBelt = value;
+                DataSet.SelectedBelt = value;
                 Calculate();
                 NotifyPropertyChanged(nameof(SelectedBelt));
             }
@@ -1616,10 +1738,10 @@ namespace ViewModel
         private string selectedFoots = "Empty";
         public string SelectedFoots
         {
-            get => selectedFoots;
+            get => DataSet.SelectedFoots;
             set
             {
-                selectedFoots = value;
+                DataSet.SelectedFoots = value;
                 Calculate();
                 NotifyPropertyChanged(nameof(SelectedFoots));
             }
@@ -1633,10 +1755,12 @@ namespace ViewModel
         private string selectedSet = "0%";
         public string SelectedSet
         {
-            get => selectedSet;
+            //get => selectedSet;
+            get => DataSet.SelectedSet;
             set
             {
-                selectedSet = value;
+                //selectedSet = value;
+                DataSet.SelectedSet = value;
                 Calculate();
                 NotifyPropertyChanged(nameof(SelectedSet));
             }
@@ -1754,6 +1878,7 @@ namespace ViewModel
         /// <param name="prop">Имя свойства, которое изменилось</param>
         public void NotifyPropertyChanged([CallerMemberName] string prop = "") =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+
         public string MagicalDD
         {
             //get => magicalDD;
@@ -1977,21 +2102,58 @@ namespace ViewModel
         
         public bool GuardianUnityActive
         {
-            get => guardianUnityActive;
+            //get => guardianUnityActive;
+            get => DataSet.GuardianUnityActive;
             set
             {
-                guardianUnityActive = value;
+                DataSet.GuardianUnityActive = value;
                 // TODO
                 // прописать логику выключения других веток,
                 // взаимодействие с сейвом
-                if (!guardianUnityActive)
+                if (!value)
                 {
                     HasTalantBlessingOfTheMoonPlusPenetration = false;
                     LvlTalantOrderToAttackPlusGuardianUnity = 0;
+                    HasTalentHarmoniousPower = false;
                 }
+                
 
             }
         }
+        private bool hasTalentHarmoniousPower = false;
+        public bool HasTalentHarmoniousPower
+        {
+            //get => hasTalentHarmoniousPower;
+            get => DataSet.HasTalentHarmoniousPower;
+            set
+            {
+                DataSet.HasTalentHarmoniousPower = value;
+                calcHarmoniousPowerDD();
+                Calculate(); NotifyPropertyChanged(nameof(HasTalentHarmoniousPower));
+            }
+        }
+        private void calcHarmoniousPowerDD()
+        {
+            harmoniousPowerMDD = 0;
+            harmoniousPowerPDD = 0;
+            if (HasTalentHarmoniousPower)
+            {
+                harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(SelectedHelmet)["Magical"];
+                harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(SelectedBody)["Magical"];
+                harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(SelectedHands)["Magical"];
+                harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(selectedBelt)["Magical"];
+                harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(selectedFoots)["Magical"];
+
+                harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(SelectedHelmet)["Physical"];
+                harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(SelectedBody)["Physical"];
+                harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(SelectedHands)["Physical"];
+                harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(selectedBelt)["Physical"];
+                harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(selectedFoots)["Physical"];
+            }
+        }
+        private double harmoniousPowerMDD = 0;
+        private double harmoniousPowerPDD = 0;
+
 
         #endregion
         #endregion
@@ -2257,10 +2419,15 @@ namespace ViewModel
                         //penetrationLuna = penetration;
                         penetrationLuna = penetration;
                     }
-                    if (criticalHitLuna > maxCriticalHit) criticalHitLuna = maxCriticalHit;
-                    if (penetrationLuna > maxPenetration) penetrationLuna = maxPenetration;
 
                 }
+                else
+                {
+                    criticalHitLuna = criticalHit;
+                    penetrationLuna = penetration;
+                }
+                if (criticalHitLuna > maxCriticalHit) criticalHitLuna = maxCriticalHit;
+                if (penetrationLuna > maxPenetration) penetrationLuna = maxPenetration;
 
                 NotifyPropertyChanged("IsUsingBlessingOfTheMoonOnLuna");
             }
@@ -2521,14 +2688,10 @@ namespace ViewModel
         public int LvlTalantOrderToAttackPlusDualRage
         {
             //get => OrderToAttack.LvlTalant;
-            get
-            {
-                if (DualRageActive) return OrderToAttack.LvlTalant;
-                return 0;
-            }
+            get => OrderToAttack.LvlTalantDualRage;
             set
             {
-                OrderToAttack.LvlTalant = value;
+                OrderToAttack.LvlTalantDualRage = value;
                 Calculate();
                 NotifyPropertyChanged("LvlTalantOrderToAttackPlusDualRage");
             }
@@ -2536,14 +2699,10 @@ namespace ViewModel
         public int LvlTalantOrderToAttackPlusGuardianUnity
         {
             //get => OrderToAttack.LvlTalant;
-            get
-            {
-                if (GuardianUnityActive) return OrderToAttack.LvlTalant;
-                return 0;
-            }
+            get => OrderToAttack.LvlTalantGuardianUnity;
             set
             {
-                OrderToAttack.LvlTalant = value;
+                OrderToAttack.LvlTalantGuardianUnity = value;
                 Calculate();
                 NotifyPropertyChanged("LvlTalantOrderToAttackPlusGuardianUnity");
             }
@@ -2646,10 +2805,11 @@ namespace ViewModel
 
         public bool CastleSwordActive
         {
-            get => castleSwordActive;
+            //get => castleSwordActive;
+            get => DataSet.CastleSwordActive;
             set
             {
-                castleSwordActive = value;
+                DataSet.CastleSwordActive = value;
                 Calculate();
                 NotifyPropertyChanged(nameof(CastleSwordActive));
             }

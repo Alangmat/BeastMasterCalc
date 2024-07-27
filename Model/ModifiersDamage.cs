@@ -63,7 +63,7 @@ namespace Model
         public List<string> Equipments = new List<string>
         {
             "Empty",
-            "Cloath",
+            "Cloth",
             "Leather"
         };
 
@@ -82,7 +82,16 @@ namespace Model
             switch (inp.Split().Length)
             {
                 case 1:
-
+                    if (inp == "Cloth")
+                    {
+                        result["Magical"] = 3;
+                        result["Physical"] = 2;
+                    }
+                    else if (inp == "Leather")
+                    {
+                        result["Physical"] = 3;
+                        result["Magical"] = 2;
+                    }
                     break;
 
                 case 2:

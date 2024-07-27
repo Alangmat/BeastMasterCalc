@@ -67,15 +67,52 @@ namespace Model
         public double Resilience { get; set; }
         #endregion
         #region other
+        #region тритоны
 
         public bool CrushingWill { get; set; } = false;
         public bool IrreversibleAnger { get; set; } = false;
+        #endregion
+        public bool Counterstand = false;
+        #region исходные бафы
+
+        public bool GuildDamageStartModifierActive = false;
+        public bool CastleStartModifierActive = false;
+        public bool TalentDamageStartModifierActive = false;
+
+        #endregion
+
+        #region Конечные бафы
+
+        public bool GuildDamageModifierActive = false;
+        public bool CastleSwordActive = false;
+        public bool TalentDamageModifierActive = false;
         public string NumberCastle { get; set; } = "Без замка";
         public bool BPDungeon { get; set; } = false;
         public bool SacredShieldHeroActive = false;
         public bool SacredShieldLunaActive = false;
 
-        public bool Counterstand = false;
+        #endregion
+
+        #region шмот
+
+        public string SelectedAmulet = "0%";
+        public string SelectedCloak = "0%";
+        public string SelectedRingL = "0%";
+        public string SelectedRingR = "0%";
+        public string SelectedBraceletL = "0%";
+        public string SelectedBraceletR = "0%";
+        public string SelectedSet = "0%";
+        
+        public string SelectedHelmet = "Empty";
+        public string SelectedBody = "Empty";
+        public string SelectedHands = "Empty";
+        public string SelectedBelt = "Empty";
+        public string SelectedFoots = "Empty";
+
+        #endregion
+
+
+
 
         #endregion
         #region active
@@ -86,9 +123,19 @@ namespace Model
         public bool HasTalantGrandeurOfTheLotus { get; set; }
 
         #endregion
+
+        #region 2 ветка
         public bool DualRageActive { get; set; }
         public bool HasTalantSymbiosis { get; set; }
 
+        #endregion
+        #region 1 ветка
+
+        public bool GuardianUnityActive { get; set; } = false;
+        public bool HasTalentHarmoniousPower { get; set; } = false;
+
+
+        #endregion
         #endregion
         #region общие таланты
 
