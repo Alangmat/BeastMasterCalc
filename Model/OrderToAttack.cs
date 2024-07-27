@@ -43,9 +43,13 @@ namespace Model
                     default:
                         break;
                 }
-                if (LvlTalant <= 3) 
+                if (LvlTalantGuardianUnity <= 3) 
                 {
-                    coefficient += 0.01 * LvlTalant;
+                    coefficient += 0.01 * LvlTalantGuardianUnity;
+                }
+                else if (LvlTalantDualRage <= 3)
+                {
+                    coefficient += 0.01 * LvlTalantDualRage;
                 }
                 NotifyPropertyChanged(nameof(Level));
             }
@@ -54,13 +58,18 @@ namespace Model
         public double BaseTimeCooldown = 10;
         public BeastAwakening Luna;
 
-        private int lvlTalant = 0;
-        public int LvlTalant
+        private int lvlTalantDualRage = 0;
+        public int LvlTalantDualRage
         {
-            get => lvlTalant;
-            set { lvlTalant = value; NotifyPropertyChanged("LvlTalant"); }
+            get => lvlTalantDualRage;
+            set { lvlTalantDualRage = value; NotifyPropertyChanged("LvlTalantDualRage"); }
         }
-
+        private int lvlTalantGuardianUnity = 0;
+        public int LvlTalantGuardianUnity
+        {
+            get => lvlTalantGuardianUnity;
+            set { lvlTalantGuardianUnity = value; NotifyPropertyChanged("LvlTalantGuardianUnity"); }
+        }
 
         public int Formula(int magedd, int physdd)
         {

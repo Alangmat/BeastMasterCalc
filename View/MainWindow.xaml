@@ -553,18 +553,6 @@
                         <TextBlock Text="Использование блага на себя и на собаку "
                             TextWrapping="Wrap" Height="35"/>
                     </CheckBox>
-                    <TextBox Grid.Column="3"
-                        Text="{Binding PercentMagicalDD, Converter={StaticResource StringToDoubleConverter}}"
-                        HorizontalAlignment="Left"
-                        Height="24" Margin="55,200,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="57"/>
-                    <TextBox Grid.Column="3"
-                        Text="{Binding PercentPhysicalDD, Converter={StaticResource StringToDoubleConverter}}"
-                        HorizontalAlignment="Left"
-                        Height="24" Margin="55,248,0,0" Grid.Row="2" TextWrapping="Wrap" VerticalAlignment="Top" Width="57"/>
-                    <TextBlock
-                        TextWrapping="Wrap" Margin="138,195,17,58" Grid.Column="3" Grid.Row="2"><Run Language="ru-ru" Text="Процентная прибавка к маг дд"/></TextBlock>
-                    <TextBlock
-                        TextWrapping="Wrap" Margin="138,240,17,10" Grid.Column="3" Grid.Row="2"><Run Text="Процентная прибавка к "/><Run Language="ru-ru" Text="физ"/><Run Text=" дд"/></TextBlock>
                     <Button Grid.Column="2"
                         Command="{Binding IncreaseLvlOrderToAttackCommand}"
                         HorizontalAlignment="Left"
@@ -648,12 +636,15 @@
                         <Button.Background>
                             <ImageBrush Stretch="Uniform" ImageSource="/icons/expert/DoubleConcentrationFramed.png"/>
                         </Button.Background>
-                        <Image x:Name="doubleConcentrationLvlIcon" 
+                        <Grid>
+                            <Image x:Name="imageDoubleConcentrationButton" />
+                            <Image x:Name="doubleConcentrationLvlIcon" 
                             Height="20" 
                             Width="30" 
                             HorizontalAlignment="Right" 
                             VerticalAlignment="Bottom" 
                             Margin="0,0,12,13"/>
+                        </Grid>
                     </Button>
 
 
@@ -882,6 +873,408 @@
 
                 </Grid>
             </TabItem>
+
+            <!--     //////////       -->
+            <TabItem Header="Исходные проценты дд">
+                <!--<Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="2*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <ComboBox
+                                    ItemsSource="{Binding Amulets}"
+                                    SelectedItem="{Binding SelectedAmulet}"
+                                    HorizontalAlignment="Right"
+                                    Margin="10" VerticalAlignment="Center" Width="111" Height="22">
+                                    <ComboBox.Background>
+                                        <LinearGradientBrush EndPoint="0,1">
+                                            <GradientStop Color="#FFF0F0F0"/>
+                                            <GradientStop Color="#FFC7C6BB" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </ComboBox.Background>
+                                </ComboBox>
+                            </Grid>
+
+                            <Grid Grid.Column="1">
+                                <Label Content="АМУЛЕТ"
+                                    HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       FontSize="18"
+                                    />
+                            </Grid>
+                        </Grid>
+
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <ComboBox
+                                    ItemsSource="{Binding Cloaks}"
+                                    SelectedItem="{Binding SelectedCloak}"
+                                    HorizontalAlignment="Right"
+                                    Margin="10" VerticalAlignment="Center" Width="111" Height="22">
+                                    <ComboBox.Background>
+                                        <LinearGradientBrush EndPoint="0,1">
+                                            <GradientStop Color="#FFF0F0F0"/>
+                                            <GradientStop Color="#FFC7C6BB" Offset="1"/>
+                                        </LinearGradientBrush>
+                                    </ComboBox.Background>
+                                </ComboBox>
+                            </Grid>
+
+                            <Grid Grid.Column="1">
+                                <Label Content="ПЛАЩ"
+                                    HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       FontSize="18"
+                                    />
+                            </Grid>
+                        </Grid>
+
+                        <Grid Grid.Row="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid Grid.Row="0">
+                                    <ComboBox
+                                    ItemsSource="{Binding Rings}"
+                                    SelectedItem="{Binding SelectedRingL}"
+                                    HorizontalAlignment="Right"
+                                    Margin="10" VerticalAlignment="Center" Width="111" Height="22">
+                                        <ComboBox.Background>
+                                            <LinearGradientBrush EndPoint="0,1">
+                                                <GradientStop Color="#FFF0F0F0"/>
+                                                <GradientStop Color="#FFC7C6BB" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </ComboBox.Background>
+                                    </ComboBox>
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <ComboBox
+                                    ItemsSource="{Binding Rings}"
+                                    SelectedItem="{Binding SelectedRingR}"
+                                    HorizontalAlignment="Right"
+                                    Margin="10" VerticalAlignment="Center" Width="111" Height="22">
+                                        <ComboBox.Background>
+                                            <LinearGradientBrush EndPoint="0,1">
+                                                <GradientStop Color="#FFF0F0F0"/>
+                                                <GradientStop Color="#FFC7C6BB" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </ComboBox.Background>
+                                    </ComboBox>
+                                </Grid>
+                            </Grid>
+
+                            <Grid Grid.Column="1">
+                                <Label Content="КОЛЬЦА"
+                                    HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       FontSize="18"
+                                    />
+                            </Grid>
+                            
+                        </Grid>
+
+                    </Grid>
+                    
+                    
+                </Grid>-->
+
+                <Grid Margin="10">
+
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="10*"/>
+                        <ColumnDefinition Width="5*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Grid Grid.Column="0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="2*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="3*"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid Grid.Row="0" Grid.Column="1">
+                            <Button 
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Width="60"
+                            Height="60"
+                                Margin="5"
+                            x:Name="cloakChoiceButton" Click="cloakChoiceButton_Click" MouseRightButtonDown="cloakChoiceButton_MouseRightButtonDown">
+                                <Grid>
+                                    <Image x:Name="cloakChoiceIcon"/>
+                                </Grid>
+                            </Button>
+                        </Grid>
+
+                        <Grid Grid.Row="0" Grid.Column="2">
+                            <Button 
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Width="60"
+                            Height="60"
+                                Margin="5"
+                            x:Name="helmetChoiceButton" Click="helmetChoiceButton_Click" MouseRightButtonDown="helmetChoiceButton_MouseRightButtonDown">
+                                <Grid>
+                                    <Image x:Name="helmetChoiceIcon"/>
+                                </Grid>
+                            </Button>
+                        </Grid>
+
+                        <Grid Grid.Row="0" Grid.Column="3">
+                            <Button 
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Width="60"
+                            Height="60"
+                                Margin="5"
+                            x:Name="amuletChoiceButton" Click="amuletChoiceButton_MouseLeftButtonDown" MouseRightButtonDown="amuletChoiceButton_MouseRightButtonDown">
+                                <Grid>
+                                    <Image x:Name="amuletChoiceIcon"/>
+                                </Grid>
+                            </Button>
+                        </Grid>
+
+                        <Grid Grid.Column="0" Grid.Row="1">
+                            <Label
+                                HorizontalContentAlignment="Center"
+                                VerticalContentAlignment="Center"
+                                >
+                                <TextBlock Text="Бонусы костюма:"
+                                   TextAlignment="Center"
+                                   TextWrapping="Wrap"/>
+                            </Label>
+                        </Grid>
+
+                        <Grid Grid.Row="1" Grid.Column="1">
+                            <Button 
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Width="60"
+                            Height="60"
+                                Margin="5"
+                            x:Name="setChoiceButton" Click="setChoiceButton_Click" MouseRightButtonDown="setChoiceButton_MouseRightButtonDown">
+                                <Grid>
+                                    <Image x:Name="setChoiceIcon"/>
+                                </Grid>
+                            </Button>
+                        </Grid>
+
+                        <Grid Grid.Row="1" Grid.Column="2">
+                            <Button 
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Width="60"
+                            Height="60"
+                                Margin="5"
+                            x:Name="bodyChoiceButton" Click="bodyChoiceButton_Click" MouseRightButtonDown="bodyChoiceButton_MouseRightButtonDown" >
+                                <Grid>
+                                    <Image x:Name="bodyChoiceIcon"/>
+                                </Grid>
+                            </Button>
+                        </Grid>
+
+                        <Grid Grid.Row="1" Grid.Column="3">
+                            <Button 
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Width="60"
+                            Height="60"
+                                Margin="5"
+                            x:Name="handsChoiceButton" Click="handsChoiceButton_Click" MouseRightButtonDown="handsChoiceButton_MouseRightButtonDown" >
+                                <Grid>
+                                    <Image x:Name="handsChoiceIcon"/>
+                                </Grid>
+                            </Button>
+                        </Grid>
+
+                        <Grid Grid.Row="2" Grid.Column="1">
+                            <Button 
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Width="60"
+                            Height="60"
+                                Margin="5"
+                            x:Name="braceletLeftChoiceButton" Click="braceletLeftChoiceButton_Click" MouseRightButtonDown="braceletLeftChoiceButton_MouseRightButtonDown">
+                                <Grid>
+                                    <Image x:Name="braceletLeftChoiceIcon"/>
+                                </Grid>
+                            </Button>
+                        </Grid>
+
+                        <Grid Grid.Row="2" Grid.Column="2">
+                            <Button 
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Width="60"
+                            Height="60"
+                                Margin="5"
+                            x:Name="beltChoiceButton" Click="beltChoiceButton_Click" MouseRightButtonDown="beltChoiceButton_MouseRightButtonDown" >
+                                <Grid>
+                                    <Image x:Name="beltChoiceIcon"/>
+                                </Grid>
+                            </Button>
+                        </Grid>
+
+                        <Grid Grid.Row="2" Grid.Column="3">
+                            <Button 
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Width="60"
+                            Height="60"
+                                Margin="5"
+                            x:Name="braceletRightChoiceButton" Click="braceletRightChoiceButton_Click" MouseRightButtonDown="braceletRightChoiceButton_MouseRightButtonDown">
+                                <Grid>
+                                    <Image x:Name="braceletRightChoiceIcon"/>
+                                </Grid>
+                            </Button>
+                        </Grid>
+
+                        <Grid Grid.Row="3" Grid.Column="1">
+                            <Button 
+                            HorizontalAlignment="Right"
+                            VerticalAlignment="Center"
+                            Width="60"
+                            Height="60"
+                                Margin="5"
+                            x:Name="ringLeftChoiceButton" Click="ringLeftChoiceButton_Click" MouseRightButtonDown="ringLeftChoiceButton_MouseRightButtonDown">
+                                <Grid>
+                                    <Image x:Name="ringLeftChoiceIcon"/>
+                                </Grid>
+                            </Button>
+                        </Grid>
+
+                        <Grid Grid.Row="3" Grid.Column="2">
+                            <Button 
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center"
+                            Width="60"
+                            Height="60"
+                                Margin="5"
+                            x:Name="footsChoiceButton" Click="footsChoiceButton_Click" MouseRightButtonDown="footsChoiceButton_MouseRightButtonDown" >
+                                <Grid>
+                                    <Image x:Name="footsChoiceIcon"/>
+                                </Grid>
+                            </Button>
+                        </Grid>
+
+                        <Grid Grid.Row="3" Grid.Column="3">
+                            <Button 
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Width="60"
+                            Height="60"
+                                Margin="5"
+                            x:Name="ringRightChoiceButton" Click="ringRightChoiceButton_Click" MouseRightButtonDown="ringRightChoiceButton_MouseRightButtonDown">
+                                <Grid>
+                                    <Image x:Name="ringRightChoiceIcon"/>
+                                </Grid>
+                            </Button>
+                        </Grid>
+
+
+                    </Grid>
+
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+
+                        </Grid.RowDefinitions>
+                        <Grid Grid.Row="0">
+                            <CheckBox HorizontalAlignment="Left" 
+                                      IsChecked="{Binding GuildDamageStartModifierActive}"
+                                      VerticalAlignment="Center">
+                                <TextBlock>
+                                    7 уровень гильдии (10%)
+                                </TextBlock>
+                            </CheckBox>
+                        </Grid>
+                        <Grid Grid.Row="1">
+                            <Image Source="icons/talents/PowerAttack.png"
+                                   Width="36"
+                                   Height="36"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center"
+                                   Margin="5"/>
+                            <CheckBox HorizontalAlignment="Left" 
+                                      Margin="50, 0, 0, 0"
+                                      IsChecked="{Binding TalentDamageStartModifierActive}"
+                                      VerticalAlignment="Center">
+                                <TextBlock>
+                                    Таланты (4.75%)
+                                </TextBlock>
+                            </CheckBox>
+                        </Grid>
+
+                        <Grid Grid.Row="2">
+                            <Image Source="/icons/castle/CastleSword.png"
+                                Width="36"
+                                Height="36"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Margin="5,0,0,0"/>
+                            <CheckBox HorizontalAlignment="Left" 
+                                Margin="50,0,0,0"
+                                IsChecked="{Binding CastleStartModifierActive}"
+                                VerticalAlignment="Center">
+                                <TextBlock><Run Text="Баф замка"/></TextBlock>
+                            </CheckBox>
+                        </Grid>
+
+                    </Grid>
+
+
+
+                </Grid>
+
+
+            </TabItem>
+
             <TabItem Header="Характеристики">
                 <Grid Background="#FFE5E5E5">
                     <Grid.RowDefinitions>
@@ -1290,16 +1683,26 @@
                                             Width="90" IsCancel="True" 
                                             Style="{StaticResource CustomButtonStyle}" Click="blessingOfTheMoonPlusPenetrationTalantButton_Click">
                                         <Button.Background>
-                                            <ImageBrush Stretch="Uniform" ImageSource="/icons/expert/BlessingOfTheMoonFramed.png"/>
+                                            <ImageBrush Stretch="Uniform" ImageSource="/icons/talents/BlessingOfTheMoonPlus.png"/>
                                         </Button.Background>
 
                                     </Button>
                                 </Grid>
 
                                 <Grid Grid.Row="2">
-                                    <TextBlock HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"
-                                        Text="В РАЗРАБОТКЕ" TextAlignment="Center"/>
+                                    <Label Content="Гармония силы" HorizontalAlignment="Center" VerticalAlignment="Top" Height="26" Foreground="Black" />
+                                    <Button HorizontalAlignment="Center"
+                                            Height="90" 
+                                            Margin="0,15,0,0"
+                                            VerticalAlignment="Center"
+                                            x:Name="harmoniousPowerTalantButton"
+                                            Width="90" IsCancel="True" 
+                                            Style="{StaticResource CustomButtonStyle}" Click="harmoniousPowerTalantButton_Click" >
+                                        <Button.Background>
+                                            <ImageBrush Stretch="Uniform" ImageSource="/icons/talents/HarmoniousPowerFramed.png"/>
+                                        </Button.Background>
+
+                                    </Button>
                                 </Grid>
                             </Grid>
                         </GroupBox>
@@ -1394,7 +1797,7 @@
                                             Width="90" IsCancel="True" 
                                             Style="{StaticResource CustomButtonStyle}" Grid.Row="1" Click="deadlyDexterityTalantButton_Click"  >
                                         <Button.Background>
-                                            <ImageBrush Stretch="Uniform" ImageSource="/icons/talents/DeadlyDexterity.jpg"/>
+                                            <ImageBrush Stretch="Uniform" ImageSource="/icons/talents/DeadlyDexterityFramed.png"/>
                                         </Button.Background>
 
                                     </Button>
@@ -1451,7 +1854,7 @@
                                             Width="90" IsCancel="True" 
                                             Style="{StaticResource CustomButtonStyle}" Grid.Row="1" Click="blessingOfTheMoonPlusCriticalHitTalantButton_Click">
                                         <Button.Background>
-                                            <ImageBrush Stretch="Uniform" ImageSource="/icons/expert/BlessingOfTheMoonFramed.png"/>
+                                            <ImageBrush Stretch="Uniform" ImageSource="/icons/talents/BlessingOfTheMoonPlus.png"/>
                                         </Button.Background>
 
                                     </Button>
@@ -1932,19 +2335,56 @@
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
+
                                 <Grid Grid.Row="0">
-                                    <CheckBox
-                                        IsChecked="{Binding ChechBPDungeon}"
-                                        HorizontalAlignment="Left" 
-                                        Height="18" 
-                                        Margin="10,0,0,0"
-                                        VerticalAlignment="Center" 
-                                        Width="194">
-                                        <TextBlock
-                                        TextWrapping="Wrap" Height="18"><Run Text="Урон в инсте  "/><Run Language="ru-ru" Text="с бафом бп"/></TextBlock>
+                                    <CheckBox HorizontalAlignment="Left" 
+                                      IsChecked="{Binding GuildDamageModifierActive}"
+                                      VerticalAlignment="Center">
+                                        <TextBlock>
+                                    7 уровень гильдии (10%)
+                                        </TextBlock>
                                     </CheckBox>
                                 </Grid>
+
                                 <Grid Grid.Row="1">
+                                    <Image Source="icons/talents/PowerAttack.png"
+                                   Width="36"
+                                   Height="36"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center"
+                                   Margin="5"/>
+                                    <CheckBox HorizontalAlignment="Left" 
+                                      Margin="50, 0, 0, 0"
+                                      IsChecked="{Binding TalentDamageModifierActive}"
+                                      VerticalAlignment="Center">
+                                        <TextBlock>
+                                    Таланты (4.75%)
+                                        </TextBlock>
+                                    </CheckBox>
+                                </Grid>
+
+
+                                <Grid Grid.Row="2">
+                                    <Image Source="/icons/castle/CastleSword.png"
+                                    Width="36"
+                                    Height="36"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
+                                    Margin="5,7,0,0"/>
+                                    <CheckBox
+                                        IsChecked="{Binding CastleSwordActive}"
+                                        HorizontalAlignment="Left" 
+                                        Height="18" 
+                                        Margin="50,0,0,0"
+                                        VerticalAlignment="Center" 
+                                        >
+                                        <TextBlock
+                                            TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Инстинкт нападения"/></TextBlock>
+                                    </CheckBox>
+
+                                </Grid>
+
+                                <Grid Grid.Row="3">
                                     <ComboBox
                                     ItemsSource="{Binding Castles}"
                                     SelectedItem="{Binding NumberCastle}"
@@ -1963,21 +2403,27 @@
                                         VerticalAlignment="Center" Width="174" Text="урон скиллов от замка" Margin="128,0,0,0"/>
                                 </Grid>
 
-                                <Grid Grid.Row="2">
+                                <Grid Grid.Row="4">
+                                    <Image Source="icons/other/bp.png"
+                                           Width="36"
+                                           Height="36"
+                                           Margin="5"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Center"
+                                           />
                                     <CheckBox
-                                        IsChecked="{Binding CastleSwordActive}"
+                                        IsChecked="{Binding ChechBPDungeon}"
                                         HorizontalAlignment="Left" 
                                         Height="18" 
-                                        Margin="10,0,0,0"
+                                        Margin="50,0,0,0"
                                         VerticalAlignment="Center" 
-                                        Width="284">
+                                        Width="194">
                                         <TextBlock
-                                            TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Инстинкт Нападения (баф меча с замка)"/></TextBlock>
+                                        TextWrapping="Wrap" Height="18"><Run Text="Урон в инсте  "/><Run Language="ru-ru" Text="с бафом бп"/></TextBlock>
                                     </CheckBox>
-                                    
                                 </Grid>
-                                
-                                <Grid Grid.Row="3">
+
+                                <Grid Grid.Row="5">
                                     <CheckBox
                                         IsChecked="{Binding SacredShieldHeroActive}"
                                         HorizontalAlignment="Left" 
@@ -1989,7 +2435,7 @@
                                             TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Сакральный щит паладина на персонажа"/></TextBlock>
                                     </CheckBox>
                                 </Grid>
-                                <Grid Grid.Row="4">
+                                <Grid Grid.Row="6">
                                     <CheckBox
                                         IsChecked="{Binding SacredShieldLunaActive}"
                                         HorizontalAlignment="Left" 
@@ -2020,9 +2466,17 @@
                                 <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0">
+                                <Image Source="icons/stats/rbreduction.png"
+                                       Width="36"
+                                       Height="36"
+                                       Margin="5"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       />
                                 <CheckBox
                                     IsChecked="{Binding Counterstand}"
-                                    HorizontalAlignment="Center" 
+                                    HorizontalAlignment="Left"
+                                    Margin="50,0,0,0"
                                     Height="18"
                                     VerticalAlignment="Center" 
                                     Width="290">
@@ -2038,410 +2492,6 @@
                 </Grid>
             </TabItem>
 
-            <TabItem Header="Исходные проценты дд">
-                <!--<Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="2*"/>
-                            <RowDefinition Height="2*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Grid Grid.Column="0">
-                                <ComboBox
-                                    ItemsSource="{Binding Amulets}"
-                                    SelectedItem="{Binding SelectedAmulet}"
-                                    HorizontalAlignment="Right"
-                                    Margin="10" VerticalAlignment="Center" Width="111" Height="22">
-                                    <ComboBox.Background>
-                                        <LinearGradientBrush EndPoint="0,1">
-                                            <GradientStop Color="#FFF0F0F0"/>
-                                            <GradientStop Color="#FFC7C6BB" Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </ComboBox.Background>
-                                </ComboBox>
-                            </Grid>
-
-                            <Grid Grid.Column="1">
-                                <Label Content="АМУЛЕТ"
-                                    HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       FontSize="18"
-                                    />
-                            </Grid>
-                        </Grid>
-
-                        <Grid Grid.Row="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Grid Grid.Column="0">
-                                <ComboBox
-                                    ItemsSource="{Binding Cloaks}"
-                                    SelectedItem="{Binding SelectedCloak}"
-                                    HorizontalAlignment="Right"
-                                    Margin="10" VerticalAlignment="Center" Width="111" Height="22">
-                                    <ComboBox.Background>
-                                        <LinearGradientBrush EndPoint="0,1">
-                                            <GradientStop Color="#FFF0F0F0"/>
-                                            <GradientStop Color="#FFC7C6BB" Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </ComboBox.Background>
-                                </ComboBox>
-                            </Grid>
-
-                            <Grid Grid.Column="1">
-                                <Label Content="ПЛАЩ"
-                                    HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       FontSize="18"
-                                    />
-                            </Grid>
-                        </Grid>
-
-                        <Grid Grid.Row="2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Grid Grid.Column="0">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <Grid Grid.Row="0">
-                                    <ComboBox
-                                    ItemsSource="{Binding Rings}"
-                                    SelectedItem="{Binding SelectedRingL}"
-                                    HorizontalAlignment="Right"
-                                    Margin="10" VerticalAlignment="Center" Width="111" Height="22">
-                                        <ComboBox.Background>
-                                            <LinearGradientBrush EndPoint="0,1">
-                                                <GradientStop Color="#FFF0F0F0"/>
-                                                <GradientStop Color="#FFC7C6BB" Offset="1"/>
-                                            </LinearGradientBrush>
-                                        </ComboBox.Background>
-                                    </ComboBox>
-                                </Grid>
-                                <Grid Grid.Row="1">
-                                    <ComboBox
-                                    ItemsSource="{Binding Rings}"
-                                    SelectedItem="{Binding SelectedRingR}"
-                                    HorizontalAlignment="Right"
-                                    Margin="10" VerticalAlignment="Center" Width="111" Height="22">
-                                        <ComboBox.Background>
-                                            <LinearGradientBrush EndPoint="0,1">
-                                                <GradientStop Color="#FFF0F0F0"/>
-                                                <GradientStop Color="#FFC7C6BB" Offset="1"/>
-                                            </LinearGradientBrush>
-                                        </ComboBox.Background>
-                                    </ComboBox>
-                                </Grid>
-                            </Grid>
-
-                            <Grid Grid.Column="1">
-                                <Label Content="КОЛЬЦА"
-                                    HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       FontSize="18"
-                                    />
-                            </Grid>
-                            
-                        </Grid>
-
-                    </Grid>
-                    
-                    
-                </Grid>-->
-
-                <Grid Margin="10">
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="10*"/>
-                        <ColumnDefinition Width="5*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Grid Grid.Column="0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="2*"/>
-                        </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="3*"/>
-                        </Grid.RowDefinitions>
-
-                        <Grid Grid.Row="0" Grid.Column="0">
-                            <Button 
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Center"
-                            Width="60"
-                            Height="60"
-                                Margin="5"
-                            x:Name="cloakChoiceButton" Click="cloakChoiceButton_Click" MouseRightButtonDown="cloakChoiceButton_MouseRightButtonDown">
-                                <Grid>
-                                    <Image x:Name="cloakChoiceIcon"/>
-                                </Grid>
-                            </Button>
-                        </Grid>
-
-                        <Grid Grid.Row="0" Grid.Column="1">
-                            <Image Source="icons/temporary/cloaks/example.jpg" Width="60"/>
-                        </Grid>
-
-                        <Grid Grid.Row="0" Grid.Column="2">
-                            <Button 
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Width="60"
-                            Height="60"
-                                Margin="5"
-                            x:Name="helmetChoiceButton" Click="helmetChoiceButton_Click" MouseRightButtonDown="helmetChoiceButton_MouseRightButtonDown">
-                                <Grid>
-                                    <Image x:Name="helmetChoiceIcon"/>
-                                </Grid>
-                            </Button>
-                        </Grid>
-
-                        <Grid Grid.Row="0" Grid.Column="3">
-                            <Image Source="icons/temporary/amulets/example.jpg" Width="60"/>
-                        </Grid>
-                        
-                        <Grid Grid.Row="0" Grid.Column="4">
-                            <Button 
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center"
-                            Width="60"
-                            Height="60"
-                                Margin="5"
-                            x:Name="amuletChoiceButton" Click="amuletChoiceButton_MouseLeftButtonDown" MouseRightButtonDown="amuletChoiceButton_MouseRightButtonDown">
-                                <Grid>
-                                    <Image x:Name="amuletChoiceIcon"/>
-                                </Grid>
-                            </Button>
-                        </Grid>
-
-                        <Grid Grid.Column="0" Grid.Row="1">
-                            <Label
-                                HorizontalContentAlignment="Center"
-                                VerticalContentAlignment="Center"
-                                >
-                                <TextBlock Text="Бонусы костюма:"
-                                   TextAlignment="Center"
-                                   TextWrapping="Wrap"/>
-                            </Label>
-                        </Grid>
-
-                        <Grid Grid.Row="1" Grid.Column="1">
-                            <Button 
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Width="60"
-                            Height="60"
-                                Margin="5"
-                            x:Name="setChoiceButton" Click="setChoiceButton_Click" MouseRightButtonDown="setChoiceButton_MouseRightButtonDown">
-                                <Grid>
-                                    <Image x:Name="setChoiceIcon"/>
-                                </Grid>
-                            </Button>
-                        </Grid>
-
-                        <Grid Grid.Row="1" Grid.Column="2">
-                            <Button 
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Width="60"
-                            Height="60"
-                                Margin="5"
-                            x:Name="bodyChoiceButton" Click="bodyChoiceButton_Click" MouseRightButtonDown="bodyChoiceButton_MouseRightButtonDown" >
-                                <Grid>
-                                    <Image x:Name="bodyChoiceIcon"/>
-                                </Grid>
-                            </Button>
-                        </Grid>
-
-                        <Grid Grid.Row="1" Grid.Column="3">
-                            <Button 
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Width="60"
-                            Height="60"
-                                Margin="5"
-                            x:Name="handsChoiceButton" Click="handsChoiceButton_Click" MouseRightButtonDown="handsChoiceButton_MouseRightButtonDown" >
-                                <Grid>
-                                    <Image x:Name="handsChoiceIcon"/>
-                                </Grid>
-                            </Button>
-                        </Grid>
-
-
-
-                        <Grid Grid.Row="2" Grid.Column="1">
-                            <Image Source="icons/temporary/bracelets/example.jpg" Width="60"/>
-                        </Grid>
-
-                        <Grid Grid.Row="2" Grid.Column="0">
-                            <Button 
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Center"
-                            Width="60"
-                            Height="60"
-                                Margin="5"
-                            x:Name="braceletLeftChoiceButton" Click="braceletLeftChoiceButton_Click" MouseRightButtonDown="braceletLeftChoiceButton_MouseRightButtonDown">
-                                <Grid>
-                                    <Image x:Name="braceletLeftChoiceIcon"/>
-                                </Grid>
-                            </Button>
-                        </Grid>
-
-                        <Grid Grid.Row="2" Grid.Column="2">
-                            <Button 
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Width="60"
-                            Height="60"
-                                Margin="5"
-                            x:Name="beltChoiceButton" Click="beltChoiceButton_Click" MouseRightButtonDown="beltChoiceButton_MouseRightButtonDown" >
-                                <Grid>
-                                    <Image x:Name="beltChoiceIcon"/>
-                                </Grid>
-                            </Button>
-                        </Grid>
-
-                        <Grid Grid.Row="2" Grid.Column="3">
-                            <Image Source="icons/temporary/bracelets/example.jpg" Width="60"/>
-                        </Grid>
-
-                        <Grid Grid.Row="2" Grid.Column="4">
-                            <Button 
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center"
-                            Width="60"
-                            Height="60"
-                                Margin="5"
-                            x:Name="braceletRightChoiceButton" Click="braceletRightChoiceButton_Click" MouseRightButtonDown="braceletRightChoiceButton_MouseRightButtonDown">
-                                <Grid>
-                                    <Image x:Name="braceletRightChoiceIcon"/>
-                                </Grid>
-                            </Button>
-                        </Grid>
-
-
-                        <Grid Grid.Row="3" Grid.Column="1">
-                            <Image Source="icons/temporary/rings/example.jpg" Width="60"/>
-                        </Grid>
-
-                        <Grid Grid.Row="3" Grid.Column="0">
-                            <Button 
-                            HorizontalAlignment="Right"
-                            VerticalAlignment="Center"
-                            Width="60"
-                            Height="60"
-                                Margin="5"
-                            x:Name="ringLeftChoiceButton" Click="ringLeftChoiceButton_Click" MouseRightButtonDown="ringLeftChoiceButton_MouseRightButtonDown">
-                                <Grid>
-                                    <Image x:Name="ringLeftChoiceIcon"/>
-                                </Grid>
-                            </Button>
-                        </Grid>
-
-                        <Grid Grid.Row="3" Grid.Column="2">
-                            <Button 
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            Width="60"
-                            Height="60"
-                                Margin="5"
-                            x:Name="footsChoiceButton" Click="footsChoiceButton_Click" MouseRightButtonDown="footsChoiceButton_MouseRightButtonDown" >
-                                <Grid>
-                                    <Image x:Name="footsChoiceIcon"/>
-                                </Grid>
-                            </Button>
-                        </Grid>
-
-                        <Grid Grid.Row="3" Grid.Column="3">
-                            <Image Source="icons/temporary/rings/example.jpg" Width="60"/>
-                        </Grid>
-
-                        <Grid Grid.Row="3" Grid.Column="4">
-                            <Button 
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Center"
-                            Width="60"
-                            Height="60"
-                                Margin="5"
-                            x:Name="ringRightChoiceButton" Click="ringRightChoiceButton_Click" MouseRightButtonDown="ringRightChoiceButton_MouseRightButtonDown">
-                                <Grid>
-                                    <Image x:Name="ringRightChoiceIcon"/>
-                                </Grid>
-                            </Button>
-                        </Grid>
-
-
-                    </Grid>
-
-                    <Grid Grid.Column="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <CheckBox HorizontalAlignment="Left" 
-                                      IsChecked="{Binding GuildDamageModifierActive}"
-                                      VerticalAlignment="Center">
-                                <TextBlock>
-                                    7 уровень гильдии (10%)
-                                </TextBlock>
-                            </CheckBox>
-                        </Grid>
-                        <Grid Grid.Row="1">
-                            <CheckBox HorizontalAlignment="Left" 
-                                      IsChecked="{Binding TalentDamageModifierActive}"
-                                      VerticalAlignment="Center">
-                                <TextBlock>
-                                    Таланты (4.75%)
-                                </TextBlock>
-                            </CheckBox>
-                        </Grid>
-                        
-                    </Grid>
-                    
-                    
-
-                </Grid>
-
-
-            </TabItem>
 
             <TabItem Header="Билды" >
                 <Grid >
@@ -2728,14 +2778,13 @@
                         Margin="31,318,0,0" 
                         VerticalAlignment="Top" 
                         Width="98"/>
-                    <Label Content="Симбиоз" HorizontalAlignment="Left" Height="25" Margin="339,252,0,0" VerticalAlignment="Top" Width="98"/>
+                    <Label Content="Симбиоз" HorizontalAlignment="Left" Height="25" Margin="33,376,0,0" VerticalAlignment="Top" Width="98"/>
                     <Label Content="{Binding OutSymbiosisDPM}"
                         HorizontalAlignment="Left"
                         Height="31" 
-                        Margin="339,280,0,0" 
+                        Margin="33,404,0,0" 
                         VerticalAlignment="Top"
                         Width="98"/>
-                    <Label Content="МАГ ПРОЦЕНТЫ (РАССОВЫЕ 4)&#xD;&#xA;1)  ги - 10 (14)&#xD;&#xA;2) таланты  - 4.75 (18.75)&#xD;&#xA;3) пк+вела+бал  - 38 (56.75)&#xD;&#xA;4) битва - 10 (66.75)&#xD;&#xA;ФИЗ ПРОЦЕНТЫ (РАССОВЫЕ 4)&#xD;&#xA;1)  ги - 10 (14)&#xD;&#xA;2) таланты  - 4.75 (18.75)&#xD;&#xA;4) битва - 10 (28.75)" HorizontalAlignment="Left" Height="182" Margin="322,332,0,0" VerticalAlignment="Top" Width="361"/>
                     <!--
                     <Button
                         Command="{Binding SaveCommand}"

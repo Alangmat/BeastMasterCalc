@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
+using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -235,6 +236,8 @@ namespace View
             updateStateButton(Logic.HasTalantBestialRampage, bestialRampageTalantButton);
             updateStateButton(Logic.DualRageActive, dualRageActiveButton);
 
+            updateStateButton(Logic.HasTalentHarmoniousPower, harmoniousPowerTalantButton);
+
             //moonlightPlusTalantButton.Opacity = nonActiveOpacity;
 
 
@@ -262,6 +265,7 @@ namespace View
 
 
             updateIconAuraOfTheForest();
+            updateIconDoubleConcentration();
 
 
             updateAmulet();
@@ -448,6 +452,15 @@ namespace View
             else
                 imageAuraOfTheForestButton.Source = auraOfTheForestIcon;
         }
+
+        private void updateIconDoubleConcentration()
+        {
+            if (Logic.HasTalentDeadlyDexterity)
+            {
+                imageDoubleConcentrationButton.Source = deadlyDexterityIcon;
+            }
+            else imageDoubleConcentrationButton.Source = doubleConcentrationIcon;
+        }
         #endregion
 
         private ViewModel.ViewModel Logic;
@@ -457,6 +470,9 @@ namespace View
         private BitmapImage grandeurOfTheLotusIcon = new BitmapImage(new Uri("/icons/expert/AuraOfTheForestUpgradeFramed.png", UriKind.Relative));
         private BitmapImage powerOfNatureIcon = new BitmapImage(new Uri("/icons/expert/AuraOfTheForestChoiceFramed.png", UriKind.Relative));
 
+        private BitmapImage doubleConcentrationIcon = new BitmapImage(new Uri("/icons/expert/DoubleConcentrationFramed.png", UriKind.Relative));
+        private BitmapImage deadlyDexterityIcon = new BitmapImage(new Uri("/icons/talents/DeadlyDexterity.png", UriKind.Relative));
+        
         //private BitmapImage testLvlIcon = new BitmapImage(new Uri("/icons/numbers/1.4.png",UriKind.Relative));
 
         private BitmapImage test1 = new BitmapImage(new Uri("/icons/expert/AuraOfTheForestChoiceFramed.png", UriKind.Relative));
@@ -465,61 +481,61 @@ namespace View
 
         #region иконки для вкладки со шмотом
         #region иконки для амулетов
-        private BitmapImage emptyAmulet = new BitmapImage(new Uri("/icons/temporary/amulets/empty.jpg", UriKind.Relative));
-        private BitmapImage sixMagicalAmulet = new BitmapImage(new Uri("/icons/temporary/amulets/6mag.jpg", UriKind.Relative));
-        private BitmapImage tenMagicalAmulet = new BitmapImage(new Uri("/icons/temporary/amulets/10mag.jpg", UriKind.Relative));
-        private BitmapImage fifteenMagicalAmulet = new BitmapImage(new Uri("/icons/temporary/amulets/15mag.jpg", UriKind.Relative));
-        private BitmapImage fourPhysicalAmulet = new BitmapImage(new Uri("/icons/temporary/amulets/4phys.jpg", UriKind.Relative));
-        private BitmapImage sevenPhysicalAmulet = new BitmapImage(new Uri("/icons/temporary/amulets/7phys.jpg", UriKind.Relative));
+        private BitmapImage emptyAmulet = new BitmapImage(new Uri("/icons/amulets/empty.png", UriKind.Relative));
+        private BitmapImage sixMagicalAmulet = new BitmapImage(new Uri("/icons/amulets/6mdd.png", UriKind.Relative));
+        private BitmapImage tenMagicalAmulet = new BitmapImage(new Uri("/icons/amulets/10mdd.png", UriKind.Relative));
+        private BitmapImage fifteenMagicalAmulet = new BitmapImage(new Uri("/icons/amulets/15mdd.png", UriKind.Relative));
+        private BitmapImage fourPhysicalAmulet = new BitmapImage(new Uri("/icons/amulets/4pdd.png", UriKind.Relative));
+        private BitmapImage sevenPhysicalAmulet = new BitmapImage(new Uri("/icons/amulets/7pdd.png", UriKind.Relative));
 
         private List<BitmapImage> iconsAmulet = new List<BitmapImage>();
         #endregion
         #region плащи
 
-        private BitmapImage emptyCloak= new BitmapImage(new Uri("/icons/temporary/cloaks/empty.jpg", UriKind.Relative));
-        private BitmapImage fiveMagicalCloak= new BitmapImage(new Uri("/icons/temporary/cloaks/5mag.jpg", UriKind.Relative));
-        private BitmapImage tenMagicalCloak= new BitmapImage(new Uri("/icons/temporary/cloaks/10mag.jpg", UriKind.Relative));
-        private BitmapImage fifteenMagicalCloak= new BitmapImage(new Uri("/icons/temporary/cloaks/15mag.jpg", UriKind.Relative));
-        private BitmapImage fourPhysicalCloak= new BitmapImage(new Uri("/icons/temporary/cloaks/4phys.jpg", UriKind.Relative));
-        private BitmapImage sevenPhysicalCloak= new BitmapImage(new Uri("/icons/temporary/cloaks/7phys.jpg", UriKind.Relative));
+        private BitmapImage emptyCloak= new BitmapImage(new Uri("/icons/cloaks/empty.png", UriKind.Relative));
+        private BitmapImage fiveMagicalCloak= new BitmapImage(new Uri("/icons/cloaks/5mdd.png", UriKind.Relative));
+        private BitmapImage tenMagicalCloak= new BitmapImage(new Uri("/icons/cloaks/10mdd.png", UriKind.Relative));
+        private BitmapImage fifteenMagicalCloak= new BitmapImage(new Uri("/icons/cloaks/15mdd.png", UriKind.Relative));
+        private BitmapImage fourPhysicalCloak= new BitmapImage(new Uri("/icons/cloaks/4pdd.png", UriKind.Relative));
+        private BitmapImage sevenPhysicalCloak= new BitmapImage(new Uri("/icons/cloaks/7pdd.png", UriKind.Relative));
 
         private List<BitmapImage> iconsCloaks = new List<BitmapImage>();
         #endregion
         #region Браслеты
-        private BitmapImage emptyBracelet = new BitmapImage(new Uri("/icons/temporary/bracelets/empty.jpg", UriKind.Relative));
-        private BitmapImage sixMagicalBracelet = new BitmapImage(new Uri("/icons/temporary/bracelets/6mag.jpg", UriKind.Relative));
-        private BitmapImage sevenMagicalBracelet = new BitmapImage(new Uri("/icons/temporary/bracelets/7.5mag.jpg", UriKind.Relative));
-        private BitmapImage fourPhysicalBracelet = new BitmapImage(new Uri("/icons/temporary/bracelets/4phys.jpg", UriKind.Relative));
-        private BitmapImage fivePhysicalBracelet = new BitmapImage(new Uri("/icons/temporary/bracelets/5phys.jpg", UriKind.Relative));
+        private BitmapImage emptyBracelet = new BitmapImage(new Uri("/icons/bracelets/empty.png", UriKind.Relative));
+        private BitmapImage sixMagicalBracelet = new BitmapImage(new Uri("/icons/bracelets/6mdd.png", UriKind.Relative));
+        private BitmapImage sevenMagicalBracelet = new BitmapImage(new Uri("/icons/bracelets/7.5mdd.png", UriKind.Relative));
+        private BitmapImage fourPhysicalBracelet = new BitmapImage(new Uri("/icons/bracelets/4pdd.png", UriKind.Relative));
+        private BitmapImage fivePhysicalBracelet = new BitmapImage(new Uri("/icons/bracelets/5pdd.png", UriKind.Relative));
 
 
         private List<BitmapImage> iconsBracelets = new List<BitmapImage>();
         #endregion
         #region Кольца
-        private BitmapImage emptyRing = new BitmapImage(new Uri("/icons/temporary/rings/empty.jpg", UriKind.Relative));
-        private BitmapImage fiveMagicalRing = new BitmapImage(new Uri("/icons/temporary/rings/5mag.jpg", UriKind.Relative));
-        private BitmapImage nineMagicalRing = new BitmapImage(new Uri("/icons/temporary/rings/9mag.jpg", UriKind.Relative));
-        private BitmapImage tenMagicalRing = new BitmapImage(new Uri("/icons/temporary/rings/10mag.jpg", UriKind.Relative));
-        private BitmapImage threePhysicalRing = new BitmapImage(new Uri("/icons/temporary/rings/3phys.jpg", UriKind.Relative));
-        private BitmapImage sixPhysicalRing = new BitmapImage(new Uri("/icons/temporary/rings/6phys.jpg", UriKind.Relative));
+        private BitmapImage emptyRing = new BitmapImage(new Uri("/icons/rings/empty.png", UriKind.Relative));
+        private BitmapImage fiveMagicalRing = new BitmapImage(new Uri("/icons/rings/5mdd.png", UriKind.Relative));
+        private BitmapImage nineMagicalRing = new BitmapImage(new Uri("/icons/rings/9mdd.png", UriKind.Relative));
+        private BitmapImage tenMagicalRing = new BitmapImage(new Uri("/icons/rings/10mdd.png", UriKind.Relative));
+        private BitmapImage threePhysicalRing = new BitmapImage(new Uri("/icons/rings/3pdd.png", UriKind.Relative));
+        private BitmapImage sixPhysicalRing = new BitmapImage(new Uri("/icons/rings/6pdd.png", UriKind.Relative));
 
 
         private List<BitmapImage> iconsRings = new List<BitmapImage>();
         #endregion
         #region шмот
-        private BitmapImage cloathEquipment = new BitmapImage(new Uri("/icons/temporary/equipments/cloath.jpg", UriKind.Relative));
-        private BitmapImage leatherEquipment = new BitmapImage(new Uri("/icons/temporary/equipments/leather.jpg", UriKind.Relative));
-        private BitmapImage helmetEquipment = new BitmapImage(new Uri("/icons/temporary/equipments/helmet.jpg", UriKind.Relative));
-        private BitmapImage bodyEquipment = new BitmapImage(new Uri("/icons/temporary/equipments/body.jpg", UriKind.Relative));
-        private BitmapImage handsEquipment = new BitmapImage(new Uri("/icons/temporary/equipments/hands.jpg", UriKind.Relative));
-        private BitmapImage beltEquipment = new BitmapImage(new Uri("/icons/temporary/equipments/belt.jpg", UriKind.Relative));
-        private BitmapImage footsEquipment = new BitmapImage(new Uri("/icons/temporary/equipments/foots.jpg", UriKind.Relative));
+        private BitmapImage cloathEquipment = new BitmapImage(new Uri("/icons/equipments/cloth.png", UriKind.Relative));
+        private BitmapImage leatherEquipment = new BitmapImage(new Uri("/icons/equipments/leather.png", UriKind.Relative));
+        private BitmapImage helmetEquipment = new BitmapImage(new Uri("/icons/equipments/helmet.png", UriKind.Relative));
+        private BitmapImage bodyEquipment = new BitmapImage(new Uri("/icons/equipments/body.png", UriKind.Relative));
+        private BitmapImage handsEquipment = new BitmapImage(new Uri("/icons/equipments/gloves.png", UriKind.Relative));
+        private BitmapImage beltEquipment = new BitmapImage(new Uri("/icons/equipments/belt.png", UriKind.Relative));
+        private BitmapImage footsEquipment = new BitmapImage(new Uri("/icons/equipments/boots.png", UriKind.Relative));
 
         #endregion
         #region сеты
-        private BitmapImage emptySet = new BitmapImage(new Uri("/icons/temporary/set/empty.jpg", UriKind.Relative));
-        private BitmapImage magicalSet = new BitmapImage(new Uri("/icons/temporary/set/12mag.jpg", UriKind.Relative));
-        private BitmapImage physicalSet = new BitmapImage(new Uri("/icons/temporary/set/8phys.jpg", UriKind.Relative));
+        private BitmapImage emptySet = new BitmapImage(new Uri("/icons/set/empty.png", UriKind.Relative));
+        private BitmapImage magicalSet = new BitmapImage(new Uri("/icons/set/12mdd.png", UriKind.Relative));
+        private BitmapImage physicalSet = new BitmapImage(new Uri("/icons/set/8pdd.png", UriKind.Relative));
 
         private List<BitmapImage> iconsSets = new List<BitmapImage>();
 
@@ -866,6 +882,7 @@ namespace View
             {
                 beastAwakeningPlusPhysicalLvlIcon.Source = null;
                 orderToAttackPlusLvlIcon.Source = null;
+                imageDoubleConcentrationButton.Source = doubleConcentrationIcon;
             }
             updateStateButton(Logic.DualRageActive, dualRageActiveButton);
             updateStateButton(Logic.HasTalantBestialRampage, bestialRampageTalantButton);
@@ -1359,7 +1376,7 @@ namespace View
             updateStateButton(Logic.GuardianUnityActive, guardianUnityActiveButton);
             updateStateButtonTalant(Logic.LvlTalantOrderToAttackPlusGuardianUnity, orderToAttackGuardianUnityTalantButton);
             updateStateButton(Logic.HasTalantBlessingOfTheMoonPlusPenetration, blessingOfTheMoonPlusPenetrationTalantButton);
-
+            updateStateButton(Logic.HasTalentHarmoniousPower, harmoniousPowerTalantButton);
 
         }
 
@@ -1385,12 +1402,30 @@ namespace View
             {
                 Logic.HasTalentDeadlyDexterity = !Logic.HasTalentDeadlyDexterity;
 
+                if (Logic.HasTalentDeadlyDexterity)
+                {
+                    imageDoubleConcentrationButton.Source = deadlyDexterityIcon;
+                }
+                else
+                {
+                    imageDoubleConcentrationButton.Source = doubleConcentrationIcon;
+                }
+
                 updateStateButton(Logic.HasTalentDeadlyDexterity, deadlyDexterityTalantButton);
+            }
+        }
+        private void harmoniousPowerTalantButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (Logic.GuardianUnityActive)
+            {
+                Logic.HasTalentHarmoniousPower = !Logic.HasTalentHarmoniousPower;
+
+                updateStateButton(Logic.HasTalentHarmoniousPower, harmoniousPowerTalantButton);
             }
         }
 
 
-
+        #region Изначальные модификаторы дд
         private void updateAmulet()
         {
             amuletChoiceIcon.Source = iconsAmulet[Logic.Amulets.IndexOf(Logic.SelectedAmulet)];
@@ -1573,7 +1608,7 @@ namespace View
                 case "Leather":
                     helmetChoiceIcon.Source = leatherEquipment;
                     break;
-                case "Cloath":
+                case "Cloth":
                     helmetChoiceIcon.Source = cloathEquipment;
                     break;
                 default:
@@ -1613,7 +1648,7 @@ namespace View
                 case "Leather":
                     bodyChoiceIcon.Source = leatherEquipment;
                     break;
-                case "Cloath":
+                case "Cloth":
                     bodyChoiceIcon.Source = cloathEquipment;
                     break;
                 default:
@@ -1652,7 +1687,7 @@ namespace View
                 case "Leather":
                     handsChoiceIcon.Source = leatherEquipment;
                     break;
-                case "Cloath":
+                case "Cloth":
                     handsChoiceIcon.Source = cloathEquipment;
                     break;
                 default:
@@ -1692,7 +1727,7 @@ namespace View
                 case "Leather":
                     beltChoiceIcon.Source = leatherEquipment;
                     break;
-                case "Cloath":
+                case "Cloth":
                     beltChoiceIcon.Source = cloathEquipment;
                     break;
                 default:
@@ -1732,7 +1767,7 @@ namespace View
                 case "Leather":
                     footsChoiceIcon.Source = leatherEquipment;
                     break;
-                case "Cloath":
+                case "Cloth":
                     footsChoiceIcon.Source = cloathEquipment;
                     break;
                 default:
@@ -1793,6 +1828,8 @@ namespace View
 
             updateSet();
         }
+        #endregion
+
     }
 
 

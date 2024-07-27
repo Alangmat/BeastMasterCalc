@@ -587,6 +587,76 @@
   <ItemGroup>
     <Resource Include="icons\temporary\castle\sword.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\amulets\10mdd.png" />
+    <Resource Include="icons\amulets\15mdd.png" />
+    <Resource Include="icons\amulets\4pdd.png" />
+    <Resource Include="icons\amulets\6mdd.png" />
+    <Resource Include="icons\amulets\7pdd.png" />
+    <Resource Include="icons\amulets\empty.png" />
+    <Resource Include="icons\bracelets\4pdd.png" />
+    <Resource Include="icons\bracelets\5pdd.png" />
+    <Resource Include="icons\bracelets\6mdd.png" />
+    <Resource Include="icons\bracelets\7.5mdd.png" />
+    <Resource Include="icons\bracelets\empty.png" />
+    <Resource Include="icons\castle\CastleFist.png" />
+    <Resource Include="icons\castle\CastleSword.png" />
+    <Resource Include="icons\cloaks\10mdd.png" />
+    <Resource Include="icons\cloaks\15mdd.png" />
+    <Resource Include="icons\cloaks\4pdd.png" />
+    <Resource Include="icons\cloaks\5mdd.png" />
+    <Resource Include="icons\cloaks\7pdd.png" />
+    <Resource Include="icons\cloaks\empty.png" />
+    <Resource Include="icons\equipments\belt.png" />
+    <Resource Include="icons\equipments\body.png" />
+    <Resource Include="icons\equipments\boots.png" />
+    <Resource Include="icons\equipments\cloth.png" />
+    <Resource Include="icons\equipments\gloves.png" />
+    <Resource Include="icons\equipments\helmet.png" />
+    <Resource Include="icons\equipments\leather.png" />
+    <Resource Include="icons\rings\10mdd.png" />
+    <Resource Include="icons\rings\3pdd.png" />
+    <Resource Include="icons\rings\5mdd.png" />
+    <Resource Include="icons\rings\6pdd.png" />
+    <Resource Include="icons\rings\9mdd.png" />
+    <Resource Include="icons\rings\empty.png" />
+    <Resource Include="icons\set\12mdd.png" />
+    <Resource Include="icons\set\8pdd.png" />
+    <Resource Include="icons\set\empty.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\BlessingOfTheMoonPlus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\DeadlyDexterity.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\DeadlyDexterityFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\HarmoniousPower.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\HarmoniousPowerFramed.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\stats\mdd.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\stats\pdd.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\stats\rbreduction.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\PowerAttack.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\other\Relic12percent.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\other\bp.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.6.5.5\build\Fody.targets" Condition="Exists('..\packages\Fody.6.5.5\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
