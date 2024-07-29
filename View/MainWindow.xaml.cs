@@ -471,7 +471,7 @@ namespace View
         private BitmapImage powerOfNatureIcon = new BitmapImage(new Uri("/icons/expert/AuraOfTheForestChoiceFramed.png", UriKind.Relative));
 
         private BitmapImage doubleConcentrationIcon = new BitmapImage(new Uri("/icons/expert/DoubleConcentrationFramed.png", UriKind.Relative));
-        private BitmapImage deadlyDexterityIcon = new BitmapImage(new Uri("/icons/talents/DeadlyDexterity.png", UriKind.Relative));
+        private BitmapImage deadlyDexterityIcon = new BitmapImage(new Uri("/icons/expert/DeadlyDexterityFramed.png", UriKind.Relative));
         
         //private BitmapImage testLvlIcon = new BitmapImage(new Uri("/icons/numbers/1.4.png",UriKind.Relative));
 
