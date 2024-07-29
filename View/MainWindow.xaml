@@ -1226,7 +1226,14 @@
 
                         </Grid.RowDefinitions>
                         <Grid Grid.Row="0">
+                            <Image Source="icons/other/GuildDamage.png"
+                                   Width="36"
+                                   Height="36"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center"
+                                   Margin="5"/>
                             <CheckBox HorizontalAlignment="Left" 
+                                      Margin="50,0,0,0"
                                       IsChecked="{Binding GuildDamageStartModifierActive}"
                                       VerticalAlignment="Center">
                                 <TextBlock>
@@ -1319,7 +1326,8 @@
                                     Margin="238,0,0,0"
                                     TextWrapping="Wrap"
                                     VerticalAlignment="Center"
-                                    Width="70" Grid.Row="2"/>
+                                    Width="35"/>
+                                <Label Content="{Binding CriticalHitHeroFinal}" Margin="278,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                             </Grid>
                             <Grid Grid.Row="1">
                                 <Image Height="36"
@@ -1334,7 +1342,12 @@
                                     Margin="238,0,0,0"
                                     TextWrapping="Wrap"
                                     VerticalAlignment="Center"
-                                    Width="70" Grid.Row="3"/>
+                                    Width="35" Grid.Row="3"/>
+                                <Label Content="{Binding CriticalDamageFinal}" 
+                                       Margin="278,0,0,0" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Left"/>
+
                             </Grid>
                             <Grid Grid.Row="2">
                                 <Image Height="36"
@@ -1353,7 +1366,11 @@
                                     Margin="238,0,0,0"
                                     TextWrapping="Wrap"
                                     VerticalAlignment="Center"
-                                    Width="70" Grid.Row="5"/>
+                                    Width="35" Grid.Row="5"/>
+                                <Label Content="{Binding AccuracyHeroFinal}" 
+                                       Margin="278,0,0,0" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Left"/>
                             </Grid>
                             <Grid Grid.Row="3">
                                 <Image Height="36"
@@ -1368,7 +1385,12 @@
                                     Margin="238,0,0,0"
                                     TextWrapping="Wrap"
                                     VerticalAlignment="Center"
-                                    Width="70" Grid.Row="1"/>
+                                    Width="35" Grid.Row="1"/>
+                                <Label Content="{Binding AttackSpeedFinal}" 
+                                       Margin="278,0,0,0" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Left"/>
+
                             </Grid>
                             <Grid Grid.Row="4">
                                 <Image Height="36"
@@ -1387,7 +1409,12 @@
                                     Margin="238,0,0,0"
                                     TextWrapping="Wrap"
                                     VerticalAlignment="Center"
-                                    Width="70" Grid.Row="4"/>
+                                    Width="35" Grid.Row="4"/>
+                                <Label Content="{Binding PenetrationHeroFinal}" 
+                                       Margin="278,0,0,0" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Left"/>
+
                             </Grid>
                             <Grid Grid.Row="5">
                                 <Image Height="36"
@@ -1402,7 +1429,12 @@
                                          Margin="238,0,0,0"
                                          TextWrapping="Wrap"
                                          VerticalAlignment="Center"
-                                         Width="70"/>
+                                         Width="35"/>
+                                <Label Content="{Binding SkillCooldownFinal}" 
+                                       Margin="278,0,0,0" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Left"/>
+
                             </Grid>
                             <Grid Grid.Row="6">
                                 <Image Height="36"
@@ -1422,7 +1454,11 @@
                                     Margin="238,0,0,0"
                                     TextWrapping="Wrap"
                                     VerticalAlignment="Center"
-                                    Width="70" Grid.Row="8"/>
+                                    Width="35" Grid.Row="8"/>
+                                <Label Content="{Binding RageFinal}" 
+                                       Margin="278,0,0,0" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Left"/>
                             </Grid>
                             <Grid Grid.Row="7">
                                 <Image Height="36"
@@ -1441,7 +1477,12 @@
                                     Margin="238,0,0,0"
                                     TextWrapping="Wrap"
                                     VerticalAlignment="Center"
-                                    Width="70" Grid.Row="6"/>
+                                    Width="35" Grid.Row="6"/>
+                                <Label Content="{Binding AttackStrengthFinal}" 
+                                       Margin="278,0,0,0" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Left"/>
+
                             </Grid>
                             <Grid Grid.Row="8">
                                 <Image Height="36"
@@ -1461,7 +1502,11 @@
                                     Margin="238,0,0,0"
                                     TextWrapping="Wrap"
                                     VerticalAlignment="Center"
-                                    Width="70" Grid.Row="7"/>
+                                    Width="35" Grid.Row="7"/>
+                                <Label Content="{Binding PiercingAttackFinal}" 
+                                       Margin="278,0,0,0" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Left"/>
                             </Grid>
                             <Grid Grid.Row="9">
                                 <Image Height="36"
@@ -1480,15 +1525,20 @@
                                     Margin="238,0,0,0"
                                     TextWrapping="Wrap"
                                     VerticalAlignment="Center"
-                                    Width="70" Grid.Row="7"/>
+                                    Width="35" Grid.Row="7"/>
+                                <Label Content="{Binding FacilitationFinal}" 
+                                       Margin="278,0,0,0" 
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Left"/>
                             </Grid>
 
                         </Grid>
                     </GroupBox>
                     <Grid Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="3" Margin="343,2,15,0">
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"/>
                             <RowDefinition Height="2*"/>
-                            <RowDefinition Height="10*"/>
+                            <RowDefinition Height="3*"/>
 
                         </Grid.RowDefinitions>
                         <GroupBox HorizontalAlignment="Left" Height="82" 
@@ -1591,6 +1641,62 @@
 
                             </Grid>
                         </GroupBox>
+                        <GroupBox HorizontalAlignment="Left" 
+                        BorderBrush="#FF400984"
+                        Grid.Row="1"
+                        Header="Статы кошки" Margin="10,179,0,0" VerticalAlignment="Top" Width="320" Grid.RowSpan="2">
+                            <Grid Height="135">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
+                                <Image Height="36"
+                                Width="36"
+                                Source="/icons/stats/CriticalHit.png"
+                                Margin="10,0,0,0"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left"/>
+                                <Label Content="Критический удар" HorizontalAlignment="Left" Height="27" Margin="50,0,0,0" VerticalAlignment="Center" Width="137"/>
+                                <Label Margin="238,0,0,0"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       Content="{Binding CriticalHitLuna}"
+                                       Grid.Row="0"
+                                       />
+                                
+                                <Image Height="36"
+                                Width="36"
+                                Source="/icons/stats/Accuracy.png"
+                                Margin="10,0,0,0"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left" Grid.Row="1"/>
+                                <Label Content="Точность" HorizontalAlignment="Left" Height="27" Margin="50,0,0,0" VerticalAlignment="Center" Width="137" Grid.Row="1"/>
+                                <Label Margin="238,0,0,0"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       Content="{Binding AccuracyLuna}"
+                                       Grid.Row="1"
+                                       />
+
+                                <Image Height="36"
+                                Width="36"
+                                Source="/icons/stats/Penetration.png"
+                                Margin="10,0,0,0"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Left" Grid.Row="2"/>
+                                <Label Content="Пробивная способность" HorizontalAlignment="Left" Height="27" Margin="50,0,0,0" VerticalAlignment="Center" Width="150" Grid.Row="2"/>
+                                <Label Margin="238,0,0,0"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Center"
+                                       Content="{Binding PenetrationLuna}"
+                                       Grid.Row="2"
+                                       />
+
+
+
+                            </Grid>
+                        </GroupBox>
                     </Grid>
                     <!--
                     <TextBox HorizontalAlignment="Left"
@@ -1622,7 +1728,7 @@
                             <GroupBox.Header>
                                 <Button Height="40" Style="{StaticResource CustomButtonStyle}"
                                         x:Name="guardianUnityActiveButton" Click="guardianUnityActiveButton_Click">
-                                    <Image Source="/icons/talents/GuardianUnity.jpg" Stretch="Uniform"/>
+                                    <Image Source="/icons/talents/GuardianUnity.png" Stretch="Uniform"/>
                                 </Button>
                             </GroupBox.Header>
                             <Grid Margin="2, 5, 2, 2">
@@ -2337,7 +2443,14 @@
                                 </Grid.RowDefinitions>
 
                                 <Grid Grid.Row="0">
+                                    <Image Source="icons/other/GuildDamage.png"
+                                   Width="36"
+                                   Height="36"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center"
+                                   Margin="5"/>
                                     <CheckBox HorizontalAlignment="Left" 
+                                              Margin="50,0,0,0"
                                       IsChecked="{Binding GuildDamageModifierActive}"
                                       VerticalAlignment="Center">
                                         <TextBlock>
@@ -2404,6 +2517,26 @@
                                 </Grid>
 
                                 <Grid Grid.Row="4">
+                                    <Image Source="icons/other/GodsAid.png"
+                                           Width="36"
+                                           Height="36"
+                                           Margin="5"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Center"
+                                           />
+                                    <CheckBox
+                                        IsChecked="{Binding GodsAid}"
+                                        HorizontalAlignment="Left" 
+                                        Height="18" 
+                                        Margin="50,0,0,0"
+                                        VerticalAlignment="Center" 
+                                        Width="194">
+                                        <TextBlock
+                                        TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Крылья жреца"/></TextBlock>
+                                    </CheckBox>
+                                </Grid>
+
+                                <Grid Grid.Row="5">
                                     <Image Source="icons/other/bp.png"
                                            Width="36"
                                            Height="36"
@@ -2422,8 +2555,8 @@
                                         TextWrapping="Wrap" Height="18"><Run Text="Урон в инсте  "/><Run Language="ru-ru" Text="с бафом бп"/></TextBlock>
                                     </CheckBox>
                                 </Grid>
-
-                                <Grid Grid.Row="5">
+                                
+                                <Grid Grid.Row="6">
                                     <CheckBox
                                         IsChecked="{Binding SacredShieldHeroActive}"
                                         HorizontalAlignment="Left" 
@@ -2435,7 +2568,7 @@
                                             TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Сакральный щит паладина на персонажа"/></TextBlock>
                                     </CheckBox>
                                 </Grid>
-                                <Grid Grid.Row="6">
+                                <Grid Grid.Row="7">
                                     <CheckBox
                                         IsChecked="{Binding SacredShieldLunaActive}"
                                         HorizontalAlignment="Left" 

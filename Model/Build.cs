@@ -39,16 +39,8 @@ namespace Model
         public DoubleConcentration DoubleConcentration { get; set; } = new DoubleConcentration();
         #endregion
         #region Stats
-        //private string magicalDamage;
         public string MagicalDamage { get; set; }
-        /*{
-            get => magicalDamage;
-            set
-            {
-                magicalDamage = value;
-                NotifyPropertyChanged("MagicalDamage");
-            }
-        }*/
+
         public double PercentMagicalDD { get; set; } = 0;
         public string PhysicalDamage { get; set; }
         public double PercentPhysicalDD { get; set; } = 0;
@@ -90,6 +82,7 @@ namespace Model
         public bool BPDungeon { get; set; } = false;
         public bool SacredShieldHeroActive = false;
         public bool SacredShieldLunaActive = false;
+        public bool GodsAid = false;
 
         #endregion
 
