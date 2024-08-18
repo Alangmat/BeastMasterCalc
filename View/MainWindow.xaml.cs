@@ -68,16 +68,7 @@ namespace View
             {
                 moonlightHintText.Text = "Файл не найден.";
             }
-            string temporaryPath = "hints/temporaryHint.txt";
-            if (File.Exists(temporaryPath))
-            {
-                string text = File.ReadAllText(temporaryPath);
-                temporaryHintText.Text = text;
-            }
-            else
-            {
-                temporaryHintText.Text = "Файл не найден.";
-            }
+
             string ddPath = "hints/ddHint.txt";
             if (File.Exists(ddPath))
             {
@@ -118,7 +109,58 @@ namespace View
             {
                 procentHintText.Text = "Файл не найден.";
             }
+            string statsHeroPath = "hints/statsHeroHint.txt";
+            if (File.Exists(statsHeroPath))
+            {
+                string text = File.ReadAllText(statsHeroPath);
+                statsHeroHintText.Text = text;
+            }
+            else
+            {
+                statsHeroHintText.Text = "Файл не найден.";
+            }
+            string weaponTypePath = "hints/weaponTypeHint.txt";
+            if (File.Exists(weaponTypePath))
+            {
+                string text = File.ReadAllText(weaponTypePath);
+                weaponTypeHintText.Text = text;
+            }
+            else
+            {
+                weaponTypeHintText.Text = "Файл не найден.";
+            }
+            string statsEntityPath = "hints/statsEntityHint.txt";
+            if (File.Exists(statsEntityPath))
+            {
+                string text = File.ReadAllText(statsEntityPath);
+                statsEntityHintText.Text = text;
+            }
+            else
+            {
+                statsEntityHintText.Text = "Файл не найден.";
+            }
+            string statsLunaPath = "hints/statsLunaHint.txt";
+            if (File.Exists(statsLunaPath))
+            {
+                string text = File.ReadAllText(statsLunaPath);
+                statsLunaHintText.Text = text;
+            }
+            else
+            {
+                statsLunaHintText.Text = "Файл не найден.";
+            }
+            string calculatePath = "hints/calculateHint.txt";
+            if (File.Exists(calculatePath))
+            {
+                string text = File.ReadAllText(calculatePath);
+                calculateHintText.Text = text;
+            }
+            else
+            {
+                calculateHintText.Text = "Файл не найден.";
+            }
         }
+
         private void Window_Closed(object sender, EventArgs e)
         {
             Logic.SaveBuilds();
@@ -1290,10 +1332,6 @@ namespace View
         {
             basicSkillPopup.IsOpen = !basicSkillPopup.IsOpen;
         }
-        private void temporaryHintButton_PreviewMouseUp(object sender, MouseButtonEventArgs e)
-        {
-            temporaryPopup.IsOpen = !temporaryPopup.IsOpen;
-        }
         private void ddHintButton_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
             ddPopup.IsOpen = !ddPopup.IsOpen;
@@ -1310,7 +1348,26 @@ namespace View
         {
             procentPopup.IsOpen = !procentPopup.IsOpen;
         }
-
+        private void statsHeroHintButton_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            statsHeroPopup.IsOpen = !statsHeroPopup.IsOpen;
+        }
+        private void weaponTypeHintButton_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            weaponTypePopup.IsOpen = !weaponTypePopup.IsOpen;
+        }
+        private void statsEntityHintButton_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            statsEntityPopup.IsOpen = !statsEntityPopup.IsOpen;
+        }
+        private void statsLunaHintButton_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            statsLunaPopup.IsOpen = !statsLunaPopup.IsOpen;
+        }
+        private void calculateHintButton_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            calculatePopup.IsOpen = !calculatePopup.IsOpen;
+        }
 
         #endregion
 

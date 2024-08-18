@@ -534,60 +534,6 @@
     <Resource Include="icons\talents\DeadlyDexterity.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icons\temporary\amulets\10mag.jpg" />
-    <Resource Include="icons\temporary\amulets\15mag.jpg" />
-    <Resource Include="icons\temporary\amulets\4phys.jpg" />
-    <Resource Include="icons\temporary\amulets\6mag.jpg" />
-    <Resource Include="icons\temporary\amulets\7phys.jpg" />
-    <Resource Include="icons\temporary\amulets\empty.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="icons\temporary\amulets\example.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="icons\temporary\cloaks\10mag.jpg" />
-    <Resource Include="icons\temporary\cloaks\15mag.jpg" />
-    <Resource Include="icons\temporary\cloaks\4phys.jpg" />
-    <Resource Include="icons\temporary\cloaks\5mag.jpg" />
-    <Resource Include="icons\temporary\cloaks\7phys.jpg" />
-    <Resource Include="icons\temporary\cloaks\empty.jpg" />
-    <Resource Include="icons\temporary\cloaks\example.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="icons\temporary\bracelets\4phys.jpg" />
-    <Resource Include="icons\temporary\bracelets\5phys.jpg" />
-    <Resource Include="icons\temporary\bracelets\6mag.jpg" />
-    <Resource Include="icons\temporary\bracelets\7.5mag.jpg" />
-    <Resource Include="icons\temporary\bracelets\empty.jpg" />
-    <Resource Include="icons\temporary\bracelets\example.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="icons\temporary\rings\10mag.jpg" />
-    <Resource Include="icons\temporary\rings\3phys.jpg" />
-    <Resource Include="icons\temporary\rings\5mag.jpg" />
-    <Resource Include="icons\temporary\rings\6phys.jpg" />
-    <Resource Include="icons\temporary\rings\9mag.jpg" />
-    <Resource Include="icons\temporary\rings\empty.jpg" />
-    <Resource Include="icons\temporary\rings\example.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="icons\temporary\equipments\belt.jpg" />
-    <Resource Include="icons\temporary\equipments\body.jpg" />
-    <Resource Include="icons\temporary\equipments\cloath.jpg" />
-    <Resource Include="icons\temporary\equipments\foots.jpg" />
-    <Resource Include="icons\temporary\equipments\hands.jpg" />
-    <Resource Include="icons\temporary\equipments\helmet.jpg" />
-    <Resource Include="icons\temporary\equipments\leather.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="icons\temporary\set\12mag.jpg" />
-    <Resource Include="icons\temporary\set\8phys.jpg" />
-    <Resource Include="icons\temporary\set\empty.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="icons\temporary\castle\sword.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="icons\amulets\10mdd.png" />
     <Resource Include="icons\amulets\15mdd.png" />
     <Resource Include="icons\amulets\4pdd.png" />

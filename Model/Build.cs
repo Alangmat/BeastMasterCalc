@@ -70,6 +70,11 @@ namespace Model
         public bool GuildDamageStartModifierActive = false;
         public bool CastleStartModifierActive = false;
         public bool TalentDamageStartModifierActive = false;
+        public bool HarmoniousPowerStartModifierActive = false;
+        public double AdditionalPercentMDDStart = 0;
+        public double AdditionalPercentPDDStart = 0;
+        public double AdditionalPercentMDDFinal = 0;
+        public double AdditionalPercentPDDFinal = 0;
 
         #endregion
 
