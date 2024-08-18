@@ -698,29 +698,7 @@
                             </Border>
                         </Popup>
                     </Button>
-                    <Button HorizontalAlignment="Left" 
-                        x:Name="temporaryHintButton"
-                        Style="{StaticResource HintButtonStyle}"
-                        Height="20" Margin="84,185,0,0" 
-                        VerticalAlignment="Top" 
-                        Width="20" 
-                        Grid.Column="2" Grid.Row="2" PreviewMouseUp="temporaryHintButton_PreviewMouseUp"  >
-                        <Button.Background>
-                            <ImageBrush ImageSource="/icons/other/ask.jpg" Stretch="Fill"/>
-                        </Button.Background>
-                        <Popup x:Name="temporaryPopup"
-                            MaxWidth="240" MinWidth="100"
-                            StaysOpen="False" Placement="Mouse" 
-                            AllowsTransparency="True"
-                               >
-                            <Border BorderBrush="Black" BorderThickness="1">
-                                <TextBlock
-                                    x:Name="temporaryHintText"
-                                    Padding="5"
-                                    TextWrapping="Wrap" Background="#FFBBCBF3" />
-                            </Border>
-                        </Popup>
-                    </Button>
+
                     <Button HorizontalAlignment="Left" 
                         x:Name="ddHintButton"
                         Style="{StaticResource HintButtonStyle}"
@@ -1008,8 +986,8 @@
                 <Grid Margin="10">
 
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="10*"/>
-                        <ColumnDefinition Width="5*"/>
+                        <ColumnDefinition Width="100*"/>
+                        <ColumnDefinition Width="70*"/>
                     </Grid.ColumnDefinitions>
 
                     <Grid Grid.Column="0">
@@ -1018,7 +996,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*"/>
@@ -1273,6 +1251,58 @@
                             </CheckBox>
                         </Grid>
 
+                        <Grid Grid.Row="3">
+                            <Image Source="/icons/talents/HarmoniousPowerFramed.png"
+                                Width="36"
+                                Height="36"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Margin="5,0,0,0"/>
+                            <CheckBox HorizontalAlignment="Left" 
+                                Margin="50,0,0,0"
+                                IsChecked="{Binding HarmoniousPowerStartModifierActive}"
+                                VerticalAlignment="Center">
+                                <TextBlock><Run Text="Гармония силы"/></TextBlock>
+                            </CheckBox>
+                        </Grid>
+                        <Grid Grid.Row="4">
+                            <Image Source="/icons/stats/mdd.png"
+                                Width="36"
+                                Height="36"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                Margin="5,0,0,0"/>
+                            <TextBox HorizontalAlignment="Left"
+                                     VerticalAlignment="Center"
+                                     Margin="50,0,0,0"
+                                     Width="30"
+                                     Text="{Binding AdditionalPercentMDDStart, Converter={StaticResource StringToDoubleConverter}}"
+                                     />
+                            <Label Content="% маг дд (дополнительно)"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center"
+                                   Margin="85,0,0,0"
+                                   />
+                        </Grid>
+                        <Grid Grid.Row="5">
+                            <Image Source="/icons/stats/pdd.png"
+                                    Width="36"
+                                    Height="36"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
+                                    Margin="5,7,0,0"/>
+                            <TextBox HorizontalAlignment="Left"
+                                     VerticalAlignment="Center"
+                                     Margin="50,0,0,0"
+                                     Width="30"
+                                     Text="{Binding AdditionalPercentPDDStart, Converter={StaticResource StringToDoubleConverter}}"
+                                     />
+                            <Label Content="% физ дд (дополнительно)"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center"
+                                   Margin="85,0,0,0"
+                                   />
+                        </Grid>
                     </Grid>
 
 
@@ -1664,7 +1694,7 @@
                                        Content="{Binding CriticalHitLuna}"
                                        Grid.Row="0"
                                        />
-                                
+
                                 <Image Height="36"
                                 Width="36"
                                 Source="/icons/stats/Accuracy.png"
@@ -1694,7 +1724,6 @@
                                        />
 
 
-
                             </Grid>
                         </GroupBox>
                     </Grid>
@@ -1706,6 +1735,126 @@
                         VerticalAlignment="Top"
                         Width="70" Grid.Row="1" Grid.Column="2"/>
                     -->
+                    <!--
+                    <Button HorizontalAlignment="Left" 
+                        x:Name="HintButton"
+                        Style="{StaticResource HintButtonStyle}"
+                        Height="20" Margin="0,0,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="20" 
+                        Grid.Column="2" Grid.Row="1" PreviewMouseUp=""  >
+                        <Button.Background>
+                            <ImageBrush ImageSource="/icons/other/ask.jpg" Stretch="Fill"/>
+                        </Button.Background>
+                        <Popup x:Name="Popup"
+                            MaxWidth="240" MinWidth="100"
+                            StaysOpen="False" Placement="Mouse" 
+                            AllowsTransparency="True"
+                               >
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <TextBlock
+                                    x:Name="HintText"
+                                    Padding="5"
+                                    TextWrapping="Wrap" Background="#FFBBCBF3" />
+                            </Border>
+                        </Popup>
+                    </Button>
+                    -->
+                    <Button HorizontalAlignment="Left" 
+                        x:Name="statsHeroHintButton"
+                        Style="{StaticResource HintButtonStyle}"
+                        Height="20" Margin="314,2,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="20" 
+                        Grid.Column="1" PreviewMouseUp="statsHeroHintButton_PreviewMouseUp" Grid.Row="1"  >
+                        <Button.Background>
+                            <ImageBrush ImageSource="/icons/other/ask.jpg" Stretch="Fill"/>
+                        </Button.Background>
+                        <Popup x:Name="statsHeroPopup"
+                            MaxWidth="240" MinWidth="100"
+                            StaysOpen="False" Placement="Mouse" 
+                            AllowsTransparency="True"
+                               >
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <TextBlock
+                                    x:Name="statsHeroHintText"
+                                    Padding="5"
+                                    TextWrapping="Wrap" Background="#FFBBCBF3" />
+                            </Border>
+                        </Popup>
+                    </Button>
+
+                    <Button HorizontalAlignment="Left" 
+                        x:Name="weaponTypeHintButton"
+                        Style="{StaticResource HintButtonStyle}"
+                        Height="20" Margin="316,2,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="20" 
+                        Grid.Column="2" PreviewMouseUp="weaponTypeHintButton_PreviewMouseUp" Grid.Row="1"  >
+                        <Button.Background>
+                            <ImageBrush ImageSource="/icons/other/ask.jpg" Stretch="Fill"/>
+                        </Button.Background>
+                        <Popup x:Name="weaponTypePopup"
+                            MaxWidth="240" MinWidth="100"
+                            StaysOpen="False" Placement="Mouse" 
+                            AllowsTransparency="True"
+                               >
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <TextBlock
+                                    x:Name="weaponTypeHintText"
+                                    Padding="5"
+                                    TextWrapping="Wrap" Background="#FFBBCBF3" />
+                            </Border>
+                        </Popup>
+                    </Button>
+
+                    <Button HorizontalAlignment="Left" 
+                        x:Name="statsEntityHintButton"
+                        Style="{StaticResource HintButtonStyle}"
+                        Height="20" Margin="316,92,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="20" 
+                        Grid.Column="2" PreviewMouseUp="statsEntityHintButton_PreviewMouseUp" Grid.Row="1"  >
+                        <Button.Background>
+                            <ImageBrush ImageSource="/icons/other/ask.jpg" Stretch="Fill"/>
+                        </Button.Background>
+                        <Popup x:Name="statsEntityPopup"
+                            MaxWidth="240" MinWidth="100"
+                            StaysOpen="False" Placement="Mouse" 
+                            AllowsTransparency="True"
+                               >
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <TextBlock
+                                    x:Name="statsEntityHintText"
+                                    Padding="5"
+                                    TextWrapping="Wrap" Background="#FFBBCBF3" />
+                            </Border>
+                        </Popup>
+                    </Button>
+                    <Button HorizontalAlignment="Left" 
+                        x:Name="statsLunaHintButton"
+                        Style="{StaticResource HintButtonStyle}"
+                        Height="20" Margin="316,271,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="20" 
+                        Grid.Column="2" PreviewMouseUp="statsLunaHintButton_PreviewMouseUp" Grid.Row="1"  >
+                        <Button.Background>
+                            <ImageBrush ImageSource="/icons/other/ask.jpg" Stretch="Fill"/>
+                        </Button.Background>
+                        <Popup x:Name="statsLunaPopup"
+                            MaxWidth="240" MinWidth="100"
+                            StaysOpen="False" Placement="Mouse" 
+                            AllowsTransparency="True"
+                               >
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <TextBlock
+                                    x:Name="statsLunaHintText"
+                                    Padding="5"
+                                    TextWrapping="Wrap" Background="#FFBBCBF3" />
+                            </Border>
+                        </Popup>
+                    </Button>
+
                 </Grid>
             </TabItem>
 
@@ -2442,6 +2591,115 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
 
+
+
+
+
+
+
+                                <Grid Grid.Row="0">
+                                    <ComboBox
+                                    ItemsSource="{Binding Castles}"
+                                    SelectedItem="{Binding NumberCastle}"
+                                    HorizontalAlignment="Left"
+                                    Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="111" Height="22">
+                                        <ComboBox.Background>
+                                            <LinearGradientBrush EndPoint="0,1">
+                                                <GradientStop Color="#FFF0F0F0"/>
+                                                <GradientStop Color="#FFC7C6BB" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </ComboBox.Background>
+                                    </ComboBox>
+                                    <TextBlock
+                                        TextWrapping="Wrap" 
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center" Width="174" Text="урон скиллов от замка" Margin="128,0,0,0"/>
+                                </Grid>
+
+                                <Grid Grid.Row="1">
+                                    <Image Source="icons/other/GodsAid.png"
+                                           Width="36"
+                                           Height="36"
+                                           Margin="5"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Center"
+                                           />
+                                    <CheckBox
+                                        IsChecked="{Binding GodsAid}"
+                                        HorizontalAlignment="Left" 
+                                        Height="18" 
+                                        Margin="50,0,0,0"
+                                        VerticalAlignment="Center" 
+                                        Width="194">
+                                        <TextBlock
+                                        TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Крылья жреца"/></TextBlock>
+                                    </CheckBox>
+                                </Grid>
+
+                                <Grid Grid.Row="2">
+                                    <Image Source="icons/other/bp.png"
+                                           Width="36"
+                                           Height="36"
+                                           Margin="5"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Center"
+                                           />
+                                    <CheckBox
+                                        IsChecked="{Binding ChechBPDungeon}"
+                                        HorizontalAlignment="Left" 
+                                        Height="18" 
+                                        Margin="50,0,0,0"
+                                        VerticalAlignment="Center" 
+                                        Width="194">
+                                        <TextBlock
+                                        TextWrapping="Wrap" Height="18"><Run Text="Урон в инсте  "/><Run Language="ru-ru" Text="с бафом бп"/></TextBlock>
+                                    </CheckBox>
+                                </Grid>
+
+                                <Grid Grid.Row="3">
+                                    <CheckBox
+                                        IsChecked="{Binding SacredShieldHeroActive}"
+                                        HorizontalAlignment="Left" 
+                                        Height="18" 
+                                        Margin="10,0,0,0"
+                                        VerticalAlignment="Center" 
+                                        Width="284">
+                                        <TextBlock
+                                            TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Сакральный щит паладина на персонажа"/></TextBlock>
+                                    </CheckBox>
+                                </Grid>
+                                <Grid Grid.Row="4">
+                                    <CheckBox
+                                        IsChecked="{Binding SacredShieldLunaActive}"
+                                        HorizontalAlignment="Left" 
+                                        Height="18" 
+                                        Margin="10,0,0,0"
+                                        VerticalAlignment="Center" 
+                                        Width="284">
+                                        <TextBlock
+                                            TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Сакральный щит паладина на Луну"/></TextBlock>
+                                    </CheckBox>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                    <Grid Grid.Column="1">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="85*"/>
+                            <RowDefinition Height="56*"/>
+                        </Grid.RowDefinitions>
+                        <Border BorderBrush="Black"
+                        BorderThickness="2"
+                        Margin="21,20,19,20" CornerRadius="10" Grid.Row="0">
+                            <!--Margin="21,20,19,242"-->
+                            <Grid Margin="5, 10, 5, 10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
                                 <Grid Grid.Row="0">
                                     <Image Source="icons/other/GuildDamage.png"
                                    Width="36"
@@ -2476,7 +2734,6 @@
                                     </CheckBox>
                                 </Grid>
 
-
                                 <Grid Grid.Row="2">
                                     <Image Source="/icons/castle/CastleSword.png"
                                     Width="36"
@@ -2498,130 +2755,82 @@
                                 </Grid>
 
                                 <Grid Grid.Row="3">
-                                    <ComboBox
-                                    ItemsSource="{Binding Castles}"
-                                    SelectedItem="{Binding NumberCastle}"
+                                    <Image Source="/icons/stats/mdd.png"
+                                    Width="36"
+                                    Height="36"
                                     HorizontalAlignment="Left"
-                                    Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="111" Height="22">
-                                        <ComboBox.Background>
-                                            <LinearGradientBrush EndPoint="0,1">
-                                                <GradientStop Color="#FFF0F0F0"/>
-                                                <GradientStop Color="#FFC7C6BB" Offset="1"/>
-                                            </LinearGradientBrush>
-                                        </ComboBox.Background>
-                                    </ComboBox>
-                                    <TextBlock
-                                        TextWrapping="Wrap" 
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center" Width="174" Text="урон скиллов от замка" Margin="128,0,0,0"/>
+                                    VerticalAlignment="Top"
+                                    Margin="5,7,0,0"/>
+                                    <TextBox HorizontalAlignment="Left"
+                                     VerticalAlignment="Center"
+                                     Margin="50,0,0,0"
+                                     Width="30"
+                                     Text="{Binding AdditionalPercentMDDFinal, Converter={StaticResource StringToDoubleConverter}}"
+                                     />
+                                    <Label Content="% маг дд (дополнительно)"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center"
+                                   Margin="85,0,0,0"
+                                   />
                                 </Grid>
 
                                 <Grid Grid.Row="4">
-                                    <Image Source="icons/other/GodsAid.png"
-                                           Width="36"
-                                           Height="36"
-                                           Margin="5"
-                                           HorizontalAlignment="Left"
-                                           VerticalAlignment="Center"
-                                           />
-                                    <CheckBox
-                                        IsChecked="{Binding GodsAid}"
-                                        HorizontalAlignment="Left" 
-                                        Height="18" 
-                                        Margin="50,0,0,0"
-                                        VerticalAlignment="Center" 
-                                        Width="194">
-                                        <TextBlock
-                                        TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Крылья жреца"/></TextBlock>
-                                    </CheckBox>
+                                    <Image Source="/icons/stats/pdd.png"
+                                    Width="36"
+                                    Height="36"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
+                                    Margin="5,7,0,0"/>
+                                    <TextBox HorizontalAlignment="Left"
+                                     VerticalAlignment="Center"
+                                     Margin="50,0,0,0"
+                                     Width="30"
+                                     Text="{Binding AdditionalPercentPDDFinal, Converter={StaticResource StringToDoubleConverter}}"
+                                     />
+                                    <Label Content="% физ дд (дополнительно)"
+                                   HorizontalAlignment="Left"
+                                   VerticalAlignment="Center"
+                                   Margin="85,0,0,0"
+                                   />
                                 </Grid>
 
-                                <Grid Grid.Row="5">
-                                    <Image Source="icons/other/bp.png"
-                                           Width="36"
-                                           Height="36"
-                                           Margin="5"
-                                           HorizontalAlignment="Left"
-                                           VerticalAlignment="Center"
-                                           />
-                                    <CheckBox
-                                        IsChecked="{Binding ChechBPDungeon}"
-                                        HorizontalAlignment="Left" 
-                                        Height="18" 
-                                        Margin="50,0,0,0"
-                                        VerticalAlignment="Center" 
-                                        Width="194">
-                                        <TextBlock
-                                        TextWrapping="Wrap" Height="18"><Run Text="Урон в инсте  "/><Run Language="ru-ru" Text="с бафом бп"/></TextBlock>
-                                    </CheckBox>
-                                </Grid>
-                                
-                                <Grid Grid.Row="6">
-                                    <CheckBox
-                                        IsChecked="{Binding SacredShieldHeroActive}"
-                                        HorizontalAlignment="Left" 
-                                        Height="18" 
-                                        Margin="10,0,0,0"
-                                        VerticalAlignment="Center" 
-                                        Width="284">
-                                        <TextBlock
-                                            TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Сакральный щит паладина на персонажа"/></TextBlock>
-                                    </CheckBox>
-                                </Grid>
-                                <Grid Grid.Row="7">
-                                    <CheckBox
-                                        IsChecked="{Binding SacredShieldLunaActive}"
-                                        HorizontalAlignment="Left" 
-                                        Height="18" 
-                                        Margin="10,0,0,0"
-                                        VerticalAlignment="Center" 
-                                        Width="284">
-                                        <TextBlock
-                                            TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Сакральный щит паладина на Луну"/></TextBlock>
-                                    </CheckBox>
-                                </Grid>
+
                             </Grid>
                         </Border>
-                    </Grid>
-                    <Border BorderBrush="Black"
+                        <Border BorderBrush="Black"
                         BorderThickness="2"
-                        Margin="21,20,19,20" CornerRadius="10" Grid.Column="1" >
-                        <Grid Margin="5, 10, 5, 10">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-                            <Grid Grid.Row="0">
-                                <Image Source="icons/stats/rbreduction.png"
+                        Margin="21,20,19,20" CornerRadius="10" Grid.Row="1">
+                            <Grid Margin="5, 10, 5, 10">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+
+                                <Grid Grid.Row="0">
+                                    <Image Source="icons/stats/rbreduction.png"
                                        Width="36"
                                        Height="36"
                                        Margin="5"
                                        HorizontalAlignment="Left"
                                        VerticalAlignment="Center"
                                        />
-                                <CheckBox
+                                    <CheckBox
                                     IsChecked="{Binding Counterstand}"
                                     HorizontalAlignment="Left"
                                     Margin="50,0,0,0"
                                     Height="18"
                                     VerticalAlignment="Center" 
-                                    Width="290">
-                                    <TextBlock
+                                    >
+                                        <TextBlock
                                         TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text=" Снижение длительности дебафов на рб"/></TextBlock>
-                                </CheckBox>
+                                    </CheckBox>
+                                </Grid>
+
                             </Grid>
-                            <Grid Grid.Row="1"/>
-                            <Grid Grid.Row="2"/>
-                            <Grid Grid.Row="3"/>
-                        </Grid>
-                    </Border>
+
+                        </Border>
+                    </Grid>
                 </Grid>
             </TabItem>
 
@@ -2993,8 +3202,32 @@
                     Width="166" FontSize="20"/>
                 <Button Content="Расчет"
                         Height="20"
+                        Command="{Binding CalculateCommand}"
                     Grid.Column="1" HorizontalAlignment="Center"
                         VerticalAlignment="Center"/>
+                <Button HorizontalAlignment="Right" 
+                        x:Name="calculateHintButton"
+                        Style="{StaticResource HintButtonStyle}"
+                        Height="20" Margin="0,0,5,0" 
+                        VerticalAlignment="Center" 
+                        Width="20" 
+                        Grid.Column="2" PreviewMouseUp="calculateHintButton_PreviewMouseUp" Grid.Row="1"  >
+                    <Button.Background>
+                        <ImageBrush ImageSource="/icons/other/ask.jpg" Stretch="Fill"/>
+                    </Button.Background>
+                    <Popup x:Name="calculatePopup"
+                            MaxWidth="240" MinWidth="100"
+                            StaysOpen="False" Placement="Mouse" 
+                            AllowsTransparency="True"
+                               >
+                        <Border BorderBrush="Black" BorderThickness="1">
+                            <TextBlock
+                                    x:Name="calculateHintText"
+                                    Padding="5"
+                                    TextWrapping="Wrap" Background="#FFBBCBF3" />
+                        </Border>
+                    </Popup>
+                </Button>
             </Grid>
         </Grid>
     </Grid>

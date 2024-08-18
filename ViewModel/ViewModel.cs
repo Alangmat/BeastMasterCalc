@@ -1261,6 +1261,7 @@ namespace ViewModel
             }
         }
         #endregion
+        #region дд от замка 
         private bool castleStartModifierActive = false;
         public bool CastleStartModifierActive
         {
@@ -1273,10 +1274,49 @@ namespace ViewModel
                 Calculate(); NotifyPropertyChanged(nameof(CastleStartModifierActive));
             }
         }
+
         #endregion
+        #region дд с первой ветки
+        public bool HarmoniousPowerStartModifierActive
+        {
+            get => DataSet.HarmoniousPowerStartModifierActive;
+            set
+            {
+                DataSet.HarmoniousPowerStartModifierActive = value;
+                Calculate(); NotifyPropertyChanged(nameof(HarmoniousPowerStartModifierActive));
+            }
+        }
+        #endregion
+        #region доп %
+        public double AdditionalPercentMDDStart
+        {
+            get => DataSet.AdditionalPercentMDDStart;
+            set
+            {
+                double p = 0;
+                if (double.TryParse(value.ToString(), out p))
+                    DataSet.AdditionalPercentMDDStart = p;
+                Calculate(); NotifyPropertyChanged(nameof(AdditionalPercentMDDStart));
+            }
+        }
+        public double AdditionalPercentPDDStart
+        {
+            get => DataSet.AdditionalPercentPDDStart;
+            set
+            {
+                double p = 0;
+                if (double.TryParse(value.ToString(), out p))
+                    DataSet.AdditionalPercentPDDStart = p;
+                Calculate(); NotifyPropertyChanged(nameof(AdditionalPercentPDDStart));
+            }
+        }
+        #endregion
+        #endregion
+
 
         private double percentMagicalDDStart = 0;
         private double percentMagicalDD = 0;
+        private const int DDConcentration = 4;
         public double PercentMagicalDD
         {
             get => DataSet.PercentMagicalDD;
@@ -1292,7 +1332,7 @@ namespace ViewModel
         private void CalcPercentMagicalDDStart()
         {
             percentMagicalDDStart = 0;
-            percentMagicalDDStart += 4;
+            percentMagicalDDStart += DDConcentration;
 
             percentMagicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedCloak)["Magical"];
             percentMagicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedAmulet)["Magical"];
@@ -1305,12 +1345,14 @@ namespace ViewModel
             if (GuildDamageStartModifierActive) percentMagicalDDStart += 10;
             if (TalentDamageStartModifierActive) percentMagicalDDStart += 4.75;
             if (CastleStartModifierActive) percentMagicalDDStart += 7.5;
+            if (HarmoniousPowerStartModifierActive) percentMagicalDDStart += harmoniousPowerMDD;
+            percentMagicalDDStart += AdditionalPercentMDDStart;
 
         }
         private void CalcPercentMagicalDD()
         {
             percentMagicalDD = 0;
-            percentMagicalDD += 4;
+            percentMagicalDD += DDConcentration;
 
             percentMagicalDD += ModifiersDamage.ConvertInModifiers(SelectedCloak)["Magical"];
             percentMagicalDD += ModifiersDamage.ConvertInModifiers(SelectedAmulet)["Magical"];
@@ -1324,6 +1366,7 @@ namespace ViewModel
             if (TalentDamageModifierActive) percentMagicalDD += 4.75;
             if (CastleSwordActive) percentMagicalDD += 7.5;
             if (HasTalentHarmoniousPower) percentMagicalDD += harmoniousPowerMDD;
+            percentMagicalDD += AdditionalPercentMDDFinal;
         }
 
         private double percentPhysicalDDStart = 0;
@@ -1344,7 +1387,7 @@ namespace ViewModel
         private void CalcPercentPhysicalDDStart()
         {
             percentPhysicalDDStart = 0;
-            percentPhysicalDDStart += 4;
+            percentPhysicalDDStart += DDConcentration;
 
             percentPhysicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedCloak)["Physical"];
             percentPhysicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedAmulet)["Physical"];
@@ -1357,13 +1400,14 @@ namespace ViewModel
             if (GuildDamageStartModifierActive) percentPhysicalDDStart += 10;
             if (TalentDamageStartModifierActive) percentPhysicalDDStart += 4.75;
             if (CastleStartModifierActive) percentPhysicalDDStart += 7.5;
-
+            if (HarmoniousPowerStartModifierActive) percentPhysicalDDStart += harmoniousPowerPDD;
+            percentPhysicalDDStart += AdditionalPercentPDDStart;
         }
 
         private void CalcPercentPhysicalDD()
         {
             percentPhysicalDD = 0;
-            percentPhysicalDD += 4;
+            percentPhysicalDD += DDConcentration;
 
             percentPhysicalDD += ModifiersDamage.ConvertInModifiers(SelectedCloak)["Physical"];
             percentPhysicalDD += ModifiersDamage.ConvertInModifiers(SelectedAmulet)["Physical"];
@@ -1377,7 +1421,7 @@ namespace ViewModel
             if (TalentDamageModifierActive) percentPhysicalDD += 4.75;
             if (CastleSwordActive) percentPhysicalDD += 7.5;
             if (HasTalentHarmoniousPower) percentPhysicalDD += harmoniousPowerPDD;
-
+            percentPhysicalDD += AdditionalPercentPDDFinal;
         }
 
 
@@ -2220,20 +2264,17 @@ namespace ViewModel
         {
             harmoniousPowerMDD = 0;
             harmoniousPowerPDD = 0;
-            if (HasTalentHarmoniousPower)
-            {
-                harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(SelectedHelmet)["Magical"];
-                harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(SelectedBody)["Magical"];
-                harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(SelectedHands)["Magical"];
-                harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(selectedBelt)["Magical"];
-                harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(selectedFoots)["Magical"];
+            harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(SelectedHelmet)["Magical"];
+            harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(SelectedBody)["Magical"];
+            harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(SelectedHands)["Magical"];
+            harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(selectedBelt)["Magical"];
+            harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(selectedFoots)["Magical"];
 
-                harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(SelectedHelmet)["Physical"];
-                harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(SelectedBody)["Physical"];
-                harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(SelectedHands)["Physical"];
-                harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(selectedBelt)["Physical"];
-                harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(selectedFoots)["Physical"];
-            }
+            harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(SelectedHelmet)["Physical"];
+            harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(SelectedBody)["Physical"];
+            harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(SelectedHands)["Physical"];
+            harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(selectedBelt)["Physical"];
+            harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(selectedFoots)["Physical"];
         }
         private double harmoniousPowerMDD = 0;
         private double harmoniousPowerPDD = 0;
@@ -2927,6 +2968,31 @@ namespace ViewModel
 
         #endregion
 
+        #endregion
+
+        #region доп %
+        public double AdditionalPercentMDDFinal
+        {
+            get => DataSet.AdditionalPercentMDDFinal;
+            set
+            {
+                double p = 0;
+                if (double.TryParse(value.ToString(), out p))
+                    DataSet.AdditionalPercentMDDFinal = p;
+                Calculate(); NotifyPropertyChanged(nameof(AdditionalPercentMDDFinal));
+            }
+        }
+        public double AdditionalPercentPDDFinal
+        {
+            get => DataSet.AdditionalPercentPDDFinal;
+            set
+            {
+                double p = 0;
+                if (double.TryParse(value.ToString(), out p))
+                    DataSet.AdditionalPercentPDDFinal = p;
+                Calculate(); NotifyPropertyChanged(nameof(AdditionalPercentPDDFinal));
+            }
+        }
         #endregion
 
         #endregion
