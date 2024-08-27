@@ -159,6 +159,42 @@ namespace View
             {
                 calculateHintText.Text = "Файл не найден.";
             }
+            string talentsPath = "hints/talentsHint.txt";
+            if (File.Exists(talentsPath))
+            {
+                string text = File.ReadAllText(talentsPath);
+                talentsHintText.Text = text;
+            }
+            else
+            {
+                talentsHintText.Text = "Файл не найден.";
+            }
+            string equipmentPath = "hints/equipmentHint.txt";
+            if (File.Exists(equipmentPath))
+            {
+                string text = File.ReadAllText(equipmentPath);
+                equipmentHintText.Text = text;
+            }
+            else
+            {
+                equipmentHintText.Text = "Файл не найден.";
+            }
+            string startModPath = "hints/startModHint.txt";
+            readHint(startModPath, startModHintText);
+            string finalModPath = "hints/finalModHint.txt";
+            readHint(finalModPath, finalModHintText);
+        }
+        private void readHint(string path, TextBlock hintText)
+        {
+            if (File.Exists(path))
+            {
+                string text = File.ReadAllText(path);
+                hintText.Text = text;
+            }
+            else
+            {
+                hintText.Text = "Файл не найден.";
+            }
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -1367,6 +1403,22 @@ namespace View
         private void calculateHintButton_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
             calculatePopup.IsOpen = !calculatePopup.IsOpen;
+        }
+        private void talentsHintButton_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            talentsPopup.IsOpen = !talentsPopup.IsOpen;
+        }
+        private void equipmentHintButton_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            equipmentPopup.IsOpen = !equipmentPopup.IsOpen;
+        }
+        private void startModHintButton_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            startModPopup.IsOpen = !startModPopup.IsOpen;
+        }
+        private void finalModHintButton_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            finalModPopup.IsOpen = !finalModPopup.IsOpen;
         }
 
         #endregion
