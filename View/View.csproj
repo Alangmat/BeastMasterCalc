@@ -507,9 +507,6 @@
     <Resource Include="icons\other\background.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Image1.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="background.jpg" />
   </ItemGroup>
   <ItemGroup>

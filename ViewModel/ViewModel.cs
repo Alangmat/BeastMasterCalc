@@ -374,7 +374,7 @@ namespace ViewModel
                     var dpmSymbiosis = CalcSymbiosis(magicdd, physdd);
                     int dpmSymbiosisLuna = dpmSymbiosis["Luna"];
                     int dpmSymbiosisHero = dpmSymbiosis["Hero"];
-                    double realCooldawnBestialRampage = (Bestial_Rampage.BaseTimeCooldown / (1 + SkillCooldown / 100)) + timeCast;
+                    double realCooldawnBestialRampage = (Bestial_Rampage.BaseTimeCooldown / (1 + SkillCooldown / 100)) + TIME_CAST;
                     int resultDD = 0;
                     int resultDDLuna = 0;
                     int resultDDHero = 0;
@@ -389,14 +389,12 @@ namespace ViewModel
                     {
                         if (BestialRampageActive)
                         {
-                            resultDDLuna += (int)(dpmBeastAwakening * TimeWithoutBestialRampage() +
-                                dpmBestialRampage * TimeBestialRampage());
-
+                            resultDDLuna += (int)(dpmBeastAwakening * TimeWithoutBestialRampage() 
+                                            + dpmBestialRampage * TimeBestialRampage());
                         }
                         else
                         {
                             resultDDLuna += dpmBeastAwakening;
-
                         }
                         if (OrderToAttackActive)
                         {
@@ -459,7 +457,7 @@ namespace ViewModel
         }
         private double MoonTouchCooldown()
         {
-            double result = ((Moon_Touch.BaseTimeCooldown / (1 + SkillCooldownFinal / 100)) + timeCast);
+            double result = ((Moon_Touch.BaseTimeCooldown / (1 + SkillCooldownFinal / 100)) + TIME_CAST);
             return result;
         }
         public int CalcMoonTouch(int magedd)
@@ -490,7 +488,7 @@ namespace ViewModel
 
         private double ChainLightningCooldown()
         {
-            double result = ((Chain_Lightning.BaseTimeCooldown / (1 + SkillCooldownFinal / 100)) + timeCast);
+            double result = ((Chain_Lightning.BaseTimeCooldown / (1 + SkillCooldownFinal / 100)) + TIME_CAST);
             return result;
         }
         public int CalcChainLightning(int magedd, int physdd)
@@ -527,7 +525,7 @@ namespace ViewModel
         }
         public double BestialRampageCooldown()
         {
-            double result = (Bestial_Rampage.BaseTimeCooldown / (1 + SkillCooldownFinal / 100)) + timeCast;
+            double result = (Bestial_Rampage.BaseTimeCooldown / (1 + SkillCooldownFinal / 100)) + TIME_CAST;
 
             return result;
         }
@@ -574,7 +572,7 @@ namespace ViewModel
         }
         public double AuraOfTheForestCooldown()
         {
-            double result = AuraOfTheForest.BaseTimeCooldown / (1 + SkillCooldownFinal / 100) + timeCast;
+            double result = AuraOfTheForest.BaseTimeCooldown / (1 + SkillCooldownFinal / 100) + TIME_CAST;
 
             return result;
         }
@@ -593,7 +591,7 @@ namespace ViewModel
                 * coefficientPredatoryDeliriumTalant 
                 * coefficientMomentOfPowerTalant 
                 * FormulaCoefficientOfPenetration());
-            double realCooldown = AuraOfTheForest.BaseTimeCooldown / (1 + SkillCooldownFinal / 100) + timeCast;
+            double realCooldown = AuraOfTheForest.BaseTimeCooldown / (1 + SkillCooldownFinal / 100) + TIME_CAST;
             if (HasTalantGrandeurOfTheLotus)
             {
                 if (BeastAwakeningActive)
@@ -651,7 +649,7 @@ namespace ViewModel
 
         public double MoonLightCooldown()
         {
-            double result = Moonlight.BaseTimeCooldown / (1 + SkillCooldownFinal / 100) + timeCast;
+            double result = Moonlight.BaseTimeCooldown / (1 + SkillCooldownFinal / 100) + TIME_CAST;
 
             return result;
         }
@@ -674,7 +672,7 @@ namespace ViewModel
             }
             if (MoonlightNonPermanentActive)
             {
-                double realCooldown = Moonlight.BaseTimeCooldown / (1 + SkillCooldownFinal / 100) + timeCast;
+                double realCooldown = Moonlight.BaseTimeCooldown / (1 + SkillCooldownFinal / 100) + TIME_CAST;
 
                 int nonPermanentDD = (int)(Moonlight.Formula(magicaldd) 
                     * coefficientCastle
@@ -695,7 +693,7 @@ namespace ViewModel
         }
         private double OrderToAttackCooldown()
         {
-            double result = ((OrderToAttack.BaseTimeCooldown / (1 + SkillCooldownFinal / 100)) + timeCast);
+            double result = ((OrderToAttack.BaseTimeCooldown / (1 + SkillCooldownFinal / 100)) + TIME_CAST);
             return result;
         }
         public int CalcOrderToAttack(int magedd, int physdd)
@@ -876,9 +874,9 @@ namespace ViewModel
         }
         #endregion
         #region Крит
-        private double maxCriticalHit = 100;
+        private const double MAX_CRITICAL_HIT = 100;
         private double maxCriticalHitHero = 53;
-        private double minCriticalHit = 0;
+        private const double MIN_CRITICAL_HIT = 0;
         private double criticalHitHero = 0;
         public double CriticalHitHeroFinal
         {
@@ -901,14 +899,17 @@ namespace ViewModel
                 NotifyPropertyChanged(nameof(CriticalHitLuna));
             }
         }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе "Критический удар"
+        /// </summary>
         public double CriticalHit
         {
             get => DataSet.CriticalHit;
             set
             {
                 DataSet.CriticalHit = value;
-                if (DataSet.CriticalHit > maxCriticalHit) DataSet.CriticalHit = maxCriticalHit;
-                if (DataSet.CriticalHit < minCriticalHit) DataSet.CriticalHit = minCriticalHit;
+                if (DataSet.CriticalHit > MAX_CRITICAL_HIT) DataSet.CriticalHit = MAX_CRITICAL_HIT;
+                if (DataSet.CriticalHit < MIN_CRITICAL_HIT) DataSet.CriticalHit = MIN_CRITICAL_HIT;
                 Calculate(); NotifyPropertyChanged("CriticalHit");
             }
         }
@@ -929,7 +930,7 @@ namespace ViewModel
         }
         #endregion
         #region Крит урон
-        private double maxCriticalDamage = 200;
+        private const double MAX_CRITICAL_DAMAGE = 200;
         private double criticalDamage = 0;
         public double CriticalDamageFinal
         {
@@ -940,13 +941,16 @@ namespace ViewModel
                 NotifyPropertyChanged(nameof(CriticalDamageFinal));
             }
         }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе "Критический урон"
+        /// </summary>
         public double CriticalDamage
         {
             get => DataSet.CriticalDamage;
             set
             {
                 DataSet.CriticalDamage = value;
-                if (DataSet.CriticalDamage > maxCriticalDamage) DataSet.CriticalDamage = maxCriticalDamage;
+                if (DataSet.CriticalDamage > MAX_CRITICAL_DAMAGE) DataSet.CriticalDamage = MAX_CRITICAL_DAMAGE;
 
                 Calculate(); NotifyPropertyChanged("CriticalDamage");
             }
@@ -961,12 +965,13 @@ namespace ViewModel
             if (DoubleConcentrationActive)
                 CriticalDamageFinal += DoubleConcentration.AdditionCriticalDamage;
             if (GodsAid) CriticalDamageFinal += 30;
-            if (CriticalDamageFinal > maxCriticalDamage) CriticalDamageFinal = maxCriticalDamage;
+            if (CriticalDamageFinal > MAX_CRITICAL_DAMAGE) CriticalDamageFinal = MAX_CRITICAL_DAMAGE;
         }
         #endregion
         #region Пробив
-        private double maxPenetration = 100;
+        private const double MAX_PENETRATION = 100;
         private double penetration = 0;
+        private const double MIN_PENETRATION = 0;
         private double maxPenetrationHero = 50;
         private double penetrationHero = 0;
         public double PenetrationHeroFinal
@@ -978,7 +983,6 @@ namespace ViewModel
                 NotifyPropertyChanged(nameof(PenetrationHeroFinal));
             }
         }
-        private double minPenetration = 0;
         private double penetrationLuna = 0;
         public double PenetrationLuna
         {
@@ -989,6 +993,9 @@ namespace ViewModel
                 NotifyPropertyChanged(nameof(PenetrationLuna));
             }
         }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе "Пробивная способность"
+        /// </summary>
         public double Penetration
         {
             //get => penetration;
@@ -996,8 +1003,8 @@ namespace ViewModel
             set
             {
                 DataSet.Penetration = value;
-                if (DataSet.Penetration > maxPenetration) DataSet.Penetration = maxPenetration;
-                if (DataSet.Penetration < minPenetration) DataSet.Penetration = minPenetration;
+                if (DataSet.Penetration > MAX_PENETRATION) DataSet.Penetration = MAX_PENETRATION;
+                if (DataSet.Penetration < MIN_PENETRATION) DataSet.Penetration = MIN_PENETRATION;
 
                 Calculate(); NotifyPropertyChanged("Penetration");
             }
@@ -1018,7 +1025,8 @@ namespace ViewModel
         }
         #endregion
         #region Точность
-        private double maxAccuracy = 100;
+        private const double MAX_ACCURACY = 100;
+        private const double MIN_ACCURACY = 0;
         private double maxAccuracyHero = 50;
         private double accuracy = 0;
         public double AccuracyLuna
@@ -1039,7 +1047,9 @@ namespace ViewModel
                 NotifyPropertyChanged(nameof(AccuracyHeroFinal));
             }
         }
-        private double minAccuracy = 0;
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе "Точность"
+        /// </summary>
         public double Accuracy
         {
             get => DataSet.Accuracy;
@@ -1047,12 +1057,12 @@ namespace ViewModel
             {
                 DataSet.Accuracy = value;
 
-                if (DataSet.Accuracy > maxAccuracy) DataSet.Accuracy = maxAccuracy;
-                if (DataSet.Accuracy < minAccuracy) DataSet.Accuracy = minAccuracy;
-                AccuracyHeroFinal = DataSet.Accuracy;
-                if (AccuracyHeroFinal > maxAccuracyHero) AccuracyHeroFinal = maxAccuracyHero;
+                if (DataSet.Accuracy > MAX_ACCURACY) DataSet.Accuracy = MAX_ACCURACY;
+                if (DataSet.Accuracy < MIN_ACCURACY) DataSet.Accuracy = MIN_ACCURACY;
+                //AccuracyHeroFinal = DataSet.Accuracy;
+                //if (AccuracyHeroFinal > maxAccuracyHero) AccuracyHeroFinal = maxAccuracyHero;
 
-                Calculate(); NotifyPropertyChanged("Accuracy");
+                Calculate(); NotifyPropertyChanged(nameof(Accuracy));
             }
         }
         /// <summary>
@@ -1070,7 +1080,8 @@ namespace ViewModel
         }
         #endregion
         #region Сила атаки
-        private double maxAttackStrength = 100;
+        private const double MAX_ATTACK_STRENGTH = 100;
+        private const double MIN_ATTACK_STRENGTH = 0;
         private double attackStrength = 0;
         public double AttackStrengthFinal
         {
@@ -1081,16 +1092,18 @@ namespace ViewModel
                 NotifyPropertyChanged(nameof(AttackStrengthFinal));
             }
         }
-        private double minAttackStrength = 0;
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе "Сила атаки"
+        /// </summary>
         public double AttackStrength
         {
             get => DataSet.AttackStrength;
             set
             {
                 DataSet.AttackStrength = value;
-                if (DataSet.AttackStrength > maxAttackStrength) DataSet.AttackStrength = maxAttackStrength;
-                if (DataSet.AttackStrength < minAttackStrength) DataSet.AttackStrength = minAttackStrength;
-                Calculate(); NotifyPropertyChanged("AttackStrength");
+                if (DataSet.AttackStrength > MAX_ATTACK_STRENGTH) DataSet.AttackStrength = MAX_ATTACK_STRENGTH;
+                if (DataSet.AttackStrength < MIN_ATTACK_STRENGTH) DataSet.AttackStrength = MIN_ATTACK_STRENGTH;
+                Calculate(); NotifyPropertyChanged(nameof(AttackStrength));
             }
         }
         /// <summary>
@@ -1100,11 +1113,12 @@ namespace ViewModel
         {
             AttackStrengthFinal = 0;
             AttackStrengthFinal += AttackStrength;
-            if (AttackStrengthFinal > maxAttackStrength) AttackStrengthFinal = maxAttackStrength;
+            if (AttackStrengthFinal > MAX_ATTACK_STRENGTH) AttackStrengthFinal = MAX_ATTACK_STRENGTH;
         }
         #endregion
         #region Пронза
-        private double maxPiercingAttack = 50;
+        private const double MAX_PIERCING_ATTACK = 50;
+        private const double MIN_PIERCING_ATTACK = 0;
         private double piercingAttack = 0;
         public double PiercingAttackFinal
         {
@@ -1115,15 +1129,17 @@ namespace ViewModel
                 NotifyPropertyChanged(nameof(PiercingAttackFinal));
             }
         }
-        private double minPiercingAttack = 0;
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе "Пронзающая атака"
+        /// </summary>
         public double PiercingAttack
         {
             get => DataSet.PiercingAttack;
             set
             {
                 DataSet.PiercingAttack = value;
-                if (DataSet.PiercingAttack > maxPiercingAttack) DataSet.PiercingAttack = maxPiercingAttack;
-                if (DataSet.PiercingAttack < minPiercingAttack) DataSet.PiercingAttack = minPiercingAttack;
+                if (DataSet.PiercingAttack > MAX_PIERCING_ATTACK) DataSet.PiercingAttack = MAX_PIERCING_ATTACK;
+                if (DataSet.PiercingAttack < MIN_PIERCING_ATTACK) DataSet.PiercingAttack = MIN_PIERCING_ATTACK;
                 Calculate(); NotifyPropertyChanged("PiercingAttack");
             }
         }
@@ -1134,11 +1150,12 @@ namespace ViewModel
         {
             PiercingAttackFinal = 0;
             PiercingAttackFinal += PiercingAttack;
-            if (PiercingAttackFinal > maxPiercingAttack) PiercingAttackFinal = maxPiercingAttack;
+            if (PiercingAttackFinal > MAX_PIERCING_ATTACK) PiercingAttackFinal = MAX_PIERCING_ATTACK;
         }
         #endregion
         #region Ярость
-        private double maxRage = 50;
+        private const double MAX_RAGE = 50;
+        private const double MIN_RAGE = 0;
         private double rage = 0;
         public double RageFinal
         {
@@ -1149,15 +1166,17 @@ namespace ViewModel
                 NotifyPropertyChanged(nameof(RageFinal));
             }
         }
-        private double minRage = 0;
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе "Ярость"
+        /// </summary>
         public double Rage
         {
             get => DataSet.Rage;
             set
             {
                 DataSet.Rage = value;
-                if (DataSet.Rage > maxRage) DataSet.Rage = maxRage;
-                if (DataSet.Rage < minRage) DataSet.Rage = minRage;
+                if (DataSet.Rage > MAX_RAGE) DataSet.Rage = MAX_RAGE;
+                if (DataSet.Rage < MIN_RAGE) DataSet.Rage = MIN_RAGE;
                 Calculate(); NotifyPropertyChanged("Rage");
             }
         }
@@ -1168,11 +1187,12 @@ namespace ViewModel
         {
             RageFinal = 0;
             RageFinal += Rage;
-            if (RageFinal >= maxRage) RageFinal = maxRage;
+            if (RageFinal >= MAX_RAGE) RageFinal = MAX_RAGE;
         }
         #endregion
         #region Орк
-        private double maxFacilitation = 50;
+        private const double MAX_FACILITATION = 50;
+        private const double MIN_FACILITATION = 0;
         private double facilitation = 0;
         public double FacilitationFinal
         {
@@ -1183,15 +1203,17 @@ namespace ViewModel
                 NotifyPropertyChanged(nameof(FacilitationFinal));
             }
         }
-        private double minFacilitation = 0;
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе "Содействие"
+        /// </summary>
         public double Facilitation
         {
             get => DataSet.Facilitation;
             set
             {
                 DataSet.Facilitation = value;
-                if (DataSet.Facilitation > maxFacilitation) DataSet.Facilitation = maxFacilitation;
-                if (DataSet.Facilitation < minFacilitation) DataSet.Facilitation = minFacilitation;
+                if (DataSet.Facilitation > MAX_FACILITATION) DataSet.Facilitation = MAX_FACILITATION;
+                if (DataSet.Facilitation < MIN_FACILITATION) DataSet.Facilitation = MIN_FACILITATION;
                 Calculate(); NotifyPropertyChanged(nameof(Facilitation));
             }
         }
@@ -1202,7 +1224,7 @@ namespace ViewModel
         {
             FacilitationFinal = 0;
             FacilitationFinal += Facilitation;
-            if (FacilitationFinal >= maxFacilitation) FacilitationFinal = maxFacilitation;
+            if (FacilitationFinal >= MAX_FACILITATION) FacilitationFinal = MAX_FACILITATION;
         }
         #endregion
         #region Проценты дд
@@ -2027,16 +2049,16 @@ namespace ViewModel
         }
 
 
-        private double timeCast = 0.65; // задержка нажатия скилла
-        public double TimeCast 
+        private const double TIME_CAST = 0.65; // задержка нажатия скилла
+        /*public double TimeCast 
         {
-            get => timeCast;
+            get => TIME_CAST;
             set
             {
-                timeCast = value;
+                TIME_CAST = value;
                 Calculate(); NotifyPropertyChanged("TimeCast");
             }
-        } // задержка нажатия скилла
+        }*/ // задержка нажатия скилла
         private double legendaryCoefficientBestialRampage = 0.5; // Будет меняться в зависимости от скорости атаки и сколько у тебя кд
         //private double legendaryCoefficientChainLightning = 1;
         public double LegendaryCoefficientChainLightning()
@@ -2056,21 +2078,21 @@ namespace ViewModel
         private double blessingOfTheMoonCooldown()
         {
             double cooldown = BlessingOfTheMoon.BaseTimeCooldown;
-            double result = ((cooldown / (1 + SkillCooldownFinal / 100)) + timeCast);
+            double result = ((cooldown / (1 + SkillCooldownFinal / 100)) + TIME_CAST);
 
             return result;
         }
         private double doubleConcentrationCooldown()
         {
             double cooldown = DoubleConcentration.BaseTimeCooldown;
-            double result = ((cooldown / (1 + SkillCooldownFinal / 100)) + timeCast);
+            double result = ((cooldown / (1 + SkillCooldownFinal / 100)) + TIME_CAST);
 
             return result;
         }
         private double healingCooldown()
         {
             double cooldown = 14;
-            double result = ((cooldown / (1 + SkillCooldownFinal / 100)) + timeCast);
+            double result = ((cooldown / (1 + SkillCooldownFinal / 100)) + TIME_CAST);
 
             return result;
         }
@@ -2131,12 +2153,12 @@ namespace ViewModel
                 Calculate(); NotifyPropertyChanged("CrushingWillActive"); }
         }
 
-        private double mermanCD = 15;
+        private const double MERMAN_CD = 15;
         private double SingleMermanDuration = 10;
 
         private double MermanDuration() 
         {
-            double result = SingleMermanDuration * (1 + FacilitationFinal / 100 ) / mermanCD * 0.9;
+            double result = SingleMermanDuration * (1 + FacilitationFinal / 100 ) / MERMAN_CD * 0.9;
 
             return result;
         }
@@ -2544,8 +2566,8 @@ namespace ViewModel
                     CriticalHitLuna = criticalHit;
                     PenetrationLuna = penetration;
                 }
-                if (CriticalHitLuna > maxCriticalHit) CriticalHitLuna = maxCriticalHit;
-                if (PenetrationLuna > maxPenetration) PenetrationLuna = maxPenetration;
+                if (CriticalHitLuna > MAX_CRITICAL_HIT) CriticalHitLuna = MAX_CRITICAL_HIT;
+                if (PenetrationLuna > MAX_PENETRATION) PenetrationLuna = MAX_PENETRATION;
 
                 NotifyPropertyChanged("IsUsingBlessingOfTheMoonOnLuna");
             }
