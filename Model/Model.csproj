@@ -217,6 +217,7 @@
     <Compile Include="MoonTouch.cs" />
     <Compile Include="OrderToAttack.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="StatsLimit.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

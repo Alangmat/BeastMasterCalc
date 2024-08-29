@@ -351,10 +351,26 @@ namespace ViewModel
 
                     //int pureMagicalDD = (int)(magicdd / legendaryCoefficientMagicalDD);
                     int pureMagicalDD = (int)(magicdd / (1 + percentMagicalDDStart / 100));
+                    int purePhysicalDD = (int)(physdd / (1 + harmoniousPowerPDD / 100) / (1 + percentPhysicalDDStart / 100));
+
+                    if (HarmoniousPowerStartModifierActive) 
+                    {
+                        pureMagicalDD = (int)(pureMagicalDD / (1 + harmoniousPowerMDD / 100));
+                        purePhysicalDD = (int)(purePhysicalDD / (1 + harmoniousPowerPDD / 100));
+
+                    }
+
                     magicdd = (int)(pureMagicalDD * (coefficientTriton  * MermanDuration() + coefRage)  + pureMagicalDD * (1 + percentMagicalDD / 100));
+                    physdd = (int)((purePhysicalDD * coefRage + purePhysicalDD * (1 + percentPhysicalDD / 100)) * (1 + harmoniousPowerPDD / 100));
+                    
+                    if (HasTalentHarmoniousPower) 
+                    {
+                        magicdd = (int)(magicdd * (1 + harmoniousPowerMDD / 100));
+                        physdd = (int)(physdd * (1 + harmoniousPowerPDD / 100));
+                        
+                    } 
+
                     //int purePhysicalDD = (int)(physdd / legendaryCoefficientPhysicalDD);
-                    int purePhysicalDD = (int)(physdd / (1 + percentPhysicalDDStart / 100));
-                    physdd = (int)(purePhysicalDD * coefRage + purePhysicalDD * (1 + percentPhysicalDD / 100));
 
 
 
@@ -808,8 +824,11 @@ namespace ViewModel
         #region Характеристики персонажа
 
         #region КД
-        private double maxSkillCooldowm = 200;
+        //private double maxSkillCooldowm = 200;
         private double skillCooldown = 0;
+        /// <summary>
+        /// Итоговое значение характеристики "Перезарядка навыков" персонажа с учетом всех скиллов и бафов
+        /// </summary>
         public double SkillCooldownFinal
         {
             get => skillCooldown;
@@ -819,17 +838,21 @@ namespace ViewModel
                 NotifyPropertyChanged(nameof(SkillCooldownFinal));
             }
         }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе "Перезарядка навыков"
+        /// </summary>
         public double SkillCooldown
         {
             //get => skillCooldown;
             get => DataSet.SkillCooldown;
             set {
-                DataSet.SkillCooldown = value;
-                if (DataSet.SkillCooldown > maxSkillCooldowm) DataSet.SkillCooldown = maxSkillCooldowm;
+                DataSet.SkillCooldown = StatsLimit.CheckLimit(value, StatsLimit.MAX_SKILL_COOLDOWN);
                 Calculate();
                 NotifyPropertyChanged("SkillCooldown"); }
         }
-
+        /// <summary>
+        /// Метод для пересчета характеристики персонажа "Перезарядка навыков"
+        /// </summary>
         private void CalcSkillCooldown()
         {
             SkillCooldownFinal = 0;
@@ -837,12 +860,15 @@ namespace ViewModel
             if (CastleSwordActive) SkillCooldownFinal += 5;
             if (DoubleConcentrationActive)
                 SkillCooldownFinal += DoubleConcentration.AddSkillCooldown();
-            if (SkillCooldownFinal > maxSkillCooldowm) SkillCooldownFinal = maxSkillCooldowm;
+            SkillCooldownFinal = StatsLimit.CheckLimit(SkillCooldownFinal, StatsLimit.MAX_SKILL_COOLDOWN);
         }
         #endregion
         #region Скорость атаки
-        private double maxAttackSpeed = 70;
+        //private double maxAttackSpeed = 70;
         private double attackSpeed = 0;
+        /// <summary>
+        /// Итоговое значение характеристики "Скорость атаки" персонажа с учетом всех скиллов и бафов
+        /// </summary>
         public double AttackSpeedFinal
         {
             get => attackSpeed;
@@ -852,15 +878,20 @@ namespace ViewModel
                 NotifyPropertyChanged(nameof(AttackSpeedFinal));
             }
         }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе "Скорость атаки"
+        /// </summary>
         public double AttackSpeed
         {
             get => DataSet.AttackSpeed;
             set {
-                DataSet.AttackSpeed = value;
-                if (DataSet.AttackSpeed > maxAttackSpeed) DataSet.AttackSpeed = maxAttackSpeed;
+                DataSet.AttackSpeed = StatsLimit.CheckLimit(value, StatsLimit.MAX_ATTACK_SPEED); ;
                 Calculate(); NotifyPropertyChanged("AttackSpeed");
             }
         }
+        /// <summary>
+        /// Метод для пересчета характеристики персонажа "Скорость атаки"
+        /// </summary>
         private void CalcAttackSpeed()
         {
             AttackSpeedFinal = 0;
@@ -869,15 +900,18 @@ namespace ViewModel
             if (DoubleConcentrationActive)
                 AttackSpeedFinal += DoubleConcentration.AddAttackSpeed();
             if (GodsAid) AttackSpeedFinal += 12;
-            if (AttackSpeedFinal > maxAttackSpeed) AttackSpeedFinal = maxAttackSpeed;
+            AttackSpeedFinal = StatsLimit.CheckLimit(AttackSpeedFinal, StatsLimit.MAX_ATTACK_SPEED);
             
         }
         #endregion
         #region Крит
-        private const double MAX_CRITICAL_HIT = 100;
+        //private const double MAX_CRITICAL_HIT = 100;
         private double maxCriticalHitHero = 53;
-        private const double MIN_CRITICAL_HIT = 0;
+        //private const double MIN_CRITICAL_HIT = 0;
         private double criticalHitHero = 0;
+        /// <summary>
+        /// Итоговое значение характеристики "Критический удар" персонажа с учетом всех скиллов и бафов
+        /// </summary>
         public double CriticalHitHeroFinal
         {
             get => criticalHitHero;
@@ -890,6 +924,9 @@ namespace ViewModel
         private double additionCriticalHitHeroAttack = 0;
         private double criticalHit = 0;
         private double criticalHitLuna = 0;
+        /// <summary>
+        /// Итоговое значение характеристики "Критический удар" Луны с учетом всех скиллов и бафов
+        /// </summary>
         public double CriticalHitLuna
         {
             get => criticalHitLuna;
@@ -907,9 +944,7 @@ namespace ViewModel
             get => DataSet.CriticalHit;
             set
             {
-                DataSet.CriticalHit = value;
-                if (DataSet.CriticalHit > MAX_CRITICAL_HIT) DataSet.CriticalHit = MAX_CRITICAL_HIT;
-                if (DataSet.CriticalHit < MIN_CRITICAL_HIT) DataSet.CriticalHit = MIN_CRITICAL_HIT;
+                DataSet.CriticalHit = StatsLimit.CheckLimit(value, StatsLimit.MAX_CRITICAL_HIT);
                 Calculate(); NotifyPropertyChanged("CriticalHit");
             }
         }
@@ -930,8 +965,11 @@ namespace ViewModel
         }
         #endregion
         #region Крит урон
-        private const double MAX_CRITICAL_DAMAGE = 200;
+        //private const double MAX_CRITICAL_DAMAGE = 200;
         private double criticalDamage = 0;
+        /// <summary>
+        /// Итоговое значение характеристики "Критический урон" персонажа с учетом всех скиллов и бафов
+        /// </summary>
         public double CriticalDamageFinal
         {
             get => criticalDamage;
@@ -949,9 +987,7 @@ namespace ViewModel
             get => DataSet.CriticalDamage;
             set
             {
-                DataSet.CriticalDamage = value;
-                if (DataSet.CriticalDamage > MAX_CRITICAL_DAMAGE) DataSet.CriticalDamage = MAX_CRITICAL_DAMAGE;
-
+                DataSet.CriticalDamage = StatsLimit.CheckLimit(value, StatsLimit.MAX_CRITICAL_DAMAGE);
                 Calculate(); NotifyPropertyChanged("CriticalDamage");
             }
         }
@@ -965,15 +1001,18 @@ namespace ViewModel
             if (DoubleConcentrationActive)
                 CriticalDamageFinal += DoubleConcentration.AdditionCriticalDamage;
             if (GodsAid) CriticalDamageFinal += 30;
-            if (CriticalDamageFinal > MAX_CRITICAL_DAMAGE) CriticalDamageFinal = MAX_CRITICAL_DAMAGE;
+            CriticalDamageFinal = StatsLimit.CheckLimit(CriticalDamageFinal, StatsLimit.MAX_CRITICAL_DAMAGE);
         }
         #endregion
         #region Пробив
-        private const double MAX_PENETRATION = 100;
+        //private const double MAX_PENETRATION = 100;
+        //private const double MIN_PENETRATION = 0;
         private double penetration = 0;
-        private const double MIN_PENETRATION = 0;
         private double maxPenetrationHero = 50;
         private double penetrationHero = 0;
+        /// <summary>
+        /// Итоговое значение характеристики "Пробивная способность" персонажа с учетом всех скиллов и бафов
+        /// </summary>
         public double PenetrationHeroFinal
         {
             get => penetrationHero;
@@ -984,6 +1023,9 @@ namespace ViewModel
             }
         }
         private double penetrationLuna = 0;
+        /// <summary>
+        /// Итоговое значение характеристики "Пробивная способность" Луны с учетом всех скиллов и бафов
+        /// </summary>
         public double PenetrationLuna
         {
             get => penetrationLuna;
@@ -1002,9 +1044,7 @@ namespace ViewModel
             get => DataSet.Penetration;
             set
             {
-                DataSet.Penetration = value;
-                if (DataSet.Penetration > MAX_PENETRATION) DataSet.Penetration = MAX_PENETRATION;
-                if (DataSet.Penetration < MIN_PENETRATION) DataSet.Penetration = MIN_PENETRATION;
+                DataSet.Penetration = StatsLimit.CheckLimit(value, StatsLimit.MAX_PENETRATION);
 
                 Calculate(); NotifyPropertyChanged("Penetration");
             }
@@ -1025,10 +1065,13 @@ namespace ViewModel
         }
         #endregion
         #region Точность
-        private const double MAX_ACCURACY = 100;
-        private const double MIN_ACCURACY = 0;
+        //private const double MAX_ACCURACY = 100;
+        //private const double MIN_ACCURACY = 0;
         private double maxAccuracyHero = 50;
         private double accuracy = 0;
+        /// <summary>
+        /// Итоговое значение характеристики "Точность" Луны с учетом всех скиллов и бафов
+        /// </summary>
         public double AccuracyLuna
         {
             get => accuracy;
@@ -1038,6 +1081,9 @@ namespace ViewModel
             }
         }
         private double accuracyHero = 0;
+        /// <summary>
+        /// Итоговое значение характеристики "Точность персонажа с учетом всех скиллов и бафов
+        /// </summary>
         public double AccuracyHeroFinal
         {
             get => accuracyHero;
@@ -1055,12 +1101,7 @@ namespace ViewModel
             get => DataSet.Accuracy;
             set
             {
-                DataSet.Accuracy = value;
-
-                if (DataSet.Accuracy > MAX_ACCURACY) DataSet.Accuracy = MAX_ACCURACY;
-                if (DataSet.Accuracy < MIN_ACCURACY) DataSet.Accuracy = MIN_ACCURACY;
-                //AccuracyHeroFinal = DataSet.Accuracy;
-                //if (AccuracyHeroFinal > maxAccuracyHero) AccuracyHeroFinal = maxAccuracyHero;
+                DataSet.Accuracy = StatsLimit.CheckLimit(value, StatsLimit.MAX_ACCURACY);
 
                 Calculate(); NotifyPropertyChanged(nameof(Accuracy));
             }
@@ -1080,9 +1121,12 @@ namespace ViewModel
         }
         #endregion
         #region Сила атаки
-        private const double MAX_ATTACK_STRENGTH = 100;
-        private const double MIN_ATTACK_STRENGTH = 0;
+        //private const double MAX_ATTACK_STRENGTH = 100;
+        //private const double MIN_ATTACK_STRENGTH = 0;
         private double attackStrength = 0;
+        /// <summary>
+        /// Итоговое значение характеристики "Сила атаки" персонажа с учетом всех скиллов и бафов
+        /// </summary>
         public double AttackStrengthFinal
         {
             get => attackStrength;
@@ -1100,9 +1144,7 @@ namespace ViewModel
             get => DataSet.AttackStrength;
             set
             {
-                DataSet.AttackStrength = value;
-                if (DataSet.AttackStrength > MAX_ATTACK_STRENGTH) DataSet.AttackStrength = MAX_ATTACK_STRENGTH;
-                if (DataSet.AttackStrength < MIN_ATTACK_STRENGTH) DataSet.AttackStrength = MIN_ATTACK_STRENGTH;
+                DataSet.AttackStrength = StatsLimit.CheckLimit(value, StatsLimit.MAX_ATTACK_STRENGTH);
                 Calculate(); NotifyPropertyChanged(nameof(AttackStrength));
             }
         }
@@ -1113,13 +1155,16 @@ namespace ViewModel
         {
             AttackStrengthFinal = 0;
             AttackStrengthFinal += AttackStrength;
-            if (AttackStrengthFinal > MAX_ATTACK_STRENGTH) AttackStrengthFinal = MAX_ATTACK_STRENGTH;
+            AttackStrengthFinal = StatsLimit.CheckLimit(AttackStrengthFinal, StatsLimit.MAX_ATTACK_STRENGTH);
         }
         #endregion
         #region Пронза
-        private const double MAX_PIERCING_ATTACK = 50;
-        private const double MIN_PIERCING_ATTACK = 0;
+        //private const double MAX_PIERCING_ATTACK = 50;
+        //private const double MIN_PIERCING_ATTACK = 0;
         private double piercingAttack = 0;
+        /// <summary>
+        /// Итоговое значение характеристики "Пронзающая атака" персонажа с учетом всех скиллов и бафов
+        /// </summary>
         public double PiercingAttackFinal
         {
             get => piercingAttack;
@@ -1137,9 +1182,7 @@ namespace ViewModel
             get => DataSet.PiercingAttack;
             set
             {
-                DataSet.PiercingAttack = value;
-                if (DataSet.PiercingAttack > MAX_PIERCING_ATTACK) DataSet.PiercingAttack = MAX_PIERCING_ATTACK;
-                if (DataSet.PiercingAttack < MIN_PIERCING_ATTACK) DataSet.PiercingAttack = MIN_PIERCING_ATTACK;
+                DataSet.PiercingAttack = StatsLimit.CheckLimit(value, StatsLimit.MAX_PIERCING_ATTACK);
                 Calculate(); NotifyPropertyChanged("PiercingAttack");
             }
         }
@@ -1150,13 +1193,16 @@ namespace ViewModel
         {
             PiercingAttackFinal = 0;
             PiercingAttackFinal += PiercingAttack;
-            if (PiercingAttackFinal > MAX_PIERCING_ATTACK) PiercingAttackFinal = MAX_PIERCING_ATTACK;
+            PiercingAttackFinal = StatsLimit.CheckLimit(PiercingAttackFinal, StatsLimit.MAX_PIERCING_ATTACK);
         }
         #endregion
         #region Ярость
-        private const double MAX_RAGE = 50;
-        private const double MIN_RAGE = 0;
+        //private const double MAX_RAGE = 50;
+        //private const double MIN_RAGE = 0;
         private double rage = 0;
+        /// <summary>
+        /// Итоговое значение характеристики "Ярость" персонажа с учетом всех скиллов и бафов
+        /// </summary>
         public double RageFinal
         {
             get => rage;
@@ -1174,9 +1220,7 @@ namespace ViewModel
             get => DataSet.Rage;
             set
             {
-                DataSet.Rage = value;
-                if (DataSet.Rage > MAX_RAGE) DataSet.Rage = MAX_RAGE;
-                if (DataSet.Rage < MIN_RAGE) DataSet.Rage = MIN_RAGE;
+                DataSet.Rage = StatsLimit.CheckLimit(value, StatsLimit.MAX_RAGE);
                 Calculate(); NotifyPropertyChanged("Rage");
             }
         }
@@ -1187,12 +1231,12 @@ namespace ViewModel
         {
             RageFinal = 0;
             RageFinal += Rage;
-            if (RageFinal >= MAX_RAGE) RageFinal = MAX_RAGE;
+            RageFinal = StatsLimit.CheckLimit(RageFinal, StatsLimit.MAX_RAGE);
         }
         #endregion
         #region Орк
-        private const double MAX_FACILITATION = 50;
-        private const double MIN_FACILITATION = 0;
+        //private const double MAX_FACILITATION = 50;
+        //private const double MIN_FACILITATION = 0;
         private double facilitation = 0;
         public double FacilitationFinal
         {
@@ -1211,9 +1255,7 @@ namespace ViewModel
             get => DataSet.Facilitation;
             set
             {
-                DataSet.Facilitation = value;
-                if (DataSet.Facilitation > MAX_FACILITATION) DataSet.Facilitation = MAX_FACILITATION;
-                if (DataSet.Facilitation < MIN_FACILITATION) DataSet.Facilitation = MIN_FACILITATION;
+                DataSet.Facilitation = StatsLimit.CheckLimit(value, StatsLimit.MAX_FACILITATION);
                 Calculate(); NotifyPropertyChanged(nameof(Facilitation));
             }
         }
@@ -1224,7 +1266,7 @@ namespace ViewModel
         {
             FacilitationFinal = 0;
             FacilitationFinal += Facilitation;
-            if (FacilitationFinal >= MAX_FACILITATION) FacilitationFinal = MAX_FACILITATION;
+            FacilitationFinal = StatsLimit.CheckLimit(FacilitationFinal, StatsLimit.MAX_FACILITATION);
         }
         #endregion
         #region Проценты дд
@@ -1367,7 +1409,7 @@ namespace ViewModel
             if (GuildDamageStartModifierActive) percentMagicalDDStart += 10;
             if (TalentDamageStartModifierActive) percentMagicalDDStart += 4.75;
             if (CastleStartModifierActive) percentMagicalDDStart += 7.5;
-            if (HarmoniousPowerStartModifierActive) percentMagicalDDStart += harmoniousPowerMDD;
+            //if (HarmoniousPowerStartModifierActive) percentMagicalDDStart += harmoniousPowerMDD;
             percentMagicalDDStart += AdditionalPercentMDDStart;
 
         }
@@ -1387,7 +1429,7 @@ namespace ViewModel
             if (GuildDamageModifierActive) percentMagicalDD += 10;
             if (TalentDamageModifierActive) percentMagicalDD += 4.75;
             if (CastleSwordActive) percentMagicalDD += 7.5;
-            if (HasTalentHarmoniousPower) percentMagicalDD += harmoniousPowerMDD;
+            //if (HasTalentHarmoniousPower) percentMagicalDD += harmoniousPowerMDD;
             percentMagicalDD += AdditionalPercentMDDFinal;
         }
 
@@ -1422,7 +1464,7 @@ namespace ViewModel
             if (GuildDamageStartModifierActive) percentPhysicalDDStart += 10;
             if (TalentDamageStartModifierActive) percentPhysicalDDStart += 4.75;
             if (CastleStartModifierActive) percentPhysicalDDStart += 7.5;
-            if (HarmoniousPowerStartModifierActive) percentPhysicalDDStart += harmoniousPowerPDD;
+            //if (HarmoniousPowerStartModifierActive) percentPhysicalDDStart += harmoniousPowerPDD;
             percentPhysicalDDStart += AdditionalPercentPDDStart;
         }
 
@@ -1442,7 +1484,7 @@ namespace ViewModel
             if (GuildDamageModifierActive) percentPhysicalDD += 10;
             if (TalentDamageModifierActive) percentPhysicalDD += 4.75;
             if (CastleSwordActive) percentPhysicalDD += 7.5;
-            if (HasTalentHarmoniousPower) percentPhysicalDD += harmoniousPowerPDD;
+            //if (HasTalentHarmoniousPower) percentPhysicalDD += harmoniousPowerPDD;
             percentPhysicalDD += AdditionalPercentPDDFinal;
         }
 
@@ -1478,48 +1520,47 @@ namespace ViewModel
 
         #region Характеристики цели
 
-        private double maxProtection = 80;
+        //private double maxProtection = 80;
         private double protection = 80;
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе "Защита"
+        /// </summary>
         public double Protection
         {
-            //get => protection;
             get => DataSet.Protection;
             set
             {
-                /*protection = value;
-                protection = Math.Min(protection, maxProtection);*/
-                DataSet.Protection = value;
-                DataSet.Protection = Math.Min(DataSet.Protection, maxProtection);
+                DataSet.Protection = StatsLimit.CheckLimit(value, StatsLimit.MAX_PROTECTION);
                 Calculate(); NotifyPropertyChanged("Protection");
             }
         }
 
-        private double maxDodge = 60;
+        //private double maxDodge = 60;
         private double dodge = 50;
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе "Уклонение"
+        /// </summary>
         public double Dodge
         {
-            //get => dodge;
             get => DataSet.Dodge;
             set
             {
-                /*dodge = value;
-                dodge = Math.Min(dodge, maxDodge);*/
-                DataSet.Dodge = value;
-                DataSet.Dodge = Math.Min(DataSet.Dodge, maxDodge);
+                DataSet.Dodge = StatsLimit.CheckLimit(value, StatsLimit.MAX_DODGE);
                 Calculate(); NotifyPropertyChanged("Dodge");
             }
         }
 
-        private double maxResilience = 60;
+        //private double maxResilience = 60;
         private double resilience = 0;
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе "Устойчивость"
+        /// </summary>
         public double Resilience
         {
-            //get => resilience;
             get => DataSet.Resilience;
             set
             {
-                //resilience = Math.Min(value, maxResilience);
-                DataSet.Resilience = Math.Min(value, maxResilience);
+                DataSet.Resilience = StatsLimit.CheckLimit(value, StatsLimit.MAX_RESILIENCE);
                 Calculate(); NotifyPropertyChanged("Resilience");
             }
         }
@@ -2286,6 +2327,7 @@ namespace ViewModel
         {
             harmoniousPowerMDD = 0;
             harmoniousPowerPDD = 0;
+
             harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(SelectedHelmet)["Magical"];
             harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(SelectedBody)["Magical"];
             harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(SelectedHands)["Magical"];
@@ -2566,8 +2608,8 @@ namespace ViewModel
                     CriticalHitLuna = criticalHit;
                     PenetrationLuna = penetration;
                 }
-                if (CriticalHitLuna > MAX_CRITICAL_HIT) CriticalHitLuna = MAX_CRITICAL_HIT;
-                if (PenetrationLuna > MAX_PENETRATION) PenetrationLuna = MAX_PENETRATION;
+                CriticalHitLuna = StatsLimit.CheckLimit(CriticalHitLuna, StatsLimit.MAX_CRITICAL_HIT);
+                PenetrationLuna = StatsLimit.CheckLimit(PenetrationLuna, StatsLimit.MAX_PENETRATION);
 
                 NotifyPropertyChanged("IsUsingBlessingOfTheMoonOnLuna");
             }
