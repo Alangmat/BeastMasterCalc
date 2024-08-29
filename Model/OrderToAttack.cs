@@ -80,10 +80,6 @@ namespace Model
         }
 
 
-
-
-
-
         public event PropertyChangedEventHandler PropertyChanged;
         /// <summary>
         /// Метод для вызова события PropertyChanged

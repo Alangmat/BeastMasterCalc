@@ -768,28 +768,7 @@
                             </Border>
                         </Popup>
                     </Button>
-                    <Button HorizontalAlignment="Left" 
-                            x:Name="procentHintButton"
-                            Style="{StaticResource HintButtonStyle}"
-                            Height="20" 
-                            VerticalAlignment="Top" 
-                            Width="20" PreviewMouseUp="procentHintButton_PreviewMouseUp" Grid.Column="3" Margin="10,222,0,0" Grid.Row="2"  >
-                        <Button.Background>
-                            <ImageBrush ImageSource="/icons/other/ask.jpg" Stretch="Fill"/>
-                        </Button.Background>
-                        <Popup x:Name="procentPopup"
-                                MaxWidth="240" MinWidth="100"
-                                StaysOpen="False" Placement="Mouse" 
-                                AllowsTransparency="True"
-                               >
-                            <Border BorderBrush="Black" BorderThickness="1">
-                                <TextBlock
-                                        x:Name="procentHintText"
-                                        Padding="5"
-                                        TextWrapping="Wrap" Background="#FFBBCBF3" />
-                            </Border>
-                        </Popup>
-                    </Button>
+
                     <!--
                     <CheckBox Grid.Column="3"
                         IsChecked="{Binding ChechBPDungeon}"
@@ -1305,7 +1284,73 @@
                         </Grid>
                     </Grid>
 
+                    <Button HorizontalAlignment="Left" 
+                        x:Name="equipmentHintButton"
+                        Style="{StaticResource HintButtonStyle}"
+                        Height="20" Margin="292,310,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="20" PreviewMouseUp="equipmentHintButton_PreviewMouseUp"  >
+                        <Button.Background>
+                            <ImageBrush ImageSource="/icons/other/ask.jpg" Stretch="Fill"/>
+                        </Button.Background>
+                        <Popup x:Name="equipmentPopup"
+                            MaxWidth="240" MinWidth="100"
+                            StaysOpen="False" Placement="Mouse" 
+                            AllowsTransparency="True"
+                               >
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <TextBlock
+                                    x:Name="equipmentHintText"
+                                    Padding="5"
+                                    TextWrapping="Wrap" Background="#FFBBCBF3" />
+                            </Border>
+                        </Popup>
+                    </Button>
+                    <Button HorizontalAlignment="Left" 
+                        x:Name="startModHintButton"
+                        Style="{StaticResource HintButtonStyle}"
+                        Height="20" Margin="380,170,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="20" PreviewMouseUp="startModHintButton_PreviewMouseUp"  >
+                        <Button.Background>
+                            <ImageBrush ImageSource="/icons/other/ask.jpg" Stretch="Fill"/>
+                        </Button.Background>
+                        <Popup x:Name="startModPopup"
+                            MaxWidth="240" MinWidth="100"
+                            StaysOpen="False" Placement="Mouse" 
+                            AllowsTransparency="True"
+                               >
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <TextBlock
+                                    x:Name="startModHintText"
+                                    Padding="5"
+                                    TextWrapping="Wrap" Background="#FFBBCBF3" />
+                            </Border>
+                        </Popup>
+                    </Button>
 
+                    <Button HorizontalAlignment="Left" 
+                            x:Name="procentHintButton"
+                            Style="{StaticResource HintButtonStyle}"
+                            Height="20" 
+                            VerticalAlignment="Top" 
+                            Width="20" PreviewMouseUp="procentHintButton_PreviewMouseUp" Margin="380,268,0,0">
+                        <Button.Background>
+                            <ImageBrush ImageSource="/icons/other/ask.jpg" Stretch="Fill"/>
+                        </Button.Background>
+                        <Popup x:Name="procentPopup"
+                                MaxWidth="240" MinWidth="100"
+                                StaysOpen="False" Placement="Mouse" 
+                                AllowsTransparency="True"
+                               >
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <TextBlock
+                                        x:Name="procentHintText"
+                                        Padding="5"
+                                        TextWrapping="Wrap" Background="#FFBBCBF3" />
+                            </Border>
+                        </Popup>
+                    </Button>
 
                 </Grid>
 
@@ -2566,6 +2611,28 @@
 
 
                     </Grid>
+                    <Button HorizontalAlignment="Left" 
+                        x:Name="talentsHintButton"
+                        Style="{StaticResource HintButtonStyle}"
+                        Height="20" Margin="670,5,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="20" PreviewMouseUp="talentsHintButton_PreviewMouseUp"  >
+                        <Button.Background>
+                            <ImageBrush ImageSource="/icons/other/ask.jpg" Stretch="Fill"/>
+                        </Button.Background>
+                        <Popup x:Name="talentsPopup"
+                            MaxWidth="240" MinWidth="100"
+                            StaysOpen="False" Placement="Mouse" 
+                            AllowsTransparency="True"
+                               >
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <TextBlock
+                                    x:Name="talentsHintText"
+                                    Padding="5"
+                                    TextWrapping="Wrap" Background="#FFBBCBF3" />
+                            </Border>
+                        </Popup>
+                    </Button>
                 </Grid>
             </TabItem>
             <TabItem Header="Модификаторы">
@@ -2831,6 +2898,28 @@
 
                         </Border>
                     </Grid>
+                    <Button HorizontalAlignment="Left" 
+                        x:Name="finalModHintButton"
+                        Style="{StaticResource HintButtonStyle}"
+                        Height="20" Margin="308,25,0,0" 
+                        VerticalAlignment="Top" 
+                        Width="20" PreviewMouseUp="finalModHintButton_PreviewMouseUp" Grid.Column="1"  >
+                        <Button.Background>
+                            <ImageBrush ImageSource="/icons/other/ask.jpg" Stretch="Fill"/>
+                        </Button.Background>
+                        <Popup x:Name="finalModPopup"
+                            MaxWidth="240" MinWidth="100"
+                            StaysOpen="False" Placement="Mouse" 
+                            AllowsTransparency="True"
+                               >
+                            <Border BorderBrush="Black" BorderThickness="1">
+                                <TextBlock
+                                    x:Name="finalModHintText"
+                                    Padding="5"
+                                    TextWrapping="Wrap" Background="#FFBBCBF3" />
+                            </Border>
+                        </Popup>
+                    </Button>
                 </Grid>
             </TabItem>
 
