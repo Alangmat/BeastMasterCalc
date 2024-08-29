@@ -181,6 +181,13 @@ namespace ViewModel
             NotifyPropertyChanged("PercentMagicalDD");
             NotifyPropertyChanged("PercentPhysicalDD");
 
+            NotifyPropertyChanged(nameof(AdditionalPercentPDDStart));
+            NotifyPropertyChanged(nameof(AdditionalPercentMDDStart));
+
+            NotifyPropertyChanged(nameof(AdditionalPercentPDDFinal));
+            NotifyPropertyChanged(nameof(AdditionalPercentMDDFinal));
+
+
             NotifyPropertyChanged("Protection");
             NotifyPropertyChanged("Dodge");
             NotifyPropertyChanged("Resilience");
@@ -218,7 +225,8 @@ namespace ViewModel
             ForestInspirationActive = DataSet.ForestInspirationActive;
             DualRageActive = DataSet.DualRageActive;
             GuardianUnityActive = DataSet.GuardianUnityActive;
-            
+
+            NotifyPropertyChanged(nameof(HarmoniousPowerStartModifierActive));
 
             NotifyPropertyChanged("HasTalantMoonTouchPlus");
             NotifyPropertyChanged("HasTalantPowerOfNature");
@@ -1183,7 +1191,7 @@ namespace ViewModel
             set
             {
                 DataSet.PiercingAttack = StatsLimit.CheckLimit(value, StatsLimit.MAX_PIERCING_ATTACK);
-                Calculate(); NotifyPropertyChanged("PiercingAttack");
+                Calculate(); NotifyPropertyChanged(nameof(PiercingAttack));
             }
         }
         /// <summary>

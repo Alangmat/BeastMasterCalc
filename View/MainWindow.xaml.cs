@@ -99,15 +99,15 @@ namespace View
             {
                 blessingHintText.Text = "Файл не найден.";
             }
-            string procentPath = "hints/procentHint.txt";
-            if (File.Exists(procentPath))
+            string percentPath = "hints/percentHint.txt";
+            if (File.Exists(percentPath))
             {
-                string text = File.ReadAllText(procentPath);
-                procentHintText.Text = text;
+                string text = File.ReadAllText(percentPath);
+                percentHintText.Text = text;
             }
             else
             {
-                procentHintText.Text = "Файл не найден.";
+                percentHintText.Text = "Файл не найден.";
             }
             string statsHeroPath = "hints/statsHeroHint.txt";
             if (File.Exists(statsHeroPath))
@@ -1380,9 +1380,9 @@ namespace View
         {
             blessingPopup.IsOpen = !blessingPopup.IsOpen;
         }
-        private void procentHintButton_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        private void percentHintButton_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
-            procentPopup.IsOpen = !procentPopup.IsOpen;
+            percentPopup.IsOpen = !percentPopup.IsOpen;
         }
         private void statsHeroHintButton_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
