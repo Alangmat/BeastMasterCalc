@@ -10,9 +10,21 @@ namespace Model
     /// <summary>
     /// Класс, содержащий списки модификаторов урона и преобразователь ConvertInModifiers
     /// </summary>
-    public class ModifiersDamage
+    public static class ModifiersDamage
     {
-        public List<string> Amulets = new List<string>() { 
+        #region Константы
+
+        public const int DD_PROCENT_PASSIVE = 4;
+        public const int DD_GUILD = 10;
+        public const double DD_TALENTS = 4.75;
+        public const double DD_CASTLE = 7.5;
+
+
+        #endregion
+
+
+
+        public static List<string> Amulets = new List<string>() { 
             "0%",
             "6% маг",
             "10% маг",
@@ -20,7 +32,7 @@ namespace Model
             "4% физ",
             "7% физ"
         };
-        public List<string> Cloaks = new List<string>() {
+        public static List<string> Cloaks = new List<string>() {
             "0%",
             "5% маг",
             "10% маг",
@@ -28,7 +40,7 @@ namespace Model
             "4% физ",
             "7% физ"
         };
-        public List<string> Rings = new List<string>() {
+        public static List<string> Rings = new List<string>() {
             "0%",
             "5% маг",
             "9% маг",
@@ -36,14 +48,14 @@ namespace Model
             "3% физ",
             "6% физ"
         };
-        public List<string> Bracelets = new List<string>() {
+        public static List<string> Bracelets = new List<string>() {
             "0%",
             "6% маг",
             "7.5% маг",
             "4% физ",
             "5% физ"
         };
-        public List<string> Sets = new List<string>() {
+        public static List<string> Sets = new List<string>() {
             "0%",
             "12% маг",
             "8% физ"
@@ -51,7 +63,7 @@ namespace Model
         /// <summary>
         /// Дурак это баф на урон от скиллов
         /// </summary>
-        public List<string> Castle = new List<string>() {
+        public static List<string> Castle = new List<string>() {
             "Без замка 0%",
             "1 сектор, 5%",
             "2 сектор, 7.5%",
@@ -60,7 +72,7 @@ namespace Model
             "5 сектор, 15%",
         };
 
-        public List<string> Equipments = new List<string>
+        public static List<string> Equipments = new List<string>
         {
             "Empty",
             "Cloth",
@@ -72,7 +84,7 @@ namespace Model
         /// </summary>
         /// <param name="inp"></param>
         /// <returns>Словарь с ключами Magical и Physical</returns>
-        public Dictionary<string, double> ConvertInModifiers(string inp)
+        public static Dictionary<string, double> ConvertInModifiers(string inp)
         {
             var result = new Dictionary<string, double>() { {"Magical", 0 }, {"Physical", 0} };
             if (inp == "0%")
@@ -118,24 +130,6 @@ namespace Model
                     break;
             }
 
-            /*if (inp.Split().Length == 2)
-            {
-                if (inp.Split()[1] == "маг")
-                {
-                    if (double.TryParse(inp.Split()[0].Trim('%'), out mod))
-                    {
-                        result["Magical"] = mod;
-                    }
-                }
-                else if (inp.Split()[1] == "физ")
-                {
-                    if (double.TryParse(inp.Split()[0].Trim('%'), out mod))
-                    {
-                        result["Physical"] = mod;
-                    }
-                }
-
-            }*/
             return result;
         }
     }
