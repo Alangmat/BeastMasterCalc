@@ -28,7 +28,7 @@ namespace ViewModel
             Calculate();
         }
 
-        private ModifiersDamage ModifiersDamage = new ModifiersDamage();
+        //private ModifiersDamage ModifiersDamage = new ModifiersDamage();
 
         #region работа с билдами
         private ObservableCollection<Build> builds = new ObservableCollection<Build>();
@@ -166,20 +166,20 @@ namespace ViewModel
 
 
             #region Вызовы событий об обновлении статов
-            NotifyPropertyChanged("MagicalDD");
-            NotifyPropertyChanged("PhysicalDD");
-            NotifyPropertyChanged("SkillCooldown");
-            NotifyPropertyChanged("CriticalHit");
-            NotifyPropertyChanged("CriticalDamage");
-            NotifyPropertyChanged("AttackSpeed");
-            NotifyPropertyChanged("Penetration");
-            NotifyPropertyChanged("Accuracy");
-            NotifyPropertyChanged("AttackStrength");
-            NotifyPropertyChanged("PiercingAttack");
-            NotifyPropertyChanged("Rage");
-            NotifyPropertyChanged("Facilitation");
-            NotifyPropertyChanged("PercentMagicalDD");
-            NotifyPropertyChanged("PercentPhysicalDD");
+            NotifyPropertyChanged(nameof(MagicalDD));
+            NotifyPropertyChanged(nameof(PhysicalDD));
+            NotifyPropertyChanged(nameof(SkillCooldown));
+            NotifyPropertyChanged(nameof(CriticalHit));
+            NotifyPropertyChanged(nameof(CriticalDamage));
+            NotifyPropertyChanged(nameof(AttackSpeed));
+            NotifyPropertyChanged(nameof(Penetration));
+            NotifyPropertyChanged(nameof(Accuracy));
+            NotifyPropertyChanged(nameof(AttackStrength));
+            NotifyPropertyChanged(nameof(PiercingAttack));
+            NotifyPropertyChanged(nameof(Rage));
+            NotifyPropertyChanged(nameof(Facilitation));
+            //NotifyPropertyChanged(nameof(PercentMagicalDD));
+            //NotifyPropertyChanged("PercentPhysicalDD");
 
             NotifyPropertyChanged(nameof(AdditionalPercentPDDStart));
             NotifyPropertyChanged(nameof(AdditionalPercentMDDStart));
@@ -188,9 +188,9 @@ namespace ViewModel
             NotifyPropertyChanged(nameof(AdditionalPercentMDDFinal));
 
 
-            NotifyPropertyChanged("Protection");
-            NotifyPropertyChanged("Dodge");
-            NotifyPropertyChanged("Resilience");
+            NotifyPropertyChanged(nameof(Protection));
+            NotifyPropertyChanged(nameof(Dodge));
+            NotifyPropertyChanged(nameof(Resilience));
             #endregion
 
             #region Обновление пух, рел
@@ -228,18 +228,18 @@ namespace ViewModel
 
             NotifyPropertyChanged(nameof(HarmoniousPowerStartModifierActive));
 
-            NotifyPropertyChanged("HasTalantMoonTouchPlus");
-            NotifyPropertyChanged("HasTalantPowerOfNature");
+            NotifyPropertyChanged(nameof(HasTalantMoonTouchPlus));
+            NotifyPropertyChanged(nameof(HasTalantPowerOfNature));
 
 
-            NotifyPropertyChanged("HasTalantBeastAwakeningMage");
-            NotifyPropertyChanged("LvlTalantBeastAwakeningPhysical");
-            NotifyPropertyChanged("HasTalantBestialRampage");
-            NotifyPropertyChanged("HasTalantGrandeurOfTheLotus");
-            NotifyPropertyChanged("LvlTalantMoonlightPlus");
-            NotifyPropertyChanged("HasTalantSymbiosis");
-            NotifyPropertyChanged("LvlTalantOrderToAttackPlusDualRage");
-            NotifyPropertyChanged("LvlTalantOrderToAttackPlusGuardianUnity");
+            NotifyPropertyChanged(nameof(HasTalantBeastAwakeningMage));
+            NotifyPropertyChanged(nameof(LvlTalantBeastAwakeningPhysical));
+            NotifyPropertyChanged(nameof(HasTalantBestialRampage));
+            NotifyPropertyChanged(nameof(HasTalantGrandeurOfTheLotus));
+            NotifyPropertyChanged(nameof(LvlTalantMoonlightPlus));
+            NotifyPropertyChanged(nameof(HasTalantSymbiosis));
+            NotifyPropertyChanged(nameof(LvlTalantOrderToAttackPlusDualRage));
+            NotifyPropertyChanged(nameof(LvlTalantOrderToAttackPlusGuardianUnity));
 
 
             LvlTalantBestialRage = DataSet.LvlTalantBestialRage;
@@ -275,8 +275,8 @@ namespace ViewModel
             #region Свойства, зависимые от изменений
             // зависимые от изменений - в set присутствует какая-либо логика кроме калка и обновления
 
-            PercentMagicalDD = DataSet.PercentMagicalDD;
-            PercentPhysicalDD = DataSet.PercentPhysicalDD;
+            //PercentMagicalDD = DataSet.PercentMagicalDD;
+            //PercentPhysicalDD = DataSet.PercentPhysicalDD;
 
             NumberCastle = DataSet.NumberCastle;
             IsUsingBlessingOfTheMoonOnLuna = DataSet.IsUsingBlessingOfTheMoonOnLuna;
@@ -309,7 +309,7 @@ namespace ViewModel
             set {
                 dataSet = value;
                 Calculate();
-                NotifyPropertyChanged("DataSet");
+                NotifyPropertyChanged(nameof(DataSet));
             }
         }
         #endregion
@@ -320,18 +320,10 @@ namespace ViewModel
             int magicdd = 0;
             int physdd = 0;
 
-            //IsUsingBlessingOfTheMoonOnLuna = DataSet.IsUsingBlessingOfTheMoonOnLuna;
-
             if (int.TryParse(MagicalDD, out magicdd))
             {
                 if (int.TryParse(PhysicalDD, out physdd))
                 {
-                    // Первым делом здесь должно быть преобразование маг и физ дд
-                    // Пользователь, будет вводить либо показатели дд под ги, либо без ги
-                    // => полученный дд нужно будет разделить на определенный кэф если под ги
-                    // после, нужно умножить полученный "чистый" дд на все коэфы
-
-                    // пока что добавлен только прок тритонов
 
                     CalcSkillCooldown();
                     CalcAttackSpeed();
@@ -351,38 +343,27 @@ namespace ViewModel
                     CalcPercentPhysicalDDStart();
                     CalcPercentPhysicalDD();
 
-                    double coefRage = FormulaCoefficientOfRage() * 0.1;
+                    double coefRage = FormulaCoefficientOfRage();
 
-
-                    // TODO
-                    // переписать
-
-                    //int pureMagicalDD = (int)(magicdd / legendaryCoefficientMagicalDD);
-                    int pureMagicalDD = (int)(magicdd / (1 + percentMagicalDDStart / 100));
-                    int purePhysicalDD = (int)(physdd / (1 + harmoniousPowerPDD / 100) / (1 + percentPhysicalDDStart / 100));
+                    int pureMagicalDD = (int)(magicdd / percentMagicalDDStart.ConvertToCoefficient());
+                    int purePhysicalDD = (int)(physdd / harmoniousPowerPDD.ConvertToCoefficient() / percentPhysicalDDStart.ConvertToCoefficient());
 
                     if (HarmoniousPowerStartModifierActive) 
                     {
-                        pureMagicalDD = (int)(pureMagicalDD / (1 + harmoniousPowerMDD / 100));
-                        purePhysicalDD = (int)(purePhysicalDD / (1 + harmoniousPowerPDD / 100));
+                        pureMagicalDD = (int)(pureMagicalDD / harmoniousPowerMDD.ConvertToCoefficient());
+                        purePhysicalDD = (int)(purePhysicalDD / harmoniousPowerPDD.ConvertToCoefficient());
 
                     }
 
-                    magicdd = (int)(pureMagicalDD * (coefficientTriton  * MermanDuration() + coefRage)  + pureMagicalDD * (1 + percentMagicalDD / 100));
-                    physdd = (int)((purePhysicalDD * coefRage + purePhysicalDD * (1 + percentPhysicalDD / 100)) * (1 + harmoniousPowerPDD / 100));
+                    magicdd = (int)(pureMagicalDD * (coefficientTriton  * MermanDuration() + coefRage)  + pureMagicalDD * percentMagicalDD.ConvertToCoefficient());
+                    physdd = (int)((purePhysicalDD * coefRage + purePhysicalDD * percentPhysicalDD.ConvertToCoefficient()) * harmoniousPowerPDD.ConvertToCoefficient());
                     
                     if (HasTalentHarmoniousPower) 
                     {
-                        magicdd = (int)(magicdd * (1 + harmoniousPowerMDD / 100));
-                        physdd = (int)(physdd * (1 + harmoniousPowerPDD / 100));
+                        magicdd = (int)(magicdd * harmoniousPowerMDD.ConvertToCoefficient());
+                        physdd = (int)(physdd * harmoniousPowerPDD.ConvertToCoefficient());
                         
                     } 
-
-                    //int purePhysicalDD = (int)(physdd / legendaryCoefficientPhysicalDD);
-
-
-
-                    
 
                     int dpmAttack = CalcAttack(magicdd, physdd);
                     int dpmMoonTouch = CalcMoonTouch(magicdd);
@@ -398,7 +379,7 @@ namespace ViewModel
                     var dpmSymbiosis = CalcSymbiosis(magicdd, physdd);
                     int dpmSymbiosisLuna = dpmSymbiosis["Luna"];
                     int dpmSymbiosisHero = dpmSymbiosis["Hero"];
-                    double realCooldawnBestialRampage = (Bestial_Rampage.BaseTimeCooldown / (1 + SkillCooldown / 100)) + TIME_CAST;
+                    //double realCooldawnBestialRampage = (Bestial_Rampage.BaseTimeCooldown / (1 + SkillCooldown / 100)) + TIME_CAST;
                     int resultDD = 0;
                     int resultDDLuna = 0;
                     int resultDDHero = 0;
@@ -481,7 +462,7 @@ namespace ViewModel
         }
         private double MoonTouchCooldown()
         {
-            double result = ((Moon_Touch.BaseTimeCooldown / (1 + SkillCooldownFinal / 100)) + TIME_CAST);
+            double result = ((Moon_Touch.BaseTimeCooldown / SkillCooldownFinal.ConvertToCoefficient()) + TIME_CAST);
             return result;
         }
         public int CalcMoonTouch(int magedd)
@@ -512,7 +493,7 @@ namespace ViewModel
 
         private double ChainLightningCooldown()
         {
-            double result = ((Chain_Lightning.BaseTimeCooldown / (1 + SkillCooldownFinal / 100)) + TIME_CAST);
+            double result = ((Chain_Lightning.BaseTimeCooldown / SkillCooldownFinal.ConvertToCoefficient()) + TIME_CAST);
             return result;
         }
         public int CalcChainLightning(int magedd, int physdd)
@@ -549,13 +530,13 @@ namespace ViewModel
         }
         public double BestialRampageCooldown()
         {
-            double result = (Bestial_Rampage.BaseTimeCooldown / (1 + SkillCooldownFinal / 100)) + TIME_CAST;
+            double result = (Bestial_Rampage.BaseTimeCooldown / SkillCooldownFinal.ConvertToCoefficient()) + TIME_CAST;
 
             return result;
         }
         public double TimeBestialRampage()
         {
-            double result = (Bestial_Rampage.TimeActive * (1 + FacilitationFinal / 100 ) / BestialRampageCooldown());
+            double result = (Bestial_Rampage.TimeActive * (FacilitationFinal.ConvertToCoefficient()) / BestialRampageCooldown());
             if (result < 0)
             {
                 return 0;
@@ -566,7 +547,7 @@ namespace ViewModel
         }
         public double TimeWithoutBestialRampage()
         {
-            double result = (BestialRampageCooldown() - Bestial_Rampage.TimeActive) * (1 + FacilitationFinal / 100) / BestialRampageCooldown();
+            double result = (BestialRampageCooldown() - Bestial_Rampage.TimeActive) * FacilitationFinal.ConvertToCoefficient() / BestialRampageCooldown();
             if (result < 0)
             {
                 return 0;
@@ -596,7 +577,7 @@ namespace ViewModel
         }
         public double AuraOfTheForestCooldown()
         {
-            double result = AuraOfTheForest.BaseTimeCooldown / (1 + SkillCooldownFinal / 100) + TIME_CAST;
+            double result = AuraOfTheForest.BaseTimeCooldown / SkillCooldownFinal.ConvertToCoefficient() + TIME_CAST;
 
             return result;
         }
@@ -606,7 +587,7 @@ namespace ViewModel
             var result = new Dictionary<string, int>();
             result.Add("Hero", 0);
             result.Add("Luna", 0);  
-            int countHit = (int)(AuraOfTheForest.TimeActive * (1 + FacilitationFinal / 100) / AuraOfTheForest.Delay);
+            int countHit = (int)(AuraOfTheForest.TimeActive * FacilitationFinal.ConvertToCoefficient() / AuraOfTheForest.Delay);
             int LunaAura = (int)(AuraOfTheForest.Formula(magedd) 
                 * FormulaCoefficientOfPenetrationLuna()); 
             int HeroesAura = (int)(AuraOfTheForest.Formula(magedd) 
@@ -615,7 +596,7 @@ namespace ViewModel
                 * coefficientPredatoryDeliriumTalant 
                 * coefficientMomentOfPowerTalant 
                 * FormulaCoefficientOfPenetration());
-            double realCooldown = AuraOfTheForest.BaseTimeCooldown / (1 + SkillCooldownFinal / 100) + TIME_CAST;
+            double realCooldown = AuraOfTheForest.BaseTimeCooldown / SkillCooldownFinal.ConvertToCoefficient() + TIME_CAST;
             if (HasTalantGrandeurOfTheLotus)
             {
                 if (BeastAwakeningActive)
@@ -673,7 +654,7 @@ namespace ViewModel
 
         public double MoonLightCooldown()
         {
-            double result = Moonlight.BaseTimeCooldown / (1 + SkillCooldownFinal / 100) + TIME_CAST;
+            double result = Moonlight.BaseTimeCooldown / SkillCooldownFinal.ConvertToCoefficient() + TIME_CAST;
 
             return result;
         }
@@ -696,7 +677,7 @@ namespace ViewModel
             }
             if (MoonlightNonPermanentActive)
             {
-                double realCooldown = Moonlight.BaseTimeCooldown / (1 + SkillCooldownFinal / 100) + TIME_CAST;
+                double realCooldown = Moonlight.BaseTimeCooldown / SkillCooldownFinal.ConvertToCoefficient() + TIME_CAST;
 
                 int nonPermanentDD = (int)(Moonlight.Formula(magicaldd) 
                     * coefficientCastle
@@ -717,7 +698,7 @@ namespace ViewModel
         }
         private double OrderToAttackCooldown()
         {
-            double result = ((OrderToAttack.BaseTimeCooldown / (1 + SkillCooldownFinal / 100)) + TIME_CAST);
+            double result = ((OrderToAttack.BaseTimeCooldown / SkillCooldownFinal.ConvertToCoefficient()) + TIME_CAST);
             return result;
         }
         public int CalcOrderToAttack(int magedd, int physdd)
@@ -832,7 +813,6 @@ namespace ViewModel
         #region Характеристики персонажа
 
         #region КД
-        //private double maxSkillCooldowm = 200;
         private double skillCooldown = 0;
         /// <summary>
         /// Итоговое значение характеристики "Перезарядка навыков" персонажа с учетом всех скиллов и бафов
@@ -851,7 +831,6 @@ namespace ViewModel
         /// </summary>
         public double SkillCooldown
         {
-            //get => skillCooldown;
             get => DataSet.SkillCooldown;
             set {
                 DataSet.SkillCooldown = StatsLimit.CheckLimit(value, StatsLimit.MAX_SKILL_COOLDOWN);
@@ -872,7 +851,6 @@ namespace ViewModel
         }
         #endregion
         #region Скорость атаки
-        //private double maxAttackSpeed = 70;
         private double attackSpeed = 0;
         /// <summary>
         /// Итоговое значение характеристики "Скорость атаки" персонажа с учетом всех скиллов и бафов
@@ -913,9 +891,7 @@ namespace ViewModel
         }
         #endregion
         #region Крит
-        //private const double MAX_CRITICAL_HIT = 100;
         private double maxCriticalHitHero = 53;
-        //private const double MIN_CRITICAL_HIT = 0;
         private double criticalHitHero = 0;
         /// <summary>
         /// Итоговое значение характеристики "Критический удар" персонажа с учетом всех скиллов и бафов
@@ -973,7 +949,6 @@ namespace ViewModel
         }
         #endregion
         #region Крит урон
-        //private const double MAX_CRITICAL_DAMAGE = 200;
         private double criticalDamage = 0;
         /// <summary>
         /// Итоговое значение характеристики "Критический урон" персонажа с учетом всех скиллов и бафов
@@ -1013,8 +988,6 @@ namespace ViewModel
         }
         #endregion
         #region Пробив
-        //private const double MAX_PENETRATION = 100;
-        //private const double MIN_PENETRATION = 0;
         private double penetration = 0;
         private double maxPenetrationHero = 50;
         private double penetrationHero = 0;
@@ -1048,7 +1021,6 @@ namespace ViewModel
         /// </summary>
         public double Penetration
         {
-            //get => penetration;
             get => DataSet.Penetration;
             set
             {
@@ -1073,8 +1045,6 @@ namespace ViewModel
         }
         #endregion
         #region Точность
-        //private const double MAX_ACCURACY = 100;
-        //private const double MIN_ACCURACY = 0;
         private double maxAccuracyHero = 50;
         private double accuracy = 0;
         /// <summary>
@@ -1129,8 +1099,6 @@ namespace ViewModel
         }
         #endregion
         #region Сила атаки
-        //private const double MAX_ATTACK_STRENGTH = 100;
-        //private const double MIN_ATTACK_STRENGTH = 0;
         private double attackStrength = 0;
         /// <summary>
         /// Итоговое значение характеристики "Сила атаки" персонажа с учетом всех скиллов и бафов
@@ -1167,8 +1135,6 @@ namespace ViewModel
         }
         #endregion
         #region Пронза
-        //private const double MAX_PIERCING_ATTACK = 50;
-        //private const double MIN_PIERCING_ATTACK = 0;
         private double piercingAttack = 0;
         /// <summary>
         /// Итоговое значение характеристики "Пронзающая атака" персонажа с учетом всех скиллов и бафов
@@ -1205,8 +1171,6 @@ namespace ViewModel
         }
         #endregion
         #region Ярость
-        //private const double MAX_RAGE = 50;
-        //private const double MIN_RAGE = 0;
         private double rage = 0;
         /// <summary>
         /// Итоговое значение характеристики "Ярость" персонажа с учетом всех скиллов и бафов
@@ -1243,8 +1207,6 @@ namespace ViewModel
         }
         #endregion
         #region Орк
-        //private const double MAX_FACILITATION = 50;
-        //private const double MIN_FACILITATION = 0;
         private double facilitation = 0;
         public double FacilitationFinal
         {
@@ -1388,8 +1350,8 @@ namespace ViewModel
 
         private double percentMagicalDDStart = 0;
         private double percentMagicalDD = 0;
-        private const int DDConcentration = 4;
-        public double PercentMagicalDD
+        private const int DD_CONCENTRATION = 4;
+        /*public double PercentMagicalDD
         {
             get => DataSet.PercentMagicalDD;
             set
@@ -1399,44 +1361,52 @@ namespace ViewModel
                 legendaryCoefficientMagicalDD = 1 + DataSet.PercentMagicalDD / 100;
                 Calculate(); NotifyPropertyChanged("PercentMagicalDD");
             }
+        }*/
+
+        private double CalcModifiersDamageJewelrySet(string type)
+        {
+            double result = ModifiersDamage.ConvertInModifiers(SelectedCloak)[type];
+            result += ModifiersDamage.ConvertInModifiers(SelectedAmulet)[type];
+            result += ModifiersDamage.ConvertInModifiers(SelectedBraceletL)[type];
+            result += ModifiersDamage.ConvertInModifiers(SelectedBraceletR)[type];
+            result += ModifiersDamage.ConvertInModifiers(SelectedRingL)[type];
+            result += ModifiersDamage.ConvertInModifiers(SelectedRingR)[type];
+            result += ModifiersDamage.ConvertInModifiers(SelectedSet)[type];
+
+
+            return result;
         }
 
+        /// <summary>
+        /// Метод для расчета исходного значения процентов Маг дд
+        /// </summary>
         private void CalcPercentMagicalDDStart()
         {
             percentMagicalDDStart = 0;
-            percentMagicalDDStart += DDConcentration;
+            percentMagicalDDStart += ModifiersDamage.DD_PROCENT_PASSIVE;
 
-            percentMagicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedCloak)["Magical"];
-            percentMagicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedAmulet)["Magical"];
-            percentMagicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedBraceletL)["Magical"];
-            percentMagicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedBraceletR)["Magical"];
-            percentMagicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedRingL)["Magical"];
-            percentMagicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedRingR)["Magical"];
-            percentMagicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedSet)["Magical"];
+            percentMagicalDDStart += CalcModifiersDamageJewelrySet("Magical");
 
-            if (GuildDamageStartModifierActive) percentMagicalDDStart += 10;
-            if (TalentDamageStartModifierActive) percentMagicalDDStart += 4.75;
-            if (CastleStartModifierActive) percentMagicalDDStart += 7.5;
+            if (GuildDamageStartModifierActive) percentMagicalDDStart += ModifiersDamage.DD_GUILD;
+            if (TalentDamageStartModifierActive) percentMagicalDDStart += ModifiersDamage.DD_TALENTS;
+            if (CastleStartModifierActive) percentMagicalDDStart += ModifiersDamage.DD_CASTLE;
             //if (HarmoniousPowerStartModifierActive) percentMagicalDDStart += harmoniousPowerMDD;
             percentMagicalDDStart += AdditionalPercentMDDStart;
 
         }
+        /// <summary>
+        /// Метод для расчета конечного значения процентов Маг дд
+        /// </summary>
         private void CalcPercentMagicalDD()
         {
             percentMagicalDD = 0;
-            percentMagicalDD += DDConcentration;
+            percentMagicalDD += ModifiersDamage.DD_PROCENT_PASSIVE;
 
-            percentMagicalDD += ModifiersDamage.ConvertInModifiers(SelectedCloak)["Magical"];
-            percentMagicalDD += ModifiersDamage.ConvertInModifiers(SelectedAmulet)["Magical"];
-            percentMagicalDD += ModifiersDamage.ConvertInModifiers(SelectedBraceletL)["Magical"];
-            percentMagicalDD += ModifiersDamage.ConvertInModifiers(SelectedBraceletR)["Magical"];
-            percentMagicalDD += ModifiersDamage.ConvertInModifiers(SelectedRingL)["Magical"];
-            percentMagicalDD += ModifiersDamage.ConvertInModifiers(SelectedRingR)["Magical"];
-            percentMagicalDD += ModifiersDamage.ConvertInModifiers(SelectedSet)["Magical"];
+            percentMagicalDD += CalcModifiersDamageJewelrySet("Magical");
 
-            if (GuildDamageModifierActive) percentMagicalDD += 10;
-            if (TalentDamageModifierActive) percentMagicalDD += 4.75;
-            if (CastleSwordActive) percentMagicalDD += 7.5;
+            if (GuildDamageModifierActive) percentMagicalDD += ModifiersDamage.DD_GUILD;
+            if (TalentDamageModifierActive) percentMagicalDD += ModifiersDamage.DD_TALENTS;
+            if (CastleSwordActive) percentMagicalDD += ModifiersDamage.DD_CASTLE;
             //if (HasTalentHarmoniousPower) percentMagicalDD += harmoniousPowerMDD;
             percentMagicalDD += AdditionalPercentMDDFinal;
         }
@@ -1444,7 +1414,7 @@ namespace ViewModel
         private double percentPhysicalDDStart = 0;
         private double percentPhysicalDD = 0;
 
-        public double PercentPhysicalDD
+        /*public double PercentPhysicalDD
         {
             get => DataSet.PercentPhysicalDD;
             set
@@ -1454,45 +1424,37 @@ namespace ViewModel
                 legendaryCoefficientPhysicalDD = 1 + DataSet.PercentPhysicalDD / 100;
                 Calculate(); NotifyPropertyChanged("PercentPhysicalDD");
             }
-        }
-
+        }*/
+        /// <summary>
+        /// Метод для расчета исходного значения процентов Физ дд
+        /// </summary>
         private void CalcPercentPhysicalDDStart()
         {
             percentPhysicalDDStart = 0;
-            percentPhysicalDDStart += DDConcentration;
+            percentPhysicalDDStart += ModifiersDamage.DD_PROCENT_PASSIVE;
 
-            percentPhysicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedCloak)["Physical"];
-            percentPhysicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedAmulet)["Physical"];
-            percentPhysicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedBraceletL)["Physical"];
-            percentPhysicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedBraceletR)["Physical"];
-            percentPhysicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedRingL)["Physical"];
-            percentPhysicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedRingR)["Physical"];
-            percentPhysicalDDStart += ModifiersDamage.ConvertInModifiers(SelectedSet)["Physical"];
+            percentPhysicalDDStart += CalcModifiersDamageJewelrySet("Physical");
 
-            if (GuildDamageStartModifierActive) percentPhysicalDDStart += 10;
-            if (TalentDamageStartModifierActive) percentPhysicalDDStart += 4.75;
-            if (CastleStartModifierActive) percentPhysicalDDStart += 7.5;
-            //if (HarmoniousPowerStartModifierActive) percentPhysicalDDStart += harmoniousPowerPDD;
+            if (GuildDamageStartModifierActive) percentPhysicalDDStart += ModifiersDamage.DD_GUILD;
+            if (TalentDamageStartModifierActive) percentPhysicalDDStart += ModifiersDamage.DD_TALENTS;
+            if (CastleStartModifierActive) percentPhysicalDDStart += ModifiersDamage.DD_CASTLE;
+
             percentPhysicalDDStart += AdditionalPercentPDDStart;
         }
-
+        /// <summary>
+        /// Метод для расчета конечного значения процентов Физ дд
+        /// </summary>
         private void CalcPercentPhysicalDD()
         {
             percentPhysicalDD = 0;
-            percentPhysicalDD += DDConcentration;
+            percentPhysicalDD += ModifiersDamage.DD_PROCENT_PASSIVE;
 
-            percentPhysicalDD += ModifiersDamage.ConvertInModifiers(SelectedCloak)["Physical"];
-            percentPhysicalDD += ModifiersDamage.ConvertInModifiers(SelectedAmulet)["Physical"];
-            percentPhysicalDD += ModifiersDamage.ConvertInModifiers(SelectedBraceletL)["Physical"];
-            percentPhysicalDD += ModifiersDamage.ConvertInModifiers(SelectedBraceletR)["Physical"];
-            percentPhysicalDD += ModifiersDamage.ConvertInModifiers(SelectedRingL)["Physical"];
-            percentPhysicalDD += ModifiersDamage.ConvertInModifiers(SelectedRingR)["Physical"];
-            percentPhysicalDD += ModifiersDamage.ConvertInModifiers(SelectedSet)["Physical"];
+            percentPhysicalDD += CalcModifiersDamageJewelrySet("Physical");
 
-            if (GuildDamageModifierActive) percentPhysicalDD += 10;
-            if (TalentDamageModifierActive) percentPhysicalDD += 4.75;
-            if (CastleSwordActive) percentPhysicalDD += 7.5;
-            //if (HasTalentHarmoniousPower) percentPhysicalDD += harmoniousPowerPDD;
+            if (GuildDamageModifierActive) percentPhysicalDD += ModifiersDamage.DD_GUILD;
+            if (TalentDamageModifierActive) percentPhysicalDD += ModifiersDamage.DD_TALENTS;
+            if (CastleSwordActive) percentPhysicalDD += ModifiersDamage.DD_CASTLE;
+
             percentPhysicalDD += AdditionalPercentPDDFinal;
         }
 
@@ -2728,7 +2690,7 @@ namespace ViewModel
             result = t * RageFinal / 100 * s;
             if (result > 1) result = 1;
             if (result < 0) result = 0;
-            return result;
+            return result * 0.1;
         }
 
         #endregion

@@ -9,6 +9,9 @@ namespace Model
     public static class StatsLimit
     {
         public const int MIN_VALUE = 0;
+
+        #region Максимальные значения
+
         public const int MAX_SKILL_COOLDOWN = 200;
         public const int MAX_ATTACK_SPEED = 70;
         public const int MAX_CRITICAL_HIT = 100;
@@ -23,6 +26,9 @@ namespace Model
         public const int MAX_DODGE = 60;
         public const int MAX_RESILIENCE = 60;
 
+        #endregion
+
+        public const int DD_PROCENT_PASSIVE = 4;
         public static double CheckLimit(double stat, int maxLimit)
         {
             stat = Math.Max(stat, MIN_VALUE);
