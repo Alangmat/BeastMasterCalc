@@ -115,7 +115,7 @@ namespace ViewModel
             DataSet = new Build();
 
             DataSet.Attack = new Attack();
-            attack = DataSet.Attack;
+            //attack = DataSet.Attack; //хз зщачем тут это
             DataSet.MaceSelected = true;
             MaceSelected = DataSet.MaceSelected;
             DataSet.BeastAwakening = new BeastAwakening();
@@ -194,15 +194,15 @@ namespace ViewModel
             #endregion
 
             #region Обновление пух, рел
-            NotifyPropertyChanged("AttackActive");
-            NotifyPropertyChanged("HasRelicMoonTouch");
-            NotifyPropertyChanged("HasRelicChainLightning");
+            NotifyPropertyChanged(nameof(AttackActive));
+            NotifyPropertyChanged(nameof(HasRelicMoonTouch));
+            NotifyPropertyChanged(nameof(HasRelicChainLightning));
 
-            NotifyPropertyChanged("AxeSelected");
-            NotifyPropertyChanged("MaceSelected");
-            NotifyPropertyChanged("SpearSelected");
-            NotifyPropertyChanged("StaffSelected");
-            NotifyPropertyChanged("SwordSelected");
+            NotifyPropertyChanged(nameof(AxeSelected));
+            NotifyPropertyChanged(nameof(MaceSelected));
+            NotifyPropertyChanged(nameof(SpearSelected));
+            NotifyPropertyChanged(nameof(StaffSelected));
+            NotifyPropertyChanged(nameof(SwordSelected));
 
             NotifyPropertyChanged(nameof(ChechBPDungeon));
             NotifyPropertyChanged(nameof(SacredShieldHeroActive));
@@ -929,7 +929,7 @@ namespace ViewModel
             set
             {
                 DataSet.CriticalHit = StatsLimit.CheckLimit(value, StatsLimit.MAX_CRITICAL_HIT);
-                Calculate(); NotifyPropertyChanged("CriticalHit");
+                Calculate(); NotifyPropertyChanged(nameof(CriticalHit));
             }
         }
         /// <summary>
@@ -941,7 +941,7 @@ namespace ViewModel
             CriticalHitHeroFinal += CriticalHit;
             if (CastleSwordActive) CriticalHitHeroFinal += 5;
             if (BlessingOfTheMoonActive) CriticalHitHeroFinal += BlessingOfTheMoon.AdditionCriticalHit;
-            if (CrushingWillActive) CriticalHitHeroFinal += crushingWillAdditionalCriticalHit;
+            if (CrushingWillActive) CriticalHitHeroFinal += MermanModifiers.CRUSHING_WILL_ADDITIONAL_CRITICAL_HIT;
             if (GodsAid) CriticalHitHeroFinal += 10;
             criticalHit = CriticalHitHeroFinal;
             IsUsingBlessingOfTheMoonOnLuna = IsUsingBlessingOfTheMoonOnLuna;
@@ -971,7 +971,7 @@ namespace ViewModel
             set
             {
                 DataSet.CriticalDamage = StatsLimit.CheckLimit(value, StatsLimit.MAX_CRITICAL_DAMAGE);
-                Calculate(); NotifyPropertyChanged("CriticalDamage");
+                Calculate(); NotifyPropertyChanged(nameof(CriticalDamage));
             }
         }
         /// <summary>
@@ -1026,7 +1026,7 @@ namespace ViewModel
             {
                 DataSet.Penetration = StatsLimit.CheckLimit(value, StatsLimit.MAX_PENETRATION);
 
-                Calculate(); NotifyPropertyChanged("Penetration");
+                Calculate(); NotifyPropertyChanged(nameof(Penetration));
             }
         }
         /// <summary>
@@ -1038,7 +1038,7 @@ namespace ViewModel
             PenetrationHeroFinal += Penetration;
             if (CastleSwordActive) PenetrationHeroFinal += 5;
             if (BlessingOfTheMoonActive) PenetrationHeroFinal += BlessingOfTheMoon.AdditionPenetration;
-            if (IrreversibleAngerActive) PenetrationHeroFinal += irreversibleAngerAdditionalPenetration;
+            if (IrreversibleAngerActive) PenetrationHeroFinal += MermanModifiers.IRREVERSIBLE_ANGER_ADDITIONAL_PENETRATION;
             penetration = PenetrationHeroFinal;
             IsUsingBlessingOfTheMoonOnLuna = IsUsingBlessingOfTheMoonOnLuna;
             if (PenetrationHeroFinal > maxPenetrationHero) PenetrationHeroFinal = maxPenetrationHero;
@@ -1092,7 +1092,7 @@ namespace ViewModel
             AccuracyHeroFinal = 0;
             AccuracyHeroFinal += Accuracy;
             if (CastleSwordActive) AccuracyHeroFinal += 5;
-            if (IrreversibleAngerActive) AccuracyHeroFinal += irreversibleAngerAdditionalAccuracy;
+            if (IrreversibleAngerActive) AccuracyHeroFinal += MermanModifiers.IRREVERSIBLE_ANGER_ADDITIONAL_ACCURACY;
             AccuracyLuna = AccuracyHeroFinal;
             if (AccuracyHeroFinal > maxAccuracyHero) AccuracyHeroFinal = maxAccuracyHero;
 
@@ -1347,10 +1347,9 @@ namespace ViewModel
         #endregion
         #endregion
 
-
         private double percentMagicalDDStart = 0;
         private double percentMagicalDD = 0;
-        private const int DD_CONCENTRATION = 4;
+        //private const int DD_CONCENTRATION = 4;
         /*public double PercentMagicalDD
         {
             get => DataSet.PercentMagicalDD;
@@ -1372,7 +1371,6 @@ namespace ViewModel
             result += ModifiersDamage.ConvertInModifiers(SelectedRingL)[type];
             result += ModifiersDamage.ConvertInModifiers(SelectedRingR)[type];
             result += ModifiersDamage.ConvertInModifiers(SelectedSet)[type];
-
 
             return result;
         }
@@ -1469,20 +1467,11 @@ namespace ViewModel
                 Calculate(); NotifyPropertyChanged(nameof(PureMagicalDD));
             }
         }
-        private int MagicalDDFinal = 0;
-        private void CalcMagicalDD()
+        //private int MagicalDDFinal = 0;
+        /*private void CalcMagicalDD()
         {
-
-
-
             MagicalDDFinal = 0; 
-
-        }
-
-
-
-
-
+        }*/
 
         #endregion
 
@@ -1491,7 +1480,7 @@ namespace ViewModel
         #region Характеристики цели
 
         //private double maxProtection = 80;
-        private double protection = 80;
+        //private double protection = 80;
         /// <summary>
         /// Свойство связанное с полем на вьюхе "Защита"
         /// </summary>
@@ -1501,12 +1490,12 @@ namespace ViewModel
             set
             {
                 DataSet.Protection = StatsLimit.CheckLimit(value, StatsLimit.MAX_PROTECTION);
-                Calculate(); NotifyPropertyChanged("Protection");
+                Calculate(); NotifyPropertyChanged(nameof(Protection));
             }
         }
 
         //private double maxDodge = 60;
-        private double dodge = 50;
+        //private double dodge = 50;
         /// <summary>
         /// Свойство связанное с полем на вьюхе "Уклонение"
         /// </summary>
@@ -1516,12 +1505,12 @@ namespace ViewModel
             set
             {
                 DataSet.Dodge = StatsLimit.CheckLimit(value, StatsLimit.MAX_DODGE);
-                Calculate(); NotifyPropertyChanged("Dodge");
+                Calculate(); NotifyPropertyChanged(nameof(Dodge));
             }
         }
 
         //private double maxResilience = 60;
-        private double resilience = 0;
+        //private double resilience = 0;
         /// <summary>
         /// Свойство связанное с полем на вьюхе "Устойчивость"
         /// </summary>
@@ -1531,33 +1520,34 @@ namespace ViewModel
             set
             {
                 DataSet.Resilience = StatsLimit.CheckLimit(value, StatsLimit.MAX_RESILIENCE);
-                Calculate(); NotifyPropertyChanged("Resilience");
+                Calculate(); NotifyPropertyChanged(nameof(Resilience));
             }
         }
 
         #endregion
 
         #region Свойства для вывода на View
+
         #region показатели урона
         #region дд
         private string outDD;
         public string OutDD
         {
             get => outDD;
-            set { outDD = value; NotifyPropertyChanged("OutDD"); }
+            set { outDD = value; NotifyPropertyChanged(nameof(OutDD)); }
         }
 
         private string outDDHero;
         public string OutDDHero
         {
             get => outDDHero;
-            set { outDDHero = value; NotifyPropertyChanged("OutDDHero"); }
+            set { outDDHero = value; NotifyPropertyChanged(nameof(OutDDHero)); }
         }
         private string outDDLuna;
         public string OutDDLuna
         {
             get => outDDLuna;
-            set { outDDLuna = value; NotifyPropertyChanged("OutDDLuna"); }
+            set { outDDLuna = value; NotifyPropertyChanged(nameof(OutDDLuna)); }
         }
         #endregion
         #region Attack
@@ -1566,13 +1556,13 @@ namespace ViewModel
         public string OutAttackDD
         {
             get => outAttackDD;
-            set { outAttackDD = value; NotifyPropertyChanged("OutAttackDD"); }
+            set { outAttackDD = value; NotifyPropertyChanged(nameof(OutAttackDD)); }
         }
         private string outAttackDPM;
         public string OutAttackDPM
         {
             get => outAttackDPM;
-            set { outAttackDPM = value; NotifyPropertyChanged("OutAttackDPM"); }
+            set { outAttackDPM = value; NotifyPropertyChanged(nameof(OutAttackDPM)); }
         }
 
         #endregion
@@ -1581,13 +1571,13 @@ namespace ViewModel
         public string OutMoonTouchDD
         {
             get => outMoonTouchDD;
-            set { outMoonTouchDD = value; NotifyPropertyChanged("OutMoonTouchDD"); }
+            set { outMoonTouchDD = value; NotifyPropertyChanged(nameof(OutMoonTouchDD)); }
         }
         private string outMoonTouchDPM;
         public string OutMoonTouchDPM
         {
             get => outMoonTouchDPM;
-            set { outMoonTouchDPM = value; NotifyPropertyChanged("OutMoonTouchDPM"); }
+            set { outMoonTouchDPM = value; NotifyPropertyChanged(nameof(OutMoonTouchDPM)); }
         }
         #endregion
         #region Beast Awakening
@@ -1595,13 +1585,13 @@ namespace ViewModel
         public string OutBeastAwakeningDD
         {
             get => outBeastAwakeningDD;
-            set { outBeastAwakeningDD = value; NotifyPropertyChanged("OutBeastAwakeningDD"); }
+            set { outBeastAwakeningDD = value; NotifyPropertyChanged(nameof(OutBeastAwakeningDD)); }
         }
         private string outBeastAwakeningDPM;
         public string OutBeastAwakeningDPM
         {
             get => outBeastAwakeningDPM;
-            set { outBeastAwakeningDPM = value; NotifyPropertyChanged("OutBeastAwakeningDPM"); }
+            set { outBeastAwakeningDPM = value; NotifyPropertyChanged(nameof(OutBeastAwakeningDPM)); }
         }
         #endregion
         #region BestialRampage
@@ -1609,13 +1599,13 @@ namespace ViewModel
         public string OutBestialRampageDD
         {
             get => outBestialRampageDD;
-            set { outBestialRampageDD = value; NotifyPropertyChanged("OutBestialRampageDD"); }
+            set { outBestialRampageDD = value; NotifyPropertyChanged(nameof(OutBestialRampageDD)); }
         }
         private string outBestialRampageDPM;
         public string OutBestialRampageDPM
         {
             get => outBestialRampageDPM;
-            set { outBestialRampageDPM = value; NotifyPropertyChanged("OutBestialRampageDPM"); }
+            set { outBestialRampageDPM = value; NotifyPropertyChanged(nameof(OutBestialRampageDPM)); }
         }
         #endregion
         #region Chain Lightning
@@ -1623,13 +1613,13 @@ namespace ViewModel
         public string OutChainLightningDD
         {
             get => outChainLightningDD;
-            set { outChainLightningDD = value; NotifyPropertyChanged("OutChainLightningDD"); }
+            set { outChainLightningDD = value; NotifyPropertyChanged(nameof(OutChainLightningDD)); }
         }
         private string outChainLightningDPM;
         public string OutChainLightningDPM
         {
             get => outChainLightningDPM;
-            set { outChainLightningDPM = value; NotifyPropertyChanged("OutChainLightningDPM"); }
+            set { outChainLightningDPM = value; NotifyPropertyChanged(nameof(OutChainLightningDPM)); }
         }
         #endregion
         #region Aura of the Forest
@@ -1638,25 +1628,25 @@ namespace ViewModel
         public string OutAuraOfTheForestLunaDD
         {
             get => outAuraOfTheForestLunaDD;
-            set { outAuraOfTheForestLunaDD = value; NotifyPropertyChanged("OutAuraOfTheForestLunaDD"); }
+            set { outAuraOfTheForestLunaDD = value; NotifyPropertyChanged(nameof(OutAuraOfTheForestLunaDD)); }
         }
         private string outAuraOfTheForestLunaDPM;
         public string OutAuraOfTheForestLunaDPM
         {
             get => outAuraOfTheForestLunaDPM;
-            set { outAuraOfTheForestLunaDPM = value; NotifyPropertyChanged("OutAuraOfTheForestLunaDPM"); }
+            set { outAuraOfTheForestLunaDPM = value; NotifyPropertyChanged(nameof(OutAuraOfTheForestLunaDPM)); }
         }
         private string outAuraOfTheForestHeroDD;
         public string OutAuraOfTheForestHeroDD
         {
             get => outAuraOfTheForestHeroDD;
-            set { outAuraOfTheForestHeroDD = value; NotifyPropertyChanged("OutAuraOfTheForestHeroDD"); }
+            set { outAuraOfTheForestHeroDD = value; NotifyPropertyChanged(nameof(OutAuraOfTheForestHeroDD)); }
         }
         private string outAuraOfTheForestHeroDPM;
         public string OutAuraOfTheForestHeroDPM
         {
             get => outAuraOfTheForestHeroDPM;
-            set { outAuraOfTheForestHeroDPM = value; NotifyPropertyChanged("OutAuraOfTheForestHeroDPM"); }
+            set { outAuraOfTheForestHeroDPM = value; NotifyPropertyChanged(nameof(OutAuraOfTheForestHeroDPM)); }
         }
 
         #endregion
@@ -1666,25 +1656,25 @@ namespace ViewModel
         public string OutMoonlightPermanentDD
         {
             get => outMoonlightPermanentDD;
-            set { outMoonlightPermanentDD = value; NotifyPropertyChanged("OutMoonlightPermanentDD"); }
+            set { outMoonlightPermanentDD = value; NotifyPropertyChanged(nameof(OutMoonlightPermanentDD)); }
         }
         private string outMoonlightPermanentDPM;
         public string OutMoonlightPermanentDPM
         {
             get => outMoonlightPermanentDPM;
-            set { outMoonlightPermanentDPM = value; NotifyPropertyChanged("OutMoonlightPermanentDPM"); }
+            set { outMoonlightPermanentDPM = value; NotifyPropertyChanged(nameof(OutMoonlightPermanentDPM)); }
         }
         private string outMoonlightNonPermanentDD;
         public string OutMoonlightNonPermanentDD
         {
             get => outMoonlightNonPermanentDD;
-            set { outMoonlightNonPermanentDD = value; NotifyPropertyChanged("OutMoonlightNonPermanentDD"); }
+            set { outMoonlightNonPermanentDD = value; NotifyPropertyChanged(nameof(OutMoonlightNonPermanentDD)); }
         }
         private string outMoonlightNonPermanentDPM;
         public string OutMoonlightNonPermanentDPM
         {
             get => outMoonlightNonPermanentDPM;
-            set { outMoonlightNonPermanentDPM = value; NotifyPropertyChanged("OutMoonlightNonPermanentDPM"); }
+            set { outMoonlightNonPermanentDPM = value; NotifyPropertyChanged(nameof(OutMoonlightNonPermanentDPM)); }
         }
 
         #endregion
@@ -1693,13 +1683,13 @@ namespace ViewModel
         public string OutOrderToAttackDD
         {
             get => outOrderToAttackDD;
-            set { outOrderToAttackDD = value; NotifyPropertyChanged("OutOrderToAttackDD"); }
+            set { outOrderToAttackDD = value; NotifyPropertyChanged(nameof(OutOrderToAttackDD)); }
         }
         private string outOrderToAttackDPM = "0";
         public string OutOrderToAttackDPM
         {
             get => outOrderToAttackDPM;
-            set { outOrderToAttackDPM = value; NotifyPropertyChanged("OutOrderToAttackDPM"); }
+            set { outOrderToAttackDPM = value; NotifyPropertyChanged(nameof(OutOrderToAttackDPM)); }
         }
         #endregion
 
@@ -1709,7 +1699,7 @@ namespace ViewModel
         public string OutSymbiosisDPM
         {
             get => outSymbiosisDPM;
-            set { outSymbiosisDPM = value; NotifyPropertyChanged("OutSymbiosisDPM"); }
+            set { outSymbiosisDPM = value; NotifyPropertyChanged(nameof(OutSymbiosisDPM)); }
         }
 
         #endregion
@@ -1913,7 +1903,7 @@ namespace ViewModel
             get => ModifiersDamage.Sets;
         }
 
-        private string selectedSet = "0%";
+        //private string selectedSet = "0%";
         public string SelectedSet
         {
             //get => selectedSet;
@@ -1934,25 +1924,25 @@ namespace ViewModel
 
         #region Источники урона
 
-        private Attack attack;
+        //private Attack attack;
         public Attack Attack
         {
             //get => attack;
             get => DataSet.Attack;
             set { //attack = value; 
                 DataSet.Attack = value;
-                NotifyPropertyChanged("Attack"); }
+                NotifyPropertyChanged(nameof(Attack)); }
         }
         public MoonTouch Moon_Touch
         { //get => moonTouch;
             get => DataSet.MoonTouch;
             set { //moonTouch = value;
                 DataSet.MoonTouch = value;
-                NotifyPropertyChanged("Moon_Touch"); }
+                NotifyPropertyChanged(nameof(Moon_Touch)); }
         }
-        private MoonTouch moonTouch;
+        //private MoonTouch moonTouch;
 
-        private OrderToAttack orderToAttack;
+        //private OrderToAttack orderToAttack;
         public OrderToAttack OrderToAttack
         {
             //get => orderToAttack;
@@ -1961,54 +1951,54 @@ namespace ViewModel
             {
                 //orderToAttack = value;
                 DataSet.OrderToAttack = value;
-                NotifyPropertyChanged("OrderToAttack");
+                NotifyPropertyChanged(nameof(OrderToAttack));
             }
         }
 
-        private ChainLightning chainLightning;
+        //private ChainLightning chainLightning;
         public ChainLightning Chain_Lightning
         {
             //get => chainLightning;
             get => DataSet.ChainLightning;
             set { //chainLightning = value;
                 DataSet.ChainLightning = value;
-                NotifyPropertyChanged("Chain_Lightning"); }
+                NotifyPropertyChanged(nameof(Chain_Lightning)); }
         }
-        private BeastAwakening beastAwakening;
+        //private BeastAwakening beastAwakening;
         public BeastAwakening Beast_Awakening
         {
             //get => beastAwakening;
             get => DataSet.BeastAwakening;
             set { //beastAwakening = value; 
                 DataSet.BeastAwakening = value;
-                NotifyPropertyChanged("Beast_Awakening"); }
+                NotifyPropertyChanged(nameof(Beast_Awakening)); }
         }
-        private BestialRampage bestialRampage;
+        //private BestialRampage bestialRampage;
         public BestialRampage Bestial_Rampage
         {
             //get => bestialRampage;
             get => DataSet.BestialRampage;
             set { //bestialRampage = value; 
                 DataSet.BestialRampage = value;
-                NotifyPropertyChanged("Bestial_Rampage"); }
+                NotifyPropertyChanged(nameof(Bestial_Rampage)); }
         }
-        private AuraOfTheForest auraOfTheForest;
+        //private AuraOfTheForest auraOfTheForest;
         public AuraOfTheForest AuraOfTheForest
         {
             //get => auraOfTheForest;
             get => DataSet.AuraOfTheForest;
             set { //auraOfTheForest = value; 
                 DataSet.AuraOfTheForest = value;
-                NotifyPropertyChanged("AuraOfTheForest"); }
+                NotifyPropertyChanged(nameof(AuraOfTheForest)); }
         }
-        private Moonlight moonlight;
+        //private Moonlight moonlight;
         public Moonlight Moonlight
         {
             //get => moonlight;
             get => DataSet.Moonlight;
             set { //moonlight = value;
                 DataSet.Moonlight = value;
-                NotifyPropertyChanged("Moonlight"); }
+                NotifyPropertyChanged(nameof(Moonlight)); }
         }
 
         public BlessingOfTheMoon BlessingOfTheMoon
@@ -2046,17 +2036,17 @@ namespace ViewModel
             get => DataSet.MagicalDamage;
             set { //magicalDD = value;
                 DataSet.MagicalDamage = value;
-                Calculate(); NotifyPropertyChanged("MagicalDD"); }
+                Calculate(); NotifyPropertyChanged(nameof(MagicalDD)); }
         }
-        private string magicalDD;
-        private string physicalDD;
+        //private string magicalDD;
+        //private string physicalDD;
         public string PhysicalDD
         {
             //get => physicalDD;
             get => DataSet.PhysicalDamage;
             set { //physicalDD = value;
                 DataSet.PhysicalDamage = value;
-                Calculate(); NotifyPropertyChanged("PhysicalDD"); }
+                Calculate(); NotifyPropertyChanged(nameof(PhysicalDD)); }
         }
 
 
@@ -2070,7 +2060,9 @@ namespace ViewModel
                 Calculate(); NotifyPropertyChanged("TimeCast");
             }
         }*/ // задержка нажатия скилла
-        private double legendaryCoefficientBestialRampage = 0.5; // Будет меняться в зависимости от скорости атаки и сколько у тебя кд
+
+        //private double legendaryCoefficientBestialRampage = 0.5; // Будет меняться в зависимости от скорости атаки и сколько у тебя кд
+        
         //private double legendaryCoefficientChainLightning = 1;
         public double LegendaryCoefficientChainLightning()
         {
@@ -2089,21 +2081,21 @@ namespace ViewModel
         private double blessingOfTheMoonCooldown()
         {
             double cooldown = BlessingOfTheMoon.BaseTimeCooldown;
-            double result = ((cooldown / (1 + SkillCooldownFinal / 100)) + TIME_CAST);
+            double result = ((cooldown / SkillCooldownFinal.ConvertToCoefficient()) + TIME_CAST);
 
             return result;
         }
         private double doubleConcentrationCooldown()
         {
             double cooldown = DoubleConcentration.BaseTimeCooldown;
-            double result = ((cooldown / (1 + SkillCooldownFinal / 100)) + TIME_CAST);
+            double result = ((cooldown / SkillCooldownFinal.ConvertToCoefficient()) + TIME_CAST);
 
             return result;
         }
         private double healingCooldown()
         {
             double cooldown = 14;
-            double result = ((cooldown / (1 + SkillCooldownFinal / 100)) + TIME_CAST);
+            double result = ((cooldown / SkillCooldownFinal.ConvertToCoefficient()) + TIME_CAST);
 
             return result;
         }
@@ -2132,17 +2124,17 @@ namespace ViewModel
         }
 
 
-        private double legendaryCoefficientAttackSpeed = 1.276; // Будет менять в зависимости от скорости атаки, кд, включенных скиллов.
-        private double legendaryCoefficientMagicalDD = 1; // Тут в него входит ги, плащ, рассовая, ну и рандомные кольца +-
-        private double legendaryCoefficientPhysicalDD = 1; // тут ги и талики на урон вне ветки
+        //private double legendaryCoefficientAttackSpeed = 1.276; // Будет менять в зависимости от скорости атаки, кд, включенных скиллов.
+        //private double legendaryCoefficientMagicalDD = 1; // Тут в него входит ги, плащ, рассовая, ну и рандомные кольца +-
+        //private double legendaryCoefficientPhysicalDD = 1; // тут ги и талики на урон вне ветки
         #endregion
 
         #region Дополнительные надбавки
 
 
         #region Triton
-        private bool crushingWillActive = false;
-        private int crushingWillAdditionalCriticalHit = 20;
+        //private bool crushingWillActive = false;
+        //private const int CRUSHING_WILL_ADDITIONAL_CRITICAL_HIT = 20;
 
         public bool CrushingWillActive
         {
@@ -2161,21 +2153,25 @@ namespace ViewModel
                     coefficientTriton = 0.3;
                 }
                 else coefficientTriton = 0;
-                Calculate(); NotifyPropertyChanged("CrushingWillActive"); }
+                Calculate(); NotifyPropertyChanged(nameof(CrushingWillActive)); 
+            }
         }
 
-        private const double MERMAN_CD = 15;
-        private double SingleMermanDuration = 10;
+        //private const double MERMAN_CD = 15;
+        //private const double SINGLE_MERMAN_DURATION = 10;
 
         private double MermanDuration() 
         {
-            double result = SingleMermanDuration * (1 + FacilitationFinal / 100 ) / MERMAN_CD * 0.9;
+            double result = MermanModifiers.SINGLE_MERMAN_DURATION 
+                * FacilitationFinal.ConvertToCoefficient() 
+                / MermanModifiers.CLOTH_COOLDOWN 
+                * 0.9;
 
             return result;
         }
         private double coefficientTriton = 0;
 
-        private bool irreversibleAngerActive = false;
+        //private bool irreversibleAngerActive = false;
         public bool IrreversibleAngerActive
         {
             //get => irreversibleAngerActive;
@@ -2185,11 +2181,11 @@ namespace ViewModel
                 /*irreversibleAngerActive = value;
                 if (irreversibleAngerActive)*/
                 DataSet.IrreversibleAnger = value;
-                Calculate(); NotifyPropertyChanged("IrreversibleAngerActive");
+                Calculate(); NotifyPropertyChanged(nameof(IrreversibleAngerActive));
             }
         }
-        private int irreversibleAngerAdditionalPenetration = 15;
-        private int irreversibleAngerAdditionalAccuracy = 15;
+        //private int irreversibleAngerAdditionalPenetration = 15;
+        //private int irreversibleAngerAdditionalAccuracy = 15;
 
 
         #endregion
@@ -2197,7 +2193,7 @@ namespace ViewModel
         #region Ветки
 
         #region 3 ветка
-        private bool forestInspirationActive = false;
+        //private bool forestInspirationActive = false;
         public bool ForestInspirationActive
         {
             //get => forestInspirationActive;
@@ -2221,7 +2217,7 @@ namespace ViewModel
 
         #region 2 ветка
 
-        private bool dualRageActive = false;
+        //private bool dualRageActive = false;
         public bool DualRageActive
         {
             get => DataSet.DualRageActive;
@@ -2251,7 +2247,7 @@ namespace ViewModel
                 //hasTalantSymbiosis = value; 
                 DoubleConcentration.HasTalentDeadlyDexterity = value;
                 Calculate();
-                NotifyPropertyChanged("HasTalentDeadlyDexterity");
+                NotifyPropertyChanged(nameof(HasTalentDeadlyDexterity));
             }
         }
 
@@ -2259,7 +2255,7 @@ namespace ViewModel
 
         #region 1 ветка
 
-        private bool guardianUnityActive = false;
+        //private bool guardianUnityActive = false;
         
         public bool GuardianUnityActive
         {
@@ -2281,7 +2277,7 @@ namespace ViewModel
 
             }
         }
-        private bool hasTalentHarmoniousPower = false;
+        //private bool hasTalentHarmoniousPower = false;
         public bool HasTalentHarmoniousPower
         {
             //get => hasTalentHarmoniousPower;
@@ -2323,7 +2319,7 @@ namespace ViewModel
 
         private double coefficientBestialRageTalant = 1;
 
-        private int lvlTalantBestialRage = 0;
+        //private int lvlTalantBestialRage = 0;
 
         public int LvlTalantBestialRage
         {
@@ -2352,7 +2348,7 @@ namespace ViewModel
                         break;
                 }
                 Calculate();
-                NotifyPropertyChanged("LvlBestialRageTalant");
+                NotifyPropertyChanged(nameof(LvlTalantBestialRage));
             }
         }
 
@@ -2362,7 +2358,7 @@ namespace ViewModel
 
         private double coefficientPredatoryDeliriumTalant = 1;
 
-        private int lvlTalantPredatoryDelirium = 0;
+        //private int lvlTalantPredatoryDelirium = 0;
 
         public int LvlTalantPredatoryDelirium
         {
@@ -2391,7 +2387,7 @@ namespace ViewModel
                         break;
                 }
                 Calculate();
-                NotifyPropertyChanged("LvlTalantPredatoryDelirium");
+                NotifyPropertyChanged(nameof(LvlTalantPredatoryDelirium));
             }
         }
 
@@ -2430,7 +2426,7 @@ namespace ViewModel
                         break;
                 }
                 Calculate();
-                NotifyPropertyChanged("LvlTalantAnimalRage");
+                NotifyPropertyChanged(nameof(LvlTalantAnimalRage));
             }
         }
 
@@ -2440,7 +2436,7 @@ namespace ViewModel
 
         private double coefficientMomentOfPowerTalant = 1;
 
-        private int lvlTalantMomentOfPower = 0;
+        //private int lvlTalantMomentOfPower = 0;
         public int LvlTalantMomentOfPower
         {
             //get => lvlTalantMomentOfPower;
@@ -2471,7 +2467,7 @@ namespace ViewModel
                         break;
                 }
                 Calculate();
-                NotifyPropertyChanged("LvlTalantMomentOfPower");
+                NotifyPropertyChanged(nameof(LvlTalantMomentOfPower));
             }
         }
 
@@ -2480,7 +2476,7 @@ namespace ViewModel
         #region Долгая смерть
 
         private double coefficientLongDeathTalant = 1;
-        private int lvlTalantLongDeath = 0;
+        //private int lvlTalantLongDeath = 0;
         public int LvlTalantLongDeath
         {
             //get => lvlTalantLongDeath;
@@ -2511,7 +2507,7 @@ namespace ViewModel
                         break;
                 }
                 Calculate();
-                NotifyPropertyChanged("LvlTalantLongDeath");
+                NotifyPropertyChanged(nameof(LvlTalantLongDeath));
             }
         }
 
@@ -2523,7 +2519,7 @@ namespace ViewModel
 
         #region Длительная неистовость
         private double additionalContinuousFuryTalant = 0;
-        private int lvlTalantContinuousFury = 0;
+        //private int lvlTalantContinuousFury = 0;
         public int LvlTalantContinuousFury
         {
             //get => lvlTalantContinuousFury;
@@ -2540,7 +2536,7 @@ namespace ViewModel
                     case 3: additionalContinuousFuryTalant = 1.5; break;
                 }
                 Calculate();
-                NotifyPropertyChanged("LvlTalantContinuousFury");
+                NotifyPropertyChanged(nameof(LvlTalantContinuousFury));
             }
         }
         #endregion
@@ -2581,7 +2577,7 @@ namespace ViewModel
                 CriticalHitLuna = StatsLimit.CheckLimit(CriticalHitLuna, StatsLimit.MAX_CRITICAL_HIT);
                 PenetrationLuna = StatsLimit.CheckLimit(PenetrationLuna, StatsLimit.MAX_PENETRATION);
 
-                NotifyPropertyChanged("IsUsingBlessingOfTheMoonOnLuna");
+                NotifyPropertyChanged(nameof(IsUsingBlessingOfTheMoonOnLuna));
             }
         }
 
@@ -2612,7 +2608,7 @@ namespace ViewModel
         {
             double criticalHitWithResilience = (CriticalHitLuna - Resilience) / 100;
             double critDamage = CriticalDamageFinal;
-            if (CrushingWillActive) critDamage += 30;
+            if (CrushingWillActive) critDamage += MermanModifiers.CRUSHING_WILL_ADDITIONAL_CRITICAL_DAMAGE;
             if (criticalHitWithResilience < 0) criticalHitWithResilience = 0;
             if (criticalHitWithResilience > 1) criticalHitWithResilience = 1;
             double result = (1 - Resilience / 100) * (1 - criticalHitWithResilience) + Math.Pow((1 - Resilience / 100), 2) * criticalHitWithResilience * (2 + critDamage / 100);
@@ -2623,7 +2619,7 @@ namespace ViewModel
         {
             double criticalHitWithResilience = (CriticalHitHeroFinal - Resilience) / 100;
             double critDamage = CriticalDamageFinal;
-            if (CrushingWillActive) critDamage += 30;
+            if (CrushingWillActive) critDamage += MermanModifiers.CRUSHING_WILL_ADDITIONAL_CRITICAL_DAMAGE;
             if (criticalHitWithResilience < 0) criticalHitWithResilience = 0;
             if (criticalHitWithResilience > 1) criticalHitWithResilience = 1;
             double result = (1 - Resilience / 100) * (1 - criticalHitWithResilience) + Math.Pow((1 - Resilience / 100), 2) * criticalHitWithResilience * (2 + (critDamage + additionAnimalRageTalant) / 100);
@@ -2633,7 +2629,7 @@ namespace ViewModel
 
         private double FormulaCoefficientOfAttackStrength()
         {
-            double result = 1 + AttackStrengthFinal / 100;
+            double result = AttackStrengthFinal.ConvertToCoefficient();
             return result;
         }
 
@@ -2671,7 +2667,7 @@ namespace ViewModel
         private double FormulaCoefficientOfRage()
         {
             double result = 0;
-            double t = (10 + additionalContinuousFuryTalant) * (1 + FacilitationFinal / 100);
+            double t = (10 + additionalContinuousFuryTalant) * FacilitationFinal.ConvertToCoefficient();
             double s = 0;
             if (AttackActive)
             {
@@ -2701,14 +2697,14 @@ namespace ViewModel
             get => Moon_Touch.HasTalantPlus;
             set { Moon_Touch.HasTalantPlus = value;
                 Calculate();
-                NotifyPropertyChanged("HasTalantMoonTouchPlus"); }
+                NotifyPropertyChanged(nameof(HasTalantMoonTouchPlus)); }
         }
         public bool HasRelicMoonTouch
         {
             get => Moon_Touch.HasRelic;
             set { Moon_Touch.HasRelic = value;
                 Calculate();
-                NotifyPropertyChanged("HasRelicMoonTouch"); }
+                NotifyPropertyChanged(nameof(HasRelicMoonTouch)); }
         }
 
         public bool HasRelicChainLightning
@@ -2716,11 +2712,11 @@ namespace ViewModel
             get => Chain_Lightning.HasRelic;
             set { Chain_Lightning.HasRelic = value;
                 Calculate();
-                NotifyPropertyChanged("HasRelicChainLightning");
+                NotifyPropertyChanged(nameof(HasRelicChainLightning));
             }
         }
 
-        private List<string> castles = new List<string>()
+        /*private List<string> castles = new List<string>()
         {
             "Без замка",
             "1 сектор, 5%",
@@ -2733,10 +2729,10 @@ namespace ViewModel
         {
             get => castles;
             set { castles = value; NotifyPropertyChanged("Castles"); }
-        }
+        }*/
 
         public double coefficientCastle = 1;
-        private string numberCastle = "Без замка";
+        //private string numberCastle = "Без замка";
         public string NumberCastle
         {
             //get => numberCastle;
@@ -2765,7 +2761,7 @@ namespace ViewModel
                         break;
                 }
                 Calculate();
-                NotifyPropertyChanged("NumberCastle"); }
+                NotifyPropertyChanged(nameof(NumberCastle)); }
         }
         public bool HasTalantBeastAwakeningMage
         {
@@ -2776,12 +2772,12 @@ namespace ViewModel
                 {
                     Beast_Awakening.HasTalantMage = value;
                     Calculate();
-                    NotifyPropertyChanged("HasTalantBeastAwakeningMage");
+                    NotifyPropertyChanged(nameof(HasTalantBeastAwakeningMage));
                 }
             }
         }
         // временно
-        public List<string> threeLevels = new List<string>()
+        /*public List<string> threeLevels = new List<string>()
         {
             "0", "1", "2", "3",
         };
@@ -2789,7 +2785,7 @@ namespace ViewModel
         {
             get => threeLevels;
             set { threeLevels = value; NotifyPropertyChanged("ThreeLevels"); }
-        }
+        }*/
         public int LvlTalantBeastAwakeningPhysical
         {
             get => Beast_Awakening.LvlTalantPhys;
@@ -2799,21 +2795,23 @@ namespace ViewModel
                 {
                     Beast_Awakening.LvlTalantPhys = value;
                     Calculate();
-                    NotifyPropertyChanged("LvlTalantBeastAwakeningPhysical");
+                    NotifyPropertyChanged(nameof(LvlTalantBeastAwakeningPhysical));
                 }
             }
         }
         public bool HasTalantBestialRampage
         {
             get => Bestial_Rampage.HasTalant;
-            set { Bestial_Rampage.HasTalant = value; Calculate(); NotifyPropertyChanged("HasTalantBestialRampage"); }
+            set { Bestial_Rampage.HasTalant = value; 
+                Calculate(); NotifyPropertyChanged(nameof(HasTalantBestialRampage)); }
         }
         public bool HasTalantPowerOfNature
         {
             get => AuraOfTheForest.HasTalantPowerOfNature;
-            set { AuraOfTheForest.HasTalantPowerOfNature = value; Calculate(); NotifyPropertyChanged("HasTalantPowerOfNature"); }
+            set { AuraOfTheForest.HasTalantPowerOfNature = value; 
+                Calculate(); NotifyPropertyChanged(nameof(HasTalantPowerOfNature)); }
         }
-        private bool hasTalantGrandeurOfTheLotus = false;
+        //private bool hasTalantGrandeurOfTheLotus = false;
         public bool HasTalantGrandeurOfTheLotus
         {
             //get => hasTalantGrandeurOfTheLotus;
@@ -2821,7 +2819,7 @@ namespace ViewModel
             set { 
                 //hasTalantGrandeurOfTheLotus = value; 
                 DataSet.HasTalantGrandeurOfTheLotus = value; 
-                Calculate(); NotifyPropertyChanged("HasTalantGrandeurOfTheLotus"); }
+                Calculate(); NotifyPropertyChanged(nameof(HasTalantGrandeurOfTheLotus)); }
         }
         public int LvlTalantMoonlightPlus
         {
@@ -2830,7 +2828,7 @@ namespace ViewModel
             {
                 Moonlight.LvlTalant = value;
                 Calculate();
-                NotifyPropertyChanged("LvlTalantMoonlightPlus");
+                NotifyPropertyChanged(nameof(LvlTalantMoonlightPlus));
             }
         }
         public int LvlTalantOrderToAttackPlusDualRage
@@ -2841,7 +2839,7 @@ namespace ViewModel
             {
                 OrderToAttack.LvlTalantDualRage = value;
                 Calculate();
-                NotifyPropertyChanged("LvlTalantOrderToAttackPlusDualRage");
+                NotifyPropertyChanged(nameof(LvlTalantOrderToAttackPlusDualRage));
             }
         }
         public int LvlTalantOrderToAttackPlusGuardianUnity
@@ -2852,17 +2850,18 @@ namespace ViewModel
             {
                 OrderToAttack.LvlTalantGuardianUnity = value;
                 Calculate();
-                NotifyPropertyChanged("LvlTalantOrderToAttackPlusGuardianUnity");
+                NotifyPropertyChanged(nameof(LvlTalantOrderToAttackPlusGuardianUnity));
             }
         }
 
         public bool HasTalantBlessingOfTheMoonPlusCriticalHit
         {
             get => BlessingOfTheMoon.HasTalantPlusCriticalHit;
-            set { BlessingOfTheMoon.HasTalantPlusCriticalHit = value; Calculate(); NotifyPropertyChanged("HasTalantBlessingOfTheMoonPlusCriticalHit"); }
+            set { BlessingOfTheMoon.HasTalantPlusCriticalHit = value; 
+                Calculate(); NotifyPropertyChanged(nameof(HasTalantBlessingOfTheMoonPlusCriticalHit)); }
         }
 
-        private bool hasTalantSymbiosis = false;
+        //private bool hasTalantSymbiosis = false;
         public bool HasTalantSymbiosis
         {
             //get => hasTalantSymbiosis;
@@ -2872,7 +2871,7 @@ namespace ViewModel
                 //hasTalantSymbiosis = value; 
                 DataSet.HasTalantSymbiosis = value; 
                 Calculate(); 
-                NotifyPropertyChanged("HasTalantSymbiosis");
+                NotifyPropertyChanged(nameof(HasTalantSymbiosis));
             }
         }
 
@@ -2880,7 +2879,8 @@ namespace ViewModel
         public bool HasTalantBlessingOfTheMoonPlusPenetration
         {
             get => BlessingOfTheMoon.HasTalantPlusPenetration;
-            set { BlessingOfTheMoon.HasTalantPlusPenetration = value; Calculate(); NotifyPropertyChanged("HasTalantBlessingOfTheMoonPlusPenetration"); }
+            set { BlessingOfTheMoon.HasTalantPlusPenetration = value; 
+                Calculate(); NotifyPropertyChanged(nameof(HasTalantBlessingOfTheMoonPlusPenetration)); }
         }
         #endregion
 
@@ -2964,7 +2964,7 @@ namespace ViewModel
 
         #region замок
 
-        private bool castleSwordActive = false;
+        //private bool castleSwordActive = false;
 
         public bool CastleSwordActive
         {
@@ -2994,6 +2994,8 @@ namespace ViewModel
                 NotifyPropertyChanged(nameof(Counterstand));
             }
         }
+        // TODO
+        // вынести в константу
         private double FormulaCounterstand()
         {
             if (Counterstand) return 0.67;
@@ -3042,7 +3044,7 @@ namespace ViewModel
             set
             {
                 Moon_Touch.Level = value;
-                NotifyPropertyChanged("MoonTouchLvl");
+                NotifyPropertyChanged(nameof(LvlMoonTouch));
             }
         }
         public void IncreaseLvlMoonTouch()
@@ -3082,7 +3084,7 @@ namespace ViewModel
             {
                 Chain_Lightning.Level = value;
                 Calculate();
-                NotifyPropertyChanged("LvlChainLightning");
+                NotifyPropertyChanged(nameof(LvlChainLightning));
             }
         }
         public void IncreaseLvlChainLightning()
@@ -3120,7 +3122,7 @@ namespace ViewModel
             {
                 OrderToAttack.Level = value;
                 Calculate();
-                NotifyPropertyChanged("LvlOrderToAttack");
+                NotifyPropertyChanged(nameof(LvlOrderToAttack));
             }
         }
         public void IncreaseLvlOrderToAttack()
@@ -3157,7 +3159,7 @@ namespace ViewModel
             set
             {
                 Beast_Awakening.Level = value;
-                NotifyPropertyChanged("LvlBeastAwakening");
+                NotifyPropertyChanged(nameof(LvlBeastAwakening));
             }
         }
         public void IncreaseBeastAwakening()
@@ -3199,7 +3201,7 @@ namespace ViewModel
             set
             {
                 Bestial_Rampage.Level = value;
-                NotifyPropertyChanged("LvlBestialRampage");
+                NotifyPropertyChanged(nameof(LvlBestialRampage));
             }
         }
 
@@ -3237,7 +3239,7 @@ namespace ViewModel
             set
             {
                 AuraOfTheForest.Level = value;
-                NotifyPropertyChanged("AuraOfTheForest");
+                NotifyPropertyChanged(nameof(AuraOfTheForest));
             }
         }
         public void IncreaseAuraOfTheForest()
@@ -3274,7 +3276,7 @@ namespace ViewModel
             set
             {
                 Moonlight.Level = value;
-                NotifyPropertyChanged("LvlMoonlight");
+                NotifyPropertyChanged(nameof(LvlMoonlight));
             }
         }
         public void IncreaseMoonlight()
@@ -3474,44 +3476,6 @@ namespace ViewModel
         }
 
         #endregion
-
-        /*#region Пробуждение зверя + (физ) 1 ветка
-        public void IncreaseTalantBeastAwakeningPlusPhysical()
-        {
-            if (DualRageActive)
-            {
-                if (LvlTalantBeastAwakeningPhysical < 3)
-                {
-                    LvlTalantBeastAwakeningPhysical = LvlTalantBeastAwakeningPhysical + 1;
-                }
-                Calculate();
-            }
-        }
-        private ICommand increaseLvlTalantBeastAwakeningPlusPhysicalCommand;
-        public ICommand IncreaseLvlTalantBeastAwakeningPlusPhysicalCommand
-        {
-            get => increaseLvlTalantBeastAwakeningPlusPhysicalCommand == null ? new RelayCommand(IncreaseTalantBeastAwakeningPlusPhysical) : increaseLvlTalantBeastAwakeningPlusPhysicalCommand;
-
-        }
-        public void DecreaseTalantBeastAwakeningPlusPhysical()
-        {
-            if (DualRageActive)
-            {
-                if (LvlTalantBeastAwakeningPhysical > 0)
-                {
-                    LvlTalantBeastAwakeningPhysical = LvlTalantBeastAwakeningPhysical - 1;
-                }
-                Calculate();
-            }
-        }
-        private ICommand decreaseLvlTalantBeastAwakeningPlusPhysicalCommand;
-        public ICommand DecreaseLvlTalantBeastAwakeningPlusPhysicalCommand
-        {
-            get => decreaseLvlTalantBeastAwakeningPlusPhysicalCommand == null ? new RelayCommand(DecreaseTalantBeastAwakeningPlusPhysical) : decreaseLvlTalantBeastAwakeningPlusPhysicalCommand;
-
-        }
-
-        #endregion*/
 
         #region Звериный гнев 
 
@@ -3788,7 +3752,7 @@ namespace ViewModel
 
         #region Выбор оружия
 
-        private bool staffSelected = false;
+        //private bool staffSelected = false;
         public bool StaffSelected
         {
             get => DataSet.StaffSelected;
@@ -3806,10 +3770,10 @@ namespace ViewModel
                     Attack.TimeDelay = 3.1;
                 }
                 Calculate();
-                NotifyPropertyChanged("StaffSelected");
+                NotifyPropertyChanged(nameof(StaffSelected));
             }
         }
-        private bool spearSelected = false;
+        //private bool spearSelected = false;
         public bool SpearSelected
         {
             get => DataSet.SpearSelected;
@@ -3830,7 +3794,7 @@ namespace ViewModel
             }
         }
 
-        private bool maceSelected = false;
+        //private bool maceSelected = false;
         public bool MaceSelected
         {
             //get => maceSelected;
@@ -3852,7 +3816,7 @@ namespace ViewModel
             }
         }
 
-        private bool swordSelected = false;
+        //private bool swordSelected = false;
         public bool SwordSelected
         {
             //get => swordSelected;
@@ -3870,11 +3834,11 @@ namespace ViewModel
                     Attack.TimeDelay = 3.2;
                 }
                 Calculate();
-                NotifyPropertyChanged(nameof(swordSelected));
+                NotifyPropertyChanged(nameof(SwordSelected));
             }
         }
 
-        private bool axeSelected = false;
+        //private bool axeSelected = false;
         public bool AxeSelected
         {
             get => DataSet.AxeSelected;
@@ -3897,59 +3861,59 @@ namespace ViewModel
 
         #endregion
 
-        private bool attackActive = true;
+        //private bool attackActive = true;
         public bool AttackActive
         {
             get => DataSet.AttackActive;
             set {  
                 DataSet.AttackActive = value; 
-                Calculate(); NotifyPropertyChanged("AttackActive"); }
+                Calculate(); NotifyPropertyChanged(nameof(AttackActive)); }
         }
 
-        private bool moonTouchActive = true;
+        //private bool moonTouchActive = true;
         public bool MoonTouchActive
         {
             get => DataSet.MoonTouchActive;
             set { 
                 DataSet.MoonTouchActive = value; 
-                Calculate(); NotifyPropertyChanged("MoonTouchActive"); }
+                Calculate(); NotifyPropertyChanged(nameof(MoonTouchActive)); }
         }
-        private bool beastAwakeningActive = true;
+        //private bool beastAwakeningActive = true;
         public bool BeastAwakeningActive
         {
             get => DataSet.BeastAwakeningActive;
             set { 
                 DataSet.BeastAwakeningActive = value; 
-                Calculate(); NotifyPropertyChanged("BeastAwakeningActive"); }
+                Calculate(); NotifyPropertyChanged(nameof(BeastAwakeningActive)); }
         }
-        private bool orderToAttackActive = true;
+        //private bool orderToAttackActive = true;
         public bool OrderToAttackActive
         {
             //get => orderToAttackActive;
             get => DataSet.OrderToAttackActive;
             set { //orderToAttackActive = value; 
                 DataSet.OrderToAttackActive = value;
-                Calculate(); NotifyPropertyChanged("OrderToAttackActive"); }
+                Calculate(); NotifyPropertyChanged(nameof(OrderToAttackActive)); }
         }
-        private bool healingActive = true;
+        //private bool healingActive = true;
         public bool HealingActive
         {
             //get => healingActive;
             get => DataSet.HealingActive;
             set { //healingActive = value;
                 DataSet.HealingActive = value;
-                Calculate(); NotifyPropertyChanged("HealingActive"); }
+                Calculate(); NotifyPropertyChanged(nameof(HealingActive)); }
         }
-        private bool chainLightningActive = true;
+        //private bool chainLightningActive = true;
         public bool ChainLightningActive
         {
             //get => chainLightningActive;
             get => DataSet.ChainLightningActive;
             set { //chainLightningActive = value; 
                 DataSet.ChainLightningActive = value;
-                Calculate(); NotifyPropertyChanged("ChainLightningActive"); }
+                Calculate(); NotifyPropertyChanged(nameof(ChainLightningActive)); }
         }
-        private bool bestialRampageActive = true;
+        //private bool bestialRampageActive = true;
         public bool BestialRampageActive
         {
             //get => bestialRampageActive;
@@ -3957,9 +3921,9 @@ namespace ViewModel
             set { 
                 //bestialRampageActive = value; 
                 DataSet.BestialRampageActive = value; 
-                Calculate(); NotifyPropertyChanged("BestialRampageActive"); }
+                Calculate(); NotifyPropertyChanged(nameof(BestialRampageActive)); }
         }
-        private bool auraOfTheForestActive = true;
+        //private bool auraOfTheForestActive = true;
         public bool AuraOfTheForestActive
         {
             //get => auraOfTheForestActive;
@@ -3967,9 +3931,9 @@ namespace ViewModel
             set {
                 //auraOfTheForestActive = value;
                 DataSet.AuraOfTheForestActive = value;
-                Calculate(); NotifyPropertyChanged("AuraOfTheForestActive"); }
+                Calculate(); NotifyPropertyChanged(nameof(AuraOfTheForestActive)); }
         }
-        private bool moonlightPermanentActive = true;
+        //private bool moonlightPermanentActive = true;
         public bool MoonlightPermanentActive
         {
             //get => moonlightPermanentActive;
@@ -3977,9 +3941,9 @@ namespace ViewModel
             set { 
                 //moonlightPermanentActive = value; 
                 DataSet.MoonlightPermanentActive = value; 
-                Calculate();NotifyPropertyChanged("MoonlightPermanentActive"); }
+                Calculate();NotifyPropertyChanged(nameof(MoonlightPermanentActive)); }
         }
-        private bool moonlightNonPermanentActive = true;
+        //private bool moonlightNonPermanentActive = true;
         public bool MoonlightNonPermanentActive
         {
             //get => moonlightNonPermanentActive;
@@ -3990,7 +3954,7 @@ namespace ViewModel
                 Calculate(); NotifyPropertyChanged(nameof(MoonlightNonPermanentActive)); }
         }
 
-        private bool blessingOfTheMoonActive = true;
+        //private bool blessingOfTheMoonActive = true;
         public bool BlessingOfTheMoonActive
         {
             //get => blessingOfTheMoonActive;
@@ -4007,7 +3971,7 @@ namespace ViewModel
             }
         }
 
-        private bool doubleConcentrationActive = true;
+        //private bool doubleConcentrationActive = true;
         public bool DoubleConcentrationActive
         {
             //get => doubleConcentrationActive;
