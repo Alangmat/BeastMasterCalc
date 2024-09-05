@@ -150,6 +150,8 @@ namespace ViewModel
             DataSet.MagicalDamage = "0";
             DataSet.PhysicalDamage = "0";
 
+            DataSet.NumberCastle = Castles[0];
+
             updateStateDataSet();
         }
 
@@ -2724,12 +2726,12 @@ namespace ViewModel
             "3 сектор, 10%",
             "4 сектор, 12.5%",
             "5 сектор, 15%",
-        };
+        };*/
         public List<string> Castles
         {
-            get => castles;
-            set { castles = value; NotifyPropertyChanged("Castles"); }
-        }*/
+            get => ModifiersDamage.Castle;
+            //set { castles = value; NotifyPropertyChanged("Castles"); }
+        }
 
         public double coefficientCastle = 1;
         //private string numberCastle = "Без замка";
