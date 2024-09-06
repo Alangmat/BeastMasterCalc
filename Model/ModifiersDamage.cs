@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Shared;
 
 namespace Model
 {
@@ -84,9 +85,9 @@ namespace Model
         /// </summary>
         /// <param name="inp"></param>
         /// <returns>Словарь с ключами Magical и Physical</returns>
-        public static Dictionary<string, double> ConvertInModifiers(string inp)
+        public static Dictionary<TypesDamage, double> ConvertInModifiers(string inp)
         {
-            var result = new Dictionary<string, double>() { {"Magical", 0 }, {"Physical", 0} };
+            var result = new Dictionary<TypesDamage, double>() { {TypesDamage.Magical, 0 }, { TypesDamage.Physical, 0} };
             if (inp == "0%")
                 return result;
             double mod = 0;
@@ -96,13 +97,13 @@ namespace Model
                 case 1:
                     if (inp == "Cloth")
                     {
-                        result["Magical"] = 3;
-                        result["Physical"] = 2;
+                        result[TypesDamage.Magical] = 3;
+                        result[TypesDamage.Physical] = 2;
                     }
                     else if (inp == "Leather")
                     {
-                        result["Physical"] = 3;
-                        result["Magical"] = 2;
+                        result[TypesDamage.Physical] = 3;
+                        result[TypesDamage.Magical] = 2;
                     }
                     break;
 
@@ -111,11 +112,11 @@ namespace Model
                     { 
                         if (inp.Split()[1] == "маг")
                         {
-                                result["Magical"] = mod;
+                                result[TypesDamage.Magical] = mod;
                         }
                         else if (inp.Split()[1] == "физ")
                         {
-                                result["Physical"] = mod;
+                                result[TypesDamage.Magical] = mod;
                         }
                     }
                     break;
@@ -124,8 +125,8 @@ namespace Model
                     var sp = inp.Split();
                     if (double.TryParse(sp[0].Trim('%'), out mod))
                     {
-                        result["Magical"] = mod;
-                        result["Physical"] = mod;
+                        result[TypesDamage.Magical] = mod;
+                        result[TypesDamage.Physical] = mod;
                     }
                     break;
             }

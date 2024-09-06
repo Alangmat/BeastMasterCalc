@@ -16,6 +16,7 @@ using Newtonsoft.Json;
 using System.IO;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json.Linq;
+using Shared;
 
 namespace ViewModel
 {
@@ -27,6 +28,35 @@ namespace ViewModel
             GenerateNewDataSet();
             Calculate();
         }
+
+        private ObservableCollection<KeyValuePair<CastleSectors, string>> _castles = new ObservableCollection<KeyValuePair<CastleSectors, string>>() 
+        {
+            new KeyValuePair<CastleSectors, string>(CastleSectors.Empty, "Без замка | 0%"),
+            new KeyValuePair<CastleSectors, string>(CastleSectors.First, "1 сектор | 5%"),
+            new KeyValuePair<CastleSectors, string>(CastleSectors.Second, "2 сектор | 7.5%"),
+            new KeyValuePair<CastleSectors, string>(CastleSectors.Third, "3 сектор | 10%"),
+            new KeyValuePair<CastleSectors, string>(CastleSectors.Fourth, "4 сектор | 12.5%"),
+            new KeyValuePair<CastleSectors, string>(CastleSectors.Fifth, "5 сектор | 15%"),
+        };
+        public ObservableCollection<KeyValuePair<CastleSectors, string>> CastlesNew
+        {
+            get => _castles;
+        }
+
+        private CastleSectors selectedCastle = CastleSectors.Empty;
+        public CastleSectors SelectedCastle
+        {
+            //get => selectedCastle;
+            get => DataSet.SelectedCastle;
+            set
+            {
+                DataSet.SelectedCastle = value;
+                coefficientCastle = (2.5 * (int)value).ConvertToCoefficient();
+                Calculate();
+                NotifyPropertyChanged(nameof(SelectedCastle));
+            }
+        }
+
 
         //private ModifiersDamage ModifiersDamage = new ModifiersDamage();
 
@@ -221,8 +251,6 @@ namespace ViewModel
             #endregion
 
             #region Обновление талантов
-
-            // ТУТ БАГУЛЯ ЖОСКАЯ С ПРИКАЗОМ К АТАКЕ
             
             ForestInspirationActive = DataSet.ForestInspirationActive;
             DualRageActive = DataSet.DualRageActive;
@@ -280,7 +308,8 @@ namespace ViewModel
             //PercentMagicalDD = DataSet.PercentMagicalDD;
             //PercentPhysicalDD = DataSet.PercentPhysicalDD;
 
-            NumberCastle = DataSet.NumberCastle;
+            SelectedCastle = DataSet.SelectedCastle;
+            //NumberCastle = DataSet.NumberCastle;
             IsUsingBlessingOfTheMoonOnLuna = DataSet.IsUsingBlessingOfTheMoonOnLuna;
             CrushingWillActive = DataSet.CrushingWill;
             IrreversibleAngerActive = DataSet.IrreversibleAnger;
@@ -1364,7 +1393,7 @@ namespace ViewModel
             }
         }*/
 
-        private double CalcModifiersDamageJewelrySet(string type)
+        private double CalcModifiersDamageJewelrySet(TypesDamage type)
         {
             double result = ModifiersDamage.ConvertInModifiers(SelectedCloak)[type];
             result += ModifiersDamage.ConvertInModifiers(SelectedAmulet)[type];
@@ -1385,7 +1414,7 @@ namespace ViewModel
             percentMagicalDDStart = 0;
             percentMagicalDDStart += ModifiersDamage.DD_PROCENT_PASSIVE;
 
-            percentMagicalDDStart += CalcModifiersDamageJewelrySet("Magical");
+            percentMagicalDDStart += CalcModifiersDamageJewelrySet(TypesDamage.Magical);
 
             if (GuildDamageStartModifierActive) percentMagicalDDStart += ModifiersDamage.DD_GUILD;
             if (TalentDamageStartModifierActive) percentMagicalDDStart += ModifiersDamage.DD_TALENTS;
@@ -1402,7 +1431,7 @@ namespace ViewModel
             percentMagicalDD = 0;
             percentMagicalDD += ModifiersDamage.DD_PROCENT_PASSIVE;
 
-            percentMagicalDD += CalcModifiersDamageJewelrySet("Magical");
+            percentMagicalDD += CalcModifiersDamageJewelrySet(TypesDamage.Magical);
 
             if (GuildDamageModifierActive) percentMagicalDD += ModifiersDamage.DD_GUILD;
             if (TalentDamageModifierActive) percentMagicalDD += ModifiersDamage.DD_TALENTS;
@@ -1433,7 +1462,7 @@ namespace ViewModel
             percentPhysicalDDStart = 0;
             percentPhysicalDDStart += ModifiersDamage.DD_PROCENT_PASSIVE;
 
-            percentPhysicalDDStart += CalcModifiersDamageJewelrySet("Physical");
+            percentPhysicalDDStart += CalcModifiersDamageJewelrySet(TypesDamage.Physical);
 
             if (GuildDamageStartModifierActive) percentPhysicalDDStart += ModifiersDamage.DD_GUILD;
             if (TalentDamageStartModifierActive) percentPhysicalDDStart += ModifiersDamage.DD_TALENTS;
@@ -1449,7 +1478,7 @@ namespace ViewModel
             percentPhysicalDD = 0;
             percentPhysicalDD += ModifiersDamage.DD_PROCENT_PASSIVE;
 
-            percentPhysicalDD += CalcModifiersDamageJewelrySet("Physical");
+            percentPhysicalDD += CalcModifiersDamageJewelrySet(TypesDamage.Physical);
 
             if (GuildDamageModifierActive) percentPhysicalDD += ModifiersDamage.DD_GUILD;
             if (TalentDamageModifierActive) percentPhysicalDD += ModifiersDamage.DD_TALENTS;
@@ -2296,17 +2325,17 @@ namespace ViewModel
             harmoniousPowerMDD = 0;
             harmoniousPowerPDD = 0;
 
-            harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(SelectedHelmet)["Magical"];
-            harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(SelectedBody)["Magical"];
-            harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(SelectedHands)["Magical"];
-            harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(selectedBelt)["Magical"];
-            harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(selectedFoots)["Magical"];
+            harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(SelectedHelmet)[TypesDamage.Magical];
+            harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(SelectedBody)[TypesDamage.Magical];
+            harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(SelectedHands)[TypesDamage.Magical];
+            harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(selectedBelt)[TypesDamage.Magical];
+            harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(selectedFoots)[TypesDamage.Magical];
 
-            harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(SelectedHelmet)["Physical"];
-            harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(SelectedBody)["Physical"];
-            harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(SelectedHands)["Physical"];
-            harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(selectedBelt)["Physical"];
-            harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(selectedFoots)["Physical"];
+            harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(SelectedHelmet)[TypesDamage.Physical];
+            harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(SelectedBody)[TypesDamage.Physical];
+            harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(SelectedHands)[TypesDamage.Physical];
+            harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(selectedBelt)[TypesDamage.Physical];
+            harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(selectedFoots)[TypesDamage.Physical];
         }
         private double harmoniousPowerMDD = 0;
         private double harmoniousPowerPDD = 0;
