@@ -216,6 +216,10 @@
       <Project>{a896efb2-8155-434f-bb0f-14655edee2ef}</Project>
       <Name>Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Shared\Shared.csproj">
+      <Project>{a2df57e8-e9d4-42b1-87cf-152f1ca27be2}</Project>
+      <Name>Shared</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />

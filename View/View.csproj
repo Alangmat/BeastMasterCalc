@@ -332,6 +332,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Shared\Shared.csproj">
+      <Project>{a2df57e8-e9d4-42b1-87cf-152f1ca27be2}</Project>
+      <Name>Shared</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ViewModel\ViewModel.csproj">
       <Project>{d52a7f53-9bfe-42be-93fa-20e87ac63a0c}</Project>
       <Name>ViewModel</Name>

@@ -2661,14 +2661,26 @@
 
 
 
-
+                                <!--
+                                    ItemsSource="{Binding Castles}"
+                                    SelectedItem="{Binding NumberCastle}"
+                                
+                                ItemsSource="{Binding CastlesNew}"
+                                      DisplayMemberPath="Value"
+                                      SelectedValuePath="Key"
+                                        SelectedValue="{Binding SelectedCastle}"
+                                        
+                                    -->
 
 
                                 <Grid Grid.Row="0">
                                     <ComboBox
-                                    ItemsSource="{Binding Castles}"
-                                    SelectedItem="{Binding NumberCastle}"
-                                    HorizontalAlignment="Left"
+                                        ItemsSource="{Binding CastlesNew}"
+                                      DisplayMemberPath="Value"
+                                      SelectedValuePath="Key"
+                                        SelectedValue="{Binding SelectedCastle}"
+                                        
+                                        HorizontalAlignment="Left"
                                     Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="111" Height="22">
                                         <ComboBox.Background>
                                             <LinearGradientBrush EndPoint="0,1">

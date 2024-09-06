@@ -7,6 +7,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using Shared;
 
 namespace Model
 {
@@ -84,6 +85,7 @@ namespace Model
         public bool CastleSwordActive = false;
         public bool TalentDamageModifierActive = false;
         public string NumberCastle { get; set; } = "Без замка";
+        public CastleSectors SelectedCastle = CastleSectors.Empty;
         public bool BPDungeon { get; set; } = false;
         public bool SacredShieldHeroActive = false;
         public bool SacredShieldLunaActive = false;
