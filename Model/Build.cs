@@ -84,7 +84,7 @@ namespace Model
         public bool GuildDamageModifierActive = false;
         public bool CastleSwordActive = false;
         public bool TalentDamageModifierActive = false;
-        public string NumberCastle { get; set; } = "Без замка";
+        //public string NumberCastle { get; set; } = "Без замка";
         public CastleSectors SelectedCastle = CastleSectors.Empty;
         public bool BPDungeon { get; set; } = false;
         public bool SacredShieldHeroActive = false;
@@ -95,19 +95,19 @@ namespace Model
 
         #region шмот
 
-        public string SelectedAmulet = "0%";
-        public string SelectedCloak = "0%";
-        public string SelectedRingL = "0%";
-        public string SelectedRingR = "0%";
-        public string SelectedBraceletL = "0%";
-        public string SelectedBraceletR = "0%";
-        public string SelectedSet = "0%";
-        
-        public string SelectedHelmet = "Empty";
-        public string SelectedBody = "Empty";
-        public string SelectedHands = "Empty";
-        public string SelectedBelt = "Empty";
-        public string SelectedFoots = "Empty";
+        public PercentsDamage SelectedAmuletNew = PercentsDamage.None;
+        public PercentsDamage SelectedCloakNew = PercentsDamage.None;
+        public PercentsDamage SelectedRingLNew = PercentsDamage.None;
+        public PercentsDamage SelectedRingRNew = PercentsDamage.None;
+        public PercentsDamage SelectedBraceletLNew = PercentsDamage.None;
+        public PercentsDamage SelectedBraceletRNew = PercentsDamage.None;
+        public PercentsDamage SelectedSetNew = PercentsDamage.None;
+
+        public TypesEquipment SelectedHelmetNew = TypesEquipment.None;
+        public TypesEquipment SelectedBodyNew = TypesEquipment.None;
+        public TypesEquipment SelectedHandsNew = TypesEquipment.None;
+        public TypesEquipment SelectedBeltNew = TypesEquipment.None;
+        public TypesEquipment SelectedFootsNew = TypesEquipment.None;
 
         #endregion
 

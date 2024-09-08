@@ -18,6 +18,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using ViewModel;
+using Shared;
 
 namespace View
 {
@@ -1540,6 +1541,11 @@ namespace View
             amuletChoiceIcon.Source = iconsAmulet[Logic.Amulets.IndexOf(Logic.SelectedAmulet)];
             
         }
+        /*private void updateAmuletNew()
+        {
+            amuletChoiceIcon.Source = iconsAmulet[Logic.AmuletsNew.IndexOf(Logic.SelectedAmuletNew)];
+
+        }*/
         private void amuletChoiceButton_MouseLeftButtonDown(object sender, RoutedEventArgs e)
         {
             int idPrev = Logic.Amulets.IndexOf(Logic.SelectedAmulet);
@@ -1549,9 +1555,19 @@ namespace View
             }
             else Logic.SelectedAmulet = Logic.Amulets[0];
 
-
             updateAmulet();
         }
+        /*private void amuletChoiceButton_MouseLeftButtonDownNew(object sender, RoutedEventArgs e)
+        {
+            int idPrev = Logic.AmuletsNew.IndexOf(Logic.SelectedAmuletNew);
+            if (++idPrev < Logic.AmuletsNew.Count)
+            {
+                Logic.SelectedAmuletNew = Logic.AmuletsNew[idPrev];
+            }
+            else Logic.SelectedAmuletNew = Logic.AmuletsNew[0];
+
+            updateAmuletNew();
+        }*/
 
         private void amuletChoiceButton_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
@@ -1564,6 +1580,17 @@ namespace View
 
             updateAmulet();
         }
+        /*private void amuletChoiceButton_MouseRightButtonDownNew(object sender, MouseButtonEventArgs e)
+        {
+            int idPrev = Logic.AmuletsNew.IndexOf(Logic.SelectedAmuletNew);
+            if (--idPrev > -1)
+            {
+                Logic.SelectedAmuletNew = Logic.AmuletsNew[idPrev];
+            }
+            else Logic.SelectedAmuletNew = Logic.AmuletsNew[Logic.AmuletsNew.Count - 1];
+
+            updateAmuletNew();
+        }*/
 
         private void updateCloak()
         {
@@ -1714,10 +1741,10 @@ namespace View
         {
             switch (Logic.SelectedHelmet)
             {
-                case "Leather":
+                case TypesEquipment.Leather:
                     helmetChoiceIcon.Source = leatherEquipment;
                     break;
-                case "Cloth":
+                case TypesEquipment.Cloth:
                     helmetChoiceIcon.Source = cloathEquipment;
                     break;
                 default:
@@ -1754,10 +1781,10 @@ namespace View
         {
             switch (Logic.SelectedBody)
             {
-                case "Leather":
+                case TypesEquipment.Leather:
                     bodyChoiceIcon.Source = leatherEquipment;
                     break;
-                case "Cloth":
+                case TypesEquipment.Cloth:
                     bodyChoiceIcon.Source = cloathEquipment;
                     break;
                 default:
@@ -1793,10 +1820,10 @@ namespace View
         {
             switch (Logic.SelectedHands)
             {
-                case "Leather":
+                case TypesEquipment.Leather:
                     handsChoiceIcon.Source = leatherEquipment;
                     break;
-                case "Cloth":
+                case TypesEquipment.Cloth:
                     handsChoiceIcon.Source = cloathEquipment;
                     break;
                 default:
@@ -1833,10 +1860,10 @@ namespace View
         {
             switch (Logic.SelectedBelt)
             {
-                case "Leather":
+                case TypesEquipment.Leather:
                     beltChoiceIcon.Source = leatherEquipment;
                     break;
-                case "Cloth":
+                case TypesEquipment.Cloth:
                     beltChoiceIcon.Source = cloathEquipment;
                     break;
                 default:
@@ -1873,10 +1900,10 @@ namespace View
         {
             switch (Logic.SelectedFoots)
             {
-                case "Leather":
+                case TypesEquipment.Leather:
                     footsChoiceIcon.Source = leatherEquipment;
                     break;
-                case "Cloth":
+                case TypesEquipment.Cloth:
                     footsChoiceIcon.Source = cloathEquipment;
                     break;
                 default:

@@ -29,7 +29,7 @@ namespace ViewModel
             Calculate();
         }
 
-        private ObservableCollection<KeyValuePair<CastleSectors, string>> _castles = new ObservableCollection<KeyValuePair<CastleSectors, string>>() 
+        /*private ObservableCollection<KeyValuePair<CastleSectors, string>> _castles = new ObservableCollection<KeyValuePair<CastleSectors, string>>()
         {
             new KeyValuePair<CastleSectors, string>(CastleSectors.Empty, "Без замка | 0%"),
             new KeyValuePair<CastleSectors, string>(CastleSectors.First, "1 сектор | 5%"),
@@ -37,8 +37,8 @@ namespace ViewModel
             new KeyValuePair<CastleSectors, string>(CastleSectors.Third, "3 сектор | 10%"),
             new KeyValuePair<CastleSectors, string>(CastleSectors.Fourth, "4 сектор | 12.5%"),
             new KeyValuePair<CastleSectors, string>(CastleSectors.Fifth, "5 сектор | 15%"),
-        };
-        public ObservableCollection<KeyValuePair<CastleSectors, string>> CastlesNew
+        };*/
+        /*public ObservableCollection<KeyValuePair<CastleSectors, string>> CastlesNew
         {
             get => _castles;
         }
@@ -55,10 +55,14 @@ namespace ViewModel
                 Calculate();
                 NotifyPropertyChanged(nameof(SelectedCastle));
             }
-        }
+        }*/
 
 
-        //private ModifiersDamage ModifiersDamage = new ModifiersDamage();
+
+
+
+
+
 
         #region работа с билдами
         private ObservableCollection<Build> builds = new ObservableCollection<Build>();
@@ -180,7 +184,7 @@ namespace ViewModel
             DataSet.MagicalDamage = "0";
             DataSet.PhysicalDamage = "0";
 
-            DataSet.NumberCastle = Castles[0];
+            //DataSet.NumberCastle = Castles[0];
 
             updateStateDataSet();
         }
@@ -356,10 +360,10 @@ namespace ViewModel
                 if (int.TryParse(PhysicalDD, out physdd))
                 {
 
-                    CalcSkillCooldown();
+                    /*CalcSkillCooldown();
                     CalcAttackSpeed();
-                    CalcCriticalDamage();
                     CalcCriticalHit();
+                    CalcCriticalDamage();
                     CalcPenetration();
                     CalcAccuracy();
                     CalcAttackStrength();
@@ -372,12 +376,16 @@ namespace ViewModel
                     CalcPercentMagicalDDStart();
                     CalcPercentMagicalDD();
                     CalcPercentPhysicalDDStart();
-                    CalcPercentPhysicalDD();
+                    CalcPercentPhysicalDD();*/
+
+                    CalcStats();
+
+                    CalcPercents();
 
                     double coefRage = FormulaCoefficientOfRage();
 
                     int pureMagicalDD = (int)(magicdd / percentMagicalDDStart.ConvertToCoefficient());
-                    int purePhysicalDD = (int)(physdd / harmoniousPowerPDD.ConvertToCoefficient() / percentPhysicalDDStart.ConvertToCoefficient());
+                    int purePhysicalDD = (int)(physdd / percentPhysicalDDStart.ConvertToCoefficient());
 
                     if (HarmoniousPowerStartModifierActive) 
                     {
@@ -387,7 +395,7 @@ namespace ViewModel
                     }
 
                     magicdd = (int)(pureMagicalDD * (coefficientTriton  * MermanDuration() + coefRage)  + pureMagicalDD * percentMagicalDD.ConvertToCoefficient());
-                    physdd = (int)((purePhysicalDD * coefRage + purePhysicalDD * percentPhysicalDD.ConvertToCoefficient()) * harmoniousPowerPDD.ConvertToCoefficient());
+                    physdd = (int)((purePhysicalDD * coefRage + purePhysicalDD * percentPhysicalDD.ConvertToCoefficient()));
                     
                     if (HasTalentHarmoniousPower) 
                     {
@@ -467,6 +475,28 @@ namespace ViewModel
         public ICommand CalculateCommand
         {
             get => calculateCommand == null ? new RelayCommand(Calculate) : calculateCommand;
+        }
+        public void CalcStats()
+        {
+            CalcSkillCooldown();
+            CalcAttackSpeed();
+            CalcCriticalHit();
+            CalcCriticalDamage();
+            CalcPenetration();
+            CalcAccuracy();
+            CalcAttackStrength();
+            CalcPiercingAttack();
+            CalcRage();
+            CalcFacilitation();
+        }
+        public void CalcPercents()
+        {
+            calcHarmoniousPowerDD();
+
+            CalcPercentMagicalDDStart();
+            CalcPercentMagicalDD();
+            CalcPercentPhysicalDDStart();
+            CalcPercentPhysicalDD();
         }
 
         private double AttackDelay()
@@ -866,7 +896,7 @@ namespace ViewModel
             set {
                 DataSet.SkillCooldown = StatsLimit.CheckLimit(value, StatsLimit.MAX_SKILL_COOLDOWN);
                 Calculate();
-                NotifyPropertyChanged("SkillCooldown"); }
+                NotifyPropertyChanged(nameof(SkillCooldown)); }
         }
         /// <summary>
         /// Метод для пересчета характеристики персонажа "Перезарядка навыков"
@@ -903,7 +933,7 @@ namespace ViewModel
             get => DataSet.AttackSpeed;
             set {
                 DataSet.AttackSpeed = StatsLimit.CheckLimit(value, StatsLimit.MAX_ATTACK_SPEED); ;
-                Calculate(); NotifyPropertyChanged("AttackSpeed");
+                Calculate(); NotifyPropertyChanged(nameof(AttackSpeed));
             }
         }
         /// <summary>
@@ -1327,7 +1357,7 @@ namespace ViewModel
         }
         #endregion
         #region дд от замка 
-        private bool castleStartModifierActive = false;
+        //private bool castleStartModifierActive = false;
         public bool CastleStartModifierActive
         {
             //get => castleStartModifierActive;
@@ -1395,13 +1425,19 @@ namespace ViewModel
 
         private double CalcModifiersDamageJewelrySet(TypesDamage type)
         {
-            double result = ModifiersDamage.ConvertInModifiers(SelectedCloak)[type];
-            result += ModifiersDamage.ConvertInModifiers(SelectedAmulet)[type];
-            result += ModifiersDamage.ConvertInModifiers(SelectedBraceletL)[type];
-            result += ModifiersDamage.ConvertInModifiers(SelectedBraceletR)[type];
-            result += ModifiersDamage.ConvertInModifiers(SelectedRingL)[type];
-            result += ModifiersDamage.ConvertInModifiers(SelectedRingR)[type];
-            result += ModifiersDamage.ConvertInModifiers(SelectedSet)[type];
+            //double result = ModifiersDamage.ConvertInModifiers(SelectedCloak)[type];
+            double result = SelectedCloak.ToPercentInDictionary(type);
+            //result += ModifiersDamage.ConvertInModifiers(SelectedAmulet)[type];
+            result += SelectedAmulet.ToPercentInDictionary(type);
+            //result += ModifiersDamage.ConvertInModifiers(SelectedBraceletL)[type];
+            //result += ModifiersDamage.ConvertInModifiers(SelectedBraceletR)[type];
+            result += SelectedBraceletL.ToPercentInDictionary(type);
+            result += SelectedBraceletR.ToPercentInDictionary(type);
+            //result += ModifiersDamage.ConvertInModifiers(SelectedRingL)[type];
+            result += SelectedRingL.ToPercentInDictionary(type);
+            result += SelectedRingR.ToPercentInDictionary(type);
+            //result += ModifiersDamage.ConvertInModifiers(SelectedSet)[type];
+            result += SelectedSet.ToPercentInDictionary(type);
 
             return result;
         }
@@ -1773,12 +1809,12 @@ namespace ViewModel
 
         #region Списки
 
-        public List<string> Amulets
+        /*public List<string> Amulets
         {
             get => ModifiersDamage.Amulets;
-        }
+        }*/
 
-        private string selectedAmulet = "0%";
+        /*private string selectedAmulet = "0%";
         public string SelectedAmulet
         {
             get => DataSet.SelectedAmulet;
@@ -1788,16 +1824,60 @@ namespace ViewModel
                 Calculate();
                 NotifyPropertyChanged(nameof(SelectedAmulet));
             }
+        }*/
+
+        private List<PercentsDamage> _amulets = new List<PercentsDamage>()
+        {
+            PercentsDamage.None,
+            PercentsDamage.Magic6Percent,
+            PercentsDamage.Magic10Percent,
+            PercentsDamage.Magic15Percent,
+            PercentsDamage.Physical4Percent,
+            PercentsDamage.Physical7Percent,
+
+        };
+        public List<PercentsDamage> Amulets
+        {
+            get => _amulets;
         }
 
-        public List<string> Cloaks
+        //private PercentsDamage _selectedAmulet = PercentsDamage.None;
+        public PercentsDamage SelectedAmulet
+        {
+            //get => _selectedAmulet;
+            get => DataSet.SelectedAmuletNew;
+            set
+            {
+                //_selectedAmulet = value;
+                DataSet.SelectedAmuletNew = value;
+                Calculate();
+                NotifyPropertyChanged(nameof(SelectedAmulet));
+            }
+        }
+
+
+        /*public List<string> Cloaks
         {
             get => ModifiersDamage.Cloaks;
 
+        }*/
+        private List<PercentsDamage> _cloaks = new List<PercentsDamage>() 
+        {
+            PercentsDamage.None,
+            PercentsDamage.Magic5Percent,
+            PercentsDamage.Magic10Percent,
+            PercentsDamage.Magic15Percent,
+            PercentsDamage.Physical4Percent,
+            PercentsDamage.Physical7Percent,
+        };
+        public List<PercentsDamage> Cloaks
+        {
+            get => _cloaks;
         }
 
-        private string selectedCloak = "0%";
-        public string SelectedCloak
+        //private string selectedCloak = "0%";
+        //private PercentsDamage selectedCloak = PercentsDamage.None;
+        /*public string SelectedCloak
         {
             get => DataSet.SelectedCloak;
             set
@@ -1806,15 +1886,41 @@ namespace ViewModel
                 Calculate();
                 NotifyPropertyChanged(nameof(SelectedCloak));
             }
+        }*/
+        public PercentsDamage SelectedCloak
+        {
+            //get => selectedCloak;
+            get => DataSet.SelectedCloakNew;
+            set
+            {
+                //selectedCloak = value;
+                DataSet.SelectedCloakNew = value;
+                Calculate();
+                NotifyPropertyChanged(nameof(SelectedCloak));
+            }
         }
 
-        public List<string> Rings
+        /*public List<string> Rings
         {
             get => ModifiersDamage.Rings;
+        }*/
+        private List<PercentsDamage> _rings = new List<PercentsDamage>()
+        {
+            PercentsDamage.None,
+            PercentsDamage.Magic5Percent,
+            PercentsDamage.Magic9Percent,
+            PercentsDamage.Magic10Percent,
+            PercentsDamage.Physical3Percent,
+            PercentsDamage.Physical6Percent,
+
+        };
+        public List<PercentsDamage> Rings
+        {
+            get => _rings;
         }
 
-        private string selectedRingL = "0%";
-        public string SelectedRingL
+        //private PercentsDamage selectedRingL = PercentsDamage.None;
+        /*public string SelectedRingL
         {
             get => DataSet.SelectedRingL;
             set
@@ -1823,10 +1929,22 @@ namespace ViewModel
                 Calculate();
                 NotifyPropertyChanged(nameof(SelectedRingL));
             }
+        }*/
+        public PercentsDamage SelectedRingL
+        {
+            //get => selectedRingL;
+            get => DataSet.SelectedRingLNew;
+            set
+            {
+                DataSet.SelectedRingLNew = value;
+                //selectedRingL = value;
+                Calculate();
+                NotifyPropertyChanged(nameof(SelectedRingL));
+            }
         }
 
-        private string selectedRingR = "0%";
-        public string SelectedRingR
+        //private PercentsDamage selectedRingR = PercentsDamage.None;
+        /*public string SelectedRingR
         {
             get => DataSet.SelectedRingR;
             set
@@ -1835,14 +1953,38 @@ namespace ViewModel
                 Calculate();
                 NotifyPropertyChanged(nameof(SelectedRingR));
             }
+        }*/
+        public PercentsDamage SelectedRingR
+        {
+            get => DataSet.SelectedRingRNew;
+            //get => selectedRingR;
+            set
+            {
+                //selectedRingR = value;
+                DataSet.SelectedRingRNew = value;
+                Calculate();
+                NotifyPropertyChanged(nameof(SelectedRingR));
+            }
         }
-        public List<string> Bracelets
+        private List<PercentsDamage> _bracelets = new List<PercentsDamage>() 
+        {
+            PercentsDamage.None,
+            PercentsDamage.Magic6Percent,
+            PercentsDamage.Magic7_5Percent,
+            PercentsDamage.Physical4Percent,
+            PercentsDamage.Physical5Percent,
+        };
+        /*public List<string> Bracelets
         {
             get => ModifiersDamage.Bracelets;
+        }*/
+        public List<PercentsDamage> Bracelets
+        {
+            get => _bracelets;
         }
 
-        private string selectedBraceletL = "0%";
-        public string SelectedBraceletL
+        //private PercentsDamage selectedBraceletL = PercentsDamage.None;
+        /*public string SelectedBraceletL
         {
             get => DataSet.SelectedBraceletL;
             set
@@ -1851,10 +1993,22 @@ namespace ViewModel
                 Calculate();
                 NotifyPropertyChanged(nameof(SelectedBraceletL));
             }
+        }*/
+        public PercentsDamage SelectedBraceletL
+        {
+            get => DataSet.SelectedBraceletLNew;
+            //get => selectedBraceletL;
+            set
+            {
+                DataSet.SelectedBraceletLNew = value;
+                //selectedBraceletL = value;
+                Calculate();
+                NotifyPropertyChanged(nameof(SelectedBraceletL));
+            }
         }
 
-        private string selectedBraceletR = "0%";
-        public string SelectedBraceletR
+        private PercentsDamage selectedBraceletR = PercentsDamage.None;
+        /*public string SelectedBraceletR
         {
             get => DataSet.SelectedBraceletR;
             set
@@ -1863,86 +2017,128 @@ namespace ViewModel
                 Calculate();
                 NotifyPropertyChanged(nameof(SelectedBraceletR));
             }
-        }
-
-        public List<string> Equipments
+        }*/
+        public PercentsDamage SelectedBraceletR
         {
-            get => ModifiersDamage.Equipments;
-        }
-        private string selectedHelmet = "Empty";
-        public string SelectedHelmet
-        {
-            get => DataSet.SelectedHelmet;
+            get => DataSet.SelectedBraceletRNew;
+            //get => selectedBraceletR;
             set
             {
-                DataSet.SelectedHelmet = value;
+                DataSet.SelectedBraceletRNew = value;
+                //selectedBraceletR = value;
+                Calculate();
+                NotifyPropertyChanged(nameof(SelectedBraceletR));
+            }
+        }
+
+
+        private List<TypesEquipment> _equipments = new List<TypesEquipment>() 
+        { 
+            TypesEquipment.None,
+            TypesEquipment.Cloth,
+            TypesEquipment.Leather,
+        };
+        public List<TypesEquipment> Equipments
+        {
+            get => _equipments;
+        }
+        /*public List<string> Equipments
+        {
+            get => ModifiersDamage.Equipments;
+        }*/
+        //private TypesEquipment selectedHelmet = TypesEquipment.None;
+        public TypesEquipment SelectedHelmet
+        {
+            get => DataSet.SelectedHelmetNew;
+            //get => selectedHelmet;
+            set
+            {
+                DataSet.SelectedHelmetNew = value;
+                //selectedHelmet = value;
                 Calculate();
                 NotifyPropertyChanged(nameof(SelectedHelmet));
             }
         }
 
-        private string selectedBody = "Empty";
-        public string SelectedBody
+        //private TypesEquipment selectedBody = TypesEquipment.None;
+        public TypesEquipment SelectedBody
         {
-            get => DataSet.SelectedBody;
+            get => DataSet.SelectedBodyNew;
+            //get => selectedBody;
             set
             {
-                DataSet.SelectedBody = value;
+                DataSet.SelectedBodyNew = value;
+                //selectedBody = value;
                 Calculate();
                 NotifyPropertyChanged(nameof(SelectedBody));
             }
         }
 
-        private string selectedHands = "Empty";
-        public string SelectedHands
+        private TypesEquipment selectedHands = TypesEquipment.None;
+        public TypesEquipment SelectedHands
         {
-            get => DataSet.SelectedHands;
+            get => DataSet.SelectedHandsNew;
+            //get => selectedHands;
             set
             {
-                DataSet.SelectedHands = value;
+                DataSet.SelectedHandsNew = value;
+                //selectedHands = value;
                 Calculate();
                 NotifyPropertyChanged(nameof(SelectedHands));
             }
         }
 
-        private string selectedBelt = "Empty";
-        public string SelectedBelt
+        //private TypesEquipment selectedBelt = TypesEquipment.None;
+        public TypesEquipment SelectedBelt
         {
-            get => DataSet.SelectedBelt;
+            get => DataSet.SelectedBeltNew;
+            //get => selectedBelt;
             set
             {
-                DataSet.SelectedBelt = value;
+                DataSet.SelectedBeltNew = value;
+                //selectedBelt = value;
                 Calculate();
                 NotifyPropertyChanged(nameof(SelectedBelt));
             }
         }
 
-        private string selectedFoots = "Empty";
-        public string SelectedFoots
+        //private TypesEquipment selectedFoots = TypesEquipment.None;
+        public TypesEquipment SelectedFoots
         {
-            get => DataSet.SelectedFoots;
+            get => DataSet.SelectedFootsNew;
+            //get => selectedFoots;
             set
             {
-                DataSet.SelectedFoots = value;
+                DataSet.SelectedFootsNew = value;
+                //selectedFoots = value;
                 Calculate();
                 NotifyPropertyChanged(nameof(SelectedFoots));
             }
         }
 
-        public List<string> Sets
+        /*public List<string> Sets
         {
             get => ModifiersDamage.Sets;
+        }*/
+        private List<PercentsDamage> _sets = new List<PercentsDamage>()
+        {
+            PercentsDamage.None,
+            PercentsDamage.Magic12Percent,
+            PercentsDamage.Physical8Percent,
+        };
+        public List<PercentsDamage> Sets
+        {
+            get => _sets;
         }
-
-        //private string selectedSet = "0%";
-        public string SelectedSet
+        //private PercentsDamage selectedSet = PercentsDamage.None;
+        public PercentsDamage SelectedSet
         {
             //get => selectedSet;
-            get => DataSet.SelectedSet;
+            get => DataSet.SelectedSetNew;
             set
             {
                 //selectedSet = value;
-                DataSet.SelectedSet = value;
+                DataSet.SelectedSetNew = value;
                 Calculate();
                 NotifyPropertyChanged(nameof(SelectedSet));
             }
@@ -2325,17 +2521,17 @@ namespace ViewModel
             harmoniousPowerMDD = 0;
             harmoniousPowerPDD = 0;
 
-            harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(SelectedHelmet)[TypesDamage.Magical];
-            harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(SelectedBody)[TypesDamage.Magical];
-            harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(SelectedHands)[TypesDamage.Magical];
-            harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(selectedBelt)[TypesDamage.Magical];
-            harmoniousPowerMDD += ModifiersDamage.ConvertInModifiers(selectedFoots)[TypesDamage.Magical];
+            harmoniousPowerMDD += SelectedHelmet.ToPercentInDictionary(TypesDamage.Magical);
+            harmoniousPowerMDD += SelectedBody.ToPercentInDictionary(TypesDamage.Magical);
+            harmoniousPowerMDD += SelectedHands.ToPercentInDictionary(TypesDamage.Magical);
+            harmoniousPowerMDD += SelectedBelt.ToPercentInDictionary(TypesDamage.Magical);
+            harmoniousPowerMDD += SelectedFoots.ToPercentInDictionary(TypesDamage.Magical);
 
-            harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(SelectedHelmet)[TypesDamage.Physical];
-            harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(SelectedBody)[TypesDamage.Physical];
-            harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(SelectedHands)[TypesDamage.Physical];
-            harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(selectedBelt)[TypesDamage.Physical];
-            harmoniousPowerPDD += ModifiersDamage.ConvertInModifiers(selectedFoots)[TypesDamage.Physical];
+            harmoniousPowerPDD += SelectedHelmet.ToPercentInDictionary(TypesDamage.Physical);
+            harmoniousPowerPDD += SelectedBody.ToPercentInDictionary(TypesDamage.Physical);
+            harmoniousPowerPDD += SelectedHands.ToPercentInDictionary(TypesDamage.Physical);
+            harmoniousPowerPDD += SelectedBelt.ToPercentInDictionary(TypesDamage.Physical);
+            harmoniousPowerPDD += SelectedFoots.ToPercentInDictionary(TypesDamage.Physical);
         }
         private double harmoniousPowerMDD = 0;
         private double harmoniousPowerPDD = 0;
@@ -2722,6 +2918,39 @@ namespace ViewModel
 
         #endregion
 
+        #region Замок (урон от скиллов)
+
+        private ObservableCollection<KeyValuePair<CastleSectors, string>> _castles = new ObservableCollection<KeyValuePair<CastleSectors, string>>()
+        {
+            new KeyValuePair<CastleSectors, string>(CastleSectors.Empty, "Без замка | 0%"),
+            new KeyValuePair<CastleSectors, string>(CastleSectors.First, "1 сектор | 5%"),
+            new KeyValuePair<CastleSectors, string>(CastleSectors.Second, "2 сектор | 7.5%"),
+            new KeyValuePair<CastleSectors, string>(CastleSectors.Third, "3 сектор | 10%"),
+            new KeyValuePair<CastleSectors, string>(CastleSectors.Fourth, "4 сектор | 12.5%"),
+            new KeyValuePair<CastleSectors, string>(CastleSectors.Fifth, "5 сектор | 15%"),
+        };
+        public ObservableCollection<KeyValuePair<CastleSectors, string>> CastlesNew
+        {
+            get => _castles;
+        }
+
+        private CastleSectors selectedCastle = CastleSectors.Empty;
+        public CastleSectors SelectedCastle
+        {
+            //get => selectedCastle;
+            get => DataSet.SelectedCastle;
+            set
+            {
+                DataSet.SelectedCastle = value;
+                coefficientCastle = (2.5 * (int)value).ConvertToCoefficient();
+                Calculate();
+                NotifyPropertyChanged(nameof(SelectedCastle));
+            }
+        }
+
+        #endregion
+
+
         #region РАЗОБРАТЬ ЧТО ТУТ
         public bool HasTalantMoonTouchPlus
         {
@@ -2756,15 +2985,15 @@ namespace ViewModel
             "4 сектор, 12.5%",
             "5 сектор, 15%",
         };*/
-        public List<string> Castles
+        /*public List<string> Castles
         {
             get => ModifiersDamage.Castle;
             //set { castles = value; NotifyPropertyChanged("Castles"); }
-        }
+        }*/
 
         public double coefficientCastle = 1;
         //private string numberCastle = "Без замка";
-        public string NumberCastle
+        /*public string NumberCastle
         {
             //get => numberCastle;
             get => DataSet.NumberCastle;
@@ -2793,7 +3022,7 @@ namespace ViewModel
                 }
                 Calculate();
                 NotifyPropertyChanged(nameof(NumberCastle)); }
-        }
+        }*/
         public bool HasTalantBeastAwakeningMage
         {
             get => Beast_Awakening.HasTalantMage;
