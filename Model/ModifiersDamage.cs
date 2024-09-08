@@ -64,14 +64,14 @@ namespace Model
         /// <summary>
         /// Дурак это баф на урон от скиллов
         /// </summary>
-        public static List<string> Castle = new List<string>() {
+        /*public static List<string> Castle = new List<string>() {
             "Без замка 0%",
             "1 сектор, 5%",
             "2 сектор, 7.5%",
             "3 сектор, 10%",
             "4 сектор, 12.5%",
             "5 сектор, 15%",
-        };
+        };*/
 
         public static List<string> Equipments = new List<string>
         {
