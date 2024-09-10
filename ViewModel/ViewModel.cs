@@ -252,6 +252,9 @@ namespace ViewModel
             NotifyPropertyChanged(nameof(CastleStartModifierActive));
             NotifyPropertyChanged(nameof(CastleSwordActive));
 
+
+            NotifyPropertyChanged(nameof(GodsAid));
+
             #endregion
 
             #region Обновление талантов
@@ -327,10 +330,11 @@ namespace ViewModel
         {
             get => loadCommand == null ? new RelayCommand(Load) : loadCommand;
         }*/
+        private const string FILE_SAVE = "save.json";
         private void Save()
         {
             string json = JsonConvert.SerializeObject(DataSet);
-            File.WriteAllText("save.json", json);
+            File.WriteAllText(FILE_SAVE, json);
         }
         private ICommand saveCommand;
         public ICommand SaveCommand
@@ -411,13 +415,13 @@ namespace ViewModel
                     int dpmChainLightning = CalcChainLightning(magicdd, physdd);
                     int dpmBestialRampage = CalcBestialRampage(magicdd, physdd);
                     var dpmAuraOfTheForest = CalcAuraOfTheForest(magicdd);
-                    int dpmAuraOfTheForestLuna = dpmAuraOfTheForest["Luna"];
-                    int dpmAuraOfTheForestHero = dpmAuraOfTheForest["Hero"];
+                    int dpmAuraOfTheForestLuna = dpmAuraOfTheForest[SourcesDamage.Luna];
+                    int dpmAuraOfTheForestHero = dpmAuraOfTheForest[SourcesDamage.Hero];
 
                     int dpmMoonlight = CalcMoonlight(magicdd, pureMagicalDD);
                     var dpmSymbiosis = CalcSymbiosis(magicdd, physdd);
-                    int dpmSymbiosisLuna = dpmSymbiosis["Luna"];
-                    int dpmSymbiosisHero = dpmSymbiosis["Hero"];
+                    int dpmSymbiosisLuna = dpmSymbiosis[SourcesDamage.Luna];
+                    int dpmSymbiosisHero = dpmSymbiosis[SourcesDamage.Hero];
                     //double realCooldawnBestialRampage = (Bestial_Rampage.BaseTimeCooldown / (1 + SkillCooldown / 100)) + TIME_CAST;
                     int resultDD = 0;
                     int resultDDLuna = 0;
@@ -642,12 +646,12 @@ namespace ViewModel
 
             return result;
         }
-        public Dictionary<string, int> CalcAuraOfTheForest(int magedd)
+        public Dictionary<SourcesDamage, int> CalcAuraOfTheForest(int magedd)
         { 
             // Коэффициенты разделены для вывода в дебаг вкладку. В резалте происходит умножение на кэфы, которые влияют исключительно на дпм скилла.
-            var result = new Dictionary<string, int>();
-            result.Add("Hero", 0);
-            result.Add("Luna", 0);  
+            var result = new Dictionary<SourcesDamage, int>();
+            result.Add(SourcesDamage.Hero, 0);
+            result.Add(SourcesDamage.Luna, 0);  
             int countHit = (int)(AuraOfTheForest.TimeActive * FacilitationFinal.ConvertToCoefficient() / AuraOfTheForest.Delay);
             int LunaAura = (int)(AuraOfTheForest.Formula(magedd) 
                 * FormulaCoefficientOfPenetrationLuna()); 
@@ -667,7 +671,7 @@ namespace ViewModel
                     LunaAura = (int)(LunaAura * 60 / AuraOfTheForestCooldown() * countHit);
                     OutAuraOfTheForestLunaDPM = LunaAura.ToString();
                     // ИТОГОВЫЙ ДД АУРЫ ЛЕСА ЛУНЫ НА ВСЕ КЭФЫ
-                    result["Luna"] += (int)(LunaAura 
+                    result[SourcesDamage.Luna] += (int)(LunaAura 
                         * CoefficientOfMoonTouchForLuna() 
                         * FormulaCoefficientOfCriticalHitLuna() 
                         * FormulaCoefficientOfAccuracyLuna());
@@ -681,7 +685,7 @@ namespace ViewModel
                 OutAuraOfTheForestHeroDD = HeroesAura.ToString();
                 HeroesAura = (int)(HeroesAura * 60 / AuraOfTheForestCooldown() * countHit);
                 OutAuraOfTheForestHeroDPM = HeroesAura.ToString();
-                result["Hero"] += (int)(HeroesAura 
+                result[SourcesDamage.Hero] += (int)(HeroesAura 
                     * FormulaCoefficientOfCriticalHitForSkill() 
                     * FormulaCoefficientOfAccuracy() 
                     * coefficientBPDungeon());
@@ -695,7 +699,7 @@ namespace ViewModel
                 OutAuraOfTheForestHeroDPM = "0";
                 OutAuraOfTheForestHeroDD = "0";
                 // ИТОГОВЫЙ ДД АУРЫ ЛЕСА ЛУНЫ НА ВСЕ КЭФЫ
-                result["Luna"] += (int)(LunaAura 
+                result[SourcesDamage.Luna] += (int)(LunaAura 
                     * CoefficientOfMoonTouchForLuna() 
                     * FormulaCoefficientOfCriticalHitLuna() 
                     * FormulaCoefficientOfAccuracyLuna());
@@ -706,7 +710,7 @@ namespace ViewModel
             OutAuraOfTheForestHeroDPM = HeroesAura.ToString();
             OutAuraOfTheForestLunaDD = "0";
             OutAuraOfTheForestLunaDPM = "0";
-            result["Hero"] += (int)(HeroesAura 
+            result[SourcesDamage.Hero] += (int)(HeroesAura 
                 * FormulaCoefficientOfCriticalHitForSkill() 
                 * FormulaCoefficientOfAccuracy() 
                 * coefficientBPDungeon());
@@ -791,11 +795,11 @@ namespace ViewModel
         /// <param name="magedd"></param>
         /// <param name="physdd"></param>
         /// <returns>Hero - урон симбиоза от персонажа, Luna - урон симбиозиса от луны</returns>
-        public Dictionary<string, int> CalcSymbiosis(int magedd, int physdd)
+        public Dictionary<SourcesDamage, int> CalcSymbiosis(int magedd, int physdd)
         {
-            var result = new Dictionary<string, int>();
-            result.Add("Hero", 0);
-            result.Add("Luna", 0);
+            var result = new Dictionary<SourcesDamage, int>();
+            result.Add(SourcesDamage.Hero, 0);
+            result.Add(SourcesDamage.Luna, 0);
 
             double Tp = AttackDelay();
             double Tl = Beast_Awakening.BaseDelay;
@@ -830,13 +834,13 @@ namespace ViewModel
                     * FormulaCoefficientOfAccuracy()
                     );
 
-                result["Hero"] = (int)(
+                result[SourcesDamage.Hero] = (int)(
                     (DpmHero * TimeWithoutBestialRampage() + DpmBestialRampageHero * TimeBestialRampage())
                     * coefficientPredatoryDeliriumTalant 
                     * CoefficientOfMoonTouchForLuna() 
                     * FormulaCoefficientOfAttackStrength()
                     );
-                result["Luna"] = (int)(
+                result[SourcesDamage.Luna] = (int)(
                     (DpmLuna * TimeWithoutBestialRampage() + DpmBestialRampageLuna * TimeBestialRampage())
                     * coefficientPredatoryDeliriumTalant
                     * CoefficientOfMoonTouchForLuna()
@@ -844,11 +848,11 @@ namespace ViewModel
                     );
 
                 
-                OutSymbiosisDPM = (result["Hero"] + result["Luna"]).ToString();
+                OutSymbiosisDPM = (result[SourcesDamage.Hero] + result[SourcesDamage.Luna]).ToString();
 
                 return result;
             }
-            result["Hero"] = (int)(
+            result[SourcesDamage.Hero] = (int)(
                 DpmHero 
                 * coefficientPredatoryDeliriumTalant 
                 * CoefficientOfMoonTouchForLuna()
@@ -856,7 +860,7 @@ namespace ViewModel
                 * coefficientBPDungeon()
                 );
 
-            result["Luna"] = (int)(
+            result[SourcesDamage.Luna] = (int)(
                 DpmHero
                 * coefficientPredatoryDeliriumTalant
                 * CoefficientOfMoonTouchForLuna()
@@ -864,7 +868,7 @@ namespace ViewModel
                 * coefficientBPDungeon()
                 );
 
-            OutSymbiosisDPM = (result["Hero"] + result["Luna"]).ToString();
+            OutSymbiosisDPM = (result[SourcesDamage.Hero] + result[SourcesDamage.Luna]).ToString();
 
             return result;
         }
@@ -2007,7 +2011,7 @@ namespace ViewModel
             }
         }
 
-        private PercentsDamage selectedBraceletR = PercentsDamage.None;
+        //private PercentsDamage selectedBraceletR = PercentsDamage.None;
         /*public string SelectedBraceletR
         {
             get => DataSet.SelectedBraceletR;
@@ -2074,7 +2078,7 @@ namespace ViewModel
             }
         }
 
-        private TypesEquipment selectedHands = TypesEquipment.None;
+        //private TypesEquipment selectedHands = TypesEquipment.None;
         public TypesEquipment SelectedHands
         {
             get => DataSet.SelectedHandsNew;
@@ -2624,7 +2628,7 @@ namespace ViewModel
 
         private double additionAnimalRageTalant = 0;
 
-        private int lvlTalantAnimalRage = 0;
+        //private int lvlTalantAnimalRage = 0;
 
         public int LvlTalantAnimalRage
         {
