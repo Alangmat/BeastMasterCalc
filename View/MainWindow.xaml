@@ -31,6 +31,33 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
+        <Style x:Key="CustomBlackButtonStyle" TargetType="Button">
+            <!-- Установка фона и базового вида -->
+            <Setter Property="Background" Value="Black" />
+            <Setter Property="BorderBrush" Value="Black" />
+            <Setter Property="BorderThickness" Value="2" />
+
+            <!-- Переопределение шаблона кнопки -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border 
+                    Background="{TemplateBinding Background}" 
+                    BorderBrush="{TemplateBinding BorderBrush}" 
+                    BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+
+            <!-- Убираем визуальные эффекты при наведении -->
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <!-- Оставляем без изменений -->
+                </Trigger>
+            </Style.Triggers>
+        </Style>
 
         <Style x:Key="HintButtonStyle" TargetType="Button">
             <Setter Property="Template">
@@ -50,7 +77,11 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-
+        <DropShadowEffect x:Key="TextOutlineEffect" 
+                      Color="Black" 
+                      BlurRadius="0" 
+                      ShadowDepth="0" 
+                      Opacity="1" />
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -59,7 +90,15 @@
         </Grid.RowDefinitions>
         <TabControl Grid.Row="0" Height="592" VerticalAlignment="Top">
             <TabItem Header="Навыки">
-                <Grid Background="#FFE5E5E5">
+                <Grid>
+                    <Grid.Background>
+                        <ImageBrush 
+                        ImageSource="icons/other/back.png" 
+                        TileMode="Tile" 
+                        Viewport="0,0,283,193" 
+                        ViewportUnits="Absolute" 
+                        Stretch="None"/>
+                    </Grid.Background>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="26*"/>
                         <RowDefinition Height="215*"/>
@@ -71,8 +110,16 @@
                         <ColumnDefinition Width="295*"/>
                         <ColumnDefinition Width="279*"/>
                     </Grid.ColumnDefinitions>
-
-                    <Rectangle HorizontalAlignment="Left" Height="203"  VerticalAlignment="Top" Stroke="Black" Width="409" Grid.Column="1" Fill="#FF182946" Margin="14,26,0,0" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
+                    <!--="#FF182946"-->
+                    <Rectangle HorizontalAlignment="Left" Height="203"  VerticalAlignment="Top" Stroke="Black" Width="409" Grid.Column="1"  Margin="14,26,0,0" Grid.RowSpan="2" Grid.ColumnSpan="2">
+                        <Rectangle.Fill>
+                            <ImageBrush ImageSource="icons/other/background.jpg" 
+                                TileMode="Tile" 
+                                Viewport="0,0,50,50" 
+                                ViewportUnits="Absolute" 
+                                Stretch="None"/>
+                        </Rectangle.Fill>
+                    </Rectangle>
 
                     <!--
                     <Rectangle HorizontalAlignment="Left" Height="203"  VerticalAlignment="Top" Stroke="Black" Width="409" Grid.Column="1" Fill="#FF182946" Margin="14,26,0,0" Grid.RowSpan="2" Grid.ColumnSpan="2"/>
@@ -90,7 +137,8 @@
                     <Button Grid.Column="1"
                             HorizontalAlignment="Left"
                             Height="70" 
-                            Margin="29,83,0,0"
+                            Margin="43,83,0,0"
+                            Opacity="{Binding MoonTouchOpacity}"
                             Grid.Row="1" 
                             VerticalAlignment="Top"
                             x:Name="moonTouchButton"
@@ -105,8 +153,9 @@
                     <Button Grid.Column="1"
                             HorizontalAlignment="Left"
                             Height="70" 
-                            Margin="103,83,0,0"
+                            Margin="114,83,0,0"
                             Grid.Row="1" 
+                            Opacity="{Binding BeastAwakeningOpacity}"
                             VerticalAlignment="Top"
                             Width="70" IsCancel="True"
                             x:Name="beastAwakeningButton"
@@ -118,12 +167,11 @@
 
                     </Button>
                     <Button Grid.Column="2"
-                            HorizontalAlignment="Left"
                             Height="70" 
-                            Margin="35,83,0,0"
+                            Margin="44,83,181,0"
                             Grid.Row="1" 
-                            VerticalAlignment="Top"
-                            Width="70" IsCancel="True"
+                            Opacity="{Binding OrderToAttackOpacity}"
+                            VerticalAlignment="Top" IsCancel="True"
                             x:Name="orderToAttackButton"
                             Style="{StaticResource CustomButtonStyle}" Click="orderToAttackButton_Click">
                         <Button.Background>
@@ -134,8 +182,9 @@
                     <Button Grid.Column="2"
                             HorizontalAlignment="Left"
                             Height="70" 
-                            Margin="106,83,0,0"
+                            Margin="116,83,0,0"
                             Grid.Row="1" 
+                            Opacity="{Binding HealingOpacity}"
                             VerticalAlignment="Top"
                             Width="70" IsCancel="True"
                             x:Name="healingButton"
@@ -148,8 +197,9 @@
                     <Button Grid.Column="2"
                             HorizontalAlignment="Left"
                             Height="70" 
-                            Margin="175,83,0,0"
+                            Margin="185,83,0,0"
                             Grid.Row="1" 
+                            Opacity="{Binding ChainLightningOpacity}"
                             VerticalAlignment="Top"
                             Width="70" IsCancel="True"
                             x:Name="chainLightningButton"
@@ -161,23 +211,21 @@
                         <Image x:Name="chainLightningLvlIcon" Height="20" Width="30" HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="0,0,12,13"/>
 
                     </Button>
-                    <TextBox Grid.Column="3"
-                             
-                             Text="{Binding MagicalDD, UpdateSourceTrigger=PropertyChanged}"
-                             TextAlignment="Center"
-                             HorizontalAlignment="Left"
-                             Height="22" Margin="7,26,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="89" GotKeyboardFocus="TextBox_GotKeyboardFocus"/>
+                    <!--
+                    <Label Grid.Column="3"  Content="ДПМ" HorizontalAlignment="Left" Height="34" Margin="31,171,0,0" Grid.Row="1" VerticalAlignment="Top" Width="61" FontSize="20"/>
+
                     <Label Grid.Column="3" x:Name="outLabel"
                            Content="{Binding OutDD}"
                            HorizontalAlignment="Left" Height="34"
                            Margin="96,171,0,0" Grid.Row="1" 
                            VerticalAlignment="Top"
                            Width="166" FontSize="20"/>
+                    -->
                     <Button Grid.Column="1"
                             Command="{Binding IncreaseLvlMoonTouchCommand}"
                             HorizontalAlignment="Left"
                         Height="28" 
-                        Margin="49,52,0,0"
+                        Margin="62,54,0,0"
                         Grid.Row="1" 
                         VerticalAlignment="Top"
                         x:Name="increaseLvlMoonTouchButton"
@@ -190,7 +238,7 @@
                             Command="{Binding DecreaseLvlMoonTouchCommand}"
                         HorizontalAlignment="Left"
                         Height="28" 
-                        Margin="49,152,0,0"
+                        Margin="62,153,0,0"
                         Grid.Row="1" 
                         VerticalAlignment="Top"
                             x:Name="decreaseLvlMoonTouchButton"
@@ -220,25 +268,25 @@
                         Grid.Row="2" 
                         VerticalAlignment="Top" 
                         Width="194">
-                        <TextBlock Text="Великая реликвия карающего умения в Лунном касании"
+                        <TextBlock Foreground="White" Text="Великая реликвия карающего умения в Лунном касании"
                             TextWrapping="Wrap" Height="35"/>
                     </CheckBox>
                     <CheckBox Grid.Column="3"
                         IsChecked="{Binding HasRelicChainLightning}"
                         HorizontalAlignment="Center" 
                         Height="35" 
-                        Margin="0,60,0,0"
+                        Margin="0,86,0,0"
                         Grid.Row="2" 
                         VerticalAlignment="Top" 
                         Width="194">
-                        <TextBlock Text="Великая реликвия карающего умения в Цепной молнии"
+                        <TextBlock Foreground="White" Text="Великая реликвия карающего умения в Цепной молнии"
                             TextWrapping="Wrap" Height="35"/>
                     </CheckBox>
                     <Button Grid.Column="2"
                         Command="{Binding IncreaseLvlChainLightningCommand}"
                         HorizontalAlignment="Left"
                         Height="28" 
-                        Margin="193,52,0,0"
+                        Margin="203,54,0,0"
                         Grid.Row="1" 
                             x:Name="increaseLvlChainLightningButton"
                         VerticalAlignment="Top"
@@ -251,7 +299,7 @@
                         Command="{Binding DecreaseLvlChainLightningCommand}"
                         HorizontalAlignment="Left"
                         Height="28" 
-                        Margin="193,152,0,0"
+                        Margin="203,152,0,0"
                         Grid.Row="1" 
                         VerticalAlignment="Top"
                             x:Name="decreaseLvlChainLightningButton"
@@ -260,20 +308,40 @@
                             <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
                         </Button.Background>
                     </Button>
-
+                    <Image Source="/icons/stats/mdd.png"
+                           VerticalAlignment="Top"
+                           HorizontalAlignment="Left"
+                           Width="22"
+                                    Height="22" Grid.Column="3" Margin="5,26,0,0" Grid.Row="1"/>
+                    <TextBox Grid.Column="3"
+                             
+                             Text="{Binding MagicalDD, UpdateSourceTrigger=PropertyChanged}"
+                             TextAlignment="Center"
+                             HorizontalAlignment="Left"
+                             Height="22" Margin="27,26,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="89" GotKeyboardFocus="TextBox_GotKeyboardFocus"/>
+                    <Image Source="/icons/stats/pdd.png"
+                           VerticalAlignment="Top"
+                           HorizontalAlignment="Left"
+                           Width="22"
+                                    Height="22" Grid.Column="3" Margin="135,26,0,0" Grid.Row="1"/>
                     <TextBox Grid.Column="3"
                              TextAlignment="Center"
                              
                         Text="{Binding PhysicalDD, UpdateSourceTrigger=PropertyChanged}"
                         HorizontalAlignment="Left"
-                        Height="22" Margin="152,26,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="89"/>
-                    <Label Grid.Column="3" Content="Маг дд" HorizontalAlignment="Left" Margin="26,26,0,0" VerticalAlignment="Top" Grid.RowSpan="2" Height="26" Width="48"/>
-                    <Label Grid.Column="3" Content="Физ дд" HorizontalAlignment="Left" Margin="170,25,0,0" VerticalAlignment="Top" Grid.RowSpan="2" Height="26" Width="47"/>
+                        Height="22" Margin="157,26,0,0" Grid.Row="1" TextWrapping="Wrap" VerticalAlignment="Top" Width="89"/>
+                    <!--<Label Grid.Column="2" Content="Магическая сила" HorizontalAlignment="Left" Margin="290,25,0,0" VerticalAlignment="Top" Grid.RowSpan="2" Height="26" Width="109" Grid.ColumnSpan="2"/>
+                    <Label Grid.Column="3" Content="Физическая сила" HorizontalAlignment="Left" Margin="144,24,0,0" VerticalAlignment="Top" Grid.RowSpan="2" Height="26" Width="107" Foreground="White" BorderBrush="Black">
+                        <Label.Effect>
+                            <DropShadowEffect Color="Black" BlurRadius="0" ShadowDepth="0" Opacity="1" />
+                        </Label.Effect>
+                    </Label>
+-->
                     <Button Grid.Column="1"
                         Command="{Binding IncreaseLvlBeastAwakeningCommand}"
                         HorizontalAlignment="Left"
                         Height="28" 
-                        Margin="121,52,0,0"
+                        Margin="132,54,0,0"
                         Grid.Row="1" 
                         VerticalAlignment="Top"
                             x:Name="increaseLvlBeastAwakeningButton"
@@ -286,7 +354,7 @@
                         Command="{Binding DecreaseLvlBeastAwakeningCommand}"
                         HorizontalAlignment="Left"
                         Height="28" 
-                        Margin="122,152,0,0"
+                        Margin="133,152,0,0"
                         Grid.Row="1" 
                         VerticalAlignment="Top"
                             x:Name="decreaseLvlBeastAwakeningButton"
@@ -295,27 +363,41 @@
                             <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
                         </Button.Background>
                     </Button>
-
+                    <!--
                     <Image HorizontalAlignment="Left" 
                                Source="icons/other/background.jpg"
                                Height="278"  VerticalAlignment="Top"  Width="410" Grid.Column="1"  Margin="13,13,0,0" Grid.Row="2" Grid.ColumnSpan="2" Stretch="Fill"/>
+                    -->
+                    <Rectangle HorizontalAlignment="Left"
+                           VerticalAlignment="Top"
+                           Stroke="Black"
+                           StrokeThickness="1"
+                           Width="410"
+                           Height="278"
+                           Margin="13,13,0,0"
+                           Grid.Column="1"
+                           Grid.Row="2"
+                           Grid.ColumnSpan="2">
+                        <Rectangle.Fill>
+                            <ImageBrush ImageSource="icons/other/background.jpg" Stretch="Fill"/>
+                        </Rectangle.Fill>
+                    </Rectangle>
                     <Label Content="Экспертные"
                         HorizontalContentAlignment="Center"
                         VerticalContentAlignment="Center"
                         Grid.Column="1"
-                        Margin="14,11,0,0"
+                        Margin="13,13,0,0"
                         Height="38"
-                        Width="409"
+                        Width="410"
                         VerticalAlignment="Top"
                         HorizontalAlignment="Left" Background="#FF332220" FontSize="16" FontFamily="Palatino Linotype" Foreground="White" Grid.Row="2" Grid.ColumnSpan="2"/>
                     <Button Grid.Column="1"
-                        HorizontalAlignment="Left"
                         Height="70" 
-                        Margin="33,65,0,0"
+                        Margin="33,65,38,0"
                         Grid.Row="2" 
+                             Opacity="{Binding BestialRampageOpacity}"
                         VerticalAlignment="Top"
-                        x:Name="bestialRampageButton"
-                        Width="70" IsCancel="True" 
+                        x:Name="bestialRampageButton" IsCancel="True" 
                         Style="{StaticResource CustomButtonStyle}" Click="bestialRampageButton_Click">
                         <Button.Background>
                             <ImageBrush Stretch="Uniform" ImageSource="/icons/expert/BestialRampageFramed.png"/>
@@ -328,6 +410,7 @@
                         Height="70" 
                         Margin="104,65,0,0"
                         Grid.Row="2" 
+                            Opacity="{Binding AuraOfTheForestOpacity}"
                         VerticalAlignment="Top"
                         x:Name="auraOfTheForestButton"
                         Width="70" IsCancel="True" 
@@ -383,14 +466,15 @@
                     <CheckBox Grid.Column="3"
                         IsChecked="{Binding AttackActive}"
                         HorizontalAlignment="Left" 
-                        Height="16" 
-                        Margin="8,83,0,0"
+                        Height="15" 
+                        Margin="7,65,0,0"
                         Grid.Row="1" 
                         VerticalAlignment="Top" 
-                        Width="84">
-                        <TextBlock
-                            TextWrapping="Wrap" Height="17"><Run Language="ru-ru" Text="Автоатака"/></TextBlock>
+                        Width="16">
                     </CheckBox>
+                    <TextBlock
+                            FontSize="18"
+                            TextWrapping="Wrap" Height="27" Foreground="White" Grid.Column="3" Margin="32,59,136,135" Grid.Row="1"><Run Language="ru-ru" Text="Автоатака"/></TextBlock>
                     <Button Grid.Column="1"
                         Command="{Binding DecreaseLvlAuraOfTheForestCommand}"
                         HorizontalAlignment="Left"
@@ -447,6 +531,7 @@
                         Height="70" 
                         Margin="38,65,0,0"
                         Grid.Row="2" 
+                            Opacity="{Binding MoonlightPermanentOpacity}"
                         VerticalAlignment="Top"
                         x:Name="moonlightPermanentButton"
                         Width="70" IsCancel="True" 
@@ -488,6 +573,7 @@
                         Height="70" 
                         Margin="108,65,0,0"
                         Grid.Row="2" 
+                            Opacity="{Binding MoonlightNonPermanentOpacity}"
                         VerticalAlignment="Top"
                         x:Name="moonlightNonPermanentButton"
                         Width="70" IsCancel="True" 
@@ -517,7 +603,7 @@
                     <Button Grid.Column="3"
                         HorizontalAlignment="Left"
                         Height="80" 
-                        Margin="95,79,0,0"
+                        Margin="95,88,0,0"
                         Grid.Row="1" 
                         VerticalAlignment="Top"
                         x:Name="irreversibleAngerButton"
@@ -531,7 +617,7 @@
                     <Button Grid.Column="3"
                         HorizontalAlignment="Left"
                         Height="80" 
-                        Margin="187,79,0,0"
+                        Margin="187,88,0,0"
                         Grid.Row="1" 
                         VerticalAlignment="Top"
                         x:Name="crushingWillButton"
@@ -550,14 +636,14 @@
                         Grid.Row="2" 
                         VerticalAlignment="Top" 
                         Width="194" Click="CheckBox_Checked">
-                        <TextBlock Text="Использование блага на себя и на собаку "
+                        <TextBlock Foreground="White" Text="Использование Благословения луны на героя и на Луну "
                             TextWrapping="Wrap" Height="35"/>
                     </CheckBox>
                     <Button Grid.Column="2"
                         Command="{Binding IncreaseLvlOrderToAttackCommand}"
                         HorizontalAlignment="Left"
                         Height="28" 
-                        Margin="53,52,0,0"
+                        Margin="62,54,0,0"
                         Grid.Row="1" 
                         VerticalAlignment="Top"
                         x:Name="increaseLvlOrderToAttackButton"
@@ -570,7 +656,7 @@
                         Command="{Binding DecreaseLvlLvlOrderToAttackCommand}"
                         HorizontalAlignment="Left"
                         Height="28" 
-                        Margin="54,152,0,0"
+                        Margin="63,152,0,0"
                         Grid.Row="1" 
                         VerticalAlignment="Top"
                         x:Name="decreaseLvlOrderToAttackButton"
@@ -580,9 +666,9 @@
                         </Button.Background>
                     </Button>
                     <Button Grid.Column="2"
-                        HorizontalAlignment="Center"
+                        HorizontalAlignment="Left"
                         Height="70" 
-                        Margin="0,175,0,0"
+                        Margin="112,175,0,0"
                         Grid.Row="2" 
                         VerticalAlignment="Top"
                         Width="70" IsCancel="True"
@@ -649,7 +735,6 @@
 
 
 
-                    <Label Grid.Column="3" Content="ДПМ" HorizontalAlignment="Left" Height="34" Margin="31,171,0,0" Grid.Row="1" VerticalAlignment="Top" Width="61" FontSize="20"/>
 
                     <Button HorizontalAlignment="Left" 
                         x:Name="moonlightlHintButton"
@@ -725,7 +810,7 @@
                     <Button HorizontalAlignment="Left" 
                         x:Name="mermenHintButton"
                         Style="{StaticResource HintButtonStyle}"
-                        Height="20" Margin="67,135,0,0" 
+                        Height="20" Margin="67,144,0,0" 
                         VerticalAlignment="Top" 
                         Width="20" 
                         Grid.Column="3" PreviewMouseUp="mermenHintButton_PreviewMouseUp" Grid.Row="1"  >
@@ -748,7 +833,7 @@
                     <Button HorizontalAlignment="Left" 
                         x:Name="blessingHintButton"
                         Style="{StaticResource HintButtonStyle}"
-                        Height="20" Margin="9,158,0,0" 
+                        Height="20" Margin="9,151,0,0" 
                         VerticalAlignment="Top" 
                         Width="20" 
                         Grid.Column="3" PreviewMouseUp="blessingHintButton_PreviewMouseUp" Grid.Row="2"  >
@@ -799,7 +884,7 @@
                     <TextBlock
                         TextWrapping="Wrap" Margin="161,102,8,152" Grid.Column="3" Grid.Row="2"><Run Text="урон скиллов"/><LineBreak/><Run Text="от замка"/></TextBlock>
                     -->
-                    <Label Grid.Column="1" Content="By Alangmat" HorizontalAlignment="Left" Height="37" Margin="18,247,0,0" Grid.Row="2" VerticalAlignment="Top" Width="108" Foreground="White" FontSize="16"/>
+                    <Label Grid.Column="1" Content="By Alangmat" Height="37" Margin="18,247,15,0" Grid.Row="2" VerticalAlignment="Top" Foreground="White" FontSize="16"/>
                     <Button Grid.Column="2"
                         Command="{Binding DecreaseLvlDoubleConcentrationCommand}"
                         HorizontalAlignment="Left"
@@ -832,529 +917,434 @@
             </TabItem>
 
             <!--     //////////       -->
-            <TabItem Header="Исходные проценты дд">
-                <!--<Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Grid Grid.Column="0">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="2*"/>
-                            <RowDefinition Height="2*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Grid Grid.Column="0">
-                                <ComboBox
-                                    ItemsSource="{Binding Amulets}"
-                                    SelectedItem="{Binding SelectedAmulet}"
-                                    HorizontalAlignment="Right"
-                                    Margin="10" VerticalAlignment="Center" Width="111" Height="22">
-                                    <ComboBox.Background>
-                                        <LinearGradientBrush EndPoint="0,1">
-                                            <GradientStop Color="#FFF0F0F0"/>
-                                            <GradientStop Color="#FFC7C6BB" Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </ComboBox.Background>
-                                </ComboBox>
-                            </Grid>
+            <TabItem Header="Исходные модификаторы силы">
+                <Grid>
+                    <Grid.Background>
+                        <ImageBrush 
+                        ImageSource="icons/other/back.png" 
+                        TileMode="Tile" 
+                        Viewport="0,0,283,193" 
+                        ViewportUnits="Absolute" 
+                        Stretch="None"/>
+                    </Grid.Background>
 
-                            <Grid Grid.Column="1">
-                                <Label Content="АМУЛЕТ"
-                                    HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       FontSize="18"
-                                    />
-                            </Grid>
-                        </Grid>
+                    <Grid Margin="10">
+                        <Grid.Resources>
+                            <!-- Общий стиль для всех TextBlock в Grid -->
+                            <Style TargetType="TextBlock">
+                                <Setter Property="Foreground" Value="White"/>
+                                <!-- Устанавливаем цвет текста -->
+                            </Style>
+                            <Style TargetType="Label">
+                                <Setter Property="Foreground" Value="White"/>
+                                <!-- Устанавливаем цвет текста -->
+                            </Style>
+                        </Grid.Resources>
 
-                        <Grid Grid.Row="1">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Grid Grid.Column="0">
-                                <ComboBox
-                                    ItemsSource="{Binding Cloaks}"
-                                    SelectedItem="{Binding SelectedCloak}"
-                                    HorizontalAlignment="Right"
-                                    Margin="10" VerticalAlignment="Center" Width="111" Height="22">
-                                    <ComboBox.Background>
-                                        <LinearGradientBrush EndPoint="0,1">
-                                            <GradientStop Color="#FFF0F0F0"/>
-                                            <GradientStop Color="#FFC7C6BB" Offset="1"/>
-                                        </LinearGradientBrush>
-                                    </ComboBox.Background>
-                                </ComboBox>
-                            </Grid>
 
-                            <Grid Grid.Column="1">
-                                <Label Content="ПЛАЩ"
-                                    HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       FontSize="18"
-                                    />
-                            </Grid>
-                        </Grid>
-
-                        <Grid Grid.Row="2">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition/>
-                                <ColumnDefinition/>
-                            </Grid.ColumnDefinitions>
-                            <Grid Grid.Column="0">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition/>
-                                </Grid.RowDefinitions>
-                                <Grid Grid.Row="0">
-                                    <ComboBox
-                                    ItemsSource="{Binding Rings}"
-                                    SelectedItem="{Binding SelectedRingL}"
-                                    HorizontalAlignment="Right"
-                                    Margin="10" VerticalAlignment="Center" Width="111" Height="22">
-                                        <ComboBox.Background>
-                                            <LinearGradientBrush EndPoint="0,1">
-                                                <GradientStop Color="#FFF0F0F0"/>
-                                                <GradientStop Color="#FFC7C6BB" Offset="1"/>
-                                            </LinearGradientBrush>
-                                        </ComboBox.Background>
-                                    </ComboBox>
-                                </Grid>
-                                <Grid Grid.Row="1">
-                                    <ComboBox
-                                    ItemsSource="{Binding Rings}"
-                                    SelectedItem="{Binding SelectedRingR}"
-                                    HorizontalAlignment="Right"
-                                    Margin="10" VerticalAlignment="Center" Width="111" Height="22">
-                                        <ComboBox.Background>
-                                            <LinearGradientBrush EndPoint="0,1">
-                                                <GradientStop Color="#FFF0F0F0"/>
-                                                <GradientStop Color="#FFC7C6BB" Offset="1"/>
-                                            </LinearGradientBrush>
-                                        </ComboBox.Background>
-                                    </ComboBox>
-                                </Grid>
-                            </Grid>
-
-                            <Grid Grid.Column="1">
-                                <Label Content="КОЛЬЦА"
-                                    HorizontalAlignment="Left"
-                                       VerticalAlignment="Center"
-                                       FontSize="18"
-                                    />
-                            </Grid>
-                            
-                        </Grid>
-
-                    </Grid>
-                    
-                    
-                </Grid>-->
-
-                <Grid Margin="10">
-
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="100*"/>
-                        <ColumnDefinition Width="70*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <Grid Grid.Column="0">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="100*"/>
+                            <ColumnDefinition Width="70*"/>
                         </Grid.ColumnDefinitions>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="3*"/>
-                        </Grid.RowDefinitions>
 
-                        <Grid Grid.Row="0" Grid.Column="1">
-                            <Button 
+                        <Grid Grid.Column="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="3*"/>
+                            </Grid.RowDefinitions>
+
+                            <Grid Grid.Row="0" Grid.Column="1">
+                                <Button 
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center"
                             Width="60"
                             Height="60"
+                                Style="{StaticResource CustomBlackButtonStyle}"
                                 Margin="5"
                             x:Name="cloakChoiceButton" Click="cloakChoiceButton_Click" MouseRightButtonDown="cloakChoiceButton_MouseRightButtonDown">
-                                <Grid>
-                                    <Image x:Name="cloakChoiceIcon"/>
-                                </Grid>
-                            </Button>
-                        </Grid>
+                                    <Grid>
+                                        <Image x:Name="cloakChoiceIcon"/>
+                                    </Grid>
+                                </Button>
+                            </Grid>
 
-                        <Grid Grid.Row="0" Grid.Column="2">
-                            <Button 
+                            <Grid Grid.Row="0" Grid.Column="2">
+                                <Button 
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Width="60"
                             Height="60"
+                                Style="{StaticResource CustomBlackButtonStyle}"
                                 Margin="5"
                             x:Name="helmetChoiceButton" Click="helmetChoiceButton_Click" MouseRightButtonDown="helmetChoiceButton_MouseRightButtonDown">
-                                <Grid>
-                                    <Image x:Name="helmetChoiceIcon"/>
-                                </Grid>
-                            </Button>
-                        </Grid>
+                                    <Grid>
+                                        <Image x:Name="helmetChoiceIcon"/>
+                                    </Grid>
+                                </Button>
+                            </Grid>
 
-                        <Grid Grid.Row="0" Grid.Column="3">
-                            <Button 
+                            <Grid Grid.Row="0" Grid.Column="3">
+                                <Button 
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
                             Width="60"
                             Height="60"
+                                Style="{StaticResource CustomBlackButtonStyle}"
                                 Margin="5"
                             x:Name="amuletChoiceButton" Click="amuletChoiceButton_MouseLeftButtonDown" MouseRightButtonDown="amuletChoiceButton_MouseRightButtonDown">
-                                <Grid>
-                                    <Image x:Name="amuletChoiceIcon"/>
-                                </Grid>
-                            </Button>
-                        </Grid>
+                                    <Grid>
+                                        <Image x:Name="amuletChoiceIcon"/>
+                                    </Grid>
+                                </Button>
+                            </Grid>
 
-                        <Grid Grid.Column="0" Grid.Row="1">
-                            <Label
+                            <Grid Grid.Column="0" Grid.Row="1">
+                                <Label
                                 HorizontalContentAlignment="Center"
                                 VerticalContentAlignment="Center"
                                 >
-                                <TextBlock Text="Бонусы костюма:"
+                                    <TextBlock Text="Бонусы костюма:"
                                    TextAlignment="Center"
                                    TextWrapping="Wrap"/>
-                            </Label>
-                        </Grid>
+                                </Label>
+                            </Grid>
 
-                        <Grid Grid.Row="1" Grid.Column="1">
-                            <Button 
+                            <Grid Grid.Row="1" Grid.Column="1">
+                                <Button 
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center"
                             Width="60"
                             Height="60"
+                                Style="{StaticResource CustomBlackButtonStyle}"
                                 Margin="5"
                             x:Name="setChoiceButton" Click="setChoiceButton_Click" MouseRightButtonDown="setChoiceButton_MouseRightButtonDown">
-                                <Grid>
-                                    <Image x:Name="setChoiceIcon"/>
-                                </Grid>
-                            </Button>
-                        </Grid>
+                                    <Grid>
+                                        <Image x:Name="setChoiceIcon"/>
+                                    </Grid>
+                                </Button>
+                            </Grid>
 
-                        <Grid Grid.Row="1" Grid.Column="2">
-                            <Button 
+                            <Grid Grid.Row="1" Grid.Column="2">
+                                <Button 
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Width="60"
                             Height="60"
+                                Style="{StaticResource CustomBlackButtonStyle}"
                                 Margin="5"
                             x:Name="bodyChoiceButton" Click="bodyChoiceButton_Click" MouseRightButtonDown="bodyChoiceButton_MouseRightButtonDown" >
-                                <Grid>
-                                    <Image x:Name="bodyChoiceIcon"/>
-                                </Grid>
-                            </Button>
-                        </Grid>
+                                    <Grid>
+                                        <Image x:Name="bodyChoiceIcon"/>
+                                    </Grid>
+                                </Button>
+                            </Grid>
 
-                        <Grid Grid.Row="1" Grid.Column="3">
-                            <Button 
+                            <Grid Grid.Row="1" Grid.Column="3">
+                                <Button 
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
                             Width="60"
                             Height="60"
+                                Style="{StaticResource CustomBlackButtonStyle}"
                                 Margin="5"
                             x:Name="handsChoiceButton" Click="handsChoiceButton_Click" MouseRightButtonDown="handsChoiceButton_MouseRightButtonDown" >
-                                <Grid>
-                                    <Image x:Name="handsChoiceIcon"/>
-                                </Grid>
-                            </Button>
-                        </Grid>
+                                    <Grid>
+                                        <Image x:Name="handsChoiceIcon"/>
+                                    </Grid>
+                                </Button>
+                            </Grid>
 
-                        <Grid Grid.Row="2" Grid.Column="1">
-                            <Button 
+                            <Grid Grid.Row="2" Grid.Column="1">
+                                <Button 
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center"
                             Width="60"
                             Height="60"
+                                Style="{StaticResource CustomBlackButtonStyle}"
                                 Margin="5"
                             x:Name="braceletLeftChoiceButton" Click="braceletLeftChoiceButton_Click" MouseRightButtonDown="braceletLeftChoiceButton_MouseRightButtonDown">
-                                <Grid>
-                                    <Image x:Name="braceletLeftChoiceIcon"/>
-                                </Grid>
-                            </Button>
-                        </Grid>
+                                    <Grid>
+                                        <Image x:Name="braceletLeftChoiceIcon"/>
+                                    </Grid>
+                                </Button>
+                            </Grid>
 
-                        <Grid Grid.Row="2" Grid.Column="2">
-                            <Button 
+                            <Grid Grid.Row="2" Grid.Column="2">
+                                <Button 
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Width="60"
                             Height="60"
+                                Style="{StaticResource CustomBlackButtonStyle}"
                                 Margin="5"
                             x:Name="beltChoiceButton" Click="beltChoiceButton_Click" MouseRightButtonDown="beltChoiceButton_MouseRightButtonDown" >
-                                <Grid>
-                                    <Image x:Name="beltChoiceIcon"/>
-                                </Grid>
-                            </Button>
-                        </Grid>
+                                    <Grid>
+                                        <Image x:Name="beltChoiceIcon"/>
+                                    </Grid>
+                                </Button>
+                            </Grid>
 
-                        <Grid Grid.Row="2" Grid.Column="3">
-                            <Button 
+                            <Grid Grid.Row="2" Grid.Column="3">
+                                <Button 
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
                             Width="60"
                             Height="60"
+                                Style="{StaticResource CustomBlackButtonStyle}"
                                 Margin="5"
                             x:Name="braceletRightChoiceButton" Click="braceletRightChoiceButton_Click" MouseRightButtonDown="braceletRightChoiceButton_MouseRightButtonDown">
-                                <Grid>
-                                    <Image x:Name="braceletRightChoiceIcon"/>
-                                </Grid>
-                            </Button>
-                        </Grid>
+                                    <Grid>
+                                        <Image x:Name="braceletRightChoiceIcon"/>
+                                    </Grid>
+                                </Button>
+                            </Grid>
 
-                        <Grid Grid.Row="3" Grid.Column="1">
-                            <Button 
+                            <Grid Grid.Row="3" Grid.Column="1">
+                                <Button 
                             HorizontalAlignment="Right"
                             VerticalAlignment="Center"
                             Width="60"
                             Height="60"
+                                Style="{StaticResource CustomBlackButtonStyle}"
                                 Margin="5"
                             x:Name="ringLeftChoiceButton" Click="ringLeftChoiceButton_Click" MouseRightButtonDown="ringLeftChoiceButton_MouseRightButtonDown">
-                                <Grid>
-                                    <Image x:Name="ringLeftChoiceIcon"/>
-                                </Grid>
-                            </Button>
-                        </Grid>
+                                    <Grid>
+                                        <Image x:Name="ringLeftChoiceIcon"/>
+                                    </Grid>
+                                </Button>
+                            </Grid>
 
-                        <Grid Grid.Row="3" Grid.Column="2">
-                            <Button 
+                            <Grid Grid.Row="3" Grid.Column="2">
+                                <Button 
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center"
                             Width="60"
                             Height="60"
+                                Style="{StaticResource CustomBlackButtonStyle}"
                                 Margin="5"
                             x:Name="footsChoiceButton" Click="footsChoiceButton_Click" MouseRightButtonDown="footsChoiceButton_MouseRightButtonDown" >
-                                <Grid>
-                                    <Image x:Name="footsChoiceIcon"/>
-                                </Grid>
-                            </Button>
-                        </Grid>
+                                    <Grid>
+                                        <Image x:Name="footsChoiceIcon"/>
+                                    </Grid>
+                                </Button>
+                            </Grid>
 
-                        <Grid Grid.Row="3" Grid.Column="3">
-                            <Button 
+                            <Grid Grid.Row="3" Grid.Column="3">
+                                <Button 
                             HorizontalAlignment="Left"
                             VerticalAlignment="Center"
                             Width="60"
                             Height="60"
+                                Style="{StaticResource CustomBlackButtonStyle}"
                                 Margin="5"
                             x:Name="ringRightChoiceButton" Click="ringRightChoiceButton_Click" MouseRightButtonDown="ringRightChoiceButton_MouseRightButtonDown">
-                                <Grid>
-                                    <Image x:Name="ringRightChoiceIcon"/>
-                                </Grid>
-                            </Button>
+                                    <Grid>
+                                        <Image x:Name="ringRightChoiceIcon"/>
+                                    </Grid>
+                                </Button>
+                            </Grid>
+
+
                         </Grid>
 
+                        <Grid Grid.Column="1">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                                <RowDefinition/>
 
-                    </Grid>
-
-                    <Grid Grid.Column="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition/>
-
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0">
-                            <Image Source="icons/other/GuildDamage.png"
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Image Source="icons/other/GuildDamage.png"
                                    Width="36"
                                    Height="36"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center"
                                    Margin="5"/>
-                            <CheckBox HorizontalAlignment="Left" 
+                                <CheckBox HorizontalAlignment="Left" 
                                       Margin="50,0,0,0"
                                       IsChecked="{Binding GuildDamageStartModifierActive}"
                                       VerticalAlignment="Center">
-                                <TextBlock>
+                                    <TextBlock>
                                     7 уровень гильдии (10%)
-                                </TextBlock>
-                            </CheckBox>
-                        </Grid>
-                        <Grid Grid.Row="1">
-                            <Image Source="icons/talents/PowerAttack.png"
+                                    </TextBlock>
+                                </CheckBox>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Image Source="icons/talents/PowerAttack.png"
                                    Width="36"
                                    Height="36"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center"
                                    Margin="5"/>
-                            <CheckBox HorizontalAlignment="Left" 
+                                <CheckBox HorizontalAlignment="Left" 
                                       Margin="50, 0, 0, 0"
                                       IsChecked="{Binding TalentDamageStartModifierActive}"
                                       VerticalAlignment="Center">
-                                <TextBlock>
+                                    <TextBlock>
                                     Таланты (4.75%)
-                                </TextBlock>
-                            </CheckBox>
-                        </Grid>
+                                    </TextBlock>
+                                </CheckBox>
+                            </Grid>
 
-                        <Grid Grid.Row="2">
-                            <Image Source="/icons/castle/CastleSword.png"
+                            <Grid Grid.Row="2">
+                                <Image Source="/icons/castle/CastleSword.png"
                                 Width="36"
                                 Height="36"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Margin="5,0,0,0"/>
-                            <CheckBox HorizontalAlignment="Left" 
+                                <CheckBox HorizontalAlignment="Left" 
                                 Margin="50,0,0,0"
                                 IsChecked="{Binding CastleStartModifierActive}"
                                 VerticalAlignment="Center">
-                                <TextBlock><Run Text="Баф замка"/></TextBlock>
-                            </CheckBox>
-                        </Grid>
+                                    <TextBlock><Run Text="Инстинкт нападения"/></TextBlock>
+                                </CheckBox>
+                            </Grid>
 
-                        <Grid Grid.Row="3">
-                            <Image Source="/icons/talents/HarmoniousPowerFramed.png"
+                            <Grid Grid.Row="3">
+                                <Image Source="/icons/talents/HarmoniousPower.png"
                                 Width="36"
                                 Height="36"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Margin="5,0,0,0"/>
-                            <CheckBox HorizontalAlignment="Left" 
+                                <CheckBox HorizontalAlignment="Left" 
                                 Margin="50,0,0,0"
                                 IsChecked="{Binding HarmoniousPowerStartModifierActive}"
                                 VerticalAlignment="Center">
-                                <TextBlock><Run Text="Гармония силы"/></TextBlock>
-                            </CheckBox>
-                        </Grid>
-                        <Grid Grid.Row="4">
-                            <Image Source="/icons/stats/mdd.png"
+                                    <TextBlock><Run Text="Гармония силы"/></TextBlock>
+                                </CheckBox>
+                            </Grid>
+                            <Grid Grid.Row="4">
+                                <Image Source="/icons/stats/mdd.png"
                                 Width="36"
                                 Height="36"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 Margin="5,0,0,0"/>
-                            <TextBox HorizontalAlignment="Left"
+                                <TextBox HorizontalAlignment="Left"
                                      VerticalAlignment="Center"
                                      Margin="50,0,0,0"
                                      Width="30"
                                      Text="{Binding AdditionalPercentMDDStart, Converter={StaticResource StringToDoubleConverter}}"
                                      />
-                            <Label Content="% маг дд (дополнительно)"
+                                <Label Content="дополнительные проценты"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center"
                                    Margin="85,0,0,0"
                                    />
-                        </Grid>
-                        <Grid Grid.Row="5">
-                            <Image Source="/icons/stats/pdd.png"
+                            </Grid>
+                            <Grid Grid.Row="5">
+                                <Image Source="/icons/stats/pdd.png"
                                     Width="36"
                                     Height="36"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Margin="5,7,0,0"/>
-                            <TextBox HorizontalAlignment="Left"
+                                <TextBox HorizontalAlignment="Left"
                                      VerticalAlignment="Center"
                                      Margin="50,0,0,0"
                                      Width="30"
                                      Text="{Binding AdditionalPercentPDDStart, Converter={StaticResource StringToDoubleConverter}}"
                                      />
-                            <Label Content="% физ дд (дополнительно)"
+                                <Label Content="дополнительные проценты"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center"
                                    Margin="85,0,0,0"
                                    />
+                            </Grid>
                         </Grid>
-                    </Grid>
 
-                    <Button HorizontalAlignment="Left" 
+                        <Button HorizontalAlignment="Left" 
                         x:Name="equipmentHintButton"
                         Style="{StaticResource HintButtonStyle}"
                         Height="20" Margin="292,310,0,0" 
                         VerticalAlignment="Top" 
                         Width="20" PreviewMouseUp="equipmentHintButton_PreviewMouseUp"  >
-                        <Button.Background>
-                            <ImageBrush ImageSource="/icons/other/ask.jpg" Stretch="Fill"/>
-                        </Button.Background>
-                        <Popup x:Name="equipmentPopup"
+                            <Button.Background>
+                                <ImageBrush ImageSource="/icons/other/ask.jpg" Stretch="Fill"/>
+                            </Button.Background>
+                            <Popup x:Name="equipmentPopup"
                             MaxWidth="240" MinWidth="100"
                             StaysOpen="False" Placement="Mouse" 
                             AllowsTransparency="True"
                                >
-                            <Border BorderBrush="Black" BorderThickness="1">
-                                <TextBlock
+                                <Border BorderBrush="Black" BorderThickness="1">
+                                    <TextBlock
                                     x:Name="equipmentHintText"
                                     Padding="5"
                                     TextWrapping="Wrap" Background="#FFBBCBF3" />
-                            </Border>
-                        </Popup>
-                    </Button>
-                    <Button HorizontalAlignment="Left" 
+                                </Border>
+                            </Popup>
+                        </Button>
+                        <Button HorizontalAlignment="Left" 
                         x:Name="startModHintButton"
                         Style="{StaticResource HintButtonStyle}"
                         Height="20" Margin="380,170,0,0" 
                         VerticalAlignment="Top" 
                         Width="20" PreviewMouseUp="startModHintButton_PreviewMouseUp"  >
-                        <Button.Background>
-                            <ImageBrush ImageSource="/icons/other/ask.jpg" Stretch="Fill"/>
-                        </Button.Background>
-                        <Popup x:Name="startModPopup"
+                            <Button.Background>
+                                <ImageBrush ImageSource="/icons/other/ask.jpg" Stretch="Fill"/>
+                            </Button.Background>
+                            <Popup x:Name="startModPopup"
                             MaxWidth="240" MinWidth="100"
                             StaysOpen="False" Placement="Mouse" 
                             AllowsTransparency="True"
                                >
-                            <Border BorderBrush="Black" BorderThickness="1">
-                                <TextBlock
+                                <Border BorderBrush="Black" BorderThickness="1">
+                                    <TextBlock
                                     x:Name="startModHintText"
                                     Padding="5"
                                     TextWrapping="Wrap" Background="#FFBBCBF3" />
-                            </Border>
-                        </Popup>
-                    </Button>
+                                </Border>
+                            </Popup>
+                        </Button>
 
-                    <Button HorizontalAlignment="Left" 
+                        <Button HorizontalAlignment="Left" 
                             x:Name="percentHintButton"
                             Style="{StaticResource HintButtonStyle}"
                             Height="20" 
                             VerticalAlignment="Top" 
                             Width="20" PreviewMouseUp="percentHintButton_PreviewMouseUp" Margin="380,268,0,0">
-                        <Button.Background>
-                            <ImageBrush ImageSource="/icons/other/ask.jpg" Stretch="Fill"/>
-                        </Button.Background>
-                        <Popup x:Name="percentPopup"
+                            <Button.Background>
+                                <ImageBrush ImageSource="/icons/other/ask.jpg" Stretch="Fill"/>
+                            </Button.Background>
+                            <Popup x:Name="percentPopup"
                                 MaxWidth="240" MinWidth="100"
                                 StaysOpen="False" Placement="Mouse" 
                                 AllowsTransparency="True"
                                >
-                            <Border BorderBrush="Black" BorderThickness="1">
-                                <TextBlock
+                                <Border BorderBrush="Black" BorderThickness="1">
+                                    <TextBlock
                                         x:Name="percentHintText"
                                         Padding="5"
                                         TextWrapping="Wrap" Background="#FFBBCBF3" />
-                            </Border>
-                        </Popup>
-                    </Button>
+                                </Border>
+                            </Popup>
+                        </Button>
+
+                    </Grid>
 
                 </Grid>
-
-
             </TabItem>
 
             <TabItem Header="Характеристики">
@@ -1370,7 +1360,7 @@
                         <ColumnDefinition Width="332*"/>
                         <ColumnDefinition Width="15*"/>
                     </Grid.ColumnDefinitions>
-                    <GroupBox Header="Статы персонажа" 
+                    <GroupBox Header="Характеристики героя" 
                               VerticalAlignment="Top"
                               Height="490"
                               Grid.Row="1" BorderBrush="#FF400984"
@@ -1665,7 +1655,7 @@
                         <GroupBox HorizontalAlignment="Left" 
                                   BorderBrush="#FF400984"
                                   Grid.Row="1"
-                                  Header="Статы цели" Margin="10,0,0,0" VerticalAlignment="Top" Width="320">
+                                  Header="Характеристики цели" Margin="10,0,0,0" VerticalAlignment="Top" Width="320">
                             <Grid Height="135">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*"/>
@@ -1719,7 +1709,7 @@
                         <GroupBox HorizontalAlignment="Left" 
                         BorderBrush="#FF400984"
                         Grid.Row="1"
-                        Header="Статы кошки" Margin="10,179,0,0" VerticalAlignment="Top" Width="320" Grid.RowSpan="2">
+                        Header="Характеристики Луны" Margin="10,179,0,0" VerticalAlignment="Top" Width="320" Grid.RowSpan="2">
                             <Grid Height="135">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="*"/>
@@ -1949,24 +1939,24 @@
                                     </Button>
                                     <Button Command="{Binding DecreaseLvlTalantOrderToAttackPlusGuardianUnityCommand}"
                                              HorizontalAlignment="Left"
-                                            Margin="5,58,0,0"
+                                            Margin="5,54,0,0"
                                             VerticalAlignment="Top"
                                             Height="25" 
                                             Width="31" 
                                             x:Name="decreaseLvlOrderToAttackPlusGuardianUnityTalantButton"
-                                            IsCancel="True" BorderBrush="{x:Null}" Grid.Row="2" Click="decreaseLvlOrderToAttackPlusGuardianUnityTalantButton_Click">
+                                            IsCancel="True" BorderBrush="{x:Null}" Click="decreaseLvlOrderToAttackPlusGuardianUnityTalantButton_Click">
                                         <Button.Background>
                                             <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
                                         </Button.Background>
                                     </Button>
                                     <Button Command="{Binding IncreaseLvlTalantOrderToAttackPlusGuardianUnityCommand}"
                                             HorizontalAlignment="Right"
-                                            Margin="0,58,5,0" 
+                                            Margin="0,54,5,0" 
                                             VerticalAlignment="Top"
                                             Height="25" 
                                             Width="31"
                                             x:Name="increaseLvlOrderToAttackPlusGuardianUnityTalantButton"
-                                            IsCancel="True" BorderBrush="{x:Null}" Grid.Row="2" Click="increaseLvlOrderToAttackPlusGuardianUnityTalantButton_Click">
+                                            IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlOrderToAttackPlusGuardianUnityTalantButton_Click">
                                         <Button.Background>
                                             <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
                                         </Button.Background>
@@ -2062,12 +2052,12 @@
                                     </Button>
                                     <Button Command="{Binding DecreaseLvlTalantBeastAwakeningPlusPhysicalCommand}"
                                              HorizontalAlignment="Left"
-                                            Margin="12,58,0,0" 
+                                            Margin="12,54,0,0" 
                                             VerticalAlignment="Top"
                                             Height="25" 
                                             Width="31"
                                             x:Name="decreaseLvlBeastAwakeningPlusPhysicalTalantButton"
-                                            IsCancel="True" BorderBrush="{x:Null}" Grid.Column="1" Grid.Row="2" Click="decreaseLvlBeastAwakeningPlusPhysicalTalantButton_Click" >
+                                            IsCancel="True" BorderBrush="{x:Null}" Click="decreaseLvlBeastAwakeningPlusPhysicalTalantButton_Click" >
                                         <Button.Background>
                                             <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
                                         </Button.Background>
@@ -2075,12 +2065,12 @@
                                     <Button
                                             Command="{Binding IncreaseLvlTalantBeastAwakeningPlusPhysicalCommand}"
                                              HorizontalAlignment="Right"
-                                            Margin="0,58,12,0" 
+                                            Margin="0,54,12,0" 
                                             VerticalAlignment="Top"
                                             Height="25" 
                                             Width="31"
                                             x:Name="increaseLvlBeastAwakeningPlusPhysicalTalantButton"
-                                            IsCancel="True" BorderBrush="{x:Null}" Grid.Column="1" Grid.Row="2" Click="increaseLvlBeastAwakeningPlusPhysicalTalantButton_Click"  >
+                                            IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlBeastAwakeningPlusPhysicalTalantButton_Click"  >
                                         <Button.Background>
                                             <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
                                         </Button.Background>
@@ -2120,24 +2110,24 @@
                                     </Button>
                                     <Button Command="{Binding DecreaseLvlTalantOrderToAttackPlusDualRageCommand}"
                                              HorizontalAlignment="Left"
-                                            Margin="12,58,0,0" 
+                                            Margin="12,55,0,0" 
                                             VerticalAlignment="Top"
                                             Height="25" 
                                             Width="31" 
                                             x:Name="decreaseLvlOrderToAttackPlusTalantButton"
-                                            IsCancel="True" BorderBrush="{x:Null}" Grid.Row="2"   Click="decreaseLvlOrderToAttackPlusTalantButton_Click" >
+                                            IsCancel="True" BorderBrush="{x:Null}"   Click="decreaseLvlOrderToAttackPlusTalantButton_Click" >
                                         <Button.Background>
                                             <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
                                         </Button.Background>
                                     </Button>
                                     <Button Command="{Binding IncreaseLvlTalantOrderToAttackPlusDualRageCommand}"
                                             HorizontalAlignment="Right"
-                                            Margin="0,58,12,0" 
+                                            Margin="0,55,12,0" 
                                             VerticalAlignment="Top"
                                             Height="25" 
                                             Width="31"
                                             x:Name="increaseLvlOrderToAttackPlusTalantButton"
-                                            IsCancel="True" BorderBrush="{x:Null}" Grid.Row="2" Click="increaseLvlOrderToAttackPlusTalantButton_Click"   >
+                                            IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlOrderToAttackPlusTalantButton_Click"   >
                                         <Button.Background>
                                             <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
                                         </Button.Background>
@@ -2216,7 +2206,7 @@
                                     </Button>
                                     <Button Command="{Binding DecreaseLvlTalantMoonlightPlusCommand}"
                                             HorizontalAlignment="Left"
-                                            Margin="5,58,0,0" 
+                                            Margin="5,54,0,0" 
                                             VerticalAlignment="Top"
                                             Height="25" 
                                             Width="31"
@@ -2229,11 +2219,11 @@
                                     <Button
                                     Command="{Binding IncreaseLvlTalantMoonlightPlusCommand}"
                                     HorizontalAlignment="Right"
-                                    Margin="0,58,5,0" 
+                                    Margin="0,54,5,0" 
                                     VerticalAlignment="Top"
                                     Height="25"  
                                     x:Name="increaseLvlMoonlightPlusTalantButton"
-                                    Width="31" IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlMoonlightPlusTalantButton_Click"  Grid.Column="1" Grid.Row="2"  >
+                                    Width="31" IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlMoonlightPlusTalantButton_Click"  >
                                         <Button.Background>
                                             <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
                                         </Button.Background>
@@ -2635,7 +2625,7 @@
                     </Button>
                 </Grid>
             </TabItem>
-            <TabItem Header="Модификаторы">
+            <TabItem Header="Конечные модификаторы">
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
@@ -2692,7 +2682,7 @@
                                     <TextBlock
                                         TextWrapping="Wrap" 
                                         HorizontalAlignment="Left"
-                                        VerticalAlignment="Center" Width="174" Text="урон скиллов от замка" Margin="128,0,0,0"/>
+                                        VerticalAlignment="Center" Width="174" Text="урон навыков от замка" Margin="128,0,0,0"/>
                                 </Grid>
 
                                 <Grid Grid.Row="1">
@@ -2731,7 +2721,7 @@
                                         VerticalAlignment="Center" 
                                         Width="194">
                                         <TextBlock
-                                        TextWrapping="Wrap" Height="18"><Run Text="Урон в инсте  "/><Run Language="ru-ru" Text="с бафом бп"/></TextBlock>
+                                        TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Сила древних"/></TextBlock>
                                     </CheckBox>
                                 </Grid>
 
@@ -2846,7 +2836,7 @@
                                      Width="30"
                                      Text="{Binding AdditionalPercentMDDFinal, Converter={StaticResource StringToDoubleConverter}}"
                                      />
-                                    <Label Content="% маг дд (дополнительно)"
+                                    <Label Content="% магической силы (дополнительно)"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center"
                                    Margin="85,0,0,0"
@@ -2866,7 +2856,7 @@
                                      Width="30"
                                      Text="{Binding AdditionalPercentPDDFinal, Converter={StaticResource StringToDoubleConverter}}"
                                      />
-                                    <Label Content="% физ дд (дополнительно)"
+                                    <Label Content="% физической силы (дополнительно)"
                                    HorizontalAlignment="Left"
                                    VerticalAlignment="Center"
                                    Margin="85,0,0,0"
@@ -2902,7 +2892,7 @@
                                     VerticalAlignment="Center" 
                                     >
                                         <TextBlock
-                                        TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text=" Снижение длительности дебафов на рб"/></TextBlock>
+                                        TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text=" Снижение длительности эффектов на "/></TextBlock>
                                     </CheckBox>
                                 </Grid>
 
@@ -2936,31 +2926,83 @@
             </TabItem>
 
 
-            <TabItem Header="Билды" >
+            <TabItem Header="Сборки" >
                 <Grid >
                     <Grid.Background>
                         <ImageBrush ImageSource="/background.jpg"/>
                     </Grid.Background>
 
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="107*"/>
-                        <ColumnDefinition Width="255*"/>
+                        <ColumnDefinition Width="65*"/>
+                        <ColumnDefinition Width="116*"/>
                     </Grid.ColumnDefinitions>
                     <ListView Grid.Column="1" ItemsSource="{Binding Builds}"
                               SelectedItem="{Binding SelectedDataSet}">
+                        <ListView.Background>
+                            <ImageBrush 
+                        ImageSource="icons/other/back.png" 
+                        TileMode="Tile" 
+                        Viewport="0,0,283,193" 
+                        ViewportUnits="Absolute" 
+                        Stretch="None"/>
+                        </ListView.Background>
                         <ListView.View>
                             <GridView>
-                                <GridViewColumn DisplayMemberBinding="{Binding Path=Name}"
-                                                Width="140"
-                                                >Имя</GridViewColumn>
-                                <GridViewColumn DisplayMemberBinding="{Binding Path=Description}" Width="220">Описание</GridViewColumn>
+                                <!-- Столбец с текстом, который нужно переносить -->
+                                <GridViewColumn Width="100" Header="Название">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <!-- Здесь задаётся перенос текста -->
+                                            <TextBlock Text="{Binding Name}" TextWrapping="Wrap" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+
+                                <!-- Описание -->
+                                <GridViewColumn Width="200" Header="Описание">
+                                    <GridViewColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Description}" TextWrapping="Wrap" LineHeight="16" 
+                       MaxHeight="48" />
+                                        </DataTemplate>
+                                    </GridViewColumn.CellTemplate>
+                                </GridViewColumn>
+                                <!-- Последнее изменение -->
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=LastDate}">Последнее изменение</GridViewColumn>
                             </GridView>
                         </ListView.View>
 
+
                         <ListView.ItemContainerStyle>
                             <Style TargetType="ListViewItem">
+                                <!-- Базовый стиль: белый текст -->
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="FontFamily" Value="Arial"/>
+                                <Setter Property="BorderBrush" Value="#CCCCCC"/>
+                                <!-- Серый цвет границы -->
+                                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                <!-- Нижняя граница -->
+
+                                <!-- Добавляем обработчик события -->
                                 <EventSetter Event="MouseDoubleClick" Handler="choiceDataSet_Click"/>
+
+                                <!-- Стиль для выбранного элемента -->
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="Foreground" Value="Black"/>
+                                        <Setter Property="BorderBrush" Value="Black"/>
+                                        <!-- Граница для выделенного -->
+                                        <Setter Property="BorderThickness" Value="1"/>
+                                        <!-- Толщина границы -->
+                                        <!-- Черный текст у выбранного элемента -->
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#444444"/>
+                                        <!-- Затемненный фон -->
+                                        <Setter Property="Foreground" Value="White"/>
+                                        <!-- Оставляем белый текст -->
+                                    </Trigger>
+                                </Style.Triggers>
                             </Style>
                         </ListView.ItemContainerStyle>
 
@@ -3008,11 +3050,13 @@
                         <Grid.RowDefinitions>
                             <RowDefinition Height="64*"/>
                             <RowDefinition Height="215*"/>
+                            <RowDefinition Height="269*"/>
 
-
+                            <!--
                             <RowDefinition Height="100*"/>
                             <RowDefinition Height="86*"/>
                             <RowDefinition Height="83*"/>
+                            -->
                         </Grid.RowDefinitions>
                         <Grid>
                             <Grid.RowDefinitions>
@@ -3023,12 +3067,13 @@
 
                             <Label Content="Название"
                                    Foreground="White"
-                                   HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Width="64"/>
+                                   FontSize="14"
+                                   HorizontalAlignment="Left" VerticalAlignment="Center" Margin="14,0,0,0" Width="88"/>
 
 
                             <TextBox HorizontalAlignment="Center" 
                                      Margin="0,32,0,0"
-                                     TextWrapping="Wrap" Text="{Binding Name}" VerticalAlignment="Top" Width="195" Grid.RowSpan="2"/>
+                                     TextWrapping="Wrap" Text="{Binding Name}" VerticalAlignment="Top" Width="220" Grid.RowSpan="2"/>
                         </Grid>
                         <Grid Margin="0,14,0,0" Grid.Row="1">
                             <Grid.RowDefinitions>
@@ -3039,12 +3084,13 @@
 
                             <Label Content="Описание"
                                    Foreground="White"
-                                   HorizontalAlignment="Left" VerticalAlignment="Center" Margin="10,0,0,0" Width="64" Height="26"/>
+                                   FontSize="14"
+                                   HorizontalAlignment="Left" VerticalAlignment="Center" Margin="14,0,0,0" Width="87" Height="26"/>
 
 
                             <TextBox HorizontalAlignment="Center" 
                                      Margin="0,4,0,0"
-                                     TextWrapping="Wrap" Text="{Binding Description}" VerticalAlignment="Top" Width="196" Grid.Row="1" Height="152"/>
+                                     TextWrapping="Wrap" Text="{Binding Description}" VerticalAlignment="Top" Width="220" Grid.Row="1" Height="152"/>
                             <!--
                             <Button Content="COpy" 
                         HorizontalAlignment="Left" 
@@ -3054,32 +3100,130 @@
                         VerticalAlignment="Top" Width="80" Click="copyDataSetButton_Click"/>
                         -->
                         </Grid>
-                        <Button Content="Сохранить изменения"  
+                        <!--изначально высота 25 была-->
+                        <Button   
                                 x:Name="editDataSetButton"
-                                Height="25" 
-                                Margin="12,20,12,0" VerticalAlignment="Top" Grid.Row="2" Width="190" Click="editDataSetButton_Click"/>
-                        <Button Content="Загрузить выбранный билд"
+                                Height="40" 
+                                Margin="0,15,0,0" 
+                                VerticalAlignment="Top" 
+                                HorizontalAlignment="Center"
+                                Grid.Row="2" 
+                                Width="230" 
+                                Click="editDataSetButton_Click"
+                                Style="{StaticResource CustomButtonStyle}">
+                            <Button.Background>
+                                <ImageBrush Stretch="Uniform" ImageSource="icons/buttons/save.png"/>
+                            </Button.Background>
+                            <!-- 
+                            <Grid>
+                                <TextBlock Text="Сохранить изменения"
+                   FontFamily="Arial Black"
+                   FontSize="14"
+                   Foreground="Black"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Margin="2,0,0,0" />
+                                <TextBlock Text="Сохранить изменения"
+                   FontFamily="Arial Black"
+                   FontSize="14"
+                   Foreground="Black"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Margin="-3,0,0,0" />
+                                <TextBlock Text="Сохранить изменения"
+                   FontFamily="Arial Black"
+                   FontSize="14"
+                   Foreground="Black"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Margin="0,2,0,0" />
+                                <TextBlock Text="Сохранить изменения"
+                   FontFamily="Arial Black"
+                   FontSize="14"
+                   Foreground="Black"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Margin="0,-2,0,0" />
+
+                                
+                                <TextBlock Text="Сохранить изменения"
+                   FontFamily="Arial Black"
+                   FontSize="14"
+                   Foreground="White"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
+                            </Grid>
+                            -->
+                            <!-- Контент кнопки
+                            <Grid> -->
+                            <!-- Обводка текста 
+                                <TextBlock Text="Сохранить изменения"
+                   FontFamily="Arial Black"
+                   FontSize="14"
+                   Foreground="Black"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   Effect="{StaticResource TextOutlineEffect}" />
+                                -->
+                            <!-- Основной текст
+                                <TextBlock Text="Сохранить изменения"
+                   FontFamily="Arial Black"
+                   FontSize="14"
+                   Foreground="White"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
+                            </Grid>
+                            -->
+                        </Button>
+                        <Button 
+                                HorizontalAlignment="Center" 
+                                Height="40" 
+                                Margin="0,150,0,0" 
+                                x:Name="deleteDataSetButton"
+                                VerticalAlignment="Top" 
+                                Width="230"  
+                                Grid.Row="2" 
+                             Style="{StaticResource CustomButtonStyle}"
+                                Click="deleteDataSetButton_Click">
+                            <Button.Background>
+                                <ImageBrush Stretch="Uniform" ImageSource="icons/buttons/delete.png"/>
+                            </Button.Background>
+                        </Button>
+                        <Button
                                 x:Name="choiceDataSet"
-                                Height="25" 
-                                Margin="12,15,12,0" VerticalAlignment="Top" Grid.Row="3" Width="190" Click="choiceDataSet_Click"/>
-                        <Button Content="Сохранить как новую запись" 
-                                HorizontalAlignment="Left" 
-                                Height="25"  
-                                Margin="13,0,0,5" 
+                                Height="40"
+                            HorizontalAlignment="Center"
+                                 Style="{StaticResource CustomButtonStyle}"
+                                Margin="0,60,0,0" VerticalAlignment="Top" Grid.Row="2"
+                            Width="230" Click="choiceDataSet_Click">
+                            <Button.Background>
+                                <ImageBrush Stretch="Uniform" ImageSource="icons/buttons/download.png"/>
+                            </Button.Background>
+                        </Button>
+                        <Button 
+                                HorizontalAlignment="Center" 
+                                Height="40"
                                 x:Name="addDataSetButton"
-                                VerticalAlignment="Bottom" Width="190" Grid.Row="3" Click="addDataSetButton_Click" />
-                        <Button Content="Создать новый билд"  
+                                 Style="{StaticResource CustomButtonStyle}"
+                            
+                                VerticalAlignment="Top" Width="230" Grid.Row="2" Click="addDataSetButton_Click" Margin="0,105,0,0" >
+                            <Button.Background>
+                                <ImageBrush Stretch="Uniform" ImageSource="icons/buttons/saveas.png"/>
+                            </Button.Background>
+                        </Button>
+                        <Button 
                                 x:Name="addAndGenerateDataSetButton"
-                                Margin="12,29,12,0" 
-                                Height="25" 
+                                Margin="0,195,0,0" 
+                                Height="40" 
                                 Click="addAndGenerateDataSetButton_Click"
-                                VerticalAlignment="Top" Width="190" Grid.Row="4"/>
-                        <Button Content="Удалить выбранный билд" 
-                        HorizontalAlignment="Left" 
-                        Height="25" 
-                        Margin="12,0,0,15" 
-                        x:Name="deleteDataSetButton"
-                        VerticalAlignment="Bottom" Width="190"  Grid.Row="2" Click="deleteDataSetButton_Click"/>
+                                 Style="{StaticResource CustomButtonStyle}"
+                            HorizontalAlignment="Center"
+                            
+                                VerticalAlignment="Top" Width="230" Grid.Row="2">
+                            <Button.Background>
+                                <ImageBrush Stretch="Uniform" ImageSource="icons/buttons/create.png"/>
+                            </Button.Background>
+                        </Button>
 
                     </Grid>
                 </Grid>
@@ -3261,32 +3405,32 @@
                    Height="61" 
                    VerticalAlignment="Center" Width="61"
                        VerticalContentAlignment="Center"
-                       FontSize="20" Margin="13,0,0,0"/>
+                       FontSize="18" Margin="13,0,0,0"/>
 
-                <Label Grid.Column="0" Content="Перс:" 
+                <Label Grid.Column="0" Content="Герой:" 
                    HorizontalAlignment="Left"
                    Height="63" 
                    VerticalAlignment="Center"
                        VerticalContentAlignment="Center"
-                       Width="61" FontSize="20" Margin="13,0,0,0"/>
-                <Label Grid.Column="1"
+                       Width="70" FontSize="18" Margin="4,0,0,0"/>
+                <Label
                     Content="{Binding OutDDHero}"
-                    HorizontalAlignment="Left" Height="34" 
+                    HorizontalAlignment="Left" Height="50" 
                     VerticalAlignment="Top"
-                    Width="166" FontSize="20"/>
+                    Width="166" FontSize="20" Grid.ColumnSpan="3" Margin="74,0,0,0"/>
 
 
                 <Label Grid.Column="2" Content="Луна:" 
                    HorizontalAlignment="Left"
                    Height="60" 
                        VerticalContentAlignment="Center"
-                   VerticalAlignment="Center" Width="61" FontSize="20" Grid.ColumnSpan="2" Margin="14,0,0,0"/>
+                   VerticalAlignment="Center" Width="61" FontSize="18" Grid.ColumnSpan="2" Margin="14,0,0,0"/>
 
                 <Label Grid.Column="3"
                     Content="{Binding OutDDLuna}"
-                    HorizontalAlignment="Left" Height="34" 
+                    HorizontalAlignment="Left" Height="50" 
                     VerticalAlignment="Top"
-                    Width="166" FontSize="20"/>
+                    Width="166" FontSize="20" Grid.ColumnSpan="2"/>
 
             </Grid>
 
@@ -3298,9 +3442,9 @@
                 </Grid.ColumnDefinitions>
                 <Label Grid.Column="0"
                     Content="{Binding OutDD}"
-                    HorizontalAlignment="Left" Height="34" 
+                    HorizontalAlignment="Left" Height="43" 
                     VerticalAlignment="Top"
-                    Width="166" FontSize="20"/>
+                    Width="166" FontSize="20" Grid.ColumnSpan="2"/>
                 <Button Content="Расчет"
                         Height="20"
                         Command="{Binding CalculateCommand}"

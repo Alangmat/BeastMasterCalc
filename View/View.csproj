@@ -611,6 +611,21 @@
   <ItemGroup>
     <Resource Include="icons\expert\DeadlyDexterityFramed.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\other\back.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\buttons\blue.png" />
+    <Resource Include="icons\buttons\green.png" />
+    <Resource Include="icons\buttons\red.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\buttons\create.png" />
+    <Resource Include="icons\buttons\delete.png" />
+    <Resource Include="icons\buttons\download.png" />
+    <Resource Include="icons\buttons\save.png" />
+    <Resource Include="icons\buttons\saveas.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.6.5.5\build\Fody.targets" Condition="Exists('..\packages\Fody.6.5.5\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

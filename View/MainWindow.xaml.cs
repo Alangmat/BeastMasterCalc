@@ -237,16 +237,16 @@ namespace View
 
             #region Показатель активности скиллов
 
-            updateStateButton(Logic.MoonTouchActive, moonTouchButton);
-            updateStateButton(Logic.BeastAwakeningActive, beastAwakeningButton);
-            updateStateButton(Logic.OrderToAttackActive, orderToAttackButton);
-            updateStateButton(Logic.HealingActive, healingButton);
-            updateStateButton(Logic.ChainLightningActive, chainLightningButton);
+            // updateStateButton(Logic.MoonTouchActive, moonTouchButton);
+            // updateStateButton(Logic.BeastAwakeningActive, beastAwakeningButton);
+            // updateStateButton(Logic.OrderToAttackActive, orderToAttackButton);
+            //updateStateButton(Logic.HealingActive, healingButton);
+            //updateStateButton(Logic.ChainLightningActive, chainLightningButton);
 
-            updateStateButton(Logic.BestialRampageActive, bestialRampageButton);
-            updateStateButton(Logic.AuraOfTheForestActive, auraOfTheForestButton);
-            updateStateButton(Logic.MoonlightPermanentActive, moonlightPermanentButton);
-            updateStateButton(Logic.MoonlightNonPermanentActive, moonlightNonPermanentButton);
+            // updateStateButton(Logic.BestialRampageActive, bestialRampageButton);
+            // updateStateButton(Logic.AuraOfTheForestActive, auraOfTheForestButton);
+            // updateStateButton(Logic.MoonlightPermanentActive, moonlightPermanentButton);
+            // updateStateButton(Logic.MoonlightNonPermanentActive, moonlightNonPermanentButton);
             updateStateButton(Logic.BlessingOfTheMoonActive, blessingOfTheMoonButton);
             updateStateButton(Logic.DoubleConcentrationActive, doubleConcentrationButton);
 
@@ -656,13 +656,13 @@ namespace View
         {
             Logic.MoonTouchActive = !Logic.MoonTouchActive;
 
-            updateStateButton(Logic.MoonTouchActive, moonTouchButton);
+            // updateStateButton(Logic.MoonTouchActive, moonTouchButton);
         }
         private void beastAwakeningButton_Click(object sender, RoutedEventArgs e)
         {
             Logic.BeastAwakeningActive = !Logic.BeastAwakeningActive;
 
-            updateStateButton(Logic.BeastAwakeningActive, beastAwakeningButton);
+            //updateStateButton(Logic.BeastAwakeningActive, beastAwakeningButton);
 
             if (!Logic.BeastAwakeningActive) 
             {
@@ -682,7 +682,7 @@ namespace View
         {
             Logic.ChainLightningActive = !Logic.ChainLightningActive;
 
-            updateStateButton(Logic.ChainLightningActive, chainLightningButton);
+            //updateStateButton(Logic.ChainLightningActive, chainLightningButton);
         }
 
         private void orderToAttackButton_Click(object sender, RoutedEventArgs e)
@@ -690,23 +690,19 @@ namespace View
             if (Logic.BeastAwakeningActive)
             {
                 Logic.OrderToAttackActive = !Logic.OrderToAttackActive;
-
-                updateStateButton(Logic.OrderToAttackActive, orderToAttackButton);
-
             }
             else
             {
                 Logic.OrderToAttackActive = false;
-
-                updateStateButton(Logic.OrderToAttackActive, orderToAttackButton);
             }
+            //updateStateButton(Logic.OrderToAttackActive, orderToAttackButton);
         }
 
         private void healingButton_Click(object sender, RoutedEventArgs e)
         {
             Logic.HealingActive = !Logic.HealingActive;
 
-            updateStateButton(Logic.HealingActive, healingButton);
+            // updateStateButton(Logic.HealingActive, healingButton);
         }
 
         private void bestialRampageButton_Click(object sender, RoutedEventArgs e)
@@ -718,9 +714,8 @@ namespace View
             else
             {
                 Logic.BestialRampageActive = false;
-
             }
-            updateStateButton(Logic.BestialRampageActive, bestialRampageButton);
+            // updateStateButton(Logic.BestialRampageActive, bestialRampageButton);
         }
         #endregion
 
@@ -729,7 +724,7 @@ namespace View
         {
             Logic.AuraOfTheForestActive = !Logic.AuraOfTheForestActive;
 
-            updateStateButton(Logic.AuraOfTheForestActive, auraOfTheForestButton);
+            // updateStateButton(Logic.AuraOfTheForestActive, auraOfTheForestButton);
         }
 
         private void moonlightPermanentButton_Click(object sender, RoutedEventArgs e)
@@ -737,12 +732,12 @@ namespace View
             if (!Logic.BeastAwakeningActive)
             {
                 Logic.MoonlightPermanentActive = false;
-                moonlightPermanentButton.Opacity = nonActiveOpacity;
+                // moonlightPermanentButton.Opacity = nonActiveOpacity;
             }
             else
             {
                 Logic.MoonlightPermanentActive = !Logic.MoonlightPermanentActive;
-                updateStateButton(Logic.MoonlightPermanentActive, moonlightPermanentButton);
+                // updateStateButton(Logic.MoonlightPermanentActive, moonlightPermanentButton);
                 
             }
 
@@ -751,7 +746,7 @@ namespace View
         private void moonlightNonPermanentButton_Click(object sender, RoutedEventArgs e)
         {
             Logic.MoonlightNonPermanentActive = !Logic.MoonlightNonPermanentActive;
-            updateStateButton(Logic.MoonlightNonPermanentActive, moonlightNonPermanentButton);
+            // updateStateButton(Logic.MoonlightNonPermanentActive, moonlightNonPermanentButton);
         }
 
         private void blessingOfTheMoonButton_Click(object sender, RoutedEventArgs e)
