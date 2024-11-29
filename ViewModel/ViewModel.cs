@@ -77,13 +77,13 @@ namespace ViewModel
         } 
         public void LoadBuilds()
         {
-            string jsonFromFile = File.ReadAllText("saves.json");
+            string jsonFromFile = File.ReadAllText(FILE_SAVE);
             Builds = JsonConvert.DeserializeObject<ObservableCollection<Build>>(jsonFromFile);
         }
         public void SaveBuilds()
         {
             string json = JsonConvert.SerializeObject(Builds);
-            File.WriteAllText("saves.json", json);
+            File.WriteAllText(FILE_SAVE, json);
         }
         public void AddDataSet()
         {
@@ -308,6 +308,18 @@ namespace ViewModel
             NotifyPropertyChanged(nameof(SelectedBelt));
             NotifyPropertyChanged(nameof(SelectedFoots));
 
+
+            MoonTouchActive = DataSet.MoonTouchActive;
+            //MoonTouchOpacity = changeOpacity(MoonTouchActive);
+            BeastAwakeningActive = DataSet.BeastAwakeningActive;
+            OrderToAttackActive = DataSet.OrderToAttackActive;
+            HealingActive = DataSet.HealingActive;
+            ChainLightningActive = DataSet.ChainLightningActive;
+            BestialRampageActive = DataSet.BestialRampageActive;
+            AuraOfTheForestActive = DataSet.AuraOfTheForestActive;
+            MoonlightPermanentActive = DataSet.MoonlightPermanentActive;
+            MoonlightNonPermanentActive = DataSet.MoonlightNonPermanentActive;
+
             #endregion
             #region Свойства, зависимые от изменений
             // зависимые от изменений - в set присутствует какая-либо логика кроме калка и обновления
@@ -324,14 +336,14 @@ namespace ViewModel
 
             Calculate();
         }
+        private const string FILE_SAVE = "saves.json";
 
         /*private ICommand loadCommand;
         public ICommand LoadCommand
         {
             get => loadCommand == null ? new RelayCommand(Load) : loadCommand;
         }*/
-        private const string FILE_SAVE = "save.json";
-        private void Save()
+        /*private void Save()
         {
             string json = JsonConvert.SerializeObject(DataSet);
             File.WriteAllText(FILE_SAVE, json);
@@ -340,7 +352,7 @@ namespace ViewModel
         public ICommand SaveCommand
         {
             get => saveCommand == null ? new RelayCommand(Save) : saveCommand;
-        }
+        }*/
 
         private Build dataSet;
         public Build DataSet { 
@@ -742,7 +754,7 @@ namespace ViewModel
             }
             if (MoonlightNonPermanentActive)
             {
-                double realCooldown = Moonlight.BaseTimeCooldown / SkillCooldownFinal.ConvertToCoefficient() + TIME_CAST;
+                //double realCooldown = Moonlight.BaseTimeCooldown / SkillCooldownFinal.ConvertToCoefficient() + TIME_CAST;
 
                 int nonPermanentDD = (int)(Moonlight.Formula(magicaldd) 
                     * coefficientCastle
@@ -2149,6 +2161,115 @@ namespace ViewModel
         }
 
 
+        #endregion
+
+        #region Активность кнопок
+        private const double ACTIVE_OPACITY = 1;
+        private const double NON_ACTIVE_OPACITY = 0.3;
+
+        private double changeOpacity(bool flag)
+        {
+            return flag ? ACTIVE_OPACITY : NON_ACTIVE_OPACITY;
+        }
+        #region Базовые скиллы
+
+        private double moonTouchOpacity = NON_ACTIVE_OPACITY;
+        public double MoonTouchOpacity
+        {
+            get => moonTouchOpacity;
+            private set
+            {
+                moonTouchOpacity = value;
+                NotifyPropertyChanged(nameof(MoonTouchOpacity));
+            }
+        }
+        private double beastAwakeningOpacity = NON_ACTIVE_OPACITY;
+        public double BeastAwakeningOpacity
+        {
+            get => beastAwakeningOpacity;
+            private set
+            {
+                beastAwakeningOpacity = value;
+                NotifyPropertyChanged(nameof(BeastAwakeningOpacity));
+            }
+        }
+        private double orderToAttackOpacity = NON_ACTIVE_OPACITY;
+        public double OrderToAttackOpacity
+        {
+            get => orderToAttackOpacity;
+            private set
+            {
+                orderToAttackOpacity = value;
+                NotifyPropertyChanged(nameof(OrderToAttackOpacity));
+            }
+        }
+        private double healingOpacity = NON_ACTIVE_OPACITY;
+        public double HealingOpacity
+        {
+            get => healingOpacity;
+            private set
+            {
+                healingOpacity = value;
+                NotifyPropertyChanged(nameof(HealingOpacity));
+            }
+        }
+        private double chainLightningOpacity = NON_ACTIVE_OPACITY;
+        public double ChainLightningOpacity
+        {
+            get => chainLightningOpacity;
+            private set
+            {
+                chainLightningOpacity = value;
+                NotifyPropertyChanged(nameof(ChainLightningOpacity));
+            }
+        }
+
+        #endregion
+        #region Экспертные навыки
+
+        private double bestialRampageOpacity = NON_ACTIVE_OPACITY;
+        public double BestialRampageOpacity
+        {
+            get => bestialRampageOpacity;
+            private set
+            {
+                bestialRampageOpacity = value;
+                NotifyPropertyChanged(nameof(BestialRampageOpacity));
+            }
+        }
+        private double auraOfTheForestOpacity = NON_ACTIVE_OPACITY;
+        public double AuraOfTheForestOpacity
+        {
+            get => auraOfTheForestOpacity;
+            private set
+            {
+                auraOfTheForestOpacity = value;
+                NotifyPropertyChanged(nameof(AuraOfTheForestOpacity));
+            }
+        }
+        private double moonlightPermanentOpacity = NON_ACTIVE_OPACITY;
+        public double MoonlightPermanentOpacity
+        {
+            get => moonlightPermanentOpacity;
+            private set
+            {
+                moonlightPermanentOpacity = value;
+                NotifyPropertyChanged(nameof(MoonlightPermanentOpacity));
+            }
+        }
+        private double moonlightNonPermanentOpacity = NON_ACTIVE_OPACITY;
+        public double MoonlightNonPermanentOpacity
+        {
+            get => moonlightNonPermanentOpacity;
+            private set
+            {
+                moonlightNonPermanentOpacity = value;
+                NotifyPropertyChanged(nameof(MoonlightNonPermanentOpacity));
+            }
+        }
+
+
+        #endregion
         #endregion
 
         #endregion
@@ -4139,7 +4260,8 @@ namespace ViewModel
         {
             get => DataSet.MoonTouchActive;
             set { 
-                DataSet.MoonTouchActive = value; 
+                DataSet.MoonTouchActive = value;
+                MoonTouchOpacity = changeOpacity(value);
                 Calculate(); NotifyPropertyChanged(nameof(MoonTouchActive)); }
         }
         //private bool beastAwakeningActive = true;
@@ -4147,7 +4269,8 @@ namespace ViewModel
         {
             get => DataSet.BeastAwakeningActive;
             set { 
-                DataSet.BeastAwakeningActive = value; 
+                DataSet.BeastAwakeningActive = value;
+                BeastAwakeningOpacity = changeOpacity(value);
                 Calculate(); NotifyPropertyChanged(nameof(BeastAwakeningActive)); }
         }
         //private bool orderToAttackActive = true;
@@ -4157,6 +4280,7 @@ namespace ViewModel
             get => DataSet.OrderToAttackActive;
             set { //orderToAttackActive = value; 
                 DataSet.OrderToAttackActive = value;
+                OrderToAttackOpacity = changeOpacity(value);
                 Calculate(); NotifyPropertyChanged(nameof(OrderToAttackActive)); }
         }
         //private bool healingActive = true;
@@ -4166,6 +4290,7 @@ namespace ViewModel
             get => DataSet.HealingActive;
             set { //healingActive = value;
                 DataSet.HealingActive = value;
+                HealingOpacity = changeOpacity(value);
                 Calculate(); NotifyPropertyChanged(nameof(HealingActive)); }
         }
         //private bool chainLightningActive = true;
@@ -4175,6 +4300,7 @@ namespace ViewModel
             get => DataSet.ChainLightningActive;
             set { //chainLightningActive = value; 
                 DataSet.ChainLightningActive = value;
+                ChainLightningOpacity = changeOpacity(value);
                 Calculate(); NotifyPropertyChanged(nameof(ChainLightningActive)); }
         }
         //private bool bestialRampageActive = true;
@@ -4184,7 +4310,8 @@ namespace ViewModel
             get => DataSet.BestialRampageActive;
             set { 
                 //bestialRampageActive = value; 
-                DataSet.BestialRampageActive = value; 
+                DataSet.BestialRampageActive = value;
+                BestialRampageOpacity = changeOpacity(value);
                 Calculate(); NotifyPropertyChanged(nameof(BestialRampageActive)); }
         }
         //private bool auraOfTheForestActive = true;
@@ -4195,6 +4322,7 @@ namespace ViewModel
             set {
                 //auraOfTheForestActive = value;
                 DataSet.AuraOfTheForestActive = value;
+                AuraOfTheForestOpacity = changeOpacity(value);
                 Calculate(); NotifyPropertyChanged(nameof(AuraOfTheForestActive)); }
         }
         //private bool moonlightPermanentActive = true;
@@ -4204,7 +4332,8 @@ namespace ViewModel
             get => DataSet.MoonlightPermanentActive;
             set { 
                 //moonlightPermanentActive = value; 
-                DataSet.MoonlightPermanentActive = value; 
+                DataSet.MoonlightPermanentActive = value;
+                MoonlightPermanentOpacity = changeOpacity(value);
                 Calculate();NotifyPropertyChanged(nameof(MoonlightPermanentActive)); }
         }
         //private bool moonlightNonPermanentActive = true;
@@ -4214,7 +4343,8 @@ namespace ViewModel
             get => DataSet.MoonlightNonPermanentActive;
             set { 
                 //moonlightNonPermanentActive = value; 
-                DataSet.MoonlightNonPermanentActive = value; 
+                DataSet.MoonlightNonPermanentActive = value;
+                MoonlightNonPermanentOpacity = changeOpacity(value);
                 Calculate(); NotifyPropertyChanged(nameof(MoonlightNonPermanentActive)); }
         }
 
