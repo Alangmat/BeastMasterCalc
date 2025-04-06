@@ -26,19 +26,19 @@ namespace Model
                 switch (_level)
                 {
                     case 1:
-                        coefficient = 0.05;
-                        break;
-                    case 2:
                         coefficient = 0.1;
                         break;
-                    case 3:
+                    case 2:
                         coefficient = 0.15;
                         break;
+                    case 3:
+                        coefficient = 0.25;
+                        break;
                     case 4:
-                        coefficient = 0.2;
+                        coefficient = 0.3;
                         break;
                     case 5:
-                        coefficient = 0.25;
+                        coefficient = 0.4;
                         break;
                     default:
                         break;

@@ -90,6 +90,7 @@ namespace Model
         public bool SacredShieldHeroActive = false;
         public bool SacredShieldLunaActive = false;
         public bool GodsAid = false;
+        public bool GodsAidLuna = false;
 
         #endregion
 
