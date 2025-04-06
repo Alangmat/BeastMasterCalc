@@ -88,7 +88,8 @@
             <RowDefinition Height="592"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <TabControl Grid.Row="0" Height="592" VerticalAlignment="Top">
+        <TabControl Grid.Row="0" Height="592" VerticalAlignment="Top" Background="#FF332220">
+            
             <TabItem Header="Навыки">
                 <Grid>
                     <Grid.Background>
@@ -753,6 +754,7 @@
                                >
                             <Border BorderBrush="Black" BorderThickness="1">
                                 <TextBlock
+                                    Foreground="Black"
                                     x:Name="moonlightHintText"
                                     Padding="5"
                                     TextWrapping="Wrap" Background="#FFBBCBF3" >
@@ -801,6 +803,7 @@
                                >
                             <Border BorderBrush="Black" BorderThickness="1">
                                 <TextBlock
+                                    Foreground="Black"
                                     x:Name="ddHintText"
                                     Padding="5"
                                     TextWrapping="Wrap" Background="#FFBBCBF3" />
@@ -824,6 +827,7 @@
                                >
                             <Border BorderBrush="Black" BorderThickness="1">
                                 <TextBlock
+                                    Foreground="Black"
                                     x:Name="mermenHintText"
                                     Padding="5"
                                     TextWrapping="Wrap" Background="#FFBBCBF3" />
@@ -847,6 +851,7 @@
                                >
                             <Border BorderBrush="Black" BorderThickness="1">
                                 <TextBlock
+                                    Foreground="Black"
                                         x:Name="blessingHintText"
                                         Padding="5"
                                         TextWrapping="Wrap" Background="#FFBBCBF3" />
@@ -1010,7 +1015,7 @@
 
                             <Grid Grid.Column="0" Grid.Row="1">
                                 <Label
-                                HorizontalContentAlignment="Center"
+                                HorizontalContentAlignment="Right"
                                 VerticalContentAlignment="Center"
                                 >
                                     <TextBlock Text="Бонусы костюма:"
@@ -1290,6 +1295,7 @@
                                >
                                 <Border BorderBrush="Black" BorderThickness="1">
                                     <TextBlock
+                                        Foreground="Black"
                                     x:Name="equipmentHintText"
                                     Padding="5"
                                     TextWrapping="Wrap" Background="#FFBBCBF3" />
@@ -1312,6 +1318,7 @@
                                >
                                 <Border BorderBrush="Black" BorderThickness="1">
                                     <TextBlock
+                                        Foreground="Black"
                                     x:Name="startModHintText"
                                     Padding="5"
                                     TextWrapping="Wrap" Background="#FFBBCBF3" />
@@ -1335,6 +1342,7 @@
                                >
                                 <Border BorderBrush="Black" BorderThickness="1">
                                     <TextBlock
+                                        Foreground="Black"
                                         x:Name="percentHintText"
                                         Padding="5"
                                         TextWrapping="Wrap" Background="#FFBBCBF3" />
@@ -1348,7 +1356,36 @@
             </TabItem>
 
             <TabItem Header="Характеристики">
-                <Grid Background="#FFE5E5E5">
+                <Grid>
+                    <Grid.Background>
+                        <ImageBrush 
+                        ImageSource="icons/other/background.jpg" 
+                        TileMode="Tile" 
+                        Viewport="0,0,283,193" 
+                        ViewportUnits="Absolute" 
+                        Stretch="None"/>
+                    </Grid.Background>
+                    <Grid.Resources>
+                        <!-- Общий стиль для всех TextBlock в Grid -->
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="#FFFFFF00"/>
+                            <!-- Устанавливаем цвет текста -->
+                        </Style>
+                        <Style TargetType="GroupBox">
+                            <Setter Property="Foreground" Value="#FFFFFF00"/>
+                            <Setter Property="FontSize" Value="16"/>
+                            <!-- Устанавливаем цвет текста -->
+                        </Style>
+                        <Style TargetType="Label">
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="Foreground" Value="#FFFFFF00"/>
+                            <!-- Устанавливаем цвет текста -->
+                        </Style>
+                        <Style TargetType="TextBox">
+                            <Setter Property="FontSize" Value="12"/>
+
+                        </Style>
+                    </Grid.Resources>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="8*"/>
                         <RowDefinition Height="523*"/>
@@ -1385,14 +1422,14 @@
                                 Source="/icons/stats/CriticalHit.png"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Left" Grid.Row="2"/>
-                                <Label Content="Критический удар" HorizontalAlignment="Left" Height="27" Margin="50,0,0,0" VerticalAlignment="Center" Width="137" Grid.Row="2"/>
+                                <Label Content="Критический удар" HorizontalAlignment="Left" Height="29" Margin="50,0,0,0" VerticalAlignment="Center" Width="147"/>
                                 <TextBox HorizontalAlignment="Left"
                                     Text="{Binding CriticalHit, Converter={StaticResource StringToDoubleConverter}}"
-                                    Margin="238,0,0,0"
+                                    Margin="233,0,0,0"
                                     TextWrapping="Wrap"
                                     VerticalAlignment="Center"
                                     Width="35"/>
-                                <Label Content="{Binding CriticalHitHeroFinal}" Margin="278,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                                <Label Content="{Binding CriticalHitHeroFinal}" Margin="271,0,0,0" VerticalAlignment="Center" HorizontalAlignment="Left"/>
                             </Grid>
                             <Grid Grid.Row="1">
                                 <Image Height="36"
@@ -1401,15 +1438,15 @@
                                     Source="/icons/stats/CriticalDamage.png"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Left" Grid.Row="3"/>
-                                <Label Content="Критический урон" HorizontalAlignment="Left" Height="27" Margin="50,0,0,0" VerticalAlignment="Center" Width="137" Grid.Row="3"/>
+                                <Label Content="Критический урон" HorizontalAlignment="Left" Height="32" Margin="50,0,0,0" VerticalAlignment="Center" Width="154"/>
                                 <TextBox HorizontalAlignment="Left"
                                     Text="{Binding CriticalDamage, Converter={StaticResource StringToDoubleConverter}}"
-                                    Margin="238,0,0,0"
+                                    Margin="233,0,0,0"
                                     TextWrapping="Wrap"
                                     VerticalAlignment="Center"
-                                    Width="35" Grid.Row="3"/>
+                                    Width="35"/>
                                 <Label Content="{Binding CriticalDamageFinal}" 
-                                       Margin="278,0,0,0" 
+                                       Margin="271,0,0,0" 
                                        VerticalAlignment="Center" 
                                        HorizontalAlignment="Left"/>
 
@@ -1428,12 +1465,12 @@
                                     Grid.Row="5"/>
                                 <TextBox HorizontalAlignment="Left"
                                     Text="{Binding Accuracy, Converter={StaticResource StringToDoubleConverter}}"
-                                    Margin="238,0,0,0"
+                                    Margin="233,0,0,0"
                                     TextWrapping="Wrap"
                                     VerticalAlignment="Center"
-                                    Width="35" Grid.Row="5"/>
+                                    Width="35"/>
                                 <Label Content="{Binding AccuracyHeroFinal}" 
-                                       Margin="278,0,0,0" 
+                                       Margin="271,0,0,0" 
                                        VerticalAlignment="Center" 
                                        HorizontalAlignment="Left"/>
                             </Grid>
@@ -1447,12 +1484,12 @@
                                 <Label Content="Скорость атаки" HorizontalAlignment="Left" Height="27" Margin="50,0,0,0" VerticalAlignment="Center" Width="137" Grid.Row="1"/>
                                 <TextBox HorizontalAlignment="Left"
                                     Text="{Binding AttackSpeed, Converter={StaticResource StringToDoubleConverter}}"
-                                    Margin="238,0,0,0"
+                                    Margin="233,0,0,0"
                                     TextWrapping="Wrap"
                                     VerticalAlignment="Center"
-                                    Width="35" Grid.Row="1"/>
+                                    Width="35"/>
                                 <Label Content="{Binding AttackSpeedFinal}" 
-                                       Margin="278,0,0,0" 
+                                       Margin="271,0,0,0" 
                                        VerticalAlignment="Center" 
                                        HorizontalAlignment="Left"/>
 
@@ -1467,16 +1504,15 @@
                                 <Label Content="Пробивная способность" 
                                        HorizontalAlignment="Left" 
                                        Height="27" Margin="50,0,0,0" 
-                                       VerticalAlignment="Center" Width="149"
-                                       Grid.Row="4"/>
+                                       VerticalAlignment="Center" Width="171"/>
                                 <TextBox HorizontalAlignment="Left"
                                     Text="{Binding Penetration, Converter={StaticResource StringToDoubleConverter}}"
-                                    Margin="238,0,0,0"
+                                    Margin="233,0,0,0"
                                     TextWrapping="Wrap"
                                     VerticalAlignment="Center"
-                                    Width="35" Grid.Row="4"/>
+                                    Width="35"/>
                                 <Label Content="{Binding PenetrationHeroFinal}" 
-                                       Margin="278,0,0,0" 
+                                       Margin="271,0,0,0" 
                                        VerticalAlignment="Center" 
                                        HorizontalAlignment="Left"/>
 
@@ -1488,15 +1524,15 @@
                                        Margin="10,0,0,0"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Left"/>
-                                <Label Content="Перезарядка навыков" HorizontalAlignment="Left" Height="27" Margin="50,0,0,0" VerticalAlignment="Center" Width="137"/>
+                                <Label Content="Перезарядка навыков" HorizontalAlignment="Left" Height="32" Margin="50,0,0,0" VerticalAlignment="Center" Width="175"/>
                                 <TextBox HorizontalAlignment="Left"
                                          Text="{Binding SkillCooldown, Converter={StaticResource StringToDoubleConverter}}"
-                                         Margin="238,0,0,0"
+                                         Margin="233,0,0,0"
                                          TextWrapping="Wrap"
                                          VerticalAlignment="Center"
                                          Width="35"/>
                                 <Label Content="{Binding SkillCooldownFinal}" 
-                                       Margin="278,0,0,0" 
+                                       Margin="271,0,0,0" 
                                        VerticalAlignment="Center" 
                                        HorizontalAlignment="Left"/>
 
@@ -1516,12 +1552,12 @@
                                     Grid.Row="8"/>
                                 <TextBox HorizontalAlignment="Left"
                                     Text="{Binding Rage, Converter={StaticResource StringToDoubleConverter}}"
-                                    Margin="238,0,0,0"
+                                    Margin="233,0,0,0"
                                     TextWrapping="Wrap"
                                     VerticalAlignment="Center"
-                                    Width="35" Grid.Row="8"/>
+                                    Width="35"/>
                                 <Label Content="{Binding RageFinal}" 
-                                       Margin="278,0,0,0" 
+                                       Margin="271,0,0,0" 
                                        VerticalAlignment="Center" 
                                        HorizontalAlignment="Left"/>
                             </Grid>
@@ -1539,12 +1575,12 @@
                                     Grid.Row="6"/>
                                 <TextBox HorizontalAlignment="Left"
                                     Text="{Binding AttackStrength, Converter={StaticResource StringToDoubleConverter}}"
-                                    Margin="238,0,0,0"
+                                    Margin="233,0,0,0"
                                     TextWrapping="Wrap"
                                     VerticalAlignment="Center"
-                                    Width="35" Grid.Row="6"/>
+                                    Width="35"/>
                                 <Label Content="{Binding AttackStrengthFinal}" 
-                                       Margin="278,0,0,0" 
+                                       Margin="271,0,0,0" 
                                        VerticalAlignment="Center" 
                                        HorizontalAlignment="Left"/>
 
@@ -1564,12 +1600,12 @@
                                     Grid.Row="7"/>
                                 <TextBox HorizontalAlignment="Left"
                                     Text="{Binding PiercingAttack, Converter={StaticResource StringToDoubleConverter}}"
-                                    Margin="238,0,0,0"
+                                    Margin="233,0,0,0"
                                     TextWrapping="Wrap"
                                     VerticalAlignment="Center"
-                                    Width="35" Grid.Row="7"/>
+                                    Width="35"/>
                                 <Label Content="{Binding PiercingAttackFinal}" 
-                                       Margin="278,0,0,0" 
+                                       Margin="271,0,0,0" 
                                        VerticalAlignment="Center" 
                                        HorizontalAlignment="Left"/>
                             </Grid>
@@ -1587,12 +1623,12 @@
                                     Grid.Row="7"/>
                                 <TextBox HorizontalAlignment="Left"
                                     Text="{Binding Facilitation, Converter={StaticResource StringToDoubleConverter}}"
-                                    Margin="238,0,0,0"
+                                    Margin="233,0,0,0"
                                     TextWrapping="Wrap"
                                     VerticalAlignment="Center"
-                                    Width="35" Grid.Row="7"/>
+                                    Width="35"/>
                                 <Label Content="{Binding FacilitationFinal}" 
-                                       Margin="278,0,0,0" 
+                                       Margin="271,0,0,0" 
                                        VerticalAlignment="Center" 
                                        HorizontalAlignment="Left"/>
                             </Grid>
@@ -1668,7 +1704,7 @@
                                    Margin="10,0,0,0"
                                    VerticalAlignment="Center"
                                    HorizontalAlignment="Left"/>
-                                <Label Content="Защита в процентах" HorizontalAlignment="Left" Height="27" Margin="50,0,0,0" VerticalAlignment="Center" Width="137"/>
+                                <Label Content="Защита в процентах" HorizontalAlignment="Left" Height="27" Margin="50,0,0,0" VerticalAlignment="Center" Width="151"/>
                                 <TextBox HorizontalAlignment="Left"
                                      Text="{Binding Protection, Converter={StaticResource StringToDoubleConverter}}"
                                      Margin="238,0,0,0"
@@ -1750,7 +1786,7 @@
                                 Margin="10,0,0,0"
                                 VerticalAlignment="Center"
                                 HorizontalAlignment="Left" Grid.Row="2"/>
-                                <Label Content="Пробивная способность" HorizontalAlignment="Left" Height="27" Margin="50,0,0,0" VerticalAlignment="Center" Width="150" Grid.Row="2"/>
+                                <Label Content="Пробивная способность" HorizontalAlignment="Left" Height="27" Margin="50,0,0,0" VerticalAlignment="Center" Width="174" Grid.Row="2"/>
                                 <Label Margin="238,0,0,0"
                                        HorizontalAlignment="Left"
                                        VerticalAlignment="Center"
@@ -1812,6 +1848,7 @@
                                >
                             <Border BorderBrush="Black" BorderThickness="1">
                                 <TextBlock
+                                    Foreground="Black"
                                     x:Name="statsHeroHintText"
                                     Padding="5"
                                     TextWrapping="Wrap" Background="#FFBBCBF3" />
@@ -1836,6 +1873,7 @@
                                >
                             <Border BorderBrush="Black" BorderThickness="1">
                                 <TextBlock
+                                    Foreground="Black"
                                     x:Name="weaponTypeHintText"
                                     Padding="5"
                                     TextWrapping="Wrap" Background="#FFBBCBF3" />
@@ -1860,6 +1898,7 @@
                                >
                             <Border BorderBrush="Black" BorderThickness="1">
                                 <TextBlock
+                                    Foreground="Black"
                                     x:Name="statsEntityHintText"
                                     Padding="5"
                                     TextWrapping="Wrap" Background="#FFBBCBF3" />
@@ -1883,6 +1922,7 @@
                                >
                             <Border BorderBrush="Black" BorderThickness="1">
                                 <TextBlock
+                                    Foreground="Black"
                                     x:Name="statsLunaHintText"
                                     Padding="5"
                                     TextWrapping="Wrap" Background="#FFBBCBF3" />
@@ -1895,6 +1935,29 @@
 
             <TabItem Header="Таланты">
                 <Grid>
+                    <Grid.Background>
+                        <ImageBrush 
+                        ImageSource="icons/other/background.jpg" 
+                        TileMode="Tile" 
+                        Viewport="0,0,283,193" 
+                        ViewportUnits="Absolute" 
+                        Stretch="None"/>
+                    </Grid.Background>
+                    <Grid.Resources>
+                        <!-- Общий стиль для всех TextBlock в Grid -->
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="White"/>
+                            <!-- Устанавливаем цвет текста -->
+                        </Style>
+                        <Style TargetType="GroupBox">
+                            <Setter Property="Foreground" Value="White"/>
+                            <!-- Устанавливаем цвет текста -->
+                        </Style>
+                        <Style TargetType="Label">
+                            <Setter Property="Foreground" Value="White"/>
+                            <!-- Устанавливаем цвет текста -->
+                        </Style>
+                    </Grid.Resources>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="100*"/>
                         <RowDefinition Height="35*"/>
@@ -1964,7 +2027,7 @@
                                 </Grid>
 
                                 <Grid Grid.Row="1">
-                                    <Label Content="Благословение луны +" HorizontalAlignment="Center" VerticalAlignment="Top" Height="26" Foreground="Black" />
+                                    <Label Content="Благословение луны +" HorizontalAlignment="Center" VerticalAlignment="Top" Height="26"/>
                                     <Button HorizontalAlignment="Center"
                                             Height="90" 
                                             Margin="0,15,0,0"
@@ -1980,7 +2043,7 @@
                                 </Grid>
 
                                 <Grid Grid.Row="2">
-                                    <Label Content="Гармония силы" HorizontalAlignment="Center" VerticalAlignment="Top" Height="26" Foreground="Black" />
+                                    <Label Content="Гармония силы" HorizontalAlignment="Center" VerticalAlignment="Top" Height="26" />
                                     <Button HorizontalAlignment="Center"
                                             Height="90" 
                                             Margin="0,15,0,0"
@@ -2019,7 +2082,7 @@
                                 </Grid.ColumnDefinitions>
 
                                 <Grid Grid.Row="0" Grid.Column="0">
-                                    <Label Content="Звериное буйство +" HorizontalAlignment="Center" VerticalAlignment="Top" Height="26" Width="120" Foreground="Black" />
+                                    <Label Content="Звериное буйство +" HorizontalAlignment="Center" VerticalAlignment="Top" Height="26" Width="120"/>
                                     <Button HorizontalAlignment="Center"
                                             Height="90" 
                                             Margin="0,15,0,0"
@@ -2078,7 +2141,7 @@
                                 </Grid>
 
                                 <Grid Grid.Row="1" Grid.Column="0">
-                                    <Label Content="Смертельная ловкость" HorizontalAlignment="Center" VerticalAlignment="Top" Height="26" Foreground="Black" />
+                                    <Label Content="Смертельная ловкость" HorizontalAlignment="Center" VerticalAlignment="Top" Height="26" />
                                     <Button HorizontalAlignment="Center"
                                             Height="90" 
                                             Margin="0,15,0,0"
@@ -2135,7 +2198,7 @@
                                 </Grid>
 
                                 <Grid Grid.Row="2" Grid.Column="0">
-                                    <Label Content="Благословение луны +" HorizontalAlignment="Center" VerticalAlignment="Top" Height="26" Foreground="Black" />
+                                    <Label Content="Благословение луны +" HorizontalAlignment="Center" VerticalAlignment="Top" Height="26" />
                                     <Button HorizontalAlignment="Center"
                                             Height="90" 
                                             Margin="0,15,0,0"
@@ -2617,6 +2680,7 @@
                                >
                             <Border BorderBrush="Black" BorderThickness="1">
                                 <TextBlock
+                                    Foreground="Black"
                                     x:Name="talentsHintText"
                                     Padding="5"
                                     TextWrapping="Wrap" Background="#FFBBCBF3" />
@@ -2627,6 +2691,25 @@
             </TabItem>
             <TabItem Header="Конечные модификаторы">
                 <Grid>
+                    <Grid.Background>
+                        <ImageBrush 
+                        ImageSource="icons/other/back.png" 
+                        TileMode="Tile" 
+                        Viewport="0,0,283,193" 
+                        ViewportUnits="Absolute" 
+                        Stretch="None"/>
+                    </Grid.Background>
+                    <Grid.Resources>
+                        <!-- Общий стиль для всех TextBlock в Grid -->
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="White"/>
+                            <!-- Устанавливаем цвет текста -->
+                        </Style>
+                        <Style TargetType="Label">
+                            <Setter Property="Foreground" Value="White"/>
+                            <!-- Устанавливаем цвет текста -->
+                        </Style>
+                    </Grid.Resources>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
@@ -2704,8 +2787,27 @@
                                         TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Крылья жреца"/></TextBlock>
                                     </CheckBox>
                                 </Grid>
-
                                 <Grid Grid.Row="2">
+                                    <Image Source="icons/other/GodsAid.png"
+                                           Width="36"
+                                           Height="36"
+                                           Margin="5"
+                                           HorizontalAlignment="Left"
+                                           VerticalAlignment="Center"
+                                           />
+                                    <CheckBox
+                                        IsChecked="{Binding GodsAidLuna}"
+                                        HorizontalAlignment="Left" 
+                                        Height="18" 
+                                        Margin="50,0,0,0"
+                                        VerticalAlignment="Center" 
+                                        Width="194">
+                                        <TextBlock
+                                        TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Крылья жреца на Луну"/></TextBlock>
+                                    </CheckBox>
+                                </Grid>
+
+                                <Grid Grid.Row="3">
                                     <Image Source="icons/other/bp.png"
                                            Width="36"
                                            Height="36"
@@ -2725,7 +2827,7 @@
                                     </CheckBox>
                                 </Grid>
 
-                                <Grid Grid.Row="3">
+                                <Grid Grid.Row="4">
                                     <CheckBox
                                         IsChecked="{Binding SacredShieldHeroActive}"
                                         HorizontalAlignment="Left" 
@@ -2737,7 +2839,7 @@
                                             TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Сакральный щит паладина на персонажа"/></TextBlock>
                                     </CheckBox>
                                 </Grid>
-                                <Grid Grid.Row="4">
+                                <Grid Grid.Row="5">
                                     <CheckBox
                                         IsChecked="{Binding SacredShieldLunaActive}"
                                         HorizontalAlignment="Left" 
@@ -2892,7 +2994,7 @@
                                     VerticalAlignment="Center" 
                                     >
                                         <TextBlock
-                                        TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text=" Снижение длительности эффектов на "/></TextBlock>
+                                        TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text=" Снижение длительности эффектов "/></TextBlock>
                                     </CheckBox>
                                 </Grid>
 
@@ -2918,6 +3020,7 @@
                                 <TextBlock
                                     x:Name="finalModHintText"
                                     Padding="5"
+                                    Foreground="Black"
                                     TextWrapping="Wrap" Background="#FFBBCBF3" />
                             </Border>
                         </Popup>
@@ -2971,6 +3074,14 @@
                                 <GridViewColumn DisplayMemberBinding="{Binding Path=LastDate}">Последнее изменение</GridViewColumn>
                             </GridView>
                         </ListView.View>
+                        <ListView.Resources>
+                            <Style TargetType="GridViewColumnHeader">
+                                <Setter Property="Background" Value="#FF332220" />
+                                <Setter Property="Foreground" Value="White" />
+                                <Setter Property="HorizontalContentAlignment" Value="Center" />
+
+                            </Style>
+                        </ListView.Resources>
 
 
                         <ListView.ItemContainerStyle>
@@ -3385,7 +3496,19 @@
             </TabItem>
         </TabControl>
 
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1" Background="#FF332220">
+            <Grid.Resources>
+                <!-- Общий стиль для всех TextBlock в Grid -->
+                <Style TargetType="TextBlock">
+                    <Setter Property="Foreground" Value="White"/>
+                    <!-- Устанавливаем цвет текста -->
+                </Style>
+                <Style TargetType="Label">
+                    <Setter Property="Foreground" Value="White"/>
+                    <!-- Устанавливаем цвет текста -->
+                </Style>
+            </Grid.Resources>
+
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="50*"/>
                 <ColumnDefinition Width="20*"/>
@@ -3467,6 +3590,7 @@
                                >
                         <Border BorderBrush="Black" BorderThickness="1">
                             <TextBlock
+                                Foreground="Black"
                                     x:Name="calculateHintText"
                                     Padding="5"
                                     TextWrapping="Wrap" Background="#FFBBCBF3" />

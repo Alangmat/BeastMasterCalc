@@ -20,6 +20,11 @@ namespace Model
         public const double DD_TALENTS = 4.75;
         public const double DD_CASTLE = 7.5;
 
+        public const int GODS_AID_ATTACK_SPEED = 12;
+        public const int GODS_AID_CRITICAL_HIT = 10;
+        public const int GODS_AID_CRITICAL_DAMAGE = 30;
+
+
 
         #endregion
 

@@ -29,39 +29,6 @@ namespace ViewModel
             Calculate();
         }
 
-        /*private ObservableCollection<KeyValuePair<CastleSectors, string>> _castles = new ObservableCollection<KeyValuePair<CastleSectors, string>>()
-        {
-            new KeyValuePair<CastleSectors, string>(CastleSectors.Empty, "Без замка | 0%"),
-            new KeyValuePair<CastleSectors, string>(CastleSectors.First, "1 сектор | 5%"),
-            new KeyValuePair<CastleSectors, string>(CastleSectors.Second, "2 сектор | 7.5%"),
-            new KeyValuePair<CastleSectors, string>(CastleSectors.Third, "3 сектор | 10%"),
-            new KeyValuePair<CastleSectors, string>(CastleSectors.Fourth, "4 сектор | 12.5%"),
-            new KeyValuePair<CastleSectors, string>(CastleSectors.Fifth, "5 сектор | 15%"),
-        };*/
-        /*public ObservableCollection<KeyValuePair<CastleSectors, string>> CastlesNew
-        {
-            get => _castles;
-        }
-
-        private CastleSectors selectedCastle = CastleSectors.Empty;
-        public CastleSectors SelectedCastle
-        {
-            //get => selectedCastle;
-            get => DataSet.SelectedCastle;
-            set
-            {
-                DataSet.SelectedCastle = value;
-                coefficientCastle = (2.5 * (int)value).ConvertToCoefficient();
-                Calculate();
-                NotifyPropertyChanged(nameof(SelectedCastle));
-            }
-        }*/
-
-
-
-
-
-
 
 
         #region работа с билдами
@@ -254,11 +221,13 @@ namespace ViewModel
 
 
             NotifyPropertyChanged(nameof(GodsAid));
+            NotifyPropertyChanged(nameof(GodsAidLuna));
+
 
             #endregion
 
             #region Обновление талантов
-            
+
             ForestInspirationActive = DataSet.ForestInspirationActive;
             DualRageActive = DataSet.DualRageActive;
             GuardianUnityActive = DataSet.GuardianUnityActive;
@@ -597,7 +566,7 @@ namespace ViewModel
                 * FormulaCoefficientOfAttackStrength() 
                 * FormulaCoefficientOfPiercingAttackLuna());
             OutBeastAwakeningDD = result.ToString();
-            result = (int)(result * 60 / Beast_Awakening.BaseDelay);
+            result = (int)(result * 60 / (Beast_Awakening.BaseDelay * ((100 - (GodsAidLuna ? ModifiersDamage.GODS_AID_ATTACK_SPEED : 0)) / 100.0)));
             OutBeastAwakeningDPM = result.ToString();
             result = (int)(result 
                 * CoefficientOfMoonTouchForLuna() 
@@ -644,7 +613,8 @@ namespace ViewModel
                 * FormulaCoefficientOfPiercingAttackLuna());
 
             OutBestialRampageDD = result.ToString();
-            result = (int)(result * 60 / (Bestial_Rampage.Luna.BaseDelay * ((100 - Bestial_Rampage.IncreaseAttackSpeed) / 100)));
+            double increaseAttackSpeed = (100 - (Bestial_Rampage.IncreaseAttackSpeed + (GodsAidLuna ? ModifiersDamage.GODS_AID_ATTACK_SPEED : 0))) / 100;
+            result = (int)(result * 60 / (Bestial_Rampage.Luna.BaseDelay * increaseAttackSpeed));
             OutBestialRampageDPM = result.ToString();
             result = (int)(result 
                 * CoefficientOfMoonTouchForLuna() 
@@ -924,6 +894,7 @@ namespace ViewModel
             if (CastleSwordActive) SkillCooldownFinal += 5;
             if (DoubleConcentrationActive)
                 SkillCooldownFinal += DoubleConcentration.AddSkillCooldown();
+            
             SkillCooldownFinal = StatsLimit.CheckLimit(SkillCooldownFinal, StatsLimit.MAX_SKILL_COOLDOWN);
         }
         #endregion
@@ -963,6 +934,7 @@ namespace ViewModel
             if (DoubleConcentrationActive)
                 AttackSpeedFinal += DoubleConcentration.AddAttackSpeed();
             if (GodsAid) AttackSpeedFinal += 12;
+            if (CastleStartModifierActive) AttackSpeedFinal -= 5;
             AttackSpeedFinal = StatsLimit.CheckLimit(AttackSpeedFinal, StatsLimit.MAX_ATTACK_SPEED);
             
         }
@@ -993,7 +965,8 @@ namespace ViewModel
             get => criticalHitLuna;
             set
             {
-                criticalHitLuna = value;
+                //criticalHitLuna = value;
+                criticalHitLuna = StatsLimit.CheckLimit(value, StatsLimit.MAX_CRITICAL_HIT);
                 NotifyPropertyChanged(nameof(CriticalHitLuna));
             }
         }
@@ -1020,6 +993,8 @@ namespace ViewModel
             if (BlessingOfTheMoonActive) CriticalHitHeroFinal += BlessingOfTheMoon.AdditionCriticalHit;
             if (CrushingWillActive) CriticalHitHeroFinal += MermanModifiers.CRUSHING_WILL_ADDITIONAL_CRITICAL_HIT;
             if (GodsAid) CriticalHitHeroFinal += 10;
+            if (CastleStartModifierActive) CriticalHitHeroFinal -= 5;
+            CriticalHitHeroFinal = Math.Max(CriticalHitHeroFinal, 0);
             criticalHit = CriticalHitHeroFinal;
             IsUsingBlessingOfTheMoonOnLuna = IsUsingBlessingOfTheMoonOnLuna;
             if (CriticalHitHeroFinal > maxCriticalHitHero) CriticalHitHeroFinal = maxCriticalHitHero;
@@ -1037,6 +1012,20 @@ namespace ViewModel
             {
                 criticalDamage = value; 
                 NotifyPropertyChanged(nameof(CriticalDamageFinal));
+            }
+        }
+        private double criticalDamageLuna = 0;
+        /// <summary>
+        /// Итоговое значение характеристики "Критический урон" Луны с учетом всех скиллов и бафов
+        /// </summary>
+        public double CriticalDamageLuna
+        {
+            get => criticalDamageLuna;
+            set
+            {
+                //criticalHitLuna = value;
+                criticalDamageLuna = value;
+                NotifyPropertyChanged(nameof(CriticalDamageLuna));
             }
         }
         /// <summary>
@@ -1061,6 +1050,8 @@ namespace ViewModel
             if (DoubleConcentrationActive)
                 CriticalDamageFinal += DoubleConcentration.AdditionCriticalDamage;
             if (GodsAid) CriticalDamageFinal += 30;
+            CriticalDamageLuna = CriticalDamageFinal;
+            if (GodsAidLuna) CriticalDamageLuna += ModifiersDamage.GODS_AID_CRITICAL_DAMAGE;
             CriticalDamageFinal = StatsLimit.CheckLimit(CriticalDamageFinal, StatsLimit.MAX_CRITICAL_DAMAGE);
         }
         #endregion
@@ -1116,6 +1107,8 @@ namespace ViewModel
             if (CastleSwordActive) PenetrationHeroFinal += 5;
             if (BlessingOfTheMoonActive) PenetrationHeroFinal += BlessingOfTheMoon.AdditionPenetration;
             if (IrreversibleAngerActive) PenetrationHeroFinal += MermanModifiers.IRREVERSIBLE_ANGER_ADDITIONAL_PENETRATION;
+            if (CastleStartModifierActive) PenetrationHeroFinal -= 5;
+            PenetrationHeroFinal = Math.Max(PenetrationHeroFinal, 0);
             penetration = PenetrationHeroFinal;
             IsUsingBlessingOfTheMoonOnLuna = IsUsingBlessingOfTheMoonOnLuna;
             if (PenetrationHeroFinal > maxPenetrationHero) PenetrationHeroFinal = maxPenetrationHero;
@@ -1170,6 +1163,8 @@ namespace ViewModel
             AccuracyHeroFinal += Accuracy;
             if (CastleSwordActive) AccuracyHeroFinal += 5;
             if (IrreversibleAngerActive) AccuracyHeroFinal += MermanModifiers.IRREVERSIBLE_ANGER_ADDITIONAL_ACCURACY;
+            if (CastleStartModifierActive) AccuracyHeroFinal -= 5;
+            AccuracyHeroFinal = Math.Max(AccuracyHeroFinal, 0);
             AccuracyLuna = AccuracyHeroFinal;
             if (AccuracyHeroFinal > maxAccuracyHero) AccuracyHeroFinal = maxAccuracyHero;
 
@@ -1304,6 +1299,16 @@ namespace ViewModel
             {
                 DataSet.Facilitation = StatsLimit.CheckLimit(value, StatsLimit.MAX_FACILITATION);
                 Calculate(); NotifyPropertyChanged(nameof(Facilitation));
+            }
+        }
+        private double facilitationLuna = 0;
+        public double FacilitationLuna
+        {
+            get => facilitationLuna;
+            set
+            {
+                facilitationLuna = value;
+                
             }
         }
         /// <summary>
@@ -2926,6 +2931,10 @@ namespace ViewModel
                     CriticalHitLuna = criticalHit;
                     PenetrationLuna = penetration;
                 }
+                if (GodsAidLuna)
+                {
+                    CriticalHitLuna += ModifiersDamage.GODS_AID_CRITICAL_HIT;
+                }
                 CriticalHitLuna = StatsLimit.CheckLimit(CriticalHitLuna, StatsLimit.MAX_CRITICAL_HIT);
                 PenetrationLuna = StatsLimit.CheckLimit(PenetrationLuna, StatsLimit.MAX_PENETRATION);
 
@@ -2959,7 +2968,8 @@ namespace ViewModel
         private double FormulaCoefficientOfCriticalHitLuna()
         {
             double criticalHitWithResilience = (CriticalHitLuna - Resilience) / 100;
-            double critDamage = CriticalDamageFinal;
+            //double critDamage = CriticalDamageFinal;
+            double critDamage = CriticalDamageLuna;
             if (CrushingWillActive) critDamage += MermanModifiers.CRUSHING_WILL_ADDITIONAL_CRITICAL_DAMAGE;
             if (criticalHitWithResilience < 0) criticalHitWithResilience = 0;
             if (criticalHitWithResilience > 1) criticalHitWithResilience = 1;
@@ -3342,6 +3352,16 @@ namespace ViewModel
                 DataSet.GodsAid = value;
                 Calculate();
                 NotifyPropertyChanged(nameof(GodsAid));
+            }
+        }
+        public bool GodsAidLuna
+        {
+            get => DataSet.GodsAidLuna;
+            set
+            {
+                DataSet.GodsAidLuna = value;
+                Calculate();
+                NotifyPropertyChanged(nameof(GodsAidLuna));
             }
         }
 
