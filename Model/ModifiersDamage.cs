@@ -24,6 +24,11 @@ namespace Model
         public const int GODS_AID_CRITICAL_HIT = 10;
         public const int GODS_AID_CRITICAL_DAMAGE = 30;
 
+        public const int PAIRING_TALENT_PHYSICAL_DD = 4;
+        public const double PAIRING_TALENT_MAGICAL_DD = 5.6;
+
+        public const int ROAR_TALENT_CRITICAL_DAMAGE = 18;
+
 
 
         #endregion

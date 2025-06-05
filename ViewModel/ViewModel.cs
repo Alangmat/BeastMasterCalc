@@ -223,6 +223,9 @@ namespace ViewModel
             NotifyPropertyChanged(nameof(GodsAid));
             NotifyPropertyChanged(nameof(GodsAidLuna));
 
+            NotifyPropertyChanged(nameof(PairingTalentAlmahadActive));
+            NotifyPropertyChanged(nameof(RoarTalentAlmahadActive));
+
 
             #endregion
 
@@ -344,25 +347,6 @@ namespace ViewModel
             {
                 if (int.TryParse(PhysicalDD, out physdd))
                 {
-
-                    /*CalcSkillCooldown();
-                    CalcAttackSpeed();
-                    CalcCriticalHit();
-                    CalcCriticalDamage();
-                    CalcPenetration();
-                    CalcAccuracy();
-                    CalcAttackStrength();
-                    CalcPiercingAttack();
-                    CalcRage();
-                    CalcFacilitation();
-
-                    calcHarmoniousPowerDD();
-
-                    CalcPercentMagicalDDStart();
-                    CalcPercentMagicalDD();
-                    CalcPercentPhysicalDDStart();
-                    CalcPercentPhysicalDD();*/
-
                     CalcStats();
 
                     CalcPercents();
@@ -1049,9 +1033,13 @@ namespace ViewModel
             CriticalDamageFinal += CriticalDamage;
             if (DoubleConcentrationActive)
                 CriticalDamageFinal += DoubleConcentration.AdditionCriticalDamage;
-            if (GodsAid) CriticalDamageFinal += 30;
+            // Крылья на ловчего
+            if (GodsAid) CriticalDamageFinal += ModifiersDamage.GODS_AID_CRITICAL_DAMAGE;
+            if (RoarTalentAlmahadActive) CriticalDamageFinal += ModifiersDamage.ROAR_TALENT_CRITICAL_DAMAGE;
             CriticalDamageLuna = CriticalDamageFinal;
+            // Крылья на Луну
             if (GodsAidLuna) CriticalDamageLuna += ModifiersDamage.GODS_AID_CRITICAL_DAMAGE;
+
             CriticalDamageFinal = StatsLimit.CheckLimit(CriticalDamageFinal, StatsLimit.MAX_CRITICAL_DAMAGE);
         }
         #endregion
@@ -1493,6 +1481,7 @@ namespace ViewModel
             if (GuildDamageModifierActive) percentMagicalDD += ModifiersDamage.DD_GUILD;
             if (TalentDamageModifierActive) percentMagicalDD += ModifiersDamage.DD_TALENTS;
             if (CastleSwordActive) percentMagicalDD += ModifiersDamage.DD_CASTLE;
+            if (PairingTalentAlmahadActive) percentMagicalDD += ModifiersDamage.PAIRING_TALENT_MAGICAL_DD;
             //if (HasTalentHarmoniousPower) percentMagicalDD += harmoniousPowerMDD;
             percentMagicalDD += AdditionalPercentMDDFinal;
         }
@@ -1540,6 +1529,7 @@ namespace ViewModel
             if (GuildDamageModifierActive) percentPhysicalDD += ModifiersDamage.DD_GUILD;
             if (TalentDamageModifierActive) percentPhysicalDD += ModifiersDamage.DD_TALENTS;
             if (CastleSwordActive) percentPhysicalDD += ModifiersDamage.DD_CASTLE;
+            if (PairingTalentAlmahadActive) percentPhysicalDD += ModifiersDamage.PAIRING_TALENT_PHYSICAL_DD;
 
             percentPhysicalDD += AdditionalPercentPDDFinal;
         }
@@ -2897,6 +2887,29 @@ namespace ViewModel
             }
         }
         #endregion
+
+        #endregion
+
+        #region Таланты альмахада
+
+        public bool PairingTalentAlmahadActive
+        {
+            get => DataSet.PairingTalentAlmahadActive;
+            set
+            {
+                DataSet.PairingTalentAlmahadActive = value;
+                Calculate(); NotifyPropertyChanged(nameof(PairingTalentAlmahadActive));
+            }
+        }
+        public bool RoarTalentAlmahadActive
+        {
+            get => DataSet.RoarTalentAlmahadActive;
+            set
+            {
+                DataSet.RoarTalentAlmahadActive = value;
+                Calculate(); NotifyPropertyChanged(nameof(RoarTalentAlmahadActive));
+            }
+        }
 
         #endregion
 
