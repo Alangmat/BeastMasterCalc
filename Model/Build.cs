@@ -41,7 +41,6 @@ namespace Model
         #endregion
         #region Stats
         public string MagicalDamage { get; set; }
-
         public double PercentMagicalDD { get; set; } = 0;
         public string PhysicalDamage { get; set; }
         public double PercentPhysicalDD { get; set; } = 0;
@@ -91,6 +90,9 @@ namespace Model
         public bool SacredShieldLunaActive = false;
         public bool GodsAid = false;
         public bool GodsAidLuna = false;
+
+        public bool PairingTalentAlmahadActive = false;
+        public bool RoarTalentAlmahadActive = false;
 
         #endregion
 
