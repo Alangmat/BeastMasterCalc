@@ -23,19 +23,19 @@ namespace Model
                         coefficient = 1.3;
                         baseDmg = 40;
                         DurationMoonTouch = 4;
-                        CoefficientDD = 0.05;
+                        CoefficientDD = 0.07;
                         break;
                     case 2:
                         coefficient = 1.4;
                         baseDmg = 55;
                         DurationMoonTouch = 5;
-                        CoefficientDD = 0.07;
+                        CoefficientDD = 0.09;
                         break;
                     case 3:
                         coefficient = 1.55;
                         baseDmg = 70;
                         DurationMoonTouch = 5;
-                        CoefficientDD = 0.1;
+                        CoefficientDD = 0.11;
                         break;
                     case 4:
                         coefficient = 1.65;
