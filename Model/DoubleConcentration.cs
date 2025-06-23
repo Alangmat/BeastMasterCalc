@@ -18,7 +18,7 @@ namespace Model
         /// <summary>
         /// Прибавка крит урона
         /// </summary>
-        public int AdditionCriticalDamage = 8;
+        public double AdditionCriticalDamage = 8;
         /// <summary>
         /// Прибавка перезарядки навыков
         /// </summary>
