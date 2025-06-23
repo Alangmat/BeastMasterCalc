@@ -64,6 +64,10 @@ namespace ViewModel
         {
             DataSet.LastDate = DateTime.Now.ToString();
             DataSet.ID = Guid.NewGuid();
+            if (builds is null)
+            {
+                builds = new ObservableCollection<Build>();
+            }
             builds.Add(DataSet);
             string json = JsonConvert.SerializeObject(DataSet);
             DataSet = JsonConvert.DeserializeObject<Build>(json);
@@ -566,7 +570,7 @@ namespace ViewModel
         }
         public double TimeBestialRampage()
         {
-            double result = (Bestial_Rampage.TimeActive * (FacilitationFinal.ConvertToCoefficient()) / BestialRampageCooldown());
+            double result = (Bestial_Rampage.TimeActive * (FacilitationLuna.ConvertToCoefficient()) / BestialRampageCooldown());
             if (result < 0)
             {
                 return 0;
@@ -577,7 +581,7 @@ namespace ViewModel
         }
         public double TimeWithoutBestialRampage()
         {
-            double result = (BestialRampageCooldown() - Bestial_Rampage.TimeActive) * FacilitationFinal.ConvertToCoefficient() / BestialRampageCooldown();
+            double result = (BestialRampageCooldown() - Bestial_Rampage.TimeActive) * FacilitationLuna.ConvertToCoefficient() / BestialRampageCooldown();
             if (result < 0)
             {
                 return 0;
@@ -618,7 +622,8 @@ namespace ViewModel
             var result = new Dictionary<SourcesDamage, int>();
             result.Add(SourcesDamage.Hero, 0);
             result.Add(SourcesDamage.Luna, 0);  
-            int countHit = (int)(AuraOfTheForest.TimeActive * FacilitationFinal.ConvertToCoefficient() / AuraOfTheForest.Delay);
+            int countHitByHero = (int)(AuraOfTheForest.TimeActive * FacilitationFinal.ConvertToCoefficient() / AuraOfTheForest.Delay);
+            int countHitByLuna = (int)(AuraOfTheForest.TimeActive * FacilitationLuna.ConvertToCoefficient() / AuraOfTheForest.Delay);
             int LunaAura = (int)(AuraOfTheForest.Formula(magedd) 
                 * FormulaCoefficientOfPenetrationLuna()); 
             int HeroesAura = (int)(AuraOfTheForest.Formula(magedd) 
@@ -634,7 +639,7 @@ namespace ViewModel
                 {
                     LunaAura = (int)(LunaAura * 0.8);
                     OutAuraOfTheForestLunaDD = LunaAura.ToString();
-                    LunaAura = (int)(LunaAura * 60 / AuraOfTheForestCooldown() * countHit);
+                    LunaAura = (int)(LunaAura * 60 / AuraOfTheForestCooldown() * countHitByLuna);
                     OutAuraOfTheForestLunaDPM = LunaAura.ToString();
                     // ИТОГОВЫЙ ДД АУРЫ ЛЕСА ЛУНЫ НА ВСЕ КЭФЫ
                     result[SourcesDamage.Luna] += (int)(LunaAura 
@@ -649,7 +654,7 @@ namespace ViewModel
                 }
                 HeroesAura = (int)(HeroesAura * 0.8);
                 OutAuraOfTheForestHeroDD = HeroesAura.ToString();
-                HeroesAura = (int)(HeroesAura * 60 / AuraOfTheForestCooldown() * countHit);
+                HeroesAura = (int)(HeroesAura * 60 / AuraOfTheForestCooldown() * countHitByHero);
                 OutAuraOfTheForestHeroDPM = HeroesAura.ToString();
                 result[SourcesDamage.Hero] += (int)(HeroesAura 
                     * FormulaCoefficientOfCriticalHitForSkill() 
@@ -660,7 +665,7 @@ namespace ViewModel
             if (BeastAwakeningActive)
             {
                 OutAuraOfTheForestLunaDD = LunaAura.ToString();
-                LunaAura = (int)(LunaAura * 60 / AuraOfTheForestCooldown() * countHit);
+                LunaAura = (int)(LunaAura * 60 / AuraOfTheForestCooldown() * countHitByLuna);
                 OutAuraOfTheForestLunaDPM = LunaAura.ToString();
                 OutAuraOfTheForestHeroDPM = "0";
                 OutAuraOfTheForestHeroDD = "0";
@@ -672,7 +677,7 @@ namespace ViewModel
                 return result;
             }
             OutAuraOfTheForestHeroDD = HeroesAura.ToString();
-            HeroesAura = (int)(HeroesAura * 60 / AuraOfTheForestCooldown() * countHit);
+            HeroesAura = (int)(HeroesAura * 60 / AuraOfTheForestCooldown() * countHitByHero);
             OutAuraOfTheForestHeroDPM = HeroesAura.ToString();
             OutAuraOfTheForestLunaDD = "0";
             OutAuraOfTheForestLunaDPM = "0";
@@ -1285,7 +1290,7 @@ namespace ViewModel
             get => DataSet.Facilitation;
             set
             {
-                DataSet.Facilitation = StatsLimit.CheckLimit(value, StatsLimit.MAX_FACILITATION);
+                DataSet.Facilitation = StatsLimit.CheckLimit(value, 300);
                 Calculate(); NotifyPropertyChanged(nameof(Facilitation));
             }
         }
@@ -1296,7 +1301,7 @@ namespace ViewModel
             set
             {
                 facilitationLuna = value;
-                
+                NotifyPropertyChanged(nameof(FacilitationLuna));
             }
         }
         /// <summary>
@@ -1306,6 +1311,7 @@ namespace ViewModel
         {
             FacilitationFinal = 0;
             FacilitationFinal += Facilitation;
+            FacilitationLuna = FacilitationFinal;
             FacilitationFinal = StatsLimit.CheckLimit(FacilitationFinal, StatsLimit.MAX_FACILITATION);
         }
         #endregion

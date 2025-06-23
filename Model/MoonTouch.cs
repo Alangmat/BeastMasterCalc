@@ -62,7 +62,7 @@ namespace Model
         private int baseDmg = 40;
         public double BaseTimeCooldown = 11;
         public int DurationMoonTouch = 4;
-        public double CoefficientDD = 0.05;
+        public double CoefficientDD = 0.07;
         public BeastAwakening Luna;
 
         public bool HasTalantPlus
