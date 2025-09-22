@@ -29,7 +29,8 @@ namespace Model
 
         public const int ROAR_TALENT_CRITICAL_DAMAGE = 18;
 
-
+        public const double PREDATORY_BOND_PENETRATION_COEFFICIENT = 0.16;
+        public const double PREDATORY_BOND_ATTACK_STRENGTH_COEFFICIENT = 0.16;
 
         #endregion
 

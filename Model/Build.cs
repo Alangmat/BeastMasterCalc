@@ -44,19 +44,20 @@ namespace Model
         public double PercentMagicalDD { get; set; } = 0;
         public string PhysicalDamage { get; set; }
         public double PercentPhysicalDD { get; set; } = 0;
-        public double SkillCooldown { get; set; }
-        public double AttackSpeed { get; set; }
-        public double CriticalHit { get; set; }
-        public double CriticalDamage { get; set; }
-        public double Penetration { get; set; }
-        public double Accuracy { get; set; }
-        public double AttackStrength { get; set; }
-        public double PiercingAttack { get; set; }
-        public double Rage { get; set; }
-        public double Facilitation { get; set; }
-        public double Protection { get; set; }
-        public double Dodge { get; set; }
-        public double Resilience { get; set; }
+        public double SkillCooldown { get; set; } = 0;
+        public double AttackSpeed { get; set; } = 0;
+        public double CriticalHit { get; set; } = 0;
+        public double CriticalDamage { get; set; } = 0;
+        public double Penetration { get; set; } = 0;    
+        public double Accuracy { get; set; } = 0;
+        public double AttackStrength { get; set; } = 0;
+        public double PiercingAttack { get; set; } = 0;
+        public double Rage { get; set; } = 0;
+        public double Facilitation { get; set; } = 0;
+        public double DepthsFury { get; set; } = 0;
+        public double Protection { get; set; } = 0;
+        public double Dodge { get; set; } = 0;
+        public double Resilience { get; set; } = 0;
         #endregion
         #region other
         #region тритоны
@@ -93,6 +94,7 @@ namespace Model
 
         public bool PairingTalentAlmahadActive = false;
         public bool RoarTalentAlmahadActive = false;
+        public bool PredatoryBondTalentAlmahadActive = false;
 
         #endregion
 
@@ -180,6 +182,8 @@ namespace Model
         #endregion
         #endregion
 
+
+        public bool OverLimit = false;
 
         public event PropertyChangedEventHandler PropertyChanged;
         /// <summary>
