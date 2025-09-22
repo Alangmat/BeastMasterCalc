@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,6 +20,7 @@ namespace Model
         public const int MAX_CRITICAL_DAMAGE = 200;
         public const int MAX_PENETRATION = 100;
         public const int MAX_PENETRATION_HERO = 50;
+        public const int MAX_ACCURACY_HERO = 50;
         public const int MAX_ACCURACY = 100;
         public const int MAX_ATTACK_STRENGTH = 100;
         public const int MAX_PIERCING_ATTACK = 50;
@@ -27,11 +29,12 @@ namespace Model
         public const int MAX_PROTECTION = 80;
         public const int MAX_DODGE = 60;
         public const int MAX_RESILIENCE = 60;
+        public const int MAX_DEPTH_FURY = 50;
 
         #endregion
 
         public const int DD_PROCENT_PASSIVE = 4;
-        public static double CheckLimit(double stat, int maxLimit)
+        public static double CheckLimit(double stat, double maxLimit)
         {
             stat = Math.Max(stat, MIN_VALUE);
             stat = Math.Min(stat, maxLimit);

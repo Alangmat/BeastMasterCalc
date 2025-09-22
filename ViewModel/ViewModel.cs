@@ -185,6 +185,7 @@ namespace ViewModel
             NotifyPropertyChanged(nameof(PiercingAttack));
             NotifyPropertyChanged(nameof(Rage));
             NotifyPropertyChanged(nameof(Facilitation));
+            NotifyPropertyChanged(nameof(DepthsFury));
             //NotifyPropertyChanged(nameof(PercentMagicalDD));
             //NotifyPropertyChanged("PercentPhysicalDD");
 
@@ -229,6 +230,7 @@ namespace ViewModel
 
             NotifyPropertyChanged(nameof(PairingTalentAlmahadActive));
             NotifyPropertyChanged(nameof(RoarTalentAlmahadActive));
+            NotifyPropertyChanged(nameof(PredatoryBondTalentAlmahadActive));
 
 
             #endregion
@@ -310,25 +312,12 @@ namespace ViewModel
             IrreversibleAngerActive = DataSet.IrreversibleAnger;
             #endregion
 
+            NotifyPropertyChanged(nameof(OverLimitClosed));
+
             Calculate();
         }
         private const string FILE_SAVE = "saves.json";
 
-        /*private ICommand loadCommand;
-        public ICommand LoadCommand
-        {
-            get => loadCommand == null ? new RelayCommand(Load) : loadCommand;
-        }*/
-        /*private void Save()
-        {
-            string json = JsonConvert.SerializeObject(DataSet);
-            File.WriteAllText(FILE_SAVE, json);
-        }
-        private ICommand saveCommand;
-        public ICommand SaveCommand
-        {
-            get => saveCommand == null ? new RelayCommand(Save) : saveCommand;
-        }*/
 
         private Build dataSet;
         public Build DataSet { 
@@ -551,7 +540,7 @@ namespace ViewModel
         public int CalcBeastAwakening(int magedd, int physdd)
         {
             int result = (int)(Beast_Awakening.Formula(magedd, physdd) 
-                * FormulaCoefficientOfAttackStrength() 
+                * FormulaCoefficientOfAttackStrengthLuna() 
                 * FormulaCoefficientOfPiercingAttackLuna());
             OutBeastAwakeningDD = result.ToString();
             result = (int)(result * 60 / (Beast_Awakening.BaseDelay * ((100 - (GodsAidLuna ? ModifiersDamage.GODS_AID_ATTACK_SPEED : 0)) / 100.0)));
@@ -581,7 +570,7 @@ namespace ViewModel
         }
         public double TimeWithoutBestialRampage()
         {
-            double result = (BestialRampageCooldown() - Bestial_Rampage.TimeActive) * FacilitationLuna.ConvertToCoefficient() / BestialRampageCooldown();
+            double result = (BestialRampageCooldown() - Bestial_Rampage.TimeActive * FacilitationLuna.ConvertToCoefficient()) / BestialRampageCooldown();
             if (result < 0)
             {
                 return 0;
@@ -597,7 +586,7 @@ namespace ViewModel
         public int CalcBestialRampage(int magedd, int physdd)
         {
             int result = (int)(Bestial_Rampage.Formula(magedd, physdd) 
-                * FormulaCoefficientOfAttackStrength() 
+                * FormulaCoefficientOfAttackStrengthLuna() 
                 * FormulaCoefficientOfPiercingAttackLuna());
 
             OutBestialRampageDD = result.ToString();
@@ -742,7 +731,7 @@ namespace ViewModel
             int result = 0;
 
             result = (int)(OrderToAttack.Formula(magedd, physdd)
-                * FormulaCoefficientOfAttackStrength() 
+                * FormulaCoefficientOfAttackStrengthLuna() 
                 * FormulaCoefficientOfPiercingAttackLuna());
 
             OutOrderToAttackDD = result.ToString();
@@ -809,7 +798,7 @@ namespace ViewModel
                     (DpmHero * TimeWithoutBestialRampage() + DpmBestialRampageHero * TimeBestialRampage())
                     * coefficientPredatoryDeliriumTalant 
                     * CoefficientOfMoonTouchForLuna() 
-                    * FormulaCoefficientOfAttackStrength()
+                    * FormulaCoefficientOfAttackStrengthLuna()
                     );
                 result[SourcesDamage.Luna] = (int)(
                     (DpmLuna * TimeWithoutBestialRampage() + DpmBestialRampageLuna * TimeBestialRampage())
@@ -827,7 +816,7 @@ namespace ViewModel
                 DpmHero 
                 * coefficientPredatoryDeliriumTalant 
                 * CoefficientOfMoonTouchForLuna()
-                * FormulaCoefficientOfAttackStrength() 
+                * FormulaCoefficientOfAttackStrengthLuna() 
                 * coefficientBPDungeon()
                 );
 
@@ -985,6 +974,7 @@ namespace ViewModel
             if (CastleStartModifierActive) CriticalHitHeroFinal -= 5;
             CriticalHitHeroFinal = Math.Max(CriticalHitHeroFinal, 0);
             criticalHit = CriticalHitHeroFinal;
+            if (OverLimitClosed) criticalHit = StatsLimit.CheckLimit(criticalHit, StatsLimit.MAX_CRITICAL_HIT_HERO);
             IsUsingBlessingOfTheMoonOnLuna = IsUsingBlessingOfTheMoonOnLuna;
             if (CriticalHitHeroFinal > maxCriticalHitHero) CriticalHitHeroFinal = maxCriticalHitHero;
         }
@@ -1103,12 +1093,13 @@ namespace ViewModel
             if (CastleStartModifierActive) PenetrationHeroFinal -= 5;
             PenetrationHeroFinal = Math.Max(PenetrationHeroFinal, 0);
             penetration = PenetrationHeroFinal;
+            if (OverLimitClosed) penetration = StatsLimit.CheckLimit(penetration, maxPenetrationHero);
             IsUsingBlessingOfTheMoonOnLuna = IsUsingBlessingOfTheMoonOnLuna;
             if (PenetrationHeroFinal > maxPenetrationHero) PenetrationHeroFinal = maxPenetrationHero;
         }
         #endregion
         #region Точность
-        private double maxAccuracyHero = 50;
+        //private double maxAccuracyHero = 50;
         private double accuracy = 0;
         /// <summary>
         /// Итоговое значение характеристики "Точность" Луны с учетом всех скиллов и бафов
@@ -1158,13 +1149,28 @@ namespace ViewModel
             if (IrreversibleAngerActive) AccuracyHeroFinal += MermanModifiers.IRREVERSIBLE_ANGER_ADDITIONAL_ACCURACY;
             if (CastleStartModifierActive) AccuracyHeroFinal -= 5;
             AccuracyHeroFinal = Math.Max(AccuracyHeroFinal, 0);
-            AccuracyLuna = AccuracyHeroFinal;
-            if (AccuracyHeroFinal > maxAccuracyHero) AccuracyHeroFinal = maxAccuracyHero;
+            double finalAcc = StatsLimit.CheckLimit(AccuracyHeroFinal, StatsLimit.MAX_ACCURACY_HERO);
+            if (OverLimitClosed) AccuracyLuna = finalAcc; else AccuracyLuna = AccuracyHeroFinal;
+            AccuracyHeroFinal = finalAcc;
 
         }
         #endregion
         #region Сила атаки
+        private double attackStrengthLuna = 0;
+        /// <summary>
+        /// Итоговое значение характеристики "Пробивная способность" Луны с учетом всех скиллов и бафов
+        /// </summary>
+        public double AttackStrengthLuna
+        {
+            get => attackStrengthLuna;
+            set
+            {
+                attackStrengthLuna = value;
+                NotifyPropertyChanged(nameof(AttackStrengthLuna));
+            }
+        }
         private double attackStrength = 0;
+        
         /// <summary>
         /// Итоговое значение характеристики "Сила атаки" персонажа с учетом всех скиллов и бафов
         /// </summary>
@@ -1196,7 +1202,9 @@ namespace ViewModel
         {
             AttackStrengthFinal = 0;
             AttackStrengthFinal += AttackStrength;
+            AttackStrengthLuna = AttackStrengthFinal;
             AttackStrengthFinal = StatsLimit.CheckLimit(AttackStrengthFinal, StatsLimit.MAX_ATTACK_STRENGTH);
+            if (PredatoryBondTalentAlmahadActive) AttackStrengthLuna += AttackStrengthFinal * ModifiersDamage.PREDATORY_BOND_ATTACK_STRENGTH_COEFFICIENT;
         }
         #endregion
         #region Пронза
@@ -1313,6 +1321,22 @@ namespace ViewModel
             FacilitationFinal += Facilitation;
             FacilitationLuna = FacilitationFinal;
             FacilitationFinal = StatsLimit.CheckLimit(FacilitationFinal, StatsLimit.MAX_FACILITATION);
+        }
+        #endregion
+        #region Гнев Глубин
+        //private double depthsFury = 0;
+
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе "Гнев Глубин"
+        /// </summary>
+        public double DepthsFury
+        {
+            get => DataSet.DepthsFury;
+            set
+            {
+                DataSet.DepthsFury = StatsLimit.CheckLimit(value, StatsLimit.MAX_DEPTH_FURY);
+                Calculate(); NotifyPropertyChanged(nameof(DepthsFury));
+            }
         }
         #endregion
         #region Проценты дд
@@ -2913,7 +2937,18 @@ namespace ViewModel
             set
             {
                 DataSet.RoarTalentAlmahadActive = value;
+                if (value) PredatoryBondTalentAlmahadActive = false;
                 Calculate(); NotifyPropertyChanged(nameof(RoarTalentAlmahadActive));
+            }
+        }
+        public bool PredatoryBondTalentAlmahadActive
+        {
+            get => DataSet.PredatoryBondTalentAlmahadActive;
+            set
+            {
+                DataSet.PredatoryBondTalentAlmahadActive = value;
+                if (value) RoarTalentAlmahadActive = false;
+                Calculate(); NotifyPropertyChanged(nameof(PredatoryBondTalentAlmahadActive));
             }
         }
 
@@ -2954,6 +2989,10 @@ namespace ViewModel
                 {
                     CriticalHitLuna += ModifiersDamage.GODS_AID_CRITICAL_HIT;
                 }
+                if (PredatoryBondTalentAlmahadActive)
+                {
+                    PenetrationLuna += Math.Min(penetration, StatsLimit.MAX_PENETRATION_HERO) * ModifiersDamage.PREDATORY_BOND_PENETRATION_COEFFICIENT;
+                }
                 CriticalHitLuna = StatsLimit.CheckLimit(CriticalHitLuna, StatsLimit.MAX_CRITICAL_HIT);
                 PenetrationLuna = StatsLimit.CheckLimit(PenetrationLuna, StatsLimit.MAX_PENETRATION);
 
@@ -2980,7 +3019,8 @@ namespace ViewModel
             double criticalHitWithResilience = ((CriticalHitHeroFinal + additionCriticalHitHeroAttack) - Resilience) / 100;
             if (criticalHitWithResilience < 0) criticalHitWithResilience = 0;
             if (criticalHitWithResilience > 1) criticalHitWithResilience = 1;
-            double result = (1 - Resilience / 100) * (1 - criticalHitWithResilience) + Math.Pow((1 - Resilience / 100), 2) * criticalHitWithResilience * (2 + CriticalDamageFinal / 100);
+            // Домножение на гнев глубин
+            double result = ((1 - Resilience / 100) * (1 - criticalHitWithResilience) + Math.Pow((1 - Resilience / 100), 2) * criticalHitWithResilience * (2 + CriticalDamageFinal / 100) * DepthsFury.ConvertToCoefficient()) * DepthsFury.ConvertToCoefficient();
 
             return result;
         }
@@ -2992,7 +3032,8 @@ namespace ViewModel
             if (CrushingWillActive) critDamage += MermanModifiers.CRUSHING_WILL_ADDITIONAL_CRITICAL_DAMAGE;
             if (criticalHitWithResilience < 0) criticalHitWithResilience = 0;
             if (criticalHitWithResilience > 1) criticalHitWithResilience = 1;
-            double result = (1 - Resilience / 100) * (1 - criticalHitWithResilience) + Math.Pow((1 - Resilience / 100), 2) * criticalHitWithResilience * (2 + critDamage / 100);
+            // Домножение на гнев глубин
+            double result = ((1 - Resilience / 100) * (1 - criticalHitWithResilience) + Math.Pow((1 - Resilience / 100), 2) * criticalHitWithResilience * (2 + critDamage / 100) * DepthsFury.ConvertToCoefficient()) * DepthsFury.ConvertToCoefficient();
 
             return result;
         }
@@ -3003,7 +3044,7 @@ namespace ViewModel
             if (CrushingWillActive) critDamage += MermanModifiers.CRUSHING_WILL_ADDITIONAL_CRITICAL_DAMAGE;
             if (criticalHitWithResilience < 0) criticalHitWithResilience = 0;
             if (criticalHitWithResilience > 1) criticalHitWithResilience = 1;
-            double result = (1 - Resilience / 100) * (1 - criticalHitWithResilience) + Math.Pow((1 - Resilience / 100), 2) * criticalHitWithResilience * (2 + (critDamage + additionAnimalRageTalant) / 100);
+            double result = ((1 - Resilience / 100) * (1 - criticalHitWithResilience) + Math.Pow((1 - Resilience / 100), 2) * criticalHitWithResilience * (2 + (critDamage + additionAnimalRageTalant) / 100) * DepthsFury.ConvertToCoefficient()) * DepthsFury.ConvertToCoefficient();
 
             return result;
         }
@@ -3011,6 +3052,11 @@ namespace ViewModel
         private double FormulaCoefficientOfAttackStrength()
         {
             double result = AttackStrengthFinal.ConvertToCoefficient();
+            return result;
+        }
+        private double FormulaCoefficientOfAttackStrengthLuna()
+        {
+            double result = AttackStrengthLuna.ConvertToCoefficient();
             return result;
         }
 
@@ -4417,6 +4463,19 @@ namespace ViewModel
             }
         }
 
+        #endregion
+
+        #region фичи
+
+        public bool OverLimitClosed
+        {
+            get => DataSet.OverLimit;
+            set
+            {
+                DataSet.OverLimit = value;
+                Calculate(); NotifyPropertyChanged(nameof(OverLimitClosed));
+            }
+        }
         #endregion
     }
 }
