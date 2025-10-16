@@ -1662,7 +1662,7 @@
                                     TextWrapping="Wrap"
                                     VerticalAlignment="Center"
                                     Width="35"/>
-                                <Label Content="{Binding DepthsFury}" 
+                                <Label Content="{Binding DepthsFuryFinal}" 
                                        Margin="271,0,0,0" 
                                        VerticalAlignment="Center" 
                                        HorizontalAlignment="Left"/>
@@ -1981,7 +1981,521 @@
 
                 </Grid>
             </TabItem>
+            <TabItem Header="Расходники">
+                <Grid>
+                    <Grid.Background>
+                        <ImageBrush 
+                        ImageSource="icons/other/background.jpg" 
+                        TileMode="Tile" 
+                        Viewport="0,0,283,193" 
+                        ViewportUnits="Absolute" 
+                        Stretch="None"/>
+                    </Grid.Background>
+                    <Grid.Resources>
+                        <!-- Общий стиль для всех TextBlock в Grid -->
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="#FFFFFF00"/>
+                            <!-- Устанавливаем цвет текста -->
+                        </Style>
+                        <Style TargetType="GroupBox">
+                            <Setter Property="Foreground" Value="#FFFFFF00"/>
+                            <Setter Property="FontSize" Value="16"/>
+                            <!-- Устанавливаем цвет текста -->
+                        </Style>
+                        <Style TargetType="Label">
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="Foreground" Value="#FFFFFF00"/>
+                            <!-- Устанавливаем цвет текста -->
+                        </Style>
+                        <Style TargetType="TextBox">
+                            <Setter Property="FontSize" Value="12"/>
 
+                        </Style>
+                    </Grid.Resources>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="8*"/>
+                        <RowDefinition Height="523*"/>
+                        <RowDefinition Height="17*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="15*"/>
+                        <ColumnDefinition Width="150*"/>
+                        <ColumnDefinition Width="150*"/>
+                        <ColumnDefinition Width="150*"/>
+                        <ColumnDefinition Width="150*"/>
+                        <ColumnDefinition Width="15*"/>
+                    </Grid.ColumnDefinitions>
+                    <GroupBox Header="Эликсир"
+                      VerticalAlignment="Top"
+                      Height="530"
+                      Grid.Row="1" BorderBrush="#FF400984"
+                      Margin="15,2,10,0" Grid.Column="1">
+                        <Grid Height="500">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/CriticalHit.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding CriticalHitPot, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/CriticalDamage.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding CriticalDamagePot, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="2">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/Accuracy.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding AccuracyPot, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="3">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/AttackSpeed.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding AttackSpeedPot, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="4">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/Penetration.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding PenetrationPot, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="5">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/SkillCooldown.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding SkillCooldownPot, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="6">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/Rage.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding RagePot, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="7">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/AttackStrength.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding AttackStrengthPot, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="8">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/PiercingAttack.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding PiercingAttackPot, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="9">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/Facilitation.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding FacilitationPot, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Свиток"
+                          VerticalAlignment="Top"
+                          Height="530"
+                          Grid.Row="1" BorderBrush="#FF400984"
+                          Margin="15,2,10,0" Grid.Column ="2">
+                        <Grid Height="500">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/CriticalHit.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding CriticalHitScroll, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/CriticalDamage.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding CriticalDamageScroll, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="2">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/Accuracy.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding AccuracyScroll, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="3">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/AttackSpeed.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                Text="{Binding AttackSpeedScroll, Converter={StaticResource StringToDoubleConverter}}"
+                                Margin="0,0,10,0"
+                                TextWrapping="Wrap"
+                                VerticalAlignment="Center"
+                                Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="4">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/Penetration.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding PenetrationScroll, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="5">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/SkillCooldown.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding SkillCooldownScroll, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="6">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/Rage.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding RageScroll, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="7">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/AttackStrength.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding AttackStrengthScroll, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="8">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/PiercingAttack.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding PiercingAttackScroll, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="9">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/Facilitation.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding FacilitationScroll, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="10">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/DepthsFury.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding DepthsFuryScroll, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                        </Grid>
+                    </GroupBox>
+                    <GroupBox Header="Питомец"
+                        VerticalAlignment="Top"
+                        Height="530"
+                        Grid.Row="1" BorderBrush="#FF400984"
+                        Margin="15,2,10,0" Grid.Column="3">
+                        <Grid Height="500">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Grid Grid.Row="0">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/CriticalDamage.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding CriticalDamagePet, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="1">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/Accuracy.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding AccuracyPet, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="2">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/AttackSpeed.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding AttackSpeedPet, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="3">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/Penetration.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding PenetrationPet, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="4">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/SkillCooldown.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding SkillCooldownPet, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="5">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/Rage.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding RagePet, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="6">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/AttackStrength.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding AttackStrengthPet, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="7">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/Facilitation.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding FacilitationPet, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                        </Grid>
+                    </GroupBox>
+                </Grid>
+            </TabItem>
             <TabItem Header="Таланты">
                 <Grid>
                     <Grid.Background>
