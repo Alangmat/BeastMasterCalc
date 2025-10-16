@@ -189,6 +189,49 @@ namespace ViewModel
             //NotifyPropertyChanged(nameof(PercentMagicalDD));
             //NotifyPropertyChanged("PercentPhysicalDD");
 
+            #region Pots
+
+            NotifyPropertyChanged(nameof(CriticalHitPot));
+            NotifyPropertyChanged(nameof(CriticalDamagePot));
+            NotifyPropertyChanged(nameof(AccuracyPot));
+            NotifyPropertyChanged(nameof(AttackSpeedPot));
+            NotifyPropertyChanged(nameof(PenetrationPot));
+            NotifyPropertyChanged(nameof(SkillCooldownPot));
+            NotifyPropertyChanged(nameof(RagePot));
+            NotifyPropertyChanged(nameof(AttackStrengthPot));
+            NotifyPropertyChanged(nameof(PiercingAttackPot));
+            NotifyPropertyChanged(nameof(FacilitationPot));
+
+            #endregion
+
+            #region Scroll
+
+            NotifyPropertyChanged(nameof(CriticalHitScroll));
+            NotifyPropertyChanged(nameof(CriticalDamageScroll));
+            NotifyPropertyChanged(nameof(AccuracyScroll));
+            NotifyPropertyChanged(nameof(AttackSpeedScroll));
+            NotifyPropertyChanged(nameof(PenetrationScroll));
+            NotifyPropertyChanged(nameof(SkillCooldownScroll));
+            NotifyPropertyChanged(nameof(RageScroll));
+            NotifyPropertyChanged(nameof(AttackStrengthScroll));
+            NotifyPropertyChanged(nameof(PiercingAttackScroll));
+            NotifyPropertyChanged(nameof(FacilitationScroll));
+            NotifyPropertyChanged(nameof(DepthsFuryScroll));
+
+            #endregion
+            #region Pet
+
+            NotifyPropertyChanged(nameof(CriticalDamagePet));
+            NotifyPropertyChanged(nameof(AccuracyPet));
+            NotifyPropertyChanged(nameof(AttackSpeedPet));
+            NotifyPropertyChanged(nameof(PenetrationPet));
+            NotifyPropertyChanged(nameof(SkillCooldownPet));
+            NotifyPropertyChanged(nameof(RagePet));
+            NotifyPropertyChanged(nameof(AttackStrengthPet));
+            NotifyPropertyChanged(nameof(FacilitationPet));
+
+            #endregion
+
             NotifyPropertyChanged(nameof(AdditionalPercentPDDStart));
             NotifyPropertyChanged(nameof(AdditionalPercentMDDStart));
 
@@ -450,6 +493,7 @@ namespace ViewModel
             CalcPiercingAttack();
             CalcRage();
             CalcFacilitation();
+            CalcDepthsFury();
         }
         public void CalcPercents()
         {
@@ -863,15 +907,58 @@ namespace ViewModel
                 NotifyPropertyChanged(nameof(SkillCooldown)); }
         }
         /// <summary>
+        /// Свойство связанное с полем на вьюхе расходники Эликсир "Перезарядка навыков"
+        /// </summary>
+        public double SkillCooldownPot
+        {
+            get => DataSet.SkillCooldownPot;
+            set
+            {
+                DataSet.SkillCooldownPot = StatsLimit.CheckLimit(value, StatsLimit.MAX_SKILL_COOLDOWN);
+                Calculate();
+                NotifyPropertyChanged(nameof(SkillCooldownPot));
+            }
+        }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе расходники свиток "Перезарядка навыков"
+        /// </summary>
+        public double SkillCooldownScroll
+        {
+            get => DataSet.SkillCooldownScroll;
+            set
+            {
+                DataSet.SkillCooldownScroll = StatsLimit.CheckLimit(value, StatsLimit.MAX_SKILL_COOLDOWN);
+                Calculate();
+                NotifyPropertyChanged(nameof(SkillCooldownScroll));
+            }
+        }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе расходники пет "Перезарядка навыков"
+        /// </summary>
+        public double SkillCooldownPet
+        {
+            get => DataSet.SkillCooldownPet;
+            set
+            {
+                DataSet.SkillCooldownPet = StatsLimit.CheckLimit(value, StatsLimit.MAX_SKILL_COOLDOWN);
+                Calculate();
+                NotifyPropertyChanged(nameof(SkillCooldownPet));
+            }
+        }
+        /// <summary>
         /// Метод для пересчета характеристики персонажа "Перезарядка навыков"
         /// </summary>
         private void CalcSkillCooldown()
         {
             SkillCooldownFinal = 0;
             SkillCooldownFinal += SkillCooldown;
+            SkillCooldownFinal += SkillCooldownPot;
+            SkillCooldownFinal += SkillCooldownScroll;
+            SkillCooldownFinal += SkillCooldownPet;
             if (CastleSwordActive) SkillCooldownFinal += 5;
             if (DoubleConcentrationActive)
                 SkillCooldownFinal += DoubleConcentration.AddSkillCooldown();
+            if (CastleStartModifierActive) SkillCooldownFinal -= 5;
             
             SkillCooldownFinal = StatsLimit.CheckLimit(SkillCooldownFinal, StatsLimit.MAX_SKILL_COOLDOWN);
         }
@@ -902,12 +989,51 @@ namespace ViewModel
             }
         }
         /// <summary>
+        /// Свойство связанное с полем на вьюхе расходники Эликсир "Скорость атаки"
+        /// </summary>
+        public double AttackSpeedPot
+        {
+            get => DataSet.AttackSpeedPot;
+            set
+            {
+                DataSet.AttackSpeedPot = StatsLimit.CheckLimit(value, StatsLimit.MAX_ATTACK_SPEED); ;
+                Calculate(); NotifyPropertyChanged(nameof(AttackSpeedPot));
+            }
+        }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе расходники свиток "Скорость атаки"
+        /// </summary>
+        public double AttackSpeedScroll
+        {
+            get => DataSet.AttackSpeedScroll;
+            set
+            {
+                DataSet.AttackSpeedScroll = StatsLimit.CheckLimit(value, StatsLimit.MAX_ATTACK_SPEED); ;
+                Calculate(); NotifyPropertyChanged(nameof(AttackSpeedScroll));
+            }
+        }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе расходники пет "Скорость атаки"
+        /// </summary>
+        public double AttackSpeedPet
+        {
+            get => DataSet.AttackSpeedPet;
+            set
+            {
+                DataSet.AttackSpeedPet = StatsLimit.CheckLimit(value, StatsLimit.MAX_ATTACK_SPEED); ;
+                Calculate(); NotifyPropertyChanged(nameof(AttackSpeedPet));
+            }
+        }
+        /// <summary>
         /// Метод для пересчета характеристики персонажа "Скорость атаки"
         /// </summary>
         private void CalcAttackSpeed()
         {
             AttackSpeedFinal = 0;
             AttackSpeedFinal += AttackSpeed;
+            AttackSpeedFinal += AttackSpeedPot;
+            AttackSpeedFinal += AttackSpeedScroll;
+            AttackSpeedFinal += AttackSpeedPet;
             if (CastleSwordActive) AttackSpeedFinal += 5;
             if (DoubleConcentrationActive)
                 AttackSpeedFinal += DoubleConcentration.AddAttackSpeed();
@@ -961,12 +1087,38 @@ namespace ViewModel
             }
         }
         /// <summary>
+        /// Свойство связанное с полем на вьюхе расходников, а именно прибавка "Критического удара" от эликсира
+        /// </summary>
+        public double CriticalHitPot
+        {
+            get => DataSet.CriticalHitPot;
+            set
+            {
+                DataSet.CriticalHitPot = StatsLimit.CheckLimit(value, StatsLimit.MAX_CRITICAL_HIT);
+                Calculate(); NotifyPropertyChanged(nameof(CriticalHitPot));
+            }
+        }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе расходников, а именно прибавка "Критического удара" от свитка
+        /// </summary>
+        public double CriticalHitScroll
+        {
+            get => DataSet.CriticalHitScroll;
+            set
+            {
+                DataSet.CriticalHitScroll = StatsLimit.CheckLimit(value, StatsLimit.MAX_CRITICAL_HIT);
+                Calculate(); NotifyPropertyChanged(nameof(CriticalHitScroll));
+            }
+        }
+        /// <summary>
         /// Метод для пересчета характеристики персонажа "Критический урон"
         /// </summary>
         private void CalcCriticalHit()
         {
             CriticalHitHeroFinal = 0;
             CriticalHitHeroFinal += CriticalHit;
+            CriticalHitHeroFinal += CriticalHitPot;
+            CriticalHitHeroFinal += CriticalHitScroll;
             if (CastleSwordActive) CriticalHitHeroFinal += 5;
             if (BlessingOfTheMoonActive) CriticalHitHeroFinal += BlessingOfTheMoon.AdditionCriticalHit;
             if (CrushingWillActive) CriticalHitHeroFinal += MermanModifiers.CRUSHING_WILL_ADDITIONAL_CRITICAL_HIT;
@@ -1020,18 +1172,58 @@ namespace ViewModel
             }
         }
         /// <summary>
+        /// Свойство связанное с полем на вьюхе расходников, а именно прибавка "Критического урона" от эликсира
+        /// </summary>
+        public double CriticalDamagePot
+        {
+            get => DataSet.CriticalDamagePot;
+            set
+            {
+                DataSet.CriticalDamagePot = StatsLimit.CheckLimit(value, StatsLimit.MAX_CRITICAL_DAMAGE);
+                Calculate(); NotifyPropertyChanged(nameof(CriticalDamagePot));
+            }
+        }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе расходников, а именно прибавка "Критического урона" от свитка
+        /// </summary>
+        public double CriticalDamageScroll
+        {
+            get => DataSet.CriticalDamageScroll;
+            set
+            {
+                DataSet.CriticalDamageScroll = StatsLimit.CheckLimit(value, StatsLimit.MAX_CRITICAL_DAMAGE);
+                Calculate(); NotifyPropertyChanged(nameof(CriticalDamageScroll));
+            }
+        }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе расходников, а именно прибавка "Критического урона" от пета
+        /// </summary>
+        public double CriticalDamagePet
+        {
+            get => DataSet.CriticalDamagePet;
+            set
+            {
+                DataSet.CriticalDamagePet = StatsLimit.CheckLimit(value, StatsLimit.MAX_CRITICAL_DAMAGE);
+                Calculate(); NotifyPropertyChanged(nameof(CriticalDamagePet));
+            }
+        }
+        /// <summary>
         /// Метод пересчета характеристики персонажа "критический урон"
         /// </summary>
         private void CalcCriticalDamage()
         {
             CriticalDamageFinal = 0;
             CriticalDamageFinal += CriticalDamage;
+            CriticalDamageFinal += CriticalDamagePot;
+            CriticalDamageFinal += CriticalDamageScroll;
+            CriticalDamageFinal += CriticalDamagePet;
             if (DoubleConcentrationActive)
                 CriticalDamageFinal += DoubleConcentration.AdditionCriticalDamage;
             // Крылья на ловчего
             if (GodsAid) CriticalDamageFinal += ModifiersDamage.GODS_AID_CRITICAL_DAMAGE;
             if (RoarTalentAlmahadActive) CriticalDamageFinal += ModifiersDamage.ROAR_TALENT_CRITICAL_DAMAGE;
             CriticalDamageLuna = CriticalDamageFinal;
+            if (CrushingWillActive) CriticalDamageLuna += MermanModifiers.CRUSHING_WILL_ADDITIONAL_CRITICAL_DAMAGE;
             // Крылья на Луну
             if (GodsAidLuna) CriticalDamageLuna += ModifiersDamage.GODS_AID_CRITICAL_DAMAGE;
 
@@ -1081,12 +1273,51 @@ namespace ViewModel
             }
         }
         /// <summary>
+        /// Свойство связанное с полем на вьюхе расходники Эликсир "Пробивная способность"
+        /// </summary>
+        public double PenetrationPot
+        {
+            get => DataSet.PenetrationPot;
+            set
+            {
+                DataSet.PenetrationPot = StatsLimit.CheckLimit(value, StatsLimit.MAX_PENETRATION);
+                Calculate(); NotifyPropertyChanged(nameof(PenetrationPot));
+            }
+        }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе расходники Свиток "Пробивная способность"
+        /// </summary>
+        public double PenetrationScroll
+        {
+            get => DataSet.PenetrationScroll;
+            set
+            {
+                DataSet.PenetrationScroll = StatsLimit.CheckLimit(value, StatsLimit.MAX_PENETRATION);
+                Calculate(); NotifyPropertyChanged(nameof(PenetrationScroll));
+            }
+        }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе расходники пет "Пробивная способность"
+        /// </summary>
+        public double PenetrationPet
+        {
+            get => DataSet.PenetrationPet;
+            set
+            {
+                DataSet.PenetrationPet = StatsLimit.CheckLimit(value, StatsLimit.MAX_PENETRATION);
+                Calculate(); NotifyPropertyChanged(nameof(PenetrationPet));
+            }
+        }
+        /// <summary>
         /// Метод для пересчета характеристики персонажа "Пробивная способность"
         /// </summary>
         private void CalcPenetration()
         {
             PenetrationHeroFinal = 0;
             PenetrationHeroFinal += Penetration;
+            PenetrationHeroFinal += PenetrationPot;
+            PenetrationHeroFinal += PenetrationScroll;
+            PenetrationHeroFinal += PenetrationPet;
             if (CastleSwordActive) PenetrationHeroFinal += 5;
             if (BlessingOfTheMoonActive) PenetrationHeroFinal += BlessingOfTheMoon.AdditionPenetration;
             if (IrreversibleAngerActive) PenetrationHeroFinal += MermanModifiers.IRREVERSIBLE_ANGER_ADDITIONAL_PENETRATION;
@@ -1139,12 +1370,54 @@ namespace ViewModel
             }
         }
         /// <summary>
+        /// Свойство связанное с полем на вьюхе расходники Эликсир "Точность"
+        /// </summary>
+        public double AccuracyPot
+        {
+            get => DataSet.AccuracyPot;
+            set
+            {
+                DataSet.AccuracyPot = StatsLimit.CheckLimit(value, StatsLimit.MAX_ACCURACY);
+
+                Calculate(); NotifyPropertyChanged(nameof(AccuracyPot));
+            }
+        }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе расходники свиток "Точность"
+        /// </summary>
+        public double AccuracyScroll
+        {
+            get => DataSet.AccuracyScroll;
+            set
+            {
+                DataSet.AccuracyScroll = StatsLimit.CheckLimit(value, StatsLimit.MAX_ACCURACY);
+
+                Calculate(); NotifyPropertyChanged(nameof(AccuracyScroll));
+            }
+        }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе расходники пет "Точность"
+        /// </summary>
+        public double AccuracyPet
+        {
+            get => DataSet.AccuracyPet;
+            set
+            {
+                DataSet.AccuracyPet = StatsLimit.CheckLimit(value, StatsLimit.MAX_ACCURACY);
+
+                Calculate(); NotifyPropertyChanged(nameof(AccuracyPet));
+            }
+        }
+        /// <summary>
         /// Метод для пересчета характеристики персонажа "Точность"
         /// </summary>
         private void CalcAccuracy()
         {
             AccuracyHeroFinal = 0;
             AccuracyHeroFinal += Accuracy;
+            AccuracyHeroFinal += AccuracyPot;
+            AccuracyHeroFinal += AccuracyScroll;
+            AccuracyHeroFinal += AccuracyPet;
             if (CastleSwordActive) AccuracyHeroFinal += 5;
             if (IrreversibleAngerActive) AccuracyHeroFinal += MermanModifiers.IRREVERSIBLE_ANGER_ADDITIONAL_ACCURACY;
             if (CastleStartModifierActive) AccuracyHeroFinal -= 5;
@@ -1196,12 +1469,51 @@ namespace ViewModel
             }
         }
         /// <summary>
+        /// Свойство связанное с полем на вьюхе расходники Эликсир "Сила атаки"
+        /// </summary>
+        public double AttackStrengthPot
+        {
+            get => DataSet.AttackStrengthPot;
+            set
+            {
+                DataSet.AttackStrengthPot = StatsLimit.CheckLimit(value, StatsLimit.MAX_ATTACK_STRENGTH);
+                Calculate(); NotifyPropertyChanged(nameof(AttackStrengthPot));
+            }
+        }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе расходники Свиток "Сила атаки"
+        /// </summary>
+        public double AttackStrengthScroll
+        {
+            get => DataSet.AttackStrengthScroll;
+            set
+            {
+                DataSet.AttackStrengthScroll = StatsLimit.CheckLimit(value, StatsLimit.MAX_ATTACK_STRENGTH);
+                Calculate(); NotifyPropertyChanged(nameof(AttackStrengthScroll));
+            }
+        }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе расходники Пет "Сила атаки"
+        /// </summary>
+        public double AttackStrengthPet
+        {
+            get => DataSet.AttackStrengthPet;
+            set
+            {
+                DataSet.AttackStrengthPet = StatsLimit.CheckLimit(value, StatsLimit.MAX_ATTACK_STRENGTH);
+                Calculate(); NotifyPropertyChanged(nameof(AttackStrengthPet));
+            }
+        }
+        /// <summary>
         /// Метод для пересчета характеристики персонажа "Сила атаки"
         /// </summary>
         private void CalcAttackStrength()
         {
             AttackStrengthFinal = 0;
             AttackStrengthFinal += AttackStrength;
+            AttackStrengthFinal += AttackStrengthPot;
+            AttackStrengthFinal += AttackStrengthScroll;
+            AttackStrengthFinal += AttackStrengthPet;
             AttackStrengthLuna = AttackStrengthFinal;
             AttackStrengthFinal = StatsLimit.CheckLimit(AttackStrengthFinal, StatsLimit.MAX_ATTACK_STRENGTH);
             if (PredatoryBondTalentAlmahadActive) AttackStrengthLuna += AttackStrengthFinal * ModifiersDamage.PREDATORY_BOND_ATTACK_STRENGTH_COEFFICIENT;
@@ -1234,12 +1546,38 @@ namespace ViewModel
             }
         }
         /// <summary>
+        /// Свойство связанное с полем на вьюхе расходники Эликсир "Пронзающая атака"
+        /// </summary>
+        public double PiercingAttackPot
+        {
+            get => DataSet.PiercingAttackPot;
+            set
+            {
+                DataSet.PiercingAttackPot = StatsLimit.CheckLimit(value, StatsLimit.MAX_PIERCING_ATTACK);
+                Calculate(); NotifyPropertyChanged(nameof(PiercingAttackPot));
+            }
+        }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе расходники Свиток "Пронзающая атака"
+        /// </summary>
+        public double PiercingAttackScroll
+        {
+            get => DataSet.PiercingAttackScroll;
+            set
+            {
+                DataSet.PiercingAttackScroll = StatsLimit.CheckLimit(value, StatsLimit.MAX_PIERCING_ATTACK);
+                Calculate(); NotifyPropertyChanged(nameof(PiercingAttackScroll));
+            }
+        }
+        /// <summary>
         /// Метод для пересчета характеристики персонажа "Пронзающая атака"
         /// </summary>
         private void CalcPiercingAttack()
         {
             PiercingAttackFinal = 0;
             PiercingAttackFinal += PiercingAttack;
+            PiercingAttackFinal += PiercingAttackPot;
+            PiercingAttackFinal += PiercingAttackScroll;
             PiercingAttackFinal = StatsLimit.CheckLimit(PiercingAttackFinal, StatsLimit.MAX_PIERCING_ATTACK);
         }
         #endregion
@@ -1270,12 +1608,51 @@ namespace ViewModel
             }
         }
         /// <summary>
+        /// Свойство связанное с полем на вьюхе расходники Эликсир "Ярость"
+        /// </summary>
+        public double RagePot
+        {
+            get => DataSet.RagePot;
+            set
+            {
+                DataSet.RagePot = StatsLimit.CheckLimit(value, StatsLimit.MAX_RAGE);
+                Calculate(); NotifyPropertyChanged(nameof(RagePot));
+            }
+        }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе расходники Свиток "Ярость"
+        /// </summary>
+        public double RageScroll
+        {
+            get => DataSet.RageScroll;
+            set
+            {
+                DataSet.RageScroll = StatsLimit.CheckLimit(value, StatsLimit.MAX_RAGE);
+                Calculate(); NotifyPropertyChanged(nameof(RageScroll));
+            }
+        }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе расходники Пет "Ярость"
+        /// </summary>
+        public double RagePet
+        {
+            get => DataSet.RagePet;
+            set
+            {
+                DataSet.RagePet = StatsLimit.CheckLimit(value, StatsLimit.MAX_RAGE);
+                Calculate(); NotifyPropertyChanged(nameof(RagePet));
+            }
+        }
+        /// <summary>
         /// Метод для пересчета характеристики персонажа "Ярость"
         /// </summary>
         private void CalcRage()
         {
             RageFinal = 0;
             RageFinal += Rage;
+            RageFinal += RagePot;
+            RageFinal += RageScroll;
+            RageFinal += RagePet;
             RageFinal = StatsLimit.CheckLimit(RageFinal, StatsLimit.MAX_RAGE);
         }
         #endregion
@@ -1302,6 +1679,42 @@ namespace ViewModel
                 Calculate(); NotifyPropertyChanged(nameof(Facilitation));
             }
         }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе расходники Эликсир "Содействие"
+        /// </summary>
+        public double FacilitationPot
+        {
+            get => DataSet.FacilitationPot;
+            set
+            {
+                DataSet.FacilitationPot = StatsLimit.CheckLimit(value, 300);
+                Calculate(); NotifyPropertyChanged(nameof(FacilitationPot));
+            }
+        }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе расходники Свиток "Содействие"
+        /// </summary>
+        public double FacilitationScroll
+        {
+            get => DataSet.FacilitationScroll;
+            set
+            {
+                DataSet.FacilitationScroll = StatsLimit.CheckLimit(value, 300);
+                Calculate(); NotifyPropertyChanged(nameof(FacilitationScroll));
+            }
+        }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе расходники пет "Содействие"
+        /// </summary>
+        public double FacilitationPet
+        {
+            get => DataSet.FacilitationPet;
+            set
+            {
+                DataSet.FacilitationPet = StatsLimit.CheckLimit(value, 300);
+                Calculate(); NotifyPropertyChanged(nameof(FacilitationPet));
+            }
+        }
         private double facilitationLuna = 0;
         public double FacilitationLuna
         {
@@ -1319,13 +1732,24 @@ namespace ViewModel
         {
             FacilitationFinal = 0;
             FacilitationFinal += Facilitation;
+            FacilitationFinal += FacilitationPot;
+            FacilitationFinal += FacilitationScroll;
+            FacilitationFinal += FacilitationPet;
             FacilitationLuna = FacilitationFinal;
             FacilitationFinal = StatsLimit.CheckLimit(FacilitationFinal, StatsLimit.MAX_FACILITATION);
         }
         #endregion
         #region Гнев Глубин
-        //private double depthsFury = 0;
-
+        private double depthsFury = 0;
+        public double DepthsFuryFinal
+        {
+            get => depthsFury;
+            set
+            {
+                depthsFury = value;
+                NotifyPropertyChanged(nameof(DepthsFuryFinal));
+            }
+        }
         /// <summary>
         /// Свойство связанное с полем на вьюхе "Гнев Глубин"
         /// </summary>
@@ -1338,12 +1762,34 @@ namespace ViewModel
                 Calculate(); NotifyPropertyChanged(nameof(DepthsFury));
             }
         }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе расходники свиток "Гнев Глубин"
+        /// </summary>
+        public double DepthsFuryScroll
+        {
+            get => DataSet.DepthsFuryScroll;
+            set
+            {
+                DataSet.DepthsFuryScroll = StatsLimit.CheckLimit(value, StatsLimit.MAX_DEPTH_FURY);
+                Calculate(); NotifyPropertyChanged(nameof(DepthsFuryScroll));
+            }
+        }
+        /// <summary>
+        /// Метод для пересчета характеристики персонажа "Гнев глубин"
+        /// </summary>
+        private void CalcDepthsFury()
+        {
+            DepthsFuryFinal = 0;
+            DepthsFuryFinal += DepthsFury;
+            DepthsFuryFinal += DepthsFuryScroll;
+            DepthsFuryFinal = StatsLimit.CheckLimit(DepthsFuryFinal, StatsLimit.MAX_DEPTH_FURY);
+        }
         #endregion
         #region Проценты дд
 
         #region базовые модификаторы дд
         #region гильдия
-        private bool guildDamageStartModifierActive = true;
+        //private bool guildDamageStartModifierActive = true;
         public bool GuildDamageStartModifierActive
         {
             //get => guildDamageStartModifierActive;
@@ -1355,7 +1801,7 @@ namespace ViewModel
                 Calculate(); NotifyPropertyChanged(nameof(GuildDamageStartModifierActive));
             }
         }
-        private bool guildDamageModifierActive = true;
+        //private bool guildDamageModifierActive = true;
         public bool GuildDamageModifierActive
         {
             //get => guildDamageModifierActive;
@@ -1369,7 +1815,7 @@ namespace ViewModel
         }
         #endregion
         #region талант на дд
-        private bool talentDamageStartModifierActive = true;
+        //private bool talentDamageStartModifierActive = true;
         public bool TalentDamageStartModifierActive
         {
             //get => talentDamageStartModifierActive;
@@ -1382,7 +1828,7 @@ namespace ViewModel
             }
         }
 
-        private bool talentDamageModifierActive = true;
+        //private bool talentDamageModifierActive = true;
         public bool TalentDamageModifierActive
         {
             //get => talentDamageModifierActive;
@@ -1449,33 +1895,16 @@ namespace ViewModel
 
         private double percentMagicalDDStart = 0;
         private double percentMagicalDD = 0;
-        //private const int DD_CONCENTRATION = 4;
-        /*public double PercentMagicalDD
-        {
-            get => DataSet.PercentMagicalDD;
-            set
-            {
-                if (value >= 0)
-                    DataSet.PercentMagicalDD = value;
-                legendaryCoefficientMagicalDD = 1 + DataSet.PercentMagicalDD / 100;
-                Calculate(); NotifyPropertyChanged("PercentMagicalDD");
-            }
-        }*/
+
 
         private double CalcModifiersDamageJewelrySet(TypesDamage type)
         {
-            //double result = ModifiersDamage.ConvertInModifiers(SelectedCloak)[type];
             double result = SelectedCloak.ToPercentInDictionary(type);
-            //result += ModifiersDamage.ConvertInModifiers(SelectedAmulet)[type];
             result += SelectedAmulet.ToPercentInDictionary(type);
-            //result += ModifiersDamage.ConvertInModifiers(SelectedBraceletL)[type];
-            //result += ModifiersDamage.ConvertInModifiers(SelectedBraceletR)[type];
             result += SelectedBraceletL.ToPercentInDictionary(type);
             result += SelectedBraceletR.ToPercentInDictionary(type);
-            //result += ModifiersDamage.ConvertInModifiers(SelectedRingL)[type];
             result += SelectedRingL.ToPercentInDictionary(type);
             result += SelectedRingR.ToPercentInDictionary(type);
-            //result += ModifiersDamage.ConvertInModifiers(SelectedSet)[type];
             result += SelectedSet.ToPercentInDictionary(type);
 
             return result;
@@ -2956,7 +3385,7 @@ namespace ViewModel
 
         #region Формулы статов
 
-        private bool isUsingBlessingOfTheMoonOnLuna = false;
+        //private bool isUsingBlessingOfTheMoonOnLuna = false;
         public bool IsUsingBlessingOfTheMoonOnLuna
         {
             //get => isUsingBlessingOfTheMoonOnLuna;
@@ -3020,7 +3449,7 @@ namespace ViewModel
             if (criticalHitWithResilience < 0) criticalHitWithResilience = 0;
             if (criticalHitWithResilience > 1) criticalHitWithResilience = 1;
             // Домножение на гнев глубин
-            double result = ((1 - Resilience / 100) * (1 - criticalHitWithResilience) + Math.Pow((1 - Resilience / 100), 2) * criticalHitWithResilience * (2 + CriticalDamageFinal / 100) * DepthsFury.ConvertToCoefficient()) * DepthsFury.ConvertToCoefficient();
+            double result = ((1 - Resilience / 100) * (1 - criticalHitWithResilience) + Math.Pow((1 - Resilience / 100), 2) * criticalHitWithResilience * (2 + CriticalDamageFinal / 100) * DepthsFuryFinal.ConvertToCoefficient()) * DepthsFuryFinal.ConvertToCoefficient();
 
             return result;
         }
@@ -3029,11 +3458,10 @@ namespace ViewModel
             double criticalHitWithResilience = (CriticalHitLuna - Resilience) / 100;
             //double critDamage = CriticalDamageFinal;
             double critDamage = CriticalDamageLuna;
-            if (CrushingWillActive) critDamage += MermanModifiers.CRUSHING_WILL_ADDITIONAL_CRITICAL_DAMAGE;
             if (criticalHitWithResilience < 0) criticalHitWithResilience = 0;
             if (criticalHitWithResilience > 1) criticalHitWithResilience = 1;
             // Домножение на гнев глубин
-            double result = ((1 - Resilience / 100) * (1 - criticalHitWithResilience) + Math.Pow((1 - Resilience / 100), 2) * criticalHitWithResilience * (2 + critDamage / 100) * DepthsFury.ConvertToCoefficient()) * DepthsFury.ConvertToCoefficient();
+            double result = ((1 - Resilience / 100) * (1 - criticalHitWithResilience) + Math.Pow((1 - Resilience / 100), 2) * criticalHitWithResilience * (2 + critDamage / 100) * DepthsFuryFinal.ConvertToCoefficient()) * DepthsFuryFinal.ConvertToCoefficient();
 
             return result;
         }
@@ -3044,7 +3472,7 @@ namespace ViewModel
             if (CrushingWillActive) critDamage += MermanModifiers.CRUSHING_WILL_ADDITIONAL_CRITICAL_DAMAGE;
             if (criticalHitWithResilience < 0) criticalHitWithResilience = 0;
             if (criticalHitWithResilience > 1) criticalHitWithResilience = 1;
-            double result = ((1 - Resilience / 100) * (1 - criticalHitWithResilience) + Math.Pow((1 - Resilience / 100), 2) * criticalHitWithResilience * (2 + (critDamage + additionAnimalRageTalant) / 100) * DepthsFury.ConvertToCoefficient()) * DepthsFury.ConvertToCoefficient();
+            double result = ((1 - Resilience / 100) * (1 - criticalHitWithResilience) + Math.Pow((1 - Resilience / 100), 2) * criticalHitWithResilience * (2 + (critDamage + additionAnimalRageTalant) / 100) * DepthsFuryFinal.ConvertToCoefficient()) * DepthsFuryFinal.ConvertToCoefficient();
 
             return result;
         }
@@ -3134,7 +3562,7 @@ namespace ViewModel
             get => _castles;
         }
 
-        private CastleSectors selectedCastle = CastleSectors.Empty;
+        //private CastleSectors selectedCastle = CastleSectors.Empty;
         public CastleSectors SelectedCastle
         {
             //get => selectedCastle;

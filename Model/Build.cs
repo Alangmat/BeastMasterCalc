@@ -59,6 +59,41 @@ namespace Model
         public double Dodge { get; set; } = 0;
         public double Resilience { get; set; } = 0;
         #endregion
+        #region StatsOfPot
+        public double SkillCooldownPot { get; set; } = 0;
+        public double AttackSpeedPot { get; set; } = 0;
+        public double CriticalHitPot { get; set; } = 0;
+        public double CriticalDamagePot { get; set; } = 0;
+        public double PenetrationPot { get; set; } = 0;
+        public double AccuracyPot { get; set; } = 0;
+        public double AttackStrengthPot { get; set; } = 0;
+        public double PiercingAttackPot { get; set; } = 0;
+        public double RagePot { get; set; } = 0;
+        public double FacilitationPot { get; set; } = 0;
+        #endregion
+        #region StatsOfScroll
+        public double SkillCooldownScroll { get; set; } = 0;
+        public double AttackSpeedScroll { get; set; } = 0;
+        public double CriticalHitScroll { get; set; } = 0;
+        public double CriticalDamageScroll { get; set; } = 0;
+        public double PenetrationScroll { get; set; } = 0;
+        public double AccuracyScroll { get; set; } = 0;
+        public double AttackStrengthScroll { get; set; } = 0;
+        public double PiercingAttackScroll { get; set; } = 0;
+        public double RageScroll { get; set; } = 0;
+        public double FacilitationScroll { get; set; } = 0;
+        public double DepthsFuryScroll { get; set; } = 0;
+        #endregion
+        #region StatsOfPet
+        public double SkillCooldownPet { get; set; } = 0;
+        public double AttackSpeedPet { get; set; } = 0;
+        public double CriticalDamagePet { get; set; } = 0;
+        public double PenetrationPet { get; set; } = 0;
+        public double AccuracyPet { get; set; } = 0;
+        public double AttackStrengthPet { get; set; } = 0;
+        public double RagePet { get; set; } = 0;
+        public double FacilitationPet { get; set; } = 0;
+        #endregion
         #region other
         #region тритоны
 
