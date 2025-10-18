@@ -5,6 +5,7 @@ using System.ComponentModel.Design;
 using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Shared;
@@ -16,7 +17,7 @@ namespace Model
     {
         #region Данные о сборке
 
-        public string Name { get; set; } = $"New Data Set {DateTime.Now.ToString()}";
+        public string Name { get; set; } = $"New Data Set";
         public string Description { get; set; } = string.Empty;
         public Guid ID { get; set; } = Guid.NewGuid();
         public string LastDate { get; set; } = DateTime.Now.ToString();
@@ -227,5 +228,13 @@ namespace Model
         /// <param name="prop">Имя свойства, которое изменилось</param>
         public void NotifyPropertyChanged([CallerMemberName] string prop = "") =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        [OnDeserialized]
+        internal void OnDeserialized(StreamingContext _)
+        {
+            if (OrderToAttack != null)
+                OrderToAttack.Luna = this.BeastAwakening;
+            if (BestialRampage != null)
+                BestialRampage.Luna = BeastAwakening;
+        }
     }
 }

@@ -43,7 +43,7 @@ namespace Model
         [JsonIgnore] public double BaseTimeCooldown = 11;
         [JsonIgnore] public int DurationMoonTouch = 4;
         [JsonIgnore] public double CoefficientDD = 0.07;
-        [JsonIgnore] public BeastAwakening Luna;
+        //[JsonIgnore] public BeastAwakening Luna;
 
         private bool hasTalantPlus;
         private bool hasRelic;

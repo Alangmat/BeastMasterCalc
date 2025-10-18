@@ -3672,11 +3672,18 @@
                         <ListView.View>
                             <GridView>
                                 <!-- Столбец с текстом, который нужно переносить -->
-                                <GridViewColumn Width="100" Header="Название">
+                                <GridViewColumn Width="120" Header="Название">
                                     <GridViewColumn.CellTemplate>
                                         <DataTemplate>
                                             <!-- Здесь задаётся перенос текста -->
-                                            <TextBlock Text="{Binding Name}" TextWrapping="Wrap" />
+                                            <Grid>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
+                                                <TextBlock Grid.Row="0" Text="{Binding Name}" TextWrapping="Wrap" />
+                                                <TextBlock Grid.Row="1" Text="{Binding Path=LastDate}" TextWrapping="Wrap" />
+                                            </Grid>
                                         </DataTemplate>
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
@@ -3691,7 +3698,7 @@
                                     </GridViewColumn.CellTemplate>
                                 </GridViewColumn>
                                 <!-- Последнее изменение -->
-                                <GridViewColumn DisplayMemberBinding="{Binding Path=LastDate}">Последнее изменение</GridViewColumn>
+                                <GridViewColumn DisplayMemberBinding="{Binding Path=ResultDD}">Итоговый Урон</GridViewColumn>
                             </GridView>
                         </ListView.View>
                         <ListView.Resources>

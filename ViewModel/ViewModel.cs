@@ -49,6 +49,7 @@ namespace ViewModel
         }
         public void SaveBuilds()
         {
+            
             string json = JsonConvert.SerializeObject(Builds);
             File.WriteAllText(FILE_SAVE, json);
         }
@@ -101,6 +102,9 @@ namespace ViewModel
             {
                 var currentDataSet = editList[0];
                 int curID = Builds.IndexOf(currentDataSet);
+                int dd = 0;
+                int.TryParse(OutDD, out dd);
+                if (dd > 0) DataSet.ResultDD = dd; 
                 Builds[curID] = DataSet;
                 Builds[curID].LastDate = DateTime.Now.ToString();
                 string json = JsonConvert.SerializeObject(DataSet);
