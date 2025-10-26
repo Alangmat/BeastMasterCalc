@@ -253,11 +253,16 @@ namespace ViewModel
             NotifyPropertyChanged(nameof(HasRelicMoonTouch));
             NotifyPropertyChanged(nameof(HasRelicChainLightning));
 
-            NotifyPropertyChanged(nameof(AxeSelected));
-            NotifyPropertyChanged(nameof(MaceSelected));
-            NotifyPropertyChanged(nameof(SpearSelected));
-            NotifyPropertyChanged(nameof(StaffSelected));
-            NotifyPropertyChanged(nameof(SwordSelected));
+            //NotifyPropertyChanged(nameof(AxeSelected));
+            //NotifyPropertyChanged(nameof(MaceSelected));
+            //NotifyPropertyChanged(nameof(SpearSelected));
+            //NotifyPropertyChanged(nameof(StaffSelected));
+            //NotifyPropertyChanged(nameof(SwordSelected));
+            AxeSelected = DataSet.AxeSelected;
+            MaceSelected = DataSet.MaceSelected;
+            SpearSelected = DataSet.SpearSelected;
+            StaffSelected = DataSet.StaffSelected;
+            SwordSelected = DataSet.SwordSelected;
 
             NotifyPropertyChanged(nameof(ChechBPDungeon));
             NotifyPropertyChanged(nameof(SacredShieldHeroActive));
