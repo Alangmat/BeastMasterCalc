@@ -633,7 +633,7 @@ namespace ViewModel
         }
         public double AttackDelayLunaWithBestialRampage()
         {
-            double result = (Bestial_Rampage.Luna.BaseDelay * ((100 - Bestial_Rampage.IncreaseAttackSpeed) / 100));
+            double result = (Bestial_Rampage.Luna.BaseDelay * ((100 - Bestial_Rampage.IncreaseAttackSpeed - (GodsAidLuna ? ModifiersDamage.GODS_AID_ATTACK_SPEED : 0)) / 100));
             return result;
         }
         public int CalcBestialRampage(int magedd, int physdd)
@@ -815,7 +815,7 @@ namespace ViewModel
             result.Add(SourcesDamage.Luna, 0);
 
             double Tp = AttackDelay();
-            double Tl = Beast_Awakening.BaseDelay;
+            double Tl = Beast_Awakening.BaseDelay * (1 - (GodsAidLuna ? ModifiersDamage.GODS_AID_ATTACK_SPEED : 0) / 100);
             double T = Math.Max(Tp, Tl);
             double DpmHero = 0.1 * 60 / T * (
                     Beast_Awakening.Formula(magedd, physdd)
@@ -874,7 +874,7 @@ namespace ViewModel
                 );
 
             result[SourcesDamage.Luna] = (int)(
-                DpmHero
+                DpmLuna
                 * coefficientPredatoryDeliriumTalant
                 * CoefficientOfMoonTouchForLuna()
                 * FormulaCoefficientOfAttackStrength()
