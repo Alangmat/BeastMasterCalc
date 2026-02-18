@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace Model
     public class Attack : INotifyPropertyChanged
     {
         private double timeDelay = 0;
+        [JsonIgnore]
         public double TimeDelay
         {
             get => timeDelay;

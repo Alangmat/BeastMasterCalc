@@ -30,6 +30,7 @@ namespace Model
         public const int MAX_DODGE = 60;
         public const int MAX_RESILIENCE = 60;
         public const int MAX_DEPTH_FURY = 50;
+        public const int MAX_SKILL_POWER = 100;
 
         #endregion
 

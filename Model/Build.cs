@@ -5,6 +5,7 @@ using System.ComponentModel.Design;
 using System.Data;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using Shared;
@@ -12,11 +13,11 @@ using Shared;
 namespace Model
 {
     [Serializable]
-    public class Build : INotifyPropertyChanged
+    public class Build //: INotifyPropertyChanged
     {
         #region Данные о сборке
 
-        public string Name { get; set; } = $"New Data Set {DateTime.Now.ToString()}";
+        public string Name { get; set; } = $"New Data Set";
         public string Description { get; set; } = string.Empty;
         public Guid ID { get; set; } = Guid.NewGuid();
         public string LastDate { get; set; } = DateTime.Now.ToString();
@@ -58,6 +59,7 @@ namespace Model
         public double Protection { get; set; } = 0;
         public double Dodge { get; set; } = 0;
         public double Resilience { get; set; } = 0;
+        public double SkillPower { get; set; } = 0;
         #endregion
         #region StatsOfPot
         public double SkillCooldownPot { get; set; } = 0;
@@ -70,6 +72,8 @@ namespace Model
         public double PiercingAttackPot { get; set; } = 0;
         public double RagePot { get; set; } = 0;
         public double FacilitationPot { get; set; } = 0;
+        public double SkillPowerPot { get; set; } = 0;
+        
         #endregion
         #region StatsOfScroll
         public double SkillCooldownScroll { get; set; } = 0;
@@ -218,14 +222,23 @@ namespace Model
         #endregion
 
 
-        public bool OverLimit = false;
+        //public bool OverLimit = false;
+        public bool AuraTalentAbuse = false;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        /// <summary>
-        /// Метод для вызова события PropertyChanged
-        /// </summary>
-        /// <param name="prop">Имя свойства, которое изменилось</param>
-        public void NotifyPropertyChanged([CallerMemberName] string prop = "") =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        //public event PropertyChangedEventHandler PropertyChanged;
+        ///// <summary>
+        ///// Метод для вызова события PropertyChanged
+        ///// </summary>
+        ///// <param name="prop">Имя свойства, которое изменилось</param>
+        //public void NotifyPropertyChanged([CallerMemberName] string prop = "") =>
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        [OnDeserialized]
+        internal void OnDeserialized(StreamingContext _)
+        {
+            if (OrderToAttack != null)
+                OrderToAttack.Luna = this.BeastAwakening;
+            if (BestialRampage != null)
+                BestialRampage.Luna = BeastAwakening;
+        }
     }
 }

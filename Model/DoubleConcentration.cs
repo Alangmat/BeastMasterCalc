@@ -1,97 +1,98 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace Model
 {
-    /// <summary>
-    /// Класс определяющий навык Двойная концентрация. 
-    /// Cодержит поля добавляющие статы Крит урон и кд, а так же свойство Level. 
-    /// Статы считаются под 4 стаками.
-    /// </summary>
+    [Serializable]
     public class DoubleConcentration : INotifyPropertyChanged
     {
-        /// <summary>
-        /// Прибавка крит урона
-        /// </summary>
-        public double AdditionCriticalDamage = 8;
-        /// <summary>
-        /// Прибавка перезарядки навыков
-        /// </summary>
-        public int AdditionSkillCooldown = 16;
-        /// <summary>
-        /// Свойство определяющее наличие таланта на скорость атаки вместо кд
-        /// </summary>
-        public bool HasTalentDeadlyDexterity = false;
-        public int BaseTimeCooldown = 22;
+        // ===== Конфиг (кэш на всё приложение) =====
+        private static JObject _cfg;
+        private static JArray _levels;
 
-        /// <summary>
-        /// Метод, для проверки таланта второй ветки и изменения прибавки кд
-        /// </summary>
-        /// <returns>Прибавляемое значение кд</returns>
+        private static int BaseCooldownCfg = 22;
+        private static double TalentDexterityFactorCfg = 0.4; // итоговый коэффициент (после (100 - raw)/100)
+
+        static DoubleConcentration()
+        {
+            var baseDir = AppDomain.CurrentDomain.BaseDirectory;
+            var path = Path.Combine(baseDir, "config", "skills", "double_concentration.json");
+            if (!File.Exists(path))
+                throw new FileNotFoundException("Не найден конфиг double_concentration.json", path);
+
+            var json = File.ReadAllText(path);
+            _cfg = JObject.Parse(json);
+
+            BaseCooldownCfg = (int?)_cfg["BaseCooldown"] ?? 22;
+
+            // В конфиге процент "среза": 60 => остаётся 40% => 0.4
+            double rawPercent = (double?)_cfg["TalentDeadlyDexterityAttackSpeedFactor"] ?? 60.0;
+            TalentDexterityFactorCfg = (100.0 - rawPercent) / 100.0;
+
+            _levels = (JArray)_cfg["Levels"];
+            if (_levels == null || _levels.Count == 0)
+                throw new InvalidOperationException("В конфиге DoubleConcentration пустой Levels.");
+        }
+
+        /// <summary>Прибавка крит урона (под 4 стаками)</summary>
+        [JsonIgnore] public double AdditionCriticalDamage = 8;
+
+        /// <summary>Прибавка перезарядки навыков (под 4 стаками)</summary>
+        [JsonIgnore] public int AdditionSkillCooldown = 16;
+
+        /// <summary>Талант: скорость атаки вместо КД (AS = AdditionSkillCooldown * 0.4 при значении 60 в конфиге)</summary>
+        public bool HasTalentDeadlyDexterity = false;
+
+        [JsonIgnore] public int BaseTimeCooldown = 22;
+
+        /// <summary>Если талант активен — 0, иначе вернёт бонус к КД</summary>
         public double AddSkillCooldown()
         {
-            return (HasTalentDeadlyDexterity ? 0 : AdditionSkillCooldown);
+            return HasTalentDeadlyDexterity ? 0 : AdditionSkillCooldown;
         }
-        /// <summary>
-        /// Метод, для проверки таланта второй ветки и изменения прибавки Скорости атаки
-        /// </summary>
-        /// <returns>Прибавляемое значение Скорости атаки</returns>
+
+        /// <summary>Если талант активен — вернёт бонус к Скорости атаки (от КД * коэффициент), иначе 0</summary>
         public double AddAttackSpeed()
         {
-            return (HasTalentDeadlyDexterity ? (AdditionSkillCooldown * 0.4) : 0);
+            return HasTalentDeadlyDexterity ? (AdditionSkillCooldown * TalentDexterityFactorCfg) : 0;
         }
 
-
         private int level = 1;
-        /// <summary>
-        /// Свойство для обновления уровня навыка, при изменении значения обновляет прибавки статов.
-        /// </summary>
+        /// <summary>Обновление уровня: тянет базовые значения из конфига</summary>
         public int Level
         {
-            get => level; 
+            get => level;
             set
             {
-                if (value >= 1 && value <= 4)
-                {
-                    level = value;
-                    switch (level)
-                    {
-                        case 1:
-                            AdditionCriticalDamage = 8;
-                            AdditionSkillCooldown = 16;
-                            break;
-                        case 2:
-                            AdditionCriticalDamage = 12;
-                            AdditionSkillCooldown = 24;
-                            break;
-                        case 3:
-                            AdditionCriticalDamage = 16;
-                            AdditionSkillCooldown = 32;
-                            break;
-                        case 4:
-                            AdditionCriticalDamage = 24;
-                            AdditionSkillCooldown = 40;
-                            break;
-                    }
-                }
+                if (value < 1 || value > 4) return;
+                level = value;
+
+                ApplyLevelFromConfig(level);
 
                 NotifyPropertyChanged(nameof(Level));
             }
         }
 
+        private void ApplyLevelFromConfig(int lvl)
+        {
+            var row = _levels.FirstOrDefault(x => (int)x["Level"] == lvl) as JObject
+                   ?? _levels.FirstOrDefault(x => (int)x["Level"] == 1) as JObject;
 
+            AdditionCriticalDamage = (double?)row?["AdditionCriticalDamage"] ?? AdditionCriticalDamage;
+            AdditionSkillCooldown = (int?)row?["AdditionSkillCooldown"] ?? AdditionSkillCooldown;
 
+            BaseTimeCooldown = BaseCooldownCfg;
+        }
+
+        // ===== INotifyPropertyChanged =====
         public event PropertyChangedEventHandler PropertyChanged;
-        /// <summary>
-        /// Метод для вызова события PropertyChanged
-        /// </summary>
-        /// <param name="prop">Имя свойства, которое изменилось</param>
         public void NotifyPropertyChanged([CallerMemberName] string prop = "") =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
     }
 }
+
