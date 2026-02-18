@@ -17,6 +17,7 @@ using System.IO;
 using System.Collections.ObjectModel;
 using Newtonsoft.Json.Linq;
 using Shared;
+using System.Configuration;
 
 namespace ViewModel
 {
@@ -371,7 +372,8 @@ namespace ViewModel
             IrreversibleAngerActive = DataSet.IrreversibleAnger;
             #endregion
 
-            NotifyPropertyChanged(nameof(OverLimitClosed));
+            //NotifyPropertyChanged(nameof(OverLimitClosed));
+            NotifyPropertyChanged(nameof(AuraTalentAbuse));
 
             Calculate();
         }
@@ -693,7 +695,7 @@ namespace ViewModel
             {
                 if (BeastAwakeningActive)
                 {
-                    LunaAura = (int)(LunaAura * coefGrandeurOfTheLotus);
+                    LunaAura = (int)(LunaAura * (AuraTalentAbuse ? 1 : coefGrandeurOfTheLotus));
                     OutAuraOfTheForestLunaDD = LunaAura.ToString();
                     LunaAura = (int)(LunaAura * 60 / AuraOfTheForestCooldown() * countHitByLuna);
                     OutAuraOfTheForestLunaDPM = LunaAura.ToString();
@@ -708,7 +710,7 @@ namespace ViewModel
                     OutAuraOfTheForestLunaDD = "0";
                     OutAuraOfTheForestLunaDPM = "0";
                 }
-                HeroesAura = (int)(HeroesAura * coefGrandeurOfTheLotus);
+                HeroesAura = (int)(HeroesAura * (AuraTalentAbuse ? 1 : coefGrandeurOfTheLotus));
                 OutAuraOfTheForestHeroDD = HeroesAura.ToString();
                 HeroesAura = (int)(HeroesAura * 60 / AuraOfTheForestCooldown() * countHitByHero);
                 OutAuraOfTheForestHeroDPM = HeroesAura.ToString();
@@ -1153,10 +1155,12 @@ namespace ViewModel
             if (CastleStartModifierActive) CriticalHitHeroFinal -= 5;
             CriticalHitHeroFinal = Math.Max(CriticalHitHeroFinal, 0);
             criticalHit = CriticalHitHeroFinal;
-            if (OverLimitClosed) criticalHit = StatsLimit.CheckLimit(criticalHit, StatsLimit.MAX_CRITICAL_HIT_HERO);
+            //if (OverLimitClosed) 
+            criticalHit = StatsLimit.CheckLimit(criticalHit, StatsLimit.MAX_CRITICAL_HIT_HERO);
             IsUsingBlessingOfTheMoonOnLuna = IsUsingBlessingOfTheMoonOnLuna;
             if (CriticalHitHeroFinal > maxCriticalHitHero) CriticalHitHeroFinal = maxCriticalHitHero;
-            if (OverLimitClosed) CriticalHitLuna = StatsLimit.CheckLimit(CriticalHitLuna, StatsLimit.MAX_CRITICAL_HIT_HERO);
+            //if (OverLimitClosed)
+            CriticalHitLuna = StatsLimit.CheckLimit(CriticalHitLuna, StatsLimit.MAX_CRITICAL_HIT_HERO);
         }
         #endregion
         #region Крит урон
@@ -1352,10 +1356,12 @@ namespace ViewModel
             if (CastleStartModifierActive) PenetrationHeroFinal -= 5;
             PenetrationHeroFinal = Math.Max(PenetrationHeroFinal, 0);
             penetration = PenetrationHeroFinal;
-            if (OverLimitClosed) penetration = StatsLimit.CheckLimit(penetration, maxPenetrationHero);
+            //if (OverLimitClosed)
+            penetration = StatsLimit.CheckLimit(penetration, maxPenetrationHero);
             IsUsingBlessingOfTheMoonOnLuna = IsUsingBlessingOfTheMoonOnLuna;
             if (PenetrationHeroFinal > maxPenetrationHero) PenetrationHeroFinal = maxPenetrationHero;
-            if (OverLimitClosed) PenetrationLuna = StatsLimit.CheckLimit(PenetrationLuna, maxPenetrationHero);
+            //if (OverLimitClosed) 
+            PenetrationLuna = StatsLimit.CheckLimit(PenetrationLuna, maxPenetrationHero);
         }
         #endregion
         #region Точность
@@ -1452,9 +1458,10 @@ namespace ViewModel
             if (CastleStartModifierActive) AccuracyHeroFinal -= 5;
             AccuracyHeroFinal = Math.Max(AccuracyHeroFinal, 0);
             double finalAcc = StatsLimit.CheckLimit(AccuracyHeroFinal, StatsLimit.MAX_ACCURACY_HERO);
-            if (OverLimitClosed) AccuracyLuna = finalAcc; else AccuracyLuna = AccuracyHeroFinal;
+            //if (OverLimitClosed) AccuracyLuna = finalAcc; else AccuracyLuna = AccuracyHeroFinal;
+            AccuracyLuna = finalAcc;
             AccuracyHeroFinal = finalAcc;
-            if (OverLimitClosed) AccuracyLuna = StatsLimit.CheckLimit(AccuracyLuna, StatsLimit.MAX_ACCURACY_HERO);
+            //if (OverLimitClosed) AccuracyLuna = StatsLimit.CheckLimit(AccuracyLuna, StatsLimit.MAX_ACCURACY_HERO);
         }
         #endregion
         #region Сила атаки
@@ -4904,13 +4911,23 @@ namespace ViewModel
 
         #region фичи
 
-        public bool OverLimitClosed
+        //public bool OverLimitClosed
+        //{
+        //    get => DataSet.OverLimit;
+        //    set
+        //    {
+        //        DataSet.OverLimit = value;
+        //        Calculate(); NotifyPropertyChanged(nameof(OverLimitClosed));
+        //    }
+        //}
+
+        public bool AuraTalentAbuse
         {
-            get => DataSet.OverLimit;
+            get => DataSet.AuraTalentAbuse;
             set
             {
-                DataSet.OverLimit = value;
-                Calculate(); NotifyPropertyChanged(nameof(OverLimitClosed));
+                DataSet.AuraTalentAbuse = value;
+                Calculate(); NotifyPropertyChanged(nameof(AuraTalentAbuse));
             }
         }
 

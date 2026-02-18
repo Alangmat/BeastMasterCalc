@@ -220,7 +220,8 @@ namespace Model
         #endregion
 
 
-        public bool OverLimit = false;
+        //public bool OverLimit = false;
+        public bool AuraTalentAbuse = false;
 
         //public event PropertyChangedEventHandler PropertyChanged;
         ///// <summary>

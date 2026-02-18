@@ -641,14 +641,14 @@
                             TextWrapping="Wrap" Height="35"/>
                     </CheckBox>
                     <CheckBox Grid.Column="3"
-                        IsChecked="{Binding OverLimitClosed}"
+                        IsChecked="{Binding AuraTalentAbuse}"
                         HorizontalAlignment="Center" 
                         Height="19" 
                         Margin="0,210,0,0"
                         Grid.Row="2" 
                         VerticalAlignment="Top" 
                         Width="194" Click="CheckBox_Checked">
-                        <TextBlock Foreground="White" Text="Отключить перекапы"
+                        <TextBlock Foreground="White" Text="Абьюз таланта на ауру"
                             TextWrapping="Wrap" Height="19"/>
                     </CheckBox>
                     <Button Grid.Column="2"
