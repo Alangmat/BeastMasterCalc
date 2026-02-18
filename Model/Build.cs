@@ -13,7 +13,7 @@ using Shared;
 namespace Model
 {
     [Serializable]
-    public class Build : INotifyPropertyChanged
+    public class Build //: INotifyPropertyChanged
     {
         #region Данные о сборке
 
@@ -59,6 +59,7 @@ namespace Model
         public double Protection { get; set; } = 0;
         public double Dodge { get; set; } = 0;
         public double Resilience { get; set; } = 0;
+        public double SkillPower { get; set; } = 0;
         #endregion
         #region StatsOfPot
         public double SkillCooldownPot { get; set; } = 0;
@@ -221,13 +222,13 @@ namespace Model
 
         public bool OverLimit = false;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        /// <summary>
-        /// Метод для вызова события PropertyChanged
-        /// </summary>
-        /// <param name="prop">Имя свойства, которое изменилось</param>
-        public void NotifyPropertyChanged([CallerMemberName] string prop = "") =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        //public event PropertyChangedEventHandler PropertyChanged;
+        ///// <summary>
+        ///// Метод для вызова события PropertyChanged
+        ///// </summary>
+        ///// <param name="prop">Имя свойства, которое изменилось</param>
+        //public void NotifyPropertyChanged([CallerMemberName] string prop = "") =>
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         [OnDeserialized]
         internal void OnDeserialized(StreamingContext _)
         {

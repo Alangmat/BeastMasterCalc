@@ -31,6 +31,7 @@ namespace ViewModel
 
 
 
+
         #region работа с билдами
         private ObservableCollection<Build> builds = new ObservableCollection<Build>();
         public ObservableCollection<Build> Builds
@@ -41,7 +42,7 @@ namespace ViewModel
                 builds = value;
                 NotifyPropertyChanged(nameof(Builds));
             }
-        } 
+        }
         public void LoadBuilds()
         {
             string jsonFromFile = File.ReadAllText(FILE_SAVE);
@@ -49,7 +50,7 @@ namespace ViewModel
         }
         public void SaveBuilds()
         {
-            
+
             string json = JsonConvert.SerializeObject(Builds);
             File.WriteAllText(FILE_SAVE, json);
         }
@@ -59,6 +60,7 @@ namespace ViewModel
             builds.Add(DataSet);
             string json = JsonConvert.SerializeObject(DataSet);
             DataSet = JsonConvert.DeserializeObject<Build>(json);
+            updateStateDataSet();
             SelectedDataSet = builds[builds.Count() - 1];
         }
         public void AddCurrentDataSet()
@@ -69,9 +71,13 @@ namespace ViewModel
             {
                 builds = new ObservableCollection<Build>();
             }
+            int result = 0;
+            bool flag = int.TryParse(OutDD, out result);
+            if (flag) DataSet.ResultDD = result;
             builds.Add(DataSet);
             string json = JsonConvert.SerializeObject(DataSet);
             DataSet = JsonConvert.DeserializeObject<Build>(json);
+            updateStateDataSet();
             SelectedDataSet = builds[builds.Count() - 1];
         }
         private Build selectedDataSet;
@@ -84,7 +90,7 @@ namespace ViewModel
                 NotifyPropertyChanged(nameof(SelectedDataSet));
             }
         }
-        
+
         public void ChoiceDataSet()
         {
             if (!(SelectedDataSet is null))
@@ -104,7 +110,7 @@ namespace ViewModel
                 int curID = Builds.IndexOf(currentDataSet);
                 int dd = 0;
                 int.TryParse(OutDD, out dd);
-                if (dd > 0) DataSet.ResultDD = dd; 
+                if (dd > 0) DataSet.ResultDD = dd;
                 Builds[curID] = DataSet;
                 Builds[curID].LastDate = DateTime.Now.ToString();
                 string json = JsonConvert.SerializeObject(DataSet);
@@ -190,6 +196,7 @@ namespace ViewModel
             NotifyPropertyChanged(nameof(Rage));
             NotifyPropertyChanged(nameof(Facilitation));
             NotifyPropertyChanged(nameof(DepthsFury));
+            NotifyPropertyChanged(nameof(SkillPower));
             //NotifyPropertyChanged(nameof(PercentMagicalDD));
             //NotifyPropertyChanged("PercentPhysicalDD");
 
@@ -372,7 +379,7 @@ namespace ViewModel
 
 
         private Build dataSet;
-        public Build DataSet { 
+        public Build DataSet {
             get => dataSet;
             set {
                 dataSet = value;
@@ -401,22 +408,22 @@ namespace ViewModel
                     int pureMagicalDD = (int)(magicdd / percentMagicalDDStart.ConvertToCoefficient());
                     int purePhysicalDD = (int)(physdd / percentPhysicalDDStart.ConvertToCoefficient());
 
-                    if (HarmoniousPowerStartModifierActive) 
+                    if (HarmoniousPowerStartModifierActive)
                     {
                         pureMagicalDD = (int)(pureMagicalDD / harmoniousPowerMDD.ConvertToCoefficient());
                         purePhysicalDD = (int)(purePhysicalDD / harmoniousPowerPDD.ConvertToCoefficient());
 
                     }
 
-                    magicdd = (int)(pureMagicalDD * (coefficientTriton  * MermanDuration() + coefRage)  + pureMagicalDD * percentMagicalDD.ConvertToCoefficient());
+                    magicdd = (int)(pureMagicalDD * (coefficientTriton * MermanDuration() + coefRage) + pureMagicalDD * percentMagicalDD.ConvertToCoefficient());
                     physdd = (int)((purePhysicalDD * coefRage + purePhysicalDD * percentPhysicalDD.ConvertToCoefficient()));
-                    
-                    if (HasTalentHarmoniousPower) 
+
+                    if (HasTalentHarmoniousPower)
                     {
                         magicdd = (int)(magicdd * harmoniousPowerMDD.ConvertToCoefficient());
                         physdd = (int)(physdd * harmoniousPowerPDD.ConvertToCoefficient());
-                        
-                    } 
+
+                    }
 
                     int dpmAttack = CalcAttack(magicdd, physdd);
                     int dpmMoonTouch = CalcMoonTouch(magicdd);
@@ -440,14 +447,14 @@ namespace ViewModel
                     // Перенести все проверки на активность внутрь калькуляторов
                     if (AttackActive)
                         resultDDHero += dpmAttack;
-                    if (MoonTouchActive) 
+                    if (MoonTouchActive)
                         resultDDHero += dpmMoonTouch;
 
                     if (BeastAwakeningActive)
                     {
                         if (BestialRampageActive)
                         {
-                            resultDDLuna += (int)(dpmBeastAwakening * TimeWithoutBestialRampage() 
+                            resultDDLuna += (int)(dpmBeastAwakening * TimeWithoutBestialRampage()
                                             + dpmBestialRampage * TimeBestialRampage());
                         }
                         else
@@ -458,15 +465,15 @@ namespace ViewModel
                         {
                             resultDDLuna += dpmOrderToAttack;
                         }
-                        if (HasTalantSymbiosis )
+                        if (HasTalantSymbiosis)
                         {
                             resultDDHero += dpmSymbiosisHero;
                             resultDDLuna += dpmSymbiosisLuna;
                         }
-                        
+
                     }
                     if (ChainLightningActive) resultDDHero += dpmChainLightning;
-                    if (AuraOfTheForestActive) 
+                    if (AuraOfTheForestActive)
                     {
                         resultDDLuna += dpmAuraOfTheForestLuna;
                         resultDDHero += dpmAuraOfTheForestHero;
@@ -477,13 +484,15 @@ namespace ViewModel
                     resultDDLuna = (int)(resultDDLuna * sacredShieldLunaCoef());
 
                     resultDD = resultDDHero + resultDDLuna;
-                    OutDD = resultDD.ToString();
+                    //OutDD = resultDD.ToString();
+                    DataSet.ResultDD = resultDD;
+                    NotifyPropertyChanged(nameof(OutDD));
                     OutDDHero = resultDDHero.ToString();
                     OutDDLuna = resultDDLuna.ToString();
                 }
-                else OutDD = "Ошибка данных";
+                //else OutDD = "Ошибка данных";
             }
-            else OutDD = "Ошибка данных";
+            //else OutDD = "Ошибка данных";
         }
         private ICommand calculateCommand;
         public ICommand CalculateCommand
@@ -502,6 +511,7 @@ namespace ViewModel
             CalcPiercingAttack();
             CalcRage();
             CalcFacilitation();
+            CalcSkillPower();
             CalcDepthsFury();
         }
         public void CalcPercents()
@@ -521,18 +531,18 @@ namespace ViewModel
         }
         public int CalcAttack(int magedd, int physdd)
         {
-            int result = (int)(Attack.Formula(magedd, physdd) 
-                * coefficientPredatoryDeliriumTalant 
-                * FormulaCoefficientOfAttackStrength() 
+            int result = (int)(Attack.Formula(magedd, physdd)
+                * coefficientPredatoryDeliriumTalant
+                * FormulaCoefficientOfAttackStrength()
                 * FormulaCoefficientOfPiercingAttack());
             OutAttackDD = result.ToString();
             result = (int)(result / AttackDelay() * 60);
             OutAttackDPM = result.ToString();
             // тут не умножается на пробив потому что формула пронзы в себе содержит коэффициент пробива просто с учетом пронзы
             // так что не надо дополнительно еще на пробив умножать
-            result = (int)(result 
-                * FormulaCoefficientOfCriticalHitHeroForAutoattack() 
-                * FormulaCoefficientOfAccuracy() 
+            result = (int)(result
+                * FormulaCoefficientOfCriticalHitHeroForAutoattack()
+                * FormulaCoefficientOfAccuracy()
                 * coefficientBPDungeon());
             return result;
         }
@@ -543,19 +553,20 @@ namespace ViewModel
         }
         public int CalcMoonTouch(int magedd)
         {
-            int result = (int)(Moon_Touch.Formula(magedd) 
-                * coefficientCastle
-                * coefficientBestialRageTalant 
-                * coefficientPredatoryDeliriumTalant 
-                * coefficientMomentOfPowerTalant 
+            int result = (int)(Moon_Touch.Formula(magedd)
+                //* coefficientCastle
+                * FormulaCoefficientSkillPower()
+                * coefficientBestialRageTalant
+                * coefficientPredatoryDeliriumTalant
+                * coefficientMomentOfPowerTalant
                 * FormulaCoefficientOfPenetration()
                 );
             OutMoonTouchDD = result.ToString();
             result = (int)(result * 60 / MoonTouchCooldown());
             OutMoonTouchDPM = result.ToString();
-            result = (int)(result 
-                * FormulaCoefficientOfCriticalHitForSkill() 
-                * FormulaCoefficientOfAccuracy() 
+            result = (int)(result
+                * FormulaCoefficientOfCriticalHitForSkill()
+                * FormulaCoefficientOfAccuracy()
                 * coefficientBPDungeon());
             return result;
         }
@@ -574,33 +585,34 @@ namespace ViewModel
         }
         public int CalcChainLightning(int magedd, int physdd)
         {
-            int result = (int)(Chain_Lightning.Formula(magedd, physdd) 
-                * coefficientCastle
-                * coefficientBestialRageTalant 
-                * coefficientPredatoryDeliriumTalant 
-                * coefficientMomentOfPowerTalant 
+            int result = (int)(Chain_Lightning.Formula(magedd, physdd)
+                //* coefficientCastle
+                * FormulaCoefficientSkillPower()
+                * coefficientBestialRageTalant
+                * coefficientPredatoryDeliriumTalant
+                * coefficientMomentOfPowerTalant
                 * FormulaCoefficientOfPenetration());
 
             OutChainLightningDD = result.ToString();
             result = (int)(result * 60 / ChainLightningCooldown() * LegendaryCoefficientChainLightning());
             OutChainLightningDPM = result.ToString();
-            result = (int)(result 
-                * FormulaCoefficientOfCriticalHitForSkill() 
-                * FormulaCoefficientOfAccuracy() 
+            result = (int)(result
+                * FormulaCoefficientOfCriticalHitForSkill()
+                * FormulaCoefficientOfAccuracy()
                 * coefficientBPDungeon());
             return result;
         }
         public int CalcBeastAwakening(int magedd, int physdd)
         {
-            int result = (int)(Beast_Awakening.Formula(magedd, physdd) 
-                * FormulaCoefficientOfAttackStrengthLuna() 
+            int result = (int)(Beast_Awakening.Formula(magedd, physdd)
+                * FormulaCoefficientOfAttackStrengthLuna()
                 * FormulaCoefficientOfPiercingAttackLuna());
             OutBeastAwakeningDD = result.ToString();
             result = (int)(result * 60 / (Beast_Awakening.BaseDelay * ((100 - (GodsAidLuna ? ModifiersDamage.GODS_AID_ATTACK_SPEED : 0)) / 100.0)));
             OutBeastAwakeningDPM = result.ToString();
-            result = (int)(result 
-                * CoefficientOfMoonTouchForLuna() 
-                * FormulaCoefficientOfCriticalHitLuna() 
+            result = (int)(result
+                * CoefficientOfMoonTouchForLuna()
+                * FormulaCoefficientOfCriticalHitLuna()
                 * FormulaCoefficientOfAccuracyLuna());
             return result;
         }
@@ -638,17 +650,17 @@ namespace ViewModel
         }
         public int CalcBestialRampage(int magedd, int physdd)
         {
-            int result = (int)(Bestial_Rampage.Formula(magedd, physdd) 
-                * FormulaCoefficientOfAttackStrengthLuna() 
+            int result = (int)(Bestial_Rampage.Formula(magedd, physdd)
+                * FormulaCoefficientOfAttackStrengthLuna()
                 * FormulaCoefficientOfPiercingAttackLuna());
 
             OutBestialRampageDD = result.ToString();
             double increaseAttackSpeed = (100 - (Bestial_Rampage.IncreaseAttackSpeed + (GodsAidLuna ? ModifiersDamage.GODS_AID_ATTACK_SPEED : 0))) / 100;
             result = (int)(result * 60 / (Bestial_Rampage.Luna.BaseDelay * increaseAttackSpeed));
             OutBestialRampageDPM = result.ToString();
-            result = (int)(result 
-                * CoefficientOfMoonTouchForLuna() 
-                * FormulaCoefficientOfCriticalHitLuna() 
+            result = (int)(result
+                * CoefficientOfMoonTouchForLuna()
+                * FormulaCoefficientOfCriticalHitLuna()
                 * FormulaCoefficientOfAccuracyLuna());
             return result;
         }
@@ -659,34 +671,36 @@ namespace ViewModel
             return result;
         }
         public Dictionary<SourcesDamage, int> CalcAuraOfTheForest(int magedd)
-        { 
+        {
             // Коэффициенты разделены для вывода в дебаг вкладку. В резалте происходит умножение на кэфы, которые влияют исключительно на дпм скилла.
             var result = new Dictionary<SourcesDamage, int>();
             result.Add(SourcesDamage.Hero, 0);
-            result.Add(SourcesDamage.Luna, 0);  
+            result.Add(SourcesDamage.Luna, 0);
+            double coefGrandeurOfTheLotus = 0.75;
             int countHitByHero = (int)(AuraOfTheForest.TimeActive * FacilitationFinal.ConvertToCoefficient() / AuraOfTheForest.Delay);
             int countHitByLuna = (int)(AuraOfTheForest.TimeActive * FacilitationLuna.ConvertToCoefficient() / AuraOfTheForest.Delay);
-            int LunaAura = (int)(AuraOfTheForest.Formula(magedd) 
-                * FormulaCoefficientOfPenetrationLuna()); 
-            int HeroesAura = (int)(AuraOfTheForest.Formula(magedd) 
-                * coefficientCastle
-                * coefficientBestialRageTalant 
-                * coefficientPredatoryDeliriumTalant 
-                * coefficientMomentOfPowerTalant 
+            int LunaAura = (int)(AuraOfTheForest.Formula(magedd)
+                * FormulaCoefficientOfPenetrationLuna());
+            int HeroesAura = (int)(AuraOfTheForest.Formula(magedd)
+                //* coefficientCastle
+                * FormulaCoefficientSkillPower()
+                * coefficientBestialRageTalant
+                * coefficientPredatoryDeliriumTalant
+                * coefficientMomentOfPowerTalant
                 * FormulaCoefficientOfPenetration());
             double realCooldown = AuraOfTheForest.BaseTimeCooldown / SkillCooldownFinal.ConvertToCoefficient() + TIME_CAST;
             if (HasTalantGrandeurOfTheLotus)
             {
                 if (BeastAwakeningActive)
                 {
-                    LunaAura = (int)(LunaAura * 0.8);
+                    LunaAura = (int)(LunaAura * coefGrandeurOfTheLotus);
                     OutAuraOfTheForestLunaDD = LunaAura.ToString();
                     LunaAura = (int)(LunaAura * 60 / AuraOfTheForestCooldown() * countHitByLuna);
                     OutAuraOfTheForestLunaDPM = LunaAura.ToString();
                     // ИТОГОВЫЙ ДД АУРЫ ЛЕСА ЛУНЫ НА ВСЕ КЭФЫ
-                    result[SourcesDamage.Luna] += (int)(LunaAura 
-                        * CoefficientOfMoonTouchForLuna() 
-                        * FormulaCoefficientOfCriticalHitLuna() 
+                    result[SourcesDamage.Luna] += (int)(LunaAura
+                        * CoefficientOfMoonTouchForLuna()
+                        * FormulaCoefficientOfCriticalHitLuna()
                         * FormulaCoefficientOfAccuracyLuna());
                 }
                 else
@@ -694,13 +708,13 @@ namespace ViewModel
                     OutAuraOfTheForestLunaDD = "0";
                     OutAuraOfTheForestLunaDPM = "0";
                 }
-                HeroesAura = (int)(HeroesAura * 0.8);
+                HeroesAura = (int)(HeroesAura * coefGrandeurOfTheLotus);
                 OutAuraOfTheForestHeroDD = HeroesAura.ToString();
                 HeroesAura = (int)(HeroesAura * 60 / AuraOfTheForestCooldown() * countHitByHero);
                 OutAuraOfTheForestHeroDPM = HeroesAura.ToString();
-                result[SourcesDamage.Hero] += (int)(HeroesAura 
-                    * FormulaCoefficientOfCriticalHitForSkill() 
-                    * FormulaCoefficientOfAccuracy() 
+                result[SourcesDamage.Hero] += (int)(HeroesAura
+                    * FormulaCoefficientOfCriticalHitForSkill()
+                    * FormulaCoefficientOfAccuracy()
                     * coefficientBPDungeon());
                 return result;
             }
@@ -712,9 +726,9 @@ namespace ViewModel
                 OutAuraOfTheForestHeroDPM = "0";
                 OutAuraOfTheForestHeroDD = "0";
                 // ИТОГОВЫЙ ДД АУРЫ ЛЕСА ЛУНЫ НА ВСЕ КЭФЫ
-                result[SourcesDamage.Luna] += (int)(LunaAura 
-                    * CoefficientOfMoonTouchForLuna() 
-                    * FormulaCoefficientOfCriticalHitLuna() 
+                result[SourcesDamage.Luna] += (int)(LunaAura
+                    * CoefficientOfMoonTouchForLuna()
+                    * FormulaCoefficientOfCriticalHitLuna()
                     * FormulaCoefficientOfAccuracyLuna());
                 return result;
             }
@@ -723,9 +737,9 @@ namespace ViewModel
             OutAuraOfTheForestHeroDPM = HeroesAura.ToString();
             OutAuraOfTheForestLunaDD = "0";
             OutAuraOfTheForestLunaDPM = "0";
-            result[SourcesDamage.Hero] += (int)(HeroesAura 
-                * FormulaCoefficientOfCriticalHitForSkill() 
-                * FormulaCoefficientOfAccuracy() 
+            result[SourcesDamage.Hero] += (int)(HeroesAura
+                * FormulaCoefficientOfCriticalHitForSkill()
+                * FormulaCoefficientOfAccuracy()
                 * coefficientBPDungeon());
             return result;
         }
@@ -741,11 +755,12 @@ namespace ViewModel
             int result = 0;
             if (MoonlightPermanentActive)
             {
-                int permanentDD = (int)(Moonlight.Formula((int)(pureMagicalDD * coefficientTriton + magicaldd))
-                    * coefficientCastle
+                int permanentDD = (int)(3 * Moonlight.Formula((int)(pureMagicalDD * coefficientTriton + magicaldd))
+                    //* coefficientCastle
+                    * FormulaCoefficientSkillPower()
                     * coefficientBestialRageTalant
                     * coefficientPredatoryDeliriumTalant
-                    * coefficientLongDeathTalant 
+                    * coefficientLongDeathTalant
                     * FormulaCoefficientOfPenetration());
 
                 OutMoonlightPermanentDD = permanentDD.ToString();
@@ -757,11 +772,12 @@ namespace ViewModel
             {
                 //double realCooldown = Moonlight.BaseTimeCooldown / SkillCooldownFinal.ConvertToCoefficient() + TIME_CAST;
 
-                int nonPermanentDD = (int)(Moonlight.Formula(magicaldd) 
-                    * coefficientCastle
-                    * coefficientBestialRageTalant 
-                    * coefficientPredatoryDeliriumTalant 
-                    * coefficientLongDeathTalant 
+                int nonPermanentDD = (int)(Moonlight.Formula(magicaldd)
+                    //* coefficientCastle
+                    * FormulaCoefficientSkillPower()
+                    * coefficientBestialRageTalant
+                    * coefficientPredatoryDeliriumTalant
+                    * coefficientLongDeathTalant
                     * FormulaCoefficientOfPenetration());
 
                 OutMoonlightNonPermanentDD = nonPermanentDD.ToString();
@@ -784,7 +800,7 @@ namespace ViewModel
             int result = 0;
 
             result = (int)(OrderToAttack.Formula(magedd, physdd)
-                * FormulaCoefficientOfAttackStrengthLuna() 
+                * FormulaCoefficientOfAttackStrengthLuna()
                 * FormulaCoefficientOfPiercingAttackLuna());
 
             OutOrderToAttackDD = result.ToString();
@@ -794,9 +810,9 @@ namespace ViewModel
                 result = (int)(result * (1 + (Bestial_Rampage.IncreaseDD - 1) * TimeBestialRampage()));
             OutOrderToAttackDPM = result.ToString();
 
-            result = (int)(result 
-                * CoefficientOfMoonTouchForLuna() 
-                * FormulaCoefficientOfCriticalHitLuna() 
+            result = (int)(result
+                * CoefficientOfMoonTouchForLuna()
+                * FormulaCoefficientOfCriticalHitLuna()
                 * FormulaCoefficientOfAccuracyLuna());
 
             return result;
@@ -817,59 +833,62 @@ namespace ViewModel
             double Tp = AttackDelay();
             double Tl = Beast_Awakening.BaseDelay * (1 - (GodsAidLuna ? ModifiersDamage.GODS_AID_ATTACK_SPEED : 0) / 100);
             double T = Math.Max(Tp, Tl);
-            double DpmHero = 0.1 * 60 / T * (
+            double DpmHero = 0.15 * 60 / T * (
                     Beast_Awakening.Formula(magedd, physdd)
                     * FormulaCoefficientOfCriticalHitLuna()
                     * FormulaCoefficientOfPiercingAttackLuna()
                     * FormulaCoefficientOfAccuracyLuna()
+                    * FormulaCoefficientOfAttackStrengthLuna()
                     );
-            double DpmLuna = 0.1 * 60 / T * (
+            double DpmLuna = 0.15 * 60 / T * (
                     Attack.Formula(magedd, physdd)
                     * FormulaCoefficientOfCriticalHitHeroForAutoattack()
                     * FormulaCoefficientOfPiercingAttack()
                     * FormulaCoefficientOfAccuracy()
+                    * FormulaCoefficientOfAttackStrength()
                     );
 
             if (BestialRampageActive)
             {
                 double Tbr = AttackDelayLunaWithBestialRampage();
                 T = Math.Max(Tp, Tbr);
-                double DpmBestialRampageHero = 0.1 * 60 / T * (
+                double DpmBestialRampageHero = 0.15 * 60 / T * (
                     Bestial_Rampage.Formula(magedd, physdd)
                     * FormulaCoefficientOfCriticalHitLuna()
                     * FormulaCoefficientOfPiercingAttackLuna()
                     * FormulaCoefficientOfAccuracyLuna()
+                    * FormulaCoefficientOfAttackStrengthLuna()
                     );
-                double DpmBestialRampageLuna = 0.1 * 60 / T * (
+                double DpmBestialRampageLuna = 0.15 * 60 / T * (
                     Attack.Formula(magedd, physdd)
                     * FormulaCoefficientOfCriticalHitHeroForAutoattack()
                     * FormulaCoefficientOfPiercingAttack()
                     * FormulaCoefficientOfAccuracy()
+                    * FormulaCoefficientOfAttackStrength()
                     );
 
                 result[SourcesDamage.Hero] = (int)(
                     (DpmHero * TimeWithoutBestialRampage() + DpmBestialRampageHero * TimeBestialRampage())
-                    * coefficientPredatoryDeliriumTalant 
-                    * CoefficientOfMoonTouchForLuna() 
-                    * FormulaCoefficientOfAttackStrengthLuna()
+                    * coefficientPredatoryDeliriumTalant
+                    * CoefficientOfMoonTouchForLuna()
+                    * coefficientBPDungeon()
                     );
                 result[SourcesDamage.Luna] = (int)(
                     (DpmLuna * TimeWithoutBestialRampage() + DpmBestialRampageLuna * TimeBestialRampage())
                     * coefficientPredatoryDeliriumTalant
                     * CoefficientOfMoonTouchForLuna()
-                    * FormulaCoefficientOfAttackStrength()
+                    * coefficientBPDungeon()
                     );
 
-                
+
                 OutSymbiosisDPM = (result[SourcesDamage.Hero] + result[SourcesDamage.Luna]).ToString();
 
                 return result;
             }
             result[SourcesDamage.Hero] = (int)(
-                DpmHero 
-                * coefficientPredatoryDeliriumTalant 
+                DpmHero
+                * coefficientPredatoryDeliriumTalant
                 * CoefficientOfMoonTouchForLuna()
-                * FormulaCoefficientOfAttackStrengthLuna() 
                 * coefficientBPDungeon()
                 );
 
@@ -877,7 +896,6 @@ namespace ViewModel
                 DpmLuna
                 * coefficientPredatoryDeliriumTalant
                 * CoefficientOfMoonTouchForLuna()
-                * FormulaCoefficientOfAttackStrength()
                 * coefficientBPDungeon()
                 );
 
@@ -968,7 +986,7 @@ namespace ViewModel
             if (DoubleConcentrationActive)
                 SkillCooldownFinal += DoubleConcentration.AddSkillCooldown();
             if (CastleStartModifierActive) SkillCooldownFinal -= 5;
-            
+
             SkillCooldownFinal = StatsLimit.CheckLimit(SkillCooldownFinal, StatsLimit.MAX_SKILL_COOLDOWN);
         }
         #endregion
@@ -1049,7 +1067,7 @@ namespace ViewModel
             if (GodsAid) AttackSpeedFinal += 12;
             if (CastleStartModifierActive) AttackSpeedFinal -= 5;
             AttackSpeedFinal = StatsLimit.CheckLimit(AttackSpeedFinal, StatsLimit.MAX_ATTACK_SPEED);
-            
+
         }
         #endregion
         #region Крит
@@ -1138,6 +1156,7 @@ namespace ViewModel
             if (OverLimitClosed) criticalHit = StatsLimit.CheckLimit(criticalHit, StatsLimit.MAX_CRITICAL_HIT_HERO);
             IsUsingBlessingOfTheMoonOnLuna = IsUsingBlessingOfTheMoonOnLuna;
             if (CriticalHitHeroFinal > maxCriticalHitHero) CriticalHitHeroFinal = maxCriticalHitHero;
+            if (OverLimitClosed) CriticalHitLuna = StatsLimit.CheckLimit(CriticalHitLuna, StatsLimit.MAX_CRITICAL_HIT_HERO);
         }
         #endregion
         #region Крит урон
@@ -1150,7 +1169,7 @@ namespace ViewModel
             get => criticalDamage;
             set
             {
-                criticalDamage = value; 
+                criticalDamage = value;
                 NotifyPropertyChanged(nameof(CriticalDamageFinal));
             }
         }
@@ -1336,6 +1355,7 @@ namespace ViewModel
             if (OverLimitClosed) penetration = StatsLimit.CheckLimit(penetration, maxPenetrationHero);
             IsUsingBlessingOfTheMoonOnLuna = IsUsingBlessingOfTheMoonOnLuna;
             if (PenetrationHeroFinal > maxPenetrationHero) PenetrationHeroFinal = maxPenetrationHero;
+            if (OverLimitClosed) PenetrationLuna = StatsLimit.CheckLimit(PenetrationLuna, maxPenetrationHero);
         }
         #endregion
         #region Точность
@@ -1434,7 +1454,7 @@ namespace ViewModel
             double finalAcc = StatsLimit.CheckLimit(AccuracyHeroFinal, StatsLimit.MAX_ACCURACY_HERO);
             if (OverLimitClosed) AccuracyLuna = finalAcc; else AccuracyLuna = AccuracyHeroFinal;
             AccuracyHeroFinal = finalAcc;
-
+            if (OverLimitClosed) AccuracyLuna = StatsLimit.CheckLimit(AccuracyLuna, StatsLimit.MAX_ACCURACY_HERO);
         }
         #endregion
         #region Сила атаки
@@ -1452,7 +1472,7 @@ namespace ViewModel
             }
         }
         private double attackStrength = 0;
-        
+
         /// <summary>
         /// Итоговое значение характеристики "Сила атаки" персонажа с учетом всех скиллов и бафов
         /// </summary>
@@ -1684,7 +1704,7 @@ namespace ViewModel
             get => DataSet.Facilitation;
             set
             {
-                DataSet.Facilitation = StatsLimit.CheckLimit(value, 300);
+                DataSet.Facilitation = StatsLimit.CheckLimit(value, StatsLimit.MAX_FACILITATION);
                 Calculate(); NotifyPropertyChanged(nameof(Facilitation));
             }
         }
@@ -1746,6 +1766,53 @@ namespace ViewModel
             FacilitationFinal += FacilitationPet;
             FacilitationLuna = FacilitationFinal;
             FacilitationFinal = StatsLimit.CheckLimit(FacilitationFinal, StatsLimit.MAX_FACILITATION);
+        }
+        #endregion
+        #region Сила навыков
+        private double skillPower = 0;
+        public double SkillPowerFinal
+        {
+            get => skillPower;
+            set
+            {
+                skillPower = value;
+                NotifyPropertyChanged(nameof(SkillPowerFinal));
+            }
+        }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе "Содействие"
+        /// </summary>
+        public double SkillPower
+        {
+            get => DataSet.SkillPower;
+            set
+            {
+                DataSet.SkillPower = StatsLimit.CheckLimit(value, StatsLimit.MAX_SKILL_POWER);
+                Calculate(); NotifyPropertyChanged(nameof(SkillPower));
+            }
+        }
+        /// <summary>
+        /// Свойство связанное с полем на вьюхе расходники Эликсир "Содействие"
+        /// </summary>
+        //public double SkillPowerPot
+        //{
+        //    get => DataSet.SkillPowerPot;
+        //    set
+        //    {
+        //        DataSet.SkillPowerPot = StatsLimit.CheckLimit(value, StatsLimit.MAX_SKILL_POWER);
+        //        Calculate(); NotifyPropertyChanged(nameof(SkillPowerPot));
+        //    }
+        //}
+        /// <summary>
+        /// Метод для пересчета характеристики персонажа "Содействие"
+        /// </summary>
+        private void CalcSkillPower()
+        {
+            SkillPowerFinal = 0;
+            SkillPowerFinal += SkillPower;
+            //SkillPowerFinal += SkillPowerPot;
+            if (coefficientCastle != 0) SkillPowerFinal += (coefficientCastle - 1) * 100;
+            SkillPowerFinal = StatsLimit.CheckLimit(SkillPowerFinal, StatsLimit.MAX_SKILL_POWER);
         }
         #endregion
         #region Гнев Глубин
@@ -2079,8 +2146,8 @@ namespace ViewModel
         private string outDD;
         public string OutDD
         {
-            get => outDD;
-            set { outDD = value; NotifyPropertyChanged(nameof(OutDD)); }
+            get => DataSet.ResultDD.ToString();
+            //set { outDD = value; NotifyPropertyChanged(nameof(OutDD)); }
         }
 
         private string outDDHero;
@@ -2340,7 +2407,7 @@ namespace ViewModel
             get => ModifiersDamage.Cloaks;
 
         }*/
-        private List<PercentsDamage> _cloaks = new List<PercentsDamage>() 
+        private List<PercentsDamage> _cloaks = new List<PercentsDamage>()
         {
             PercentsDamage.None,
             PercentsDamage.Magic5Percent,
@@ -2445,7 +2512,7 @@ namespace ViewModel
                 NotifyPropertyChanged(nameof(SelectedRingR));
             }
         }
-        private List<PercentsDamage> _bracelets = new List<PercentsDamage>() 
+        private List<PercentsDamage> _bracelets = new List<PercentsDamage>()
         {
             PercentsDamage.None,
             PercentsDamage.Magic6Percent,
@@ -2511,8 +2578,8 @@ namespace ViewModel
         }
 
 
-        private List<TypesEquipment> _equipments = new List<TypesEquipment>() 
-        { 
+        private List<TypesEquipment> _equipments = new List<TypesEquipment>()
+        {
             TypesEquipment.None,
             TypesEquipment.Cloth,
             TypesEquipment.Leather,
@@ -2877,7 +2944,7 @@ namespace ViewModel
         }*/ // задержка нажатия скилла
 
         //private double legendaryCoefficientBestialRampage = 0.5; // Будет меняться в зависимости от скорости атаки и сколько у тебя кд
-        
+
         //private double legendaryCoefficientChainLightning = 1;
         public double LegendaryCoefficientChainLightning()
         {
@@ -2933,7 +3000,7 @@ namespace ViewModel
             if (s < 0) s = 0;
             if (s > 1) s = 1;
 
-            double result = - 0.3 * s + 1;
+            double result = -0.3 * s + 1;
 
             return result;
         }
@@ -2955,31 +3022,25 @@ namespace ViewModel
         {
             //get => crushingWillActive;
             get => DataSet.CrushingWill;
-            set { /*crushingWillActive = value;
-                if (crushingWillActive)
-                {
-                    coefficientTriton = 0.3;
-                }
-                else coefficientTriton = 0;*/
-
+            set { 
                 DataSet.CrushingWill = value;
                 if (DataSet.CrushingWill)
                 {
                     coefficientTriton = 0.3;
                 }
                 else coefficientTriton = 0;
-                Calculate(); NotifyPropertyChanged(nameof(CrushingWillActive)); 
+                Calculate(); NotifyPropertyChanged(nameof(CrushingWillActive));
             }
         }
 
         //private const double MERMAN_CD = 15;
         //private const double SINGLE_MERMAN_DURATION = 10;
 
-        private double MermanDuration() 
+        private double MermanDuration()
         {
-            double result = MermanModifiers.SINGLE_MERMAN_DURATION 
-                * FacilitationFinal.ConvertToCoefficient() 
-                / MermanModifiers.CLOTH_COOLDOWN 
+            double result = MermanModifiers.SINGLE_MERMAN_DURATION
+                * FacilitationFinal.ConvertToCoefficient()
+                / MermanModifiers.CLOTH_COOLDOWN
                 * 0.9;
 
             return result;
@@ -2999,8 +3060,6 @@ namespace ViewModel
                 Calculate(); NotifyPropertyChanged(nameof(IrreversibleAngerActive));
             }
         }
-        //private int irreversibleAngerAdditionalPenetration = 15;
-        //private int irreversibleAngerAdditionalAccuracy = 15;
 
 
         #endregion
@@ -3070,8 +3129,6 @@ namespace ViewModel
 
         #region 1 ветка
 
-        //private bool guardianUnityActive = false;
-        
         public bool GuardianUnityActive
         {
             //get => guardianUnityActive;
@@ -3088,7 +3145,7 @@ namespace ViewModel
                     LvlTalantOrderToAttackPlusGuardianUnity = 0;
                     HasTalentHarmoniousPower = false;
                 }
-                
+
 
             }
         }
@@ -3134,15 +3191,11 @@ namespace ViewModel
 
         private double coefficientBestialRageTalant = 1;
 
-        //private int lvlTalantBestialRage = 0;
-
         public int LvlTalantBestialRage
         {
-            //get => lvlTalantBestialRage;
             get => DataSet.LvlTalantBestialRage;
             set
             {
-                //lvlTalantBestialRage = value;
                 DataSet.LvlTalantBestialRage = value;
                 switch (value)
                 {
@@ -3173,15 +3226,12 @@ namespace ViewModel
 
         private double coefficientPredatoryDeliriumTalant = 1;
 
-        //private int lvlTalantPredatoryDelirium = 0;
 
         public int LvlTalantPredatoryDelirium
         {
-            //get => lvlTalantPredatoryDelirium;
             get => DataSet.LvlTalantPredatoryDelirium;
             set
             {
-                //lvlTalantPredatoryDelirium = value;
                 DataSet.LvlTalantPredatoryDelirium = value;
                 switch (value)
                 {
@@ -3403,7 +3453,7 @@ namespace ViewModel
             {
                 //isUsingBlessingOfTheMoonOnLuna = value;
 
-                if (BlessingOfTheMoonActive) 
+                if (BlessingOfTheMoonActive)
                 {
                     DataSet.IsUsingBlessingOfTheMoonOnLuna = value;
                     if (value)
@@ -3431,14 +3481,14 @@ namespace ViewModel
                 {
                     PenetrationLuna += Math.Min(penetration, StatsLimit.MAX_PENETRATION_HERO) * ModifiersDamage.PREDATORY_BOND_PENETRATION_COEFFICIENT;
                 }
-                CriticalHitLuna = StatsLimit.CheckLimit(CriticalHitLuna, StatsLimit.MAX_CRITICAL_HIT);
-                PenetrationLuna = StatsLimit.CheckLimit(PenetrationLuna, StatsLimit.MAX_PENETRATION);
+                CriticalHitLuna = StatsLimit.CheckLimit(CriticalHitLuna, maxCriticalHitHero);
+                PenetrationLuna = StatsLimit.CheckLimit(PenetrationLuna, maxPenetrationHero);
 
                 NotifyPropertyChanged(nameof(IsUsingBlessingOfTheMoonOnLuna));
             }
         }
 
-        private double FormulaCoefficientOfCriticalHitHero( )
+        private double FormulaCoefficientOfCriticalHitHero()
         {
             double criticalHitWithResilience = (CriticalHitHeroFinal - Resilience) / 100;
             if (criticalHitWithResilience < 0) criticalHitWithResilience = 0;
@@ -3520,7 +3570,7 @@ namespace ViewModel
 
         private double FormulaCoefficientOfPiercingAttack()
         {
-            double result = 1 - (Math.Max(0, (Protection - PenetrationHeroFinal) * (1 - (PiercingAttack / 100)))) / 100 ;
+            double result = 1 - (Math.Max(0, (Protection - PenetrationHeroFinal) * (1 - (PiercingAttack / 100)))) / 100;
             return result;
         }
         private double FormulaCoefficientOfPiercingAttackLuna()
@@ -3551,6 +3601,11 @@ namespace ViewModel
             if (result > 1) result = 1;
             if (result < 0) result = 0;
             return result * 0.1;
+        }
+
+        private double FormulaCoefficientSkillPower()
+        {
+            return SkillPowerFinal.ConvertToCoefficient();
         }
 
         #endregion
@@ -3613,53 +3668,8 @@ namespace ViewModel
             }
         }
 
-        /*private List<string> castles = new List<string>()
-        {
-            "Без замка",
-            "1 сектор, 5%",
-            "2 сектор, 7.5%",
-            "3 сектор, 10%",
-            "4 сектор, 12.5%",
-            "5 сектор, 15%",
-        };*/
-        /*public List<string> Castles
-        {
-            get => ModifiersDamage.Castle;
-            //set { castles = value; NotifyPropertyChanged("Castles"); }
-        }*/
-
         public double coefficientCastle = 1;
-        //private string numberCastle = "Без замка";
-        /*public string NumberCastle
-        {
-            //get => numberCastle;
-            get => DataSet.NumberCastle;
-            set { //numberCastle = value;
-                DataSet.NumberCastle = value;
-                switch (value)
-                {
-                    case "1 сектор, 5%":
-                        coefficientCastle = 1.05;
-                        break;
-                    case "2 сектор, 7.5%":
-                        coefficientCastle = 1.075;
-                        break;
-                    case "3 сектор, 10%":
-                        coefficientCastle = 1.1;
-                        break;
-                    case "4 сектор, 12.5%":
-                        coefficientCastle = 1.125;
-                        break;
-                    case "5 сектор, 15%":
-                        coefficientCastle = 1.15;
-                        break;
-                    default:
-                        coefficientCastle = 1;
-                        break;
-                }
-                Calculate();
-                NotifyPropertyChanged(nameof(NumberCastle)); }
-        }*/
+
         public bool HasTalantBeastAwakeningMage
         {
             get => Beast_Awakening.HasTalantMage;
@@ -3673,16 +3683,6 @@ namespace ViewModel
                 }
             }
         }
-        // временно
-        /*public List<string> threeLevels = new List<string>()
-        {
-            "0", "1", "2", "3",
-        };
-        public List<string> ThreeLevels
-        {
-            get => threeLevels;
-            set { threeLevels = value; NotifyPropertyChanged("ThreeLevels"); }
-        }*/
         public int LvlTalantBeastAwakeningPhysical
         {
             get => Beast_Awakening.LvlTalantPhys;
@@ -3699,13 +3699,13 @@ namespace ViewModel
         public bool HasTalantBestialRampage
         {
             get => Bestial_Rampage.HasTalant;
-            set { Bestial_Rampage.HasTalant = value; 
+            set { Bestial_Rampage.HasTalant = value;
                 Calculate(); NotifyPropertyChanged(nameof(HasTalantBestialRampage)); }
         }
         public bool HasTalantPowerOfNature
         {
             get => AuraOfTheForest.HasTalantPowerOfNature;
-            set { AuraOfTheForest.HasTalantPowerOfNature = value; 
+            set { AuraOfTheForest.HasTalantPowerOfNature = value;
                 Calculate(); NotifyPropertyChanged(nameof(HasTalantPowerOfNature)); }
         }
         //private bool hasTalantGrandeurOfTheLotus = false;
@@ -3713,9 +3713,9 @@ namespace ViewModel
         {
             //get => hasTalantGrandeurOfTheLotus;
             get => DataSet.HasTalantGrandeurOfTheLotus;
-            set { 
+            set {
                 //hasTalantGrandeurOfTheLotus = value; 
-                DataSet.HasTalantGrandeurOfTheLotus = value; 
+                DataSet.HasTalantGrandeurOfTheLotus = value;
                 Calculate(); NotifyPropertyChanged(nameof(HasTalantGrandeurOfTheLotus)); }
         }
         public int LvlTalantMoonlightPlus
@@ -3754,7 +3754,7 @@ namespace ViewModel
         public bool HasTalantBlessingOfTheMoonPlusCriticalHit
         {
             get => BlessingOfTheMoon.HasTalantPlusCriticalHit;
-            set { BlessingOfTheMoon.HasTalantPlusCriticalHit = value; 
+            set { BlessingOfTheMoon.HasTalantPlusCriticalHit = value;
                 Calculate(); NotifyPropertyChanged(nameof(HasTalantBlessingOfTheMoonPlusCriticalHit)); }
         }
 
@@ -3766,8 +3766,8 @@ namespace ViewModel
             set
             {
                 //hasTalantSymbiosis = value; 
-                DataSet.HasTalantSymbiosis = value; 
-                Calculate(); 
+                DataSet.HasTalantSymbiosis = value;
+                Calculate();
                 NotifyPropertyChanged(nameof(HasTalantSymbiosis));
             }
         }
@@ -3776,7 +3776,7 @@ namespace ViewModel
         public bool HasTalantBlessingOfTheMoonPlusPenetration
         {
             get => BlessingOfTheMoon.HasTalantPlusPenetration;
-            set { BlessingOfTheMoon.HasTalantPlusPenetration = value; 
+            set { BlessingOfTheMoon.HasTalantPlusPenetration = value;
                 Calculate(); NotifyPropertyChanged(nameof(HasTalantBlessingOfTheMoonPlusPenetration)); }
         }
         #endregion
@@ -3829,7 +3829,7 @@ namespace ViewModel
         public bool SacredShieldLunaActive
         {
             get => DataSet.SacredShieldLunaActive;
-            set 
+            set
             {
                 DataSet.SacredShieldLunaActive = value;
                 Calculate(); NotifyPropertyChanged(nameof(SacredShieldLunaActive));
@@ -4772,8 +4772,8 @@ namespace ViewModel
         public bool AttackActive
         {
             get => DataSet.AttackActive;
-            set {  
-                DataSet.AttackActive = value; 
+            set {
+                DataSet.AttackActive = value;
                 Calculate(); NotifyPropertyChanged(nameof(AttackActive)); }
         }
 
@@ -4781,7 +4781,7 @@ namespace ViewModel
         public bool MoonTouchActive
         {
             get => DataSet.MoonTouchActive;
-            set { 
+            set {
                 DataSet.MoonTouchActive = value;
                 MoonTouchOpacity = changeOpacity(value);
                 Calculate(); NotifyPropertyChanged(nameof(MoonTouchActive)); }
@@ -4790,7 +4790,7 @@ namespace ViewModel
         public bool BeastAwakeningActive
         {
             get => DataSet.BeastAwakeningActive;
-            set { 
+            set {
                 DataSet.BeastAwakeningActive = value;
                 BeastAwakeningOpacity = changeOpacity(value);
                 Calculate(); NotifyPropertyChanged(nameof(BeastAwakeningActive)); }
@@ -4830,7 +4830,7 @@ namespace ViewModel
         {
             //get => bestialRampageActive;
             get => DataSet.BestialRampageActive;
-            set { 
+            set {
                 //bestialRampageActive = value; 
                 DataSet.BestialRampageActive = value;
                 BestialRampageOpacity = changeOpacity(value);
@@ -4852,18 +4852,18 @@ namespace ViewModel
         {
             //get => moonlightPermanentActive;
             get => DataSet.MoonlightPermanentActive;
-            set { 
+            set {
                 //moonlightPermanentActive = value; 
                 DataSet.MoonlightPermanentActive = value;
                 MoonlightPermanentOpacity = changeOpacity(value);
-                Calculate();NotifyPropertyChanged(nameof(MoonlightPermanentActive)); }
+                Calculate(); NotifyPropertyChanged(nameof(MoonlightPermanentActive)); }
         }
         //private bool moonlightNonPermanentActive = true;
         public bool MoonlightNonPermanentActive
         {
             //get => moonlightNonPermanentActive;
             get => DataSet.MoonlightNonPermanentActive;
-            set { 
+            set {
                 //moonlightNonPermanentActive = value; 
                 DataSet.MoonlightNonPermanentActive = value;
                 MoonlightNonPermanentOpacity = changeOpacity(value);
@@ -4882,7 +4882,7 @@ namespace ViewModel
                 {
                     IsUsingBlessingOfTheMoonOnLuna = false;
                 }
-                DataSet.BlessingOfTheMoonActive = value; 
+                DataSet.BlessingOfTheMoonActive = value;
                 Calculate(); NotifyPropertyChanged(nameof(BlessingOfTheMoonActive));
             }
         }
@@ -4895,7 +4895,7 @@ namespace ViewModel
             set
             {
                 //doubleConcentrationActive = value; 
-                DataSet.DoubleConcentrationActive = value; 
+                DataSet.DoubleConcentrationActive = value;
                 Calculate(); NotifyPropertyChanged(nameof(DoubleConcentrationActive));
             }
         }
@@ -4913,6 +4913,1482 @@ namespace ViewModel
                 Calculate(); NotifyPropertyChanged(nameof(OverLimitClosed));
             }
         }
+
+        public void OptimizeByGradientOLD()
+        {
+            // ============================================================
+            // CONFIG
+            // ============================================================
+            const double step = 0.1;
+            const double budgetTolerance = 0.2;
+            const int SCALE = 10000;
+            const int MAX_ITERATIONS = 1000;
+            const double LEARNING_RATE = 0.3;
+            const int LOCAL_SEARCH_RADIUS = 2;
+
+            Status = "Градиентная оптимизация";
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+
+            // ============================================================
+            // ВЕСА
+            // ============================================================
+            const double wSC = 0.42;
+            const double wASp = 1.07;
+            const double wCH = 0.78;
+            const double wCD = 1.46;
+            const double wP = 1.24;
+            const double wAc = 0.86;
+            const double wASt = 1.23;
+            const double wPA = 0.97;
+            const double wR = 0.93;
+            const double wF = 1.77;
+
+            // ============================================================
+            // HARD CAPS
+            // ============================================================
+            const double hardSC = 200;
+            const double hardASp = 70;
+            const double hardCH = 53;
+            const double hardCD = 200;
+            const double hardP = 50;
+            const double hardAc = 50;
+            const double hardASt = 100;
+            const double hardPA = 50;
+            const double hardR = 50;
+            const double hardF = 50;
+
+            // ============================================================
+            // БАЗА
+            // ============================================================
+            const double innateCH = 5;
+            const double guildASp = 15;
+            const double guildCH = 6;
+            const double guildCD = 20;
+            const double guildSC = 15;
+            const double guildP = 6;
+            const double guildAc = 7;
+
+            int branch = DataSet.DualRageActive ? 2 :
+                         DataSet.ForestInspirationActive ? 3 : 1;
+
+            double tASp = (branch == 2) ? 5.75 : 4.25;
+            double tCH = 4.75;
+            double tCD = (branch == 2) ? 3.0 : 1.5;
+            double tSC = (branch == 2) ? 4.25 : 5.75;
+            double tP = (branch == 3) ? 2.75 : 3.75;
+            double tAc = (branch == 1) ? 4.75 : 3.5;
+
+            // ============================================================
+            // КНИГИ (опционально)
+            // ============================================================
+            bool includeBooks = false;
+            const double bookASp = 7, bookCH = 4, bookCD = 10, bookSC = 8;
+            const double bookP = 3, bookAc = 4, bookPA = 4, bookASt = 4.7;
+            const double bookF = 7.5, bookR = 8;
+
+            double bASp = includeBooks ? bookASp : 0;
+            double bCH = includeBooks ? bookCH : 0;
+            double bCD = includeBooks ? bookCD : 0;
+            double bSC = includeBooks ? bookSC : 0;
+            double bP = includeBooks ? bookP : 0;
+            double bAc = includeBooks ? bookAc : 0;
+            double bPA = includeBooks ? bookPA : 0;
+            double bASt = includeBooks ? bookASt : 0;
+            double bF = includeBooks ? bookF : 0;
+            double bR = includeBooks ? bookR : 0;
+
+            // ============================================================
+            // СОФТ-КАПЫ
+            // ============================================================
+            const double softGearASp = 38.1;
+            const double softGearCH = 49.2;
+            const double softGearCD = 24.0;
+            const double softGearSC = 102.8;
+            const double softGearP = 29.9;
+            const double softGearAc = 47.7;
+            const double softGearPA = 19;
+            //const double softGearPA = 42.8;
+            const double softGearASt = 33.8;
+            const double softGearR = 41.9;
+            const double softGearF = 23.8;
+
+            // ============================================================
+            // MIN и MAX
+            // ============================================================
+            double minASp = guildASp + tASp + bASp;
+            double minCH = innateCH + guildCH + tCH + bCH;
+            double minCD = guildCD + tCD + bCD;
+            double minSC = guildSC + tSC + bSC;
+            double minP = guildP + tP + bP;
+            double minAc = guildAc + tAc + bAc;
+            double minPA = bPA;
+            double minASt = bASt;
+            double minR = bR;
+            double minF = bF;
+
+            double maxASp = Math.Min(hardASp, minASp + softGearASp);
+            double maxCH = Math.Min(hardCH, minCH + softGearCH);
+            double maxCD = Math.Min(hardCD, minCD + softGearCD);
+            double maxSC = Math.Min(hardSC, minSC + softGearSC);
+            double maxP = Math.Min(hardP, minP + softGearP);
+            double maxAc = Math.Min(hardAc, minAc + softGearAc);
+            double maxPA = Math.Min(hardPA, minPA + softGearPA);
+            double maxASt = Math.Min(hardASt, minASt + softGearASt);
+            double maxR = Math.Min(hardR, minR + softGearR);
+            double maxF = Math.Min(hardF, minF + softGearF);
+
+            // ============================================================
+            // Сохраняем исходные значения
+            // ============================================================
+            double oSC = DataSet.SkillCooldown;
+            double oASp = DataSet.AttackSpeed;
+            double oCH = DataSet.CriticalHit;
+            double oCD = DataSet.CriticalDamage;
+            double oP = DataSet.Penetration;
+            double oAc = DataSet.Accuracy;
+            double oASt = DataSet.AttackStrength;
+            double oPA = DataSet.PiercingAttack;
+            double oR = DataSet.Rage;
+            double oF = DataSet.Facilitation;
+
+            // ============================================================
+            // Массивы для удобства
+            // ============================================================
+            double[] weights = { wSC, wASp, wCH, wCD, wP, wAc, wASt, wPA, wR, wF };
+            double[] mins = { minSC, minASp, minCH, minCD, minP, minAc, minASt, minPA, minR, minF };
+            double[] maxs = { maxSC, maxASp, maxCH, maxCD, maxP, maxAc, maxASt, maxPA, maxR, maxF };
+
+            // ============================================================
+            // Вычисление целевого бюджета
+            // ============================================================
+            double[] current = {
+        Math.Max(mins[0], Math.Min(maxs[0], oSC)),
+        Math.Max(mins[1], Math.Min(maxs[1], oASp)),
+        Math.Max(mins[2], Math.Min(maxs[2], oCH)),
+        Math.Max(mins[3], Math.Min(maxs[3], oCD)),
+        Math.Max(mins[4], Math.Min(maxs[4], oP)),
+        Math.Max(mins[5], Math.Min(maxs[5], oAc)),
+        Math.Max(mins[6], Math.Min(maxs[6], oASt)),
+        Math.Max(mins[7], Math.Min(maxs[7], oPA)),
+        Math.Max(mins[8], Math.Min(maxs[8], oR)),
+        Math.Max(mins[9], Math.Min(maxs[9], oF))
+    };
+
+            double targetBudget = 0;
+            for (int i = 0; i < 10; i++)
+                targetBudget += weights[i] * current[i];
+
+            // ============================================================
+            // Вспомогательные функции
+            // ============================================================
+            double Clamp(double val, double min, double max)
+            {
+                return Math.Max(min, Math.Min(max, val));
+            }
+
+            double Round01(double val)
+            {
+                return Math.Round(val * 10) / 10.0;
+            }
+
+            void ApplyToDataSet(double[] x1)
+            {
+                DataSet.SkillCooldown = Round01(x1[0]);
+                DataSet.AttackSpeed = Round01(x1[1]);
+                DataSet.CriticalHit = Round01(x1[2]);
+                DataSet.CriticalDamage = Round01(x1[3]);
+                DataSet.Penetration = Round01(x1[4]);
+                DataSet.Accuracy = Round01(x1[5]);
+                DataSet.AttackStrength = Round01(x1[6]);
+                DataSet.PiercingAttack = Round01(x1[7]);
+                DataSet.Rage = Round01(x1[8]);
+                DataSet.Facilitation = Round01(x1[9]);
+            }
+
+            double ComputeBudget(double[] x2)
+            {
+                double sum = 0;
+                for (int i = 0; i < 10; i++)
+                    sum += weights[i] * x2[i];
+                return sum;
+            }
+
+            // ЖЁСТКАЯ ПРОЕКЦИЯ НА БЮДЖЕТ методом множителей Лагранжа
+            void ProjectToBudget(double[] x3, double target)
+            {
+                // Бинарный поиск множителя lambda
+                double lambdaMin = -100, lambdaMax = 100;
+
+                for (int iter = 0; iter < 30; iter++)
+                {
+                    double lambda = (lambdaMin + lambdaMax) / 2.0;
+
+                    double[] xProj = new double[10];
+                    for (int i = 0; i < 10; i++)
+                    {
+                        // x_i - lambda * w_i (градиент Лагранжиана)
+                        xProj[i] = Clamp(x3[i] - lambda * weights[i], mins[i], maxs[i]);
+                    }
+
+                    double budget = ComputeBudget(xProj);
+
+                    if (Math.Abs(budget - target) < 0.01)
+                    {
+                        for (int i = 0; i < 10; i++)
+                            x3[i] = xProj[i];
+                        return;
+                    }
+
+                    if (budget > target)
+                        lambdaMin = lambda;
+                    else
+                        lambdaMax = lambda;
+                }
+
+                // Финальная проекция
+                double lambda2 = (lambdaMin + lambdaMax) / 2.0;
+                for (int i = 0; i < 10; i++)
+                    x3[i] = Clamp(x3[i] - lambda2 * weights[i], mins[i], maxs[i]);
+            }
+
+            // ============================================================
+            // ГРАДИЕНТНЫЙ СПУСК С ПРОЕКЦИЕЙ
+            // ============================================================
+            double[] x = (double[])current.Clone();
+            double[] gradient = new double[10];
+            const double h = 0.1;
+
+            int bestDD = int.MinValue;
+            double[] bestSolution = (double[])x.Clone();
+
+            // Начальная проекция на бюджет
+            ProjectToBudget(x, targetBudget);
+
+            for (int iter = 0; iter < MAX_ITERATIONS; iter++)
+            {
+                // Вычисление численного градиента
+                ApplyToDataSet(x);
+                Calculate();
+                double fx = DataSet.ResultDD;
+
+                for (int i = 0; i < 10; i++)
+                {
+                    double[] xh = (double[])x.Clone();
+                    xh[i] += h;
+                    xh[i] = Clamp(xh[i], mins[i], maxs[i]);
+
+                    // Временно проецируем на бюджет
+                    ProjectToBudget(xh, targetBudget);
+
+                    ApplyToDataSet(xh);
+                    Calculate();
+                    double fxh = DataSet.ResultDD;
+
+                    gradient[i] = (fxh - fx) / h;
+                }
+
+                // Градиентный шаг
+                double[] xNew = new double[10];
+                for (int i = 0; i < 10; i++)
+                {
+                    xNew[i] = x[i] + LEARNING_RATE * gradient[i];
+                    xNew[i] = Clamp(xNew[i], mins[i], maxs[i]);
+                }
+
+                // ЖЁСТКАЯ ПРОЕКЦИЯ НА БЮДЖЕТ
+                ProjectToBudget(xNew, targetBudget);
+
+                // Проверка улучшения
+                ApplyToDataSet(xNew);
+                Calculate();
+
+                if (DataSet.ResultDD > bestDD)
+                {
+                    bestDD = DataSet.ResultDD;
+                    bestSolution = (double[])xNew.Clone();
+                    Status = $"Градиент (iter={iter}, DD={bestDD}, ΔB={Math.Abs(ComputeBudget(xNew) - targetBudget):F2})";
+                }
+
+                x = xNew;
+
+                // Ранний выход если сошлись
+                if (iter > 100)
+                {
+                    double gradNorm = 0;
+                    for (int i = 0; i < 10; i++)
+                        gradNorm += gradient[i] * gradient[i];
+
+                    if (Math.Sqrt(gradNorm) < 0.001)
+                        break;
+                }
+            }
+
+            // ============================================================
+            // ОКРУГЛЕНИЕ И ЛОКАЛЬНЫЙ ПОИСК
+            // ============================================================
+            double[] rounded = new double[10];
+            for (int i = 0; i < 10; i++)
+                rounded[i] = Round01(bestSolution[i]);
+
+            // Перепроецируем округленное решение
+            ProjectToBudget(rounded, targetBudget);
+
+            // Локальный поиск с соблюдением бюджета
+            void LocalSearch(double[] solution, int radius)
+            {
+                ApplyToDataSet(solution);
+                Calculate();
+                int currentBest = DataSet.ResultDD;
+                double[] currentSolution = (double[])solution.Clone();
+
+                // Двухмерный поиск: уменьшаем одну характеристику, увеличиваем другую
+                for (int i = 0; i < 10; i++)
+                {
+                    for (int j = 0; j < 10; j++)
+                    {
+                        if (i == j) continue;
+
+                        for (int delta = 1; delta <= radius; delta++)
+                        {
+                            double[] neighbor = (double[])currentSolution.Clone();
+
+                            // Уменьшаем i, увеличиваем j так, чтобы сохранить бюджет
+                            double decrease = delta * step;
+                            double increase = (weights[i] / weights[j]) * decrease;
+
+                            neighbor[i] = Round01(neighbor[i] - decrease);
+                            neighbor[j] = Round01(neighbor[j] + increase);
+
+                            neighbor[i] = Clamp(neighbor[i], mins[i], maxs[i]);
+                            neighbor[j] = Clamp(neighbor[j], mins[j], maxs[j]);
+
+                            double budgetDiff = Math.Abs(ComputeBudget(neighbor) - targetBudget);
+                            if (budgetDiff > budgetTolerance) continue;
+
+                            ApplyToDataSet(neighbor);
+                            Calculate();
+
+                            if (DataSet.ResultDD > currentBest)
+                            {
+                                currentBest = DataSet.ResultDD;
+                                currentSolution = (double[])neighbor.Clone();
+                                bestDD = DataSet.ResultDD;
+                            }
+                        }
+                    }
+                }
+
+                for (int i = 0; i < 10; i++)
+                    solution[i] = currentSolution[i];
+            }
+
+            LocalSearch(rounded, LOCAL_SEARCH_RADIUS);
+
+            // Финальная проверка бюджета
+            double finalBudget = ComputeBudget(rounded);
+            double finalDiff = Math.Abs(finalBudget - targetBudget);
+
+            // ============================================================
+            // СОХРАНЕНИЕ РЕЗУЛЬТАТОВ
+            // ============================================================
+            sw.Stop();
+            TimeRec = sw.ElapsedMilliseconds;
+
+            string resultsDir = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "results");
+            System.IO.Directory.CreateDirectory(resultsDir);
+
+            string fileName = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + "_gradient_opt.txt";
+            string filePath = System.IO.Path.Combine(resultsDir, fileName);
+
+            using (var writer = new System.IO.StreamWriter(filePath, false, System.Text.Encoding.UTF8))
+            {
+                writer.WriteLine("=== BeastMasterCalc | Gradient Optimization ===");
+                writer.WriteLine("Execution time: " + TimeRec + " ms");
+                writer.WriteLine();
+                writer.WriteLine("Branch: " + branch);
+                writer.WriteLine("IncludeBooks: " + includeBooks);
+                writer.WriteLine("Target Budget: " + targetBudget.ToString("0.###"));
+                writer.WriteLine("Budget Tolerance: ±" + budgetTolerance);
+                writer.WriteLine();
+                writer.WriteLine("=== BEST SOLUTION ===");
+                writer.WriteLine("Best DD = " + bestDD);
+                writer.WriteLine("Final Budget = " + finalBudget.ToString("0.###"));
+                writer.WriteLine("Budget Diff = " + finalDiff.ToString("0.###"));
+                writer.WriteLine();
+                writer.WriteLine("SkillCooldown   = " + rounded[0].ToString("0.0"));
+                writer.WriteLine("AttackSpeed     = " + rounded[1].ToString("0.0"));
+                writer.WriteLine("CriticalHit     = " + rounded[2].ToString("0.0"));
+                writer.WriteLine("CriticalDamage  = " + rounded[3].ToString("0.0"));
+                writer.WriteLine("Penetration     = " + rounded[4].ToString("0.0"));
+                writer.WriteLine("Accuracy        = " + rounded[5].ToString("0.0"));
+                writer.WriteLine("AttackStrength  = " + rounded[6].ToString("0.0"));
+                writer.WriteLine("PiercingAttack  = " + rounded[7].ToString("0.0"));
+                writer.WriteLine("Rage            = " + rounded[8].ToString("0.0"));
+                writer.WriteLine("Facilitation    = " + rounded[9].ToString("0.0"));
+            }
+
+            // ============================================================
+            // ВОЗВРАТ ИСХОДНЫХ ДАННЫХ
+            // ============================================================
+            DataSet.SkillCooldown = oSC;
+            DataSet.AttackSpeed = oASp;
+            DataSet.CriticalHit = oCH;
+            DataSet.CriticalDamage = oCD;
+            DataSet.Penetration = oP;
+            DataSet.Accuracy = oAc;
+            DataSet.AttackStrength = oASt;
+            DataSet.PiercingAttack = oPA;
+            DataSet.Rage = oR;
+            DataSet.Facilitation = oF;
+            Calculate();
+
+            Status = "Оптимизация завершена (ΔBudget=" + finalDiff.ToString("0.###") + ")";
+        }
+
+        #region Claude methods
+
+        // ============================================================
+        // ВАРИАНТ 1: ГРАДИЕНТНАЯ ОПТИМИЗАЦИЯ (исправленный бюджет)
+        // ============================================================
+        public void OptimizeByGradient()
+        {
+            const double step = 0.1;
+            const double budgetTolerance = 0.2;
+            const int MAX_ITERATIONS = 1000;
+            const double LEARNING_RATE = 0.3;
+
+            Status = "Градиентная оптимизация";
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+
+            // ВЕСА
+            double[] weights = { 0.42, 1.07, 0.78, 1.46, 1.24, 0.86, 1.23, 0.97, 0.93, 1.77 };
+
+            // HARD CAPS
+            double[] hardCaps = { 200, 70, 53, 200, 50, 50, 100, 50, 50, 50 };
+
+            // БАЗА: гильдия + таланты
+            int branch = DataSet.DualRageActive ? 2 : DataSet.ForestInspirationActive ? 3 : 1;
+
+            double tASp = (branch == 2) ? 5.75 : 4.25;
+            double tCH = 4.75;
+            double tCD = (branch == 2) ? 3.0 : 1.5;
+            double tSC = (branch == 2) ? 4.25 : 5.75;
+            double tP = (branch == 3) ? 2.75 : 3.75;
+            double tAc = (branch == 1) ? 4.75 : 3.5;
+
+            // КНИГИ (индивидуальные флаги - добавь их в DataSet)
+            // Пример: DataSet.HasBookASp, DataSet.HasBookCH и т.д.
+            // Если у тебя нет этих полей, создай их как bool в DataSet
+            bool hasBookSC = true;   // замени на DataSet.HasBookSC
+            bool hasBookASp = false;  // замени на DataSet.HasBookASp
+            bool hasBookCH = true;   // замени на DataSet.HasBookCH
+            bool hasBookCD = false;   // замени на DataSet.HasBookCD
+            bool hasBookP = true;    // замени на DataSet.HasBookP
+            bool hasBookAc = true;   // замени на DataSet.HasBookAc
+            bool hasBookASt = true;  // замени на DataSet.HasBookASt
+            bool hasBookPA = true;   // замени на DataSet.HasBookPA
+            bool hasBookR = false;    // замени на DataSet.HasBookR
+            bool hasBookF = false;    // замени на DataSet.HasBookF
+
+            double bSC = hasBookSC ? 8 : 0;
+            double bASp = hasBookASp ? 7 : 0;
+            double bCH = hasBookCH ? 4 : 0;
+            double bCD = hasBookCD ? 10 : 0;
+            double bP = hasBookP ? 3 : 0;
+            double bAc = hasBookAc ? 4 : 0;
+            double bASt = hasBookASt ? 4.7 : 0;
+            double bPA = hasBookPA ? 4 : 0;
+            double bR = hasBookR ? 8 : 0;
+            double bF = hasBookF ? 7.5 : 0;
+
+            double[] baseStats = {
+        15 + tSC + bSC,           // SC
+        15 + tASp + bASp,         // ASp
+        5 + 6 + tCH + bCH,        // CH (врожденный + гильдия + талант + книга)
+        20 + tCD + bCD,           // CD
+        6 + tP + bP,              // P
+        7 + tAc + bAc,            // Ac
+        bASt,                     // ASt
+        bPA,                      // PA
+        bR,                       // R
+        bF                        // F
+    };
+
+            // СОФТ-КАПЫ (шмот + кристаллы)
+            double[] softGear = { 102.8, 38.1, 49.2, 24.0, 29.9, 47.7, 33.8, 42.8, 41.9, 23.8 };
+
+            // MIN и MAX
+            double[] mins = new double[10];
+            double[] maxs = new double[10];
+            for (int i = 0; i < 10; i++)
+            {
+                mins[i] = baseStats[i];
+                maxs[i] = Math.Min(hardCaps[i], baseStats[i] + softGear[i]);
+            }
+
+            // Сохраняем исходные
+            double[] original = {
+        DataSet.SkillCooldown, DataSet.AttackSpeed, DataSet.CriticalHit, DataSet.CriticalDamage,
+        DataSet.Penetration, DataSet.Accuracy, DataSet.AttackStrength, DataSet.PiercingAttack,
+        DataSet.Rage, DataSet.Facilitation
+    };
+
+            // Текущие статы (ограничены min/max)
+            double[] current = new double[10];
+            for (int i = 0; i < 10; i++)
+                current[i] = Math.Max(mins[i], Math.Min(maxs[i], original[i]));
+
+            // ЦЕЛЕВОЙ БЮДЖЕТ (только переменная часть - шмот+кристаллы)
+            double targetBudget = 0;
+            for (int i = 0; i < 10; i++)
+                targetBudget += weights[i] * (current[i] - baseStats[i]);
+
+            // ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+            double Clamp(double val, double min, double max) => Math.Max(min, Math.Min(max, val));
+            double Round01(double val) => Math.Round(val * 10) / 10.0;
+
+            void ApplyToDataSet(double[] x1)
+            {
+                DataSet.SkillCooldown = Round01(x1[0]);
+                DataSet.AttackSpeed = Round01(x1[1]);
+                DataSet.CriticalHit = Round01(x1[2]);
+                DataSet.CriticalDamage = Round01(x1[3]);
+                DataSet.Penetration = Round01(x1[4]);
+                DataSet.Accuracy = Round01(x1[5]);
+                DataSet.AttackStrength = Round01(x1[6]);
+                DataSet.PiercingAttack = Round01(x1[7]);
+                DataSet.Rage = Round01(x1[8]);
+                DataSet.Facilitation = Round01(x1[9]);
+            }
+
+            double ComputeGearBudget(double[] x2)
+            {
+                double sum = 0;
+                for (int i = 0; i < 10; i++)
+                    sum += weights[i] * (x2[i] - baseStats[i]);
+                return sum;
+            }
+
+            // ПРОЕКЦИЯ НА БЮДЖЕТ (метод множителей Лагранжа)
+            void ProjectToBudget(double[] x3, double target)
+            {
+                double lambdaMin = -100, lambdaMax = 100;
+
+                for (int iter = 0; iter < 30; iter++)
+                {
+                    double lambda = (lambdaMin + lambdaMax) / 2.0;
+                    double[] xProj = new double[10];
+
+                    for (int i = 0; i < 10; i++)
+                    {
+                        double variablePart = x3[i] - baseStats[i];
+                        variablePart = Clamp(variablePart - lambda * weights[i], 0, maxs[i] - baseStats[i]);
+                        xProj[i] = baseStats[i] + variablePart;
+                    }
+
+                    double budget = ComputeGearBudget(xProj);
+
+                    if (Math.Abs(budget - target) < 0.01)
+                    {
+                        for (int i = 0; i < 10; i++) x3[i] = xProj[i];
+                        return;
+                    }
+
+                    if (budget > target) lambdaMin = lambda;
+                    else lambdaMax = lambda;
+                }
+
+                double lambda2 = (lambdaMin + lambdaMax) / 2.0;
+                for (int i = 0; i < 10; i++)
+                {
+                    double variablePart = x3[i] - baseStats[i];
+                    variablePart = Clamp(variablePart - lambda2 * weights[i], 0, maxs[i] - baseStats[i]);
+                    x3[i] = baseStats[i] + variablePart;
+                }
+            }
+
+            // ГРАДИЕНТНЫЙ СПУСК
+            double[] x = (double[])current.Clone();
+            ProjectToBudget(x, targetBudget);
+
+            int bestDD = int.MinValue;
+            double[] bestSolution = (double[])x.Clone();
+
+            for (int iter = 0; iter < MAX_ITERATIONS; iter++)
+            {
+                ApplyToDataSet(x);
+                Calculate();
+                double fx = DataSet.ResultDD;
+
+                double[] gradient = new double[10];
+                for (int i = 0; i < 10; i++)
+                {
+                    double[] xh = (double[])x.Clone();
+                    xh[i] += 0.1;
+                    xh[i] = Clamp(xh[i], mins[i], maxs[i]);
+                    ProjectToBudget(xh, targetBudget);
+
+                    ApplyToDataSet(xh);
+                    Calculate();
+                    gradient[i] = (DataSet.ResultDD - fx) / 0.1;
+                }
+
+                double[] xNew = new double[10];
+                for (int i = 0; i < 10; i++)
+                    xNew[i] = Clamp(x[i] + LEARNING_RATE * gradient[i], mins[i], maxs[i]);
+
+                ProjectToBudget(xNew, targetBudget);
+                ApplyToDataSet(xNew);
+                Calculate();
+
+                if (DataSet.ResultDD > bestDD)
+                {
+                    bestDD = DataSet.ResultDD;
+                    bestSolution = (double[])xNew.Clone();
+                    Status = $"Градиент (iter={iter}, DD={bestDD})";
+                }
+
+                x = xNew;
+
+                if (iter > 100)
+                {
+                    double gradNorm = 0;
+                    for (int i = 0; i < 10; i++) gradNorm += gradient[i] * gradient[i];
+                    if (Math.Sqrt(gradNorm) < 0.001) break;
+                }
+            }
+
+            double[] rounded = new double[10];
+            for (int i = 0; i < 10; i++)
+                rounded[i] = Round01(bestSolution[i]);
+            ProjectToBudget(rounded, targetBudget);
+
+            bool[] bookFlags = { hasBookSC, hasBookASp, hasBookCH, hasBookCD, hasBookP,
+                        hasBookAc, hasBookASt, hasBookPA, hasBookR, hasBookF };
+            SaveResults(rounded, bestDD, targetBudget, baseStats, original, sw, "gradient", branch, bookFlags);
+
+            for (int i = 0; i < 10; i++)
+                ApplyToDataSet(original);
+            Calculate();
+            Status = "Оптимизация завершена";
+        }
+        // ============================================================
+        // ВАРИАНТ 2: OptimizeByMCTS МЕТОД
+        // ============================================================
+
+        public void OptimizeByMCTS()
+        {
+            const double budgetTolerance = 0.2;
+            const int MAX_ITERATIONS = 5000;
+            const double EXPLORATION_CONSTANT = 1.414;
+
+            Status = "Monte Carlo Tree Search";
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+
+            // ВЕСА И ПАРАМЕТРЫ
+            double[] weights = { 1.88, 1.91, 3.68, 5.15, 4.46, 2.73, 3.55, 11.36, 7.94, 11.11 };
+            double[] hardCaps = { 200, 70, 53, 200, 50, 50, 100, 50, 50, 50 };
+            double[] softGear = { 102.8, 38.1, 49.2, 24.0, 29.9, 47.7, 33.8, 42.8, 41.9, 23.8 };
+
+            int branch = DataSet.DualRageActive ? 2 : DataSet.ForestInspirationActive ? 3 : 1;
+
+            double tASp = (branch == 2) ? 5.75 : 4.25;
+            double tCH = 4.75;
+            double tCD = (branch == 2) ? 3.0 : 1.5;
+            double tSC = (branch == 2) ? 4.25 : 5.75;
+            double tP = (branch == 3) ? 2.75 : 3.75;
+            double tAc = (branch == 1) ? 4.75 : 3.5;
+
+            bool hasBookSC = true;
+            bool hasBookASp = false;
+            bool hasBookCH = true;
+            bool hasBookCD = false;
+            bool hasBookP = true;
+            bool hasBookAc = true;
+            bool hasBookASt = true;
+            bool hasBookPA = true;
+            bool hasBookR = false;
+            bool hasBookF = false;
+
+            double bSC = hasBookSC ? 8 : 0;
+            double bASp = hasBookASp ? 7 : 0;
+            double bCH = hasBookCH ? 3 : 0;
+            double bCD = hasBookCD ? 10 : 0;
+            double bP = hasBookP ? 3 : 0;
+            double bAc = hasBookAc ? 4 : 0;
+            double bPA = hasBookPA ? 4 : 0;
+            double bASt = hasBookASt ? 4.7 : 0;
+            double bR = hasBookR ? 8 : 0;
+            double bF = hasBookF ? 7.5 : 0;
+
+            double[] baseStats = {
+        15 + tSC + bSC, 15 + tASp + bASp, 5 + 6 + tCH + bCH, 20 + tCD + bCD,
+        6 + tP + bP, 7 + tAc + bAc, bASt, bPA, bR, bF
+    };
+
+            double[] mins = new double[10];
+            double[] maxs = new double[10];
+            for (int i = 0; i < 10; i++)
+            {
+                mins[i] = baseStats[i];
+                maxs[i] = Math.Min(hardCaps[i], baseStats[i] + softGear[i]);
+            }
+
+            double[] userMins = { 0, 0, 30, 0, 24, 0, 0, 0, 8.1, 0 };
+            for (int i = 0; i < 10; i++)
+            {
+                mins[i] = Math.Max(mins[i], userMins[i]);
+                if (mins[i] > maxs[i]) mins[i] = maxs[i];
+            }
+
+            double[] original = {
+        DataSet.SkillCooldown, DataSet.AttackSpeed, DataSet.CriticalHit, DataSet.CriticalDamage,
+        DataSet.Penetration, DataSet.Accuracy, DataSet.AttackStrength, DataSet.PiercingAttack,
+        DataSet.Rage, DataSet.Facilitation
+    };
+
+            double[] current = new double[10];
+            for (int i = 0; i < 10; i++)
+                current[i] = Math.Max(mins[i], Math.Min(maxs[i], original[i]));
+
+            double Clamp(double val, double min, double max) => Math.Max(min, Math.Min(max, val));
+            double Round01(double val) => Math.Round(val * 10) / 10.0;
+
+            void ApplyToDataSet(double[] x)
+            {
+                DataSet.SkillCooldown = Round01(x[0]);
+                DataSet.AttackSpeed = Round01(x[1]);
+                DataSet.CriticalHit = Round01(x[2]);
+                DataSet.CriticalDamage = Round01(x[3]);
+                DataSet.Penetration = Round01(x[4]);
+                DataSet.Accuracy = Round01(x[5]);
+                DataSet.AttackStrength = Round01(x[6]);
+                DataSet.PiercingAttack = Round01(x[7]);
+                DataSet.Rage = Round01(x[8]);
+                DataSet.Facilitation = Round01(x[9]);
+            }
+
+            double ComputeGearBudget(double[] x)
+            {
+                double sum = 0;
+                for (int i = 0; i < 10; i++)
+                    sum += weights[i] * (x[i] - baseStats[i]);
+                return sum;
+            }
+
+            double targetBudget = ComputeGearBudget(current);
+
+            void ProjectToBudget(double[] x, double target)
+            {
+                double lambdaMin = -100, lambdaMax = 100;
+                for (int iter = 0; iter < 30; iter++)
+                {
+                    double lambda = (lambdaMin + lambdaMax) / 2.0;
+                    double[] xProj = new double[10];
+                    for (int i = 0; i < 10; i++)
+                    {
+                        double minVar = mins[i] - baseStats[i];
+                        double maxVar = maxs[i] - baseStats[i];
+                        double variablePart = x[i] - baseStats[i];
+                        variablePart = Clamp(variablePart - lambda * weights[i], minVar, maxVar);
+                        xProj[i] = baseStats[i] + variablePart;
+                    }
+                    double budget = ComputeGearBudget(xProj);
+                    if (Math.Abs(budget - target) < 0.01)
+                    {
+                        for (int i = 0; i < 10; i++) x[i] = xProj[i];
+                        return;
+                    }
+                    if (budget > target) lambdaMin = lambda;
+                    else lambdaMax = lambda;
+                }
+                double lambda2 = (lambdaMin + lambdaMax) / 2.0;
+                for (int i = 0; i < 10; i++)
+                {
+                    double minVar = mins[i] - baseStats[i];
+                    double maxVar = maxs[i] - baseStats[i];
+                    double variablePart = x[i] - baseStats[i];
+                    variablePart = Clamp(variablePart - lambda2 * weights[i], minVar, maxVar);
+                    x[i] = baseStats[i] + variablePart;
+                }
+            }
+
+            double Evaluate(double[] x)
+            {
+                ApplyToDataSet(x);
+                Calculate();
+                double budgetDiff = Math.Abs(ComputeGearBudget(x) - targetBudget);
+                double penalty = budgetDiff > budgetTolerance ? budgetDiff * 100000 : 0;
+                return DataSet.ResultDD - penalty;
+            }
+
+            // ПРОСТАЯ РЕАЛИЗАЦИЯ БЕЗ ДЕРЕВА (упрощенный вариант MCTS)
+            var rand = new System.Random();
+
+            int bestDD = int.MinValue;
+            double[] bestSolution = (double[])current.Clone();
+
+            // Храним лучшие найденные решения
+            double[][] topSolutions = new double[20][];
+            double[] topScores = new double[20];
+            for (int i = 0; i < 20; i++)
+            {
+                topSolutions[i] = (double[])current.Clone();
+                topScores[i] = double.MinValue;
+            }
+
+            // Действия: индекс стата + дельта
+            int[] actionStats = new int[80];
+            double[] actionDeltas = new double[80];
+            int actionIdx = 0;
+            double[] deltas = { -5.0, -2.0, -1.0, -0.5, 0.5, 1.0, 2.0, 5.0 };
+            for (int i = 0; i < 10; i++)
+            {
+                for (int d = 0; d < 8; d++)
+                {
+                    actionStats[actionIdx] = i;
+                    actionDeltas[actionIdx] = deltas[d];
+                    actionIdx++;
+                }
+            }
+
+            double[] ApplyAction(double[] state, int actionIndex)
+            {
+                double[] newState = (double[])state.Clone();
+                int statIdx = actionStats[actionIndex];
+                double delta = actionDeltas[actionIndex];
+
+                newState[statIdx] += delta;
+                newState[statIdx] = Clamp(newState[statIdx], mins[statIdx], maxs[statIdx]);
+                newState[statIdx] = Round01(newState[statIdx]);
+
+                ProjectToBudget(newState, targetBudget);
+                return newState;
+            }
+
+            // Основной цикл MCTS (упрощенный)
+            for (int iteration = 0; iteration < MAX_ITERATIONS; iteration++)
+            {
+                // Выбираем базовое состояние (эксплуатация лучших или исследование текущего)
+                double[] baseState;
+                if (iteration % 5 == 0 && iteration > 0)
+                {
+                    // Эксплуатация: берем одно из лучших решений
+                    int topIdx = rand.Next(Math.Min(5, 20));
+                    baseState = (double[])topSolutions[topIdx].Clone();
+                }
+                else
+                {
+                    // Исследование: случайное решение из топ-20
+                    int topIdx = rand.Next(20);
+                    baseState = (double[])topSolutions[topIdx].Clone();
+                }
+
+                // Симуляция: делаем 5-15 случайных действий
+                double[] simState = (double[])baseState.Clone();
+                int steps = rand.Next(5, 15);
+
+                for (int step = 0; step < steps; step++)
+                {
+                    int action = rand.Next(80);
+                    simState = ApplyAction(simState, action);
+                }
+
+                // Оцениваем результат
+                double reward = Evaluate(simState);
+
+                // Обновляем лучшее решение
+                if (reward > bestDD)
+                {
+                    bestDD = (int)reward;
+                    bestSolution = (double[])simState.Clone();
+                    Status = $"MCTS: iter={iteration}, DD={bestDD}";
+                }
+
+                // Обновляем топ-20
+                for (int i = 0; i < 20; i++)
+                {
+                    if (reward > topScores[i])
+                    {
+                        // Сдвигаем вниз
+                        for (int j = 19; j > i; j--)
+                        {
+                            topSolutions[j] = topSolutions[j - 1];
+                            topScores[j] = topScores[j - 1];
+                        }
+                        topSolutions[i] = (double[])simState.Clone();
+                        topScores[i] = reward;
+                        break;
+                    }
+                }
+
+                // Каждые 100 итераций пробуем улучшить топ решения локальным поиском
+                if (iteration % 100 == 0 && iteration > 0)
+                {
+                    for (int t = 0; t < 3; t++)
+                    {
+                        double[] state = (double[])topSolutions[t].Clone();
+
+                        // Пробуем небольшие изменения
+                        for (int attempt = 0; attempt < 10; attempt++)
+                        {
+                            int action = rand.Next(80);
+                            double[] newState = ApplyAction(state, action);
+                            double newReward = Evaluate(newState);
+
+                            if (newReward > topScores[t])
+                            {
+                                state = newState;
+                                topScores[t] = newReward;
+
+                                if (newReward > bestDD)
+                                {
+                                    bestDD = (int)newReward;
+                                    bestSolution = (double[])newState.Clone();
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            // ФИНАЛИЗАЦИЯ
+            double[] rounded = new double[10];
+            for (int i = 0; i < 10; i++)
+                rounded[i] = Round01(bestSolution[i]);
+
+            ProjectToBudget(rounded, targetBudget);
+            for (int i = 0; i < 10; i++)
+                rounded[i] = Clamp(Round01(rounded[i]), mins[i], maxs[i]);
+
+            ApplyToDataSet(rounded);
+            Calculate();
+            bestDD = DataSet.ResultDD;
+
+            bool[] bookFlags = {
+        hasBookSC, hasBookASp, hasBookCH, hasBookCD, hasBookP,
+        hasBookAc, hasBookASt, hasBookPA, hasBookR, hasBookF
+    };
+
+            SaveResults(rounded, bestDD, targetBudget, baseStats, original, sw, "mcts", branch, bookFlags);
+
+            ApplyToDataSet(original);
+            Calculate();
+            Status = "MCTS завершен";
+        }
+
+
+        // ============================================================
+        // ВАРИАНТ 3: DIFFERENTIAL EVOLUTION
+        // ============================================================
+        public void OptimizeByDE()
+        {
+            const double budgetTolerance = 0.2;
+            const int POPULATION_SIZE = 100;
+            const int MAX_GENERATIONS = 200;
+            const double F = 0.8;   // коэффициент мутации
+            const double CR = 0.9;  // вероятность кроссовера
+
+            Status = "Differential Evolution";
+            var sw = System.Diagnostics.Stopwatch.StartNew();
+
+            // Порядок статов: 0 SC, 1 ASp, 2 CH, 3 CD, 4 P, 5 Ac, 6 ASt, 7 PA, 8 R, 9 F
+
+            // Веса
+            const double wSC = 1.88;   // CDR
+            const double wASp = 1.91;  // AS
+            const double wCH = 3.68;   // CH
+            const double wCD = 5.15;   // CD
+            const double wP = 4.46;    // PEN
+            const double wAc = 2.73;   // ACC
+            const double wASt = 3.55;  // ATK
+            const double wPA = 11.36;  // PA
+            const double wR = 7.94;    // RAGE
+            const double wF = 11.11;   // FAC
+
+            double[] weights = { wSC, wASp, wCH, wCD, wP, wAc, wASt, wPA, wR, wF };
+            //double[] weights = { 0.42, 1.07, 0.78, 1.46, 1.24, 0.86, 1.23, 0.97, 0.93, 1.77 };
+            double[] hardCaps = { 200, 70, 53, 200, 50, 50, 100, 50, 50, 50 };
+            double[] softGear = { 102.8, 38.1, 49.2, 24.0, 29.9, 47.7, 33.8, 42.8, 41.9, 23.8 };
+
+            int branch = DataSet.DualRageActive ? 2 : DataSet.ForestInspirationActive ? 3 : 1;
+
+            // Таланты (твои значения)
+            double tASp = (branch == 2) ? 5.75 : 4.25;
+            double tCH = 4.75;
+            double tCD = (branch == 2) ? 3.0 : 1.5;
+            double tSC = (branch == 2) ? 4.25 : 5.75;
+            double tP = (branch == 3) ? 2.75 : 3.75;
+            double tAc = (branch == 1) ? 4.75 : 3.5;
+
+            // ============================================================
+            // КНИГИ: раздельные флаги (ЗАМЕНИ на реальные поля DataSet.*)
+            // ============================================================
+            bool hasBookSC = true; // DataSet.HasBookSC;
+            bool hasBookASp = false; // DataSet.HasBookASp;
+            bool hasBookCH = true; // DataSet.HasBookCH;
+            bool hasBookCD = false; // DataSet.HasBookCD;
+            bool hasBookP = true; // DataSet.HasBookP;
+            bool hasBookAc = true; // DataSet.HasBookAc;
+            bool hasBookASt = true; // DataSet.HasBookASt;
+            bool hasBookPA = true; // DataSet.HasBookPA;
+            bool hasBookR = false; // DataSet.HasBookR;
+            bool hasBookF = false; // DataSet.HasBookF;
+
+            double bSC = hasBookSC ? 8 : 0;
+            double bASp = hasBookASp ? 7 : 0;
+            double bCH = hasBookCH ? 3 : 0;
+            double bCD = hasBookCD ? 10 : 0;
+            double bP = hasBookP ? 3 : 0;
+            double bAc = hasBookAc ? 4 : 0;
+            double bPA = hasBookPA ? 4 : 0;
+            double bASt = hasBookASt ? 4.7 : 0;
+            double bR = hasBookR ? 8 : 0;
+            double bF = hasBookF ? 7.5 : 0;
+
+            // ============================================================
+            // БАЗА (врождённое + гильдия + таланты + книги)
+            // ============================================================
+            double[] baseStats =
+            {
+        15 + tSC + bSC,            // SC
+        15 + tASp + bASp,          // ASp
+        5 + 6 + tCH + bCH,         // CH
+        20 + tCD + bCD,            // CD
+        6 + tP + bP,               // P
+        7 + tAc + bAc,             // Ac
+        bASt,                      // ASt
+        bPA,                       // PA
+        bR,                        // R
+        bF                         // F
+    };
+
+            // ============================================================
+            // MIN/MAX по перебору (min = база, max = min(hard, база + soft))
+            // ============================================================
+            double[] mins = new double[10];
+            double[] maxs = new double[10];
+            for (int i = 0; i < 10; i++)
+            {
+                mins[i] = baseStats[i];
+                maxs[i] = System.Math.Min(hardCaps[i], baseStats[i] + softGear[i]);
+            }
+
+            // ============================================================
+            // ДОП. МИНИМУМЫ (user-min): ниже этих значений итоговый стат быть не может
+            // Если не задаёшь ограничение — ставь 0.
+            // Пример: CH не ниже 38
+            // ============================================================
+            double[] userMins =
+            {
+        0,   // SC
+        0,   // ASp
+        30,  // CH
+        0,   // CD
+        24,   // P
+        0,   // Ac
+        0,   // ASt
+        0,   // PA
+        8.1,   // R
+        0    // F
+    };
+
+            for (int i = 0; i < 10; i++)
+            {
+                mins[i] = System.Math.Max(mins[i], userMins[i]);
+                if (mins[i] > maxs[i]) mins[i] = maxs[i]; // защита (можешь заменить на throw)
+            }
+
+            // ============================================================
+            // Сохраняем исходные значения
+            // ============================================================
+            double[] original =
+            {
+        DataSet.SkillCooldown, DataSet.AttackSpeed, DataSet.CriticalHit, DataSet.CriticalDamage,
+        DataSet.Penetration, DataSet.Accuracy, DataSet.AttackStrength, DataSet.PiercingAttack,
+        DataSet.Rage, DataSet.Facilitation
+    };
+
+            // Текущая точка (clamp)
+            double[] current = new double[10];
+            for (int i = 0; i < 10; i++)
+                current[i] = System.Math.Max(mins[i], System.Math.Min(maxs[i], original[i]));
+
+            double Clamp(double val, double min, double max) => System.Math.Max(min, System.Math.Min(max, val));
+            double Round01(double val) => System.Math.Round(val * 10) / 10.0;
+
+            void ApplyToDataSet(double[] x)
+            {
+                DataSet.SkillCooldown = Round01(x[0]);
+                DataSet.AttackSpeed = Round01(x[1]);
+                DataSet.CriticalHit = Round01(x[2]);
+                DataSet.CriticalDamage = Round01(x[3]);
+                DataSet.Penetration = Round01(x[4]);
+                DataSet.Accuracy = Round01(x[5]);
+                DataSet.AttackStrength = Round01(x[6]);
+                DataSet.PiercingAttack = Round01(x[7]);
+                DataSet.Rage = Round01(x[8]);
+                DataSet.Facilitation = Round01(x[9]);
+            }
+
+            double ComputeGearBudget(double[] x)
+            {
+                double sum = 0;
+                for (int i = 0; i < 10; i++)
+                    sum += weights[i] * (x[i] - baseStats[i]);
+                return sum;
+            }
+
+            // Целевой бюджет (только шмот+кристаллы), берём от текущей сборки
+            double targetBudget = ComputeGearBudget(current);
+
+            // Проекция на бюджет с учётом mins/maxs (и user-min тоже!)
+            void ProjectToBudget(double[] x, double target)
+            {
+                double lambdaMin = -100, lambdaMax = 100;
+
+                for (int iter = 0; iter < 30; iter++)
+                {
+                    double lambda = (lambdaMin + lambdaMax) / 2.0;
+                    double[] xProj = new double[10];
+
+                    for (int i = 0; i < 10; i++)
+                    {
+                        double minVar = mins[i] - baseStats[i];
+                        double maxVar = maxs[i] - baseStats[i];
+
+                        double variablePart = x[i] - baseStats[i];
+                        variablePart = Clamp(variablePart - lambda * weights[i], minVar, maxVar);
+                        xProj[i] = baseStats[i] + variablePart;
+                    }
+
+                    double budget = ComputeGearBudget(xProj);
+
+                    if (System.Math.Abs(budget - target) < 0.01)
+                    {
+                        for (int i = 0; i < 10; i++) x[i] = xProj[i];
+                        return;
+                    }
+
+                    if (budget > target) lambdaMin = lambda;
+                    else lambdaMax = lambda;
+                }
+
+                double lambda2 = (lambdaMin + lambdaMax) / 2.0;
+                for (int i = 0; i < 10; i++)
+                {
+                    double minVar = mins[i] - baseStats[i];
+                    double maxVar = maxs[i] - baseStats[i];
+
+                    double variablePart = x[i] - baseStats[i];
+                    variablePart = Clamp(variablePart - lambda2 * weights[i], minVar, maxVar);
+                    x[i] = baseStats[i] + variablePart;
+                }
+            }
+
+            double Evaluate(double[] x)
+            {
+                ApplyToDataSet(x);
+                Calculate();
+
+                double budgetDiff = System.Math.Abs(ComputeGearBudget(x) - targetBudget);
+                double penalty = budgetDiff > budgetTolerance ? budgetDiff * 100000 : 0;
+
+                return DataSet.ResultDD - penalty;
+            }
+
+            // ============================================================
+            // ИНИЦИАЛИЗАЦИЯ ПОПУЛЯЦИИ
+            // ============================================================
+            var rand = new System.Random();
+            double[][] population = new double[POPULATION_SIZE][];
+            double[] fitness = new double[POPULATION_SIZE];
+
+            for (int i = 0; i < POPULATION_SIZE; i++)
+            {
+                population[i] = new double[10];
+
+                if (i == 0)
+                {
+                    population[i] = (double[])current.Clone();
+                }
+                else
+                {
+                    for (int j = 0; j < 10; j++)
+                        population[i][j] = mins[j] + rand.NextDouble() * (maxs[j] - mins[j]);
+                }
+
+                ProjectToBudget(population[i], targetBudget);
+                fitness[i] = Evaluate(population[i]);
+            }
+
+            int bestIdx = 0;
+            for (int i = 1; i < POPULATION_SIZE; i++)
+                if (fitness[i] > fitness[bestIdx]) bestIdx = i;
+
+            // ============================================================
+            // ЭВОЛЮЦИЯ
+            // ============================================================
+            for (int gen = 0; gen < MAX_GENERATIONS; gen++)
+            {
+                for (int i = 0; i < POPULATION_SIZE; i++)
+                {
+                    int a, b, c;
+                    do { a = rand.Next(POPULATION_SIZE); } while (a == i);
+                    do { b = rand.Next(POPULATION_SIZE); } while (b == i || b == a);
+                    do { c = rand.Next(POPULATION_SIZE); } while (c == i || c == a || c == b);
+
+                    // Мутация: v = a + F * (b - c)
+                    double[] mutant = new double[10];
+                    for (int j = 0; j < 10; j++)
+                    {
+                        mutant[j] = population[a][j] + F * (population[b][j] - population[c][j]);
+                        mutant[j] = Clamp(mutant[j], mins[j], maxs[j]);
+                    }
+                    ProjectToBudget(mutant, targetBudget);
+
+                    // Кроссовер
+                    double[] trial = new double[10];
+                    int jRand = rand.Next(10);
+                    for (int j = 0; j < 10; j++)
+                    {
+                        if (rand.NextDouble() < CR || j == jRand)
+                            trial[j] = mutant[j];
+                        else
+                            trial[j] = population[i][j];
+                    }
+                    ProjectToBudget(trial, targetBudget);
+
+                    // Селекция
+                    double trialFitness = Evaluate(trial);
+                    if (trialFitness > fitness[i])
+                    {
+                        population[i] = trial;
+                        fitness[i] = trialFitness;
+
+                        if (trialFitness > fitness[bestIdx])
+                        {
+                            bestIdx = i;
+                            Status = $"DE: gen={gen}, DD={(int)(trialFitness)}";
+                        }
+                    }
+                }
+            }
+
+            // ============================================================
+            // ЛУЧШЕЕ РЕШЕНИЕ
+            // ============================================================
+            double[] bestSolution = population[bestIdx];
+
+            double[] rounded = new double[10];
+            for (int i = 0; i < 10; i++)
+                rounded[i] = Round01(bestSolution[i]);
+
+            // На всякий случай снова в бюджет и в границы
+            ProjectToBudget(rounded, targetBudget);
+            for (int i = 0; i < 10; i++)
+                rounded[i] = Clamp(Round01(rounded[i]), mins[i], maxs[i]);
+
+            ApplyToDataSet(rounded);
+            Calculate();
+            int bestDD = DataSet.ResultDD;
+
+            bool[] bookFlags =
+            {
+        hasBookSC, hasBookASp, hasBookCH, hasBookCD, hasBookP,
+        hasBookAc, hasBookASt, hasBookPA, hasBookR, hasBookF
+    };
+
+            // Если у тебя SaveResults уже обновлён под startStats — передавай original
+            SaveResults(rounded, bestDD, targetBudget, baseStats, original, sw, "de", branch, bookFlags);
+
+            // Возврат исходного
+            ApplyToDataSet(original);
+            Calculate();
+
+            Status = "Differential Evolution завершена";
+        }
+
+        // ============================================================
+        // ОБЩАЯ ФУНКЦИЯ СОХРАНЕНИЯ РЕЗУЛЬТАТОВ
+        // + разница статов (recommended - start)
+        // bookFlags: 10 bool в порядке statNames: SC,ASp,CH,CD,P,Ac,ASt,PA,R,F
+        // ============================================================
+        private void SaveResults(
+            double[] solution,
+            int dd,
+            double targetBudget,
+            double[] baseStats,
+            double[] startStats,
+            System.Diagnostics.Stopwatch sw,
+            string method,
+            int branch,
+            bool[] bookFlags
+        )
+        {
+            sw.Stop();
+            TimeRec = sw.ElapsedMilliseconds;
+
+            // Веса
+            const double wSC = 1.88;   // CDR
+            const double wASp = 1.91;  // AS
+            const double wCH = 3.68;   // CH
+            const double wCD = 5.15;   // CD
+            const double wP = 4.46;    // PEN
+            const double wAc = 2.73;   // ACC
+            const double wASt = 3.55;  // ATK
+            const double wPA = 11.36;  // PA
+            const double wR = 7.94;    // RAGE
+            const double wF = 11.11;   // FAC
+
+            double[] weights = { wSC, wASp, wCH, wCD, wP, wAc, wASt, wPA, wR, wF };
+            //double[] weights = { 0.42, 1.07, 0.78, 1.46, 1.24, 0.86, 1.23, 0.97, 0.93, 1.77 };
+
+            double gearBudget = 0;
+            for (int i = 0; i < 10; i++)
+                gearBudget += weights[i] * (solution[i] - baseStats[i]);
+
+            // Стартовый бюджет (только шмот+кристаллы) для сравнения
+            double startGearBudget = 0;
+            if (startStats != null && startStats.Length == 10)
+            {
+                for (int i = 0; i < 10; i++)
+                    startGearBudget += weights[i] * (startStats[i] - baseStats[i]);
+            }
+
+            string resultsDir = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "results");
+            System.IO.Directory.CreateDirectory(resultsDir);
+
+            string fileName = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + $"_{method}_opt.txt";
+            string filePath = System.IO.Path.Combine(resultsDir, fileName);
+
+            string[] statNames =
+            {
+        "SkillCooldown", "AttackSpeed", "CriticalHit", "CriticalDamage",
+        "Penetration", "Accuracy", "AttackStrength", "PiercingAttack",
+        "Rage", "Facilitation"
+    };
+
+            string[] bookNames =
+            {
+        "BookSkillCooldown(+8)",
+        "BookAttackSpeed(+7)",
+        "BookCriticalHit(+4)",
+        "BookCriticalDamage(+10)",
+        "BookPenetration(+3)",
+        "BookAccuracy(+4)",
+        "BookAttackStrength(+4.7)",
+        "BookPiercingAttack(+4)",
+        "BookRage(+8)",
+        "BookFacilitation(+7.5)"
+    };
+
+            using (var writer = new System.IO.StreamWriter(filePath, false, System.Text.Encoding.UTF8))
+            {
+                writer.WriteLine($"=== BeastMasterCalc | {method.ToUpper()} Optimization ===");
+                writer.WriteLine("Execution time: " + TimeRec + " ms");
+                writer.WriteLine();
+
+                writer.WriteLine("Branch: " + branch + " (1=GuardianUnity, 2=DualRage, 3=ForestInspiration)");
+                writer.WriteLine();
+
+                // Книги: раздельно
+                if (bookFlags != null && bookFlags.Length == 10)
+                {
+                    writer.WriteLine("Books:");
+                    for (int i = 0; i < 10; i++)
+                        writer.WriteLine($"  {bookNames[i],-26}: {(bookFlags[i] ? "ON" : "OFF")}");
+                    writer.WriteLine();
+                }
+
+                writer.WriteLine("Target Gear Budget (W): " + targetBudget.ToString("0.###"));
+                writer.WriteLine("Actual Gear Budget (W): " + gearBudget.ToString("0.###"));
+                writer.WriteLine("Budget Diff: " + System.Math.Abs(gearBudget - targetBudget).ToString("0.###"));
+                writer.WriteLine();
+
+                if (startStats != null && startStats.Length == 10)
+                {
+                    writer.WriteLine("Start Gear Budget (W):  " + startGearBudget.ToString("0.###"));
+                    writer.WriteLine("ΔBudget (rec-start):    " + (gearBudget - startGearBudget).ToString("0.###"));
+                    writer.WriteLine();
+                }
+
+                writer.WriteLine("=== BEST SOLUTION ===");
+                writer.WriteLine("Best DD = " + dd);
+                writer.WriteLine();
+
+                // NEW: разница статов старт/рекомендовано
+                if (startStats != null && startStats.Length == 10)
+                {
+                    writer.WriteLine("РАЗНИЦА СТАТОВ (recommended - start):");
+                    for (int i = 0; i < 10; i++)
+                    {
+                        double start = startStats[i];
+                        double rec = solution[i];
+                        double delta = rec - start;
+
+                        writer.WriteLine(
+                            $"{statNames[i],-20}: start={start:F1}  rec={rec:F1}  Δ={delta:+0.0;-0.0;+0.0}"
+                        );
+                    }
+                    writer.WriteLine();
+                }
+
+                writer.WriteLine("ИТОГОВЫЕ СТАТЫ (база + шмот+кристаллы):");
+                for (int i = 0; i < 10; i++)
+                {
+                    writer.WriteLine(
+                        $"{statNames[i],-20} = {solution[i]:F1} " +
+                        $"(база: {baseStats[i]:F1}, шмот: {(solution[i] - baseStats[i]):F1})"
+                    );
+                }
+
+                writer.WriteLine();
+                writer.WriteLine("КОНТРОЛЬНАЯ СУММА (только шмот+кристаллы):");
+                for (int i = 0; i < 10; i++)
+                {
+                    double gear = solution[i] - baseStats[i];
+                    double contribution = weights[i] * gear;
+                    writer.WriteLine($"{statNames[i],-20}: {gear:F1} × {weights[i]:F2} = {contribution:F3}");
+                }
+                writer.WriteLine($"{"ИТОГО:",-20}                    = {gearBudget:F3}");
+            }
+        }
+
+
         #endregion
+
+        private ICommand getRecommendCommand;
+        public ICommand GetRecommendCommand
+        {
+            get => getRecommendCommand == null ? new RelayCommand(OptimizeByMCTS) : getRecommendCommand;
+        }
+
+        private long timeRec = 0;
+        public long TimeRec
+        {
+            get => timeRec;
+            set
+            {
+                timeRec = value;
+                NotifyPropertyChanged(nameof(TimeRec));
+            }
+        }
+        private string status = "Отключен";
+        public string Status
+        {
+            get => status;
+            set
+            {
+                status = value;
+                NotifyPropertyChanged(nameof(Status));
+            }
+        }
+        #endregion
+
+
+
+
+
     }
 }

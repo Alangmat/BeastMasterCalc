@@ -89,7 +89,7 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <TabControl Grid.Row="0" Height="592" VerticalAlignment="Top" Background="#FF332220">
-            
+
             <TabItem Header="Навыки">
                 <Grid>
                     <Grid.Background>
@@ -169,7 +169,7 @@
                     </Button>
                     <Button Grid.Column="2"
                             Height="70" 
-                            Margin="44,83,181,0"
+                            Margin="50,83,175,0"
                             Grid.Row="1" 
                             Opacity="{Binding OrderToAttackOpacity}"
                             VerticalAlignment="Top" IsCancel="True"
@@ -183,7 +183,7 @@
                     <Button Grid.Column="2"
                             HorizontalAlignment="Left"
                             Height="70" 
-                            Margin="116,83,0,0"
+                            Margin="115,83,0,0"
                             Grid.Row="1" 
                             Opacity="{Binding HealingOpacity}"
                             VerticalAlignment="Top"
@@ -655,11 +655,11 @@
                         Command="{Binding IncreaseLvlOrderToAttackCommand}"
                         HorizontalAlignment="Left"
                         Height="28" 
-                        Margin="62,54,0,0"
+                        Margin="68,54,0,0"
                         Grid.Row="1" 
                         VerticalAlignment="Top"
                         x:Name="increaseLvlOrderToAttackButton"
-                        Width="33" IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlOrderToAttackButton_Click" >
+                        Width="32" IsCancel="True" BorderBrush="{x:Null}" Click="increaseLvlOrderToAttackButton_Click" >
                         <Button.Background>
                             <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
                         </Button.Background>
@@ -668,11 +668,11 @@
                         Command="{Binding DecreaseLvlLvlOrderToAttackCommand}"
                         HorizontalAlignment="Left"
                         Height="28" 
-                        Margin="63,152,0,0"
+                        Margin="68,152,0,0"
                         Grid.Row="1" 
                         VerticalAlignment="Top"
                         x:Name="decreaseLvlOrderToAttackButton"
-                        Width="33" IsCancel="True" BorderBrush="{x:Null}" Click="decreaseLvlOrderToAttackButton_Click" >
+                        Width="34" IsCancel="True" BorderBrush="{x:Null}" Click="decreaseLvlOrderToAttackButton_Click" >
                         <Button.Background>
                             <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/minus.png"/>
                         </Button.Background>
@@ -1426,6 +1426,7 @@
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
+                                <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0">
                                 <Image Height="36"
@@ -1645,6 +1646,29 @@
                                        HorizontalAlignment="Left"/>
                             </Grid>
                             <Grid Grid.Row="10">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
+                                    Source="/icons/stats/SkillPower.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="7"/>
+                                <Label Content="Сила навыков" 
+                                    HorizontalAlignment="Left" 
+                                    Height="27" Margin="50,0,0,0" 
+                                    VerticalAlignment="Center" Width="149"
+                                    Grid.Row="7"/>
+                                <TextBox HorizontalAlignment="Left"
+                                    Text="{Binding SkillPower, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="233,0,0,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="35"/>
+                                <Label Content="{Binding SkillPowerFinal}" 
+                                   Margin="271,0,0,0" 
+                                   VerticalAlignment="Center" 
+                                   HorizontalAlignment="Left"/>
+                            </Grid>
+                            <Grid Grid.Row="11">
                                 <Image Height="36"
                                     Width="36"
                                     Margin="10,0,0,0"
@@ -3460,7 +3484,7 @@
                                            HorizontalAlignment="Left"
                                            VerticalAlignment="Center"
                                            />
-                                        <CheckBox
+                                    <CheckBox
                                             IsChecked="{Binding PredatoryBondTalentAlmahadActive}"
                                             HorizontalAlignment="Left" 
                                             Height="18" 
@@ -4110,6 +4134,10 @@
                         Margin="33,404,0,0" 
                         VerticalAlignment="Top"
                         Width="98"/>
+                    <Label Content="{Binding TimeRec}" HorizontalAlignment="Left" Height="25" Margin="240,311,0,0" VerticalAlignment="Top" Width="98"/>
+                    <Label Content="{Binding Status}" HorizontalAlignment="Left" Height="25" Margin="228,369,0,0" VerticalAlignment="Top" Width="98"/>
+                    <Button Content="Recs" HorizontalAlignment="Left" Margin="375,369,0,0" VerticalAlignment="Top" Height="28" Width="97" 
+                            Command="{Binding GetRecommendCommand}"/>
                     <!--
                     <Button
                         Command="{Binding SaveCommand}"
