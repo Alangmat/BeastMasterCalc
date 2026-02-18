@@ -212,6 +212,7 @@ namespace ViewModel
             NotifyPropertyChanged(nameof(RagePot));
             NotifyPropertyChanged(nameof(AttackStrengthPot));
             NotifyPropertyChanged(nameof(PiercingAttackPot));
+            NotifyPropertyChanged(nameof(SkillPowerPot));
             NotifyPropertyChanged(nameof(FacilitationPot));
 
             #endregion
@@ -1787,7 +1788,7 @@ namespace ViewModel
             }
         }
         /// <summary>
-        /// Свойство связанное с полем на вьюхе "Содействие"
+        /// Свойство связанное с полем на вьюхе "Сила навыков"
         /// </summary>
         public double SkillPower
         {
@@ -1799,17 +1800,17 @@ namespace ViewModel
             }
         }
         /// <summary>
-        /// Свойство связанное с полем на вьюхе расходники Эликсир "Содействие"
+        /// Свойство связанное с полем на вьюхе расходники Эликсир "Сила навыков"
         /// </summary>
-        //public double SkillPowerPot
-        //{
-        //    get => DataSet.SkillPowerPot;
-        //    set
-        //    {
-        //        DataSet.SkillPowerPot = StatsLimit.CheckLimit(value, StatsLimit.MAX_SKILL_POWER);
-        //        Calculate(); NotifyPropertyChanged(nameof(SkillPowerPot));
-        //    }
-        //}
+        public double SkillPowerPot
+        {
+            get => DataSet.SkillPowerPot;
+            set
+            {
+                DataSet.SkillPowerPot = StatsLimit.CheckLimit(value, StatsLimit.MAX_SKILL_POWER);
+                Calculate(); NotifyPropertyChanged(nameof(SkillPowerPot));
+            }
+        }
         /// <summary>
         /// Метод для пересчета характеристики персонажа "Содействие"
         /// </summary>
@@ -1817,7 +1818,7 @@ namespace ViewModel
         {
             SkillPowerFinal = 0;
             SkillPowerFinal += SkillPower;
-            //SkillPowerFinal += SkillPowerPot;
+            SkillPowerFinal += SkillPowerPot;
             if (coefficientCastle != 0) SkillPowerFinal += (coefficientCastle - 1) * 100;
             SkillPowerFinal = StatsLimit.CheckLimit(SkillPowerFinal, StatsLimit.MAX_SKILL_POWER);
         }

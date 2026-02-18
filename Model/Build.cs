@@ -72,6 +72,8 @@ namespace Model
         public double PiercingAttackPot { get; set; } = 0;
         public double RagePot { get; set; } = 0;
         public double FacilitationPot { get; set; } = 0;
+        public double SkillPowerPot { get; set; } = 0;
+        
         #endregion
         #region StatsOfScroll
         public double SkillCooldownScroll { get; set; } = 0;

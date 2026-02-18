@@ -2198,6 +2198,20 @@
                                 <Image Height="36"
                                     Width="36"
                                     Margin="10,0,0,0"
+                                    Source="/icons/stats/SkillPower.png"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left" Grid.Row="2"/>
+                                <TextBox HorizontalAlignment="Right"
+                                    Text="{Binding SkillPowerPot, Converter={StaticResource StringToDoubleConverter}}"
+                                    Margin="0,0,10,0"
+                                    TextWrapping="Wrap"
+                                    VerticalAlignment="Center"
+                                    Width="50"/>
+                            </Grid>
+                            <Grid Grid.Row="10">
+                                <Image Height="36"
+                                    Width="36"
+                                    Margin="10,0,0,0"
                                     Source="/icons/stats/Facilitation.png"
                                     VerticalAlignment="Center"
                                     HorizontalAlignment="Left" Grid.Row="2"/>
