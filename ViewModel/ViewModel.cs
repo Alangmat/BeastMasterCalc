@@ -2912,13 +2912,26 @@ namespace ViewModel
         #endregion
 
         #region неотобранные элементы 
+        private readonly RecommendationSystem _rs = new RecommendationSystem();
+        private volatile bool _suppressNotifications = false;
+
         public event PropertyChangedEventHandler PropertyChanged;
         /// <summary>
         /// Метод для вызова события PropertyChanged
         /// </summary>
         /// <param name="prop">Имя свойства, которое изменилось</param>
-        public void NotifyPropertyChanged([CallerMemberName] string prop = "") =>
+        public void NotifyPropertyChanged([CallerMemberName] string prop = "")
+        {
+            if (_suppressNotifications) return;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        }
+
+        private void SetStatusDirect(string s)
+        {
+            status = s;
+            System.Windows.Application.Current?.Dispatcher.BeginInvoke(
+                new Action(() => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Status)))));
+        }
 
         public string MagicalDD
         {
@@ -5899,39 +5912,35 @@ namespace ViewModel
         // ============================================================
         // ВАРИАНТ 3: DIFFERENTIAL EVOLUTION
         // ============================================================
-        public void OptimizeByDE()
-        {
-            const double budgetTolerance = 0.2;
-            const int POPULATION_SIZE = 100;
-            const int MAX_GENERATIONS = 200;
-            const double F = 0.8;   // коэффициент мутации
-            const double CR = 0.9;  // вероятность кроссовера
+        public void OptimizeByDE() => _ = OptimizeByDEAsync();
 
+        private async Task OptimizeByDEAsync()
+        {
             Status = "Differential Evolution";
             var sw = System.Diagnostics.Stopwatch.StartNew();
 
-            // Порядок статов: 0 SC, 1 ASp, 2 CH, 3 CD, 4 P, 5 Ac, 6 ASt, 7 PA, 8 R, 9 F
+            // Порядок статов: 0 SC, 1 ASp, 2 CH, 3 CD, 4 P, 5 Ac, 6 ASt, 7 PA, 8 R, 9 F, 10 SP
 
             // Веса
-            const double wSC = 1.88;   // CDR
-            const double wASp = 1.91;  // AS
-            const double wCH = 3.68;   // CH
-            const double wCD = 5.15;   // CD
-            const double wP = 4.46;    // PEN
-            const double wAc = 2.73;   // ACC
-            const double wASt = 3.55;  // ATK
-            const double wPA = 11.36;  // PA
-            const double wR = 7.94;    // RAGE
-            const double wF = 11.11;   // FAC
+            const double wSC = 0.1447; // SkillCooldown
+            const double wASp = 0.1158; // AttackSpeed
+            const double wCH = 0.1159; // CriticalHit
+            const double wCD = 0.0892; // CriticalDamage
+            const double wP = 0.0846;  // Penetration
+            const double wAc = 0.0882; // Accuracy
+            const double wASt = 0.0593; // AttackStrength
+            const double wPA = 0.0675; // PiercingAttack
+            const double wR = 0.1097;  // Rage
+            const double wF = 0.0797;  // Facilitation
+            const double wSP = 0.0454; // SkillPower
 
-            double[] weights = { wSC, wASp, wCH, wCD, wP, wAc, wASt, wPA, wR, wF };
+            double[] weights = { wSC, wASp, wCH, wCD, wP, wAc, wASt, wPA, wR, wF, wSP };
             //double[] weights = { 0.42, 1.07, 0.78, 1.46, 1.24, 0.86, 1.23, 0.97, 0.93, 1.77 };
-            double[] hardCaps = { 200, 70, 53, 200, 50, 50, 100, 50, 50, 50 };
-            double[] softGear = { 102.8, 38.1, 49.2, 24.0, 29.9, 47.7, 33.8, 42.8, 41.9, 23.8 };
+            double[] hardCaps = { 200, 70, 53, 200, 50, 50, 100, 50, 50, 50, 100 };
+            double[] softGear = { 102.8, 38.1, 49.2, 24.0, 29.9, 47.7, 33.8, 42.8, 41.9, 23.8, 12.0 };
 
             int branch = DataSet.DualRageActive ? 2 : DataSet.ForestInspirationActive ? 3 : 1;
 
-            // Таланты (твои значения)
             double tASp = (branch == 2) ? 5.75 : 4.25;
             double tCH = 4.75;
             double tCD = (branch == 2) ? 3.0 : 1.5;
@@ -5978,15 +5987,16 @@ namespace ViewModel
         bASt,                      // ASt
         bPA,                       // PA
         bR,                        // R
-        bF                         // F
+        bF,                        // F
+        0                          // SP
     };
 
             // ============================================================
             // MIN/MAX по перебору (min = база, max = min(hard, база + soft))
             // ============================================================
-            double[] mins = new double[10];
-            double[] maxs = new double[10];
-            for (int i = 0; i < 10; i++)
+            double[] mins = new double[11];
+            double[] maxs = new double[11];
+            for (int i = 0; i < 11; i++)
             {
                 mins[i] = baseStats[i];
                 maxs[i] = System.Math.Min(hardCaps[i], baseStats[i] + softGear[i]);
@@ -6003,15 +6013,16 @@ namespace ViewModel
         0,   // ASp
         30,  // CH
         0,   // CD
-        24,   // P
+        24,  // P
         0,   // Ac
         0,   // ASt
         0,   // PA
-        8.1,   // R
-        0    // F
+        8.1, // R
+        0,   // F
+        0    // SK
     };
 
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 11; i++)
             {
                 mins[i] = System.Math.Max(mins[i], userMins[i]);
                 if (mins[i] > maxs[i]) mins[i] = maxs[i]; // защита (можешь заменить на throw)
@@ -6024,15 +6035,13 @@ namespace ViewModel
             {
         DataSet.SkillCooldown, DataSet.AttackSpeed, DataSet.CriticalHit, DataSet.CriticalDamage,
         DataSet.Penetration, DataSet.Accuracy, DataSet.AttackStrength, DataSet.PiercingAttack,
-        DataSet.Rage, DataSet.Facilitation
+        DataSet.Rage, DataSet.Facilitation, DataSet.SkillPower
     };
 
-            // Текущая точка (clamp)
-            double[] current = new double[10];
-            for (int i = 0; i < 10; i++)
+            double[] current = new double[11];
+            for (int i = 0; i < 11; i++)
                 current[i] = System.Math.Max(mins[i], System.Math.Min(maxs[i], original[i]));
 
-            double Clamp(double val, double min, double max) => System.Math.Max(min, System.Math.Min(max, val));
             double Round01(double val) => System.Math.Round(val * 10) / 10.0;
 
             void ApplyToDataSet(double[] x)
@@ -6047,165 +6056,34 @@ namespace ViewModel
                 DataSet.PiercingAttack = Round01(x[7]);
                 DataSet.Rage = Round01(x[8]);
                 DataSet.Facilitation = Round01(x[9]);
+                DataSet.SkillPower = Round01(x[10]);
             }
 
-            double ComputeGearBudget(double[] x)
+            double targetBudget = 0;
+            for (int i = 0; i < 11; i++)
+                targetBudget += weights[i] * (current[i] - baseStats[i]);
+
+            // ============================================================
+            // ЗАПУСК DE АСИНХРОННО (UI не блокируется)
+            // ============================================================
+            _suppressNotifications = true;
+            double[] rounded;
+            try
             {
-                double sum = 0;
-                for (int i = 0; i < 10; i++)
-                    sum += weights[i] * (x[i] - baseStats[i]);
-                return sum;
+                rounded = await _rs.RunDEAsync(
+                    initial: current,
+                    weights: weights,
+                    baseStats: baseStats,
+                    mins: mins,
+                    maxs: maxs,
+                    targetBudget: targetBudget,
+                    evaluate: x => { ApplyToDataSet(x); Calculate(); return DataSet.ResultDD; },
+                    reportStatus: s => SetStatusDirect(s));
             }
-
-            // Целевой бюджет (только шмот+кристаллы), берём от текущей сборки
-            double targetBudget = ComputeGearBudget(current);
-
-            // Проекция на бюджет с учётом mins/maxs (и user-min тоже!)
-            void ProjectToBudget(double[] x, double target)
+            finally
             {
-                double lambdaMin = -100, lambdaMax = 100;
-
-                for (int iter = 0; iter < 30; iter++)
-                {
-                    double lambda = (lambdaMin + lambdaMax) / 2.0;
-                    double[] xProj = new double[10];
-
-                    for (int i = 0; i < 10; i++)
-                    {
-                        double minVar = mins[i] - baseStats[i];
-                        double maxVar = maxs[i] - baseStats[i];
-
-                        double variablePart = x[i] - baseStats[i];
-                        variablePart = Clamp(variablePart - lambda * weights[i], minVar, maxVar);
-                        xProj[i] = baseStats[i] + variablePart;
-                    }
-
-                    double budget = ComputeGearBudget(xProj);
-
-                    if (System.Math.Abs(budget - target) < 0.01)
-                    {
-                        for (int i = 0; i < 10; i++) x[i] = xProj[i];
-                        return;
-                    }
-
-                    if (budget > target) lambdaMin = lambda;
-                    else lambdaMax = lambda;
-                }
-
-                double lambda2 = (lambdaMin + lambdaMax) / 2.0;
-                for (int i = 0; i < 10; i++)
-                {
-                    double minVar = mins[i] - baseStats[i];
-                    double maxVar = maxs[i] - baseStats[i];
-
-                    double variablePart = x[i] - baseStats[i];
-                    variablePart = Clamp(variablePart - lambda2 * weights[i], minVar, maxVar);
-                    x[i] = baseStats[i] + variablePart;
-                }
+                _suppressNotifications = false;
             }
-
-            double Evaluate(double[] x)
-            {
-                ApplyToDataSet(x);
-                Calculate();
-
-                double budgetDiff = System.Math.Abs(ComputeGearBudget(x) - targetBudget);
-                double penalty = budgetDiff > budgetTolerance ? budgetDiff * 100000 : 0;
-
-                return DataSet.ResultDD - penalty;
-            }
-
-            // ============================================================
-            // ИНИЦИАЛИЗАЦИЯ ПОПУЛЯЦИИ
-            // ============================================================
-            var rand = new System.Random();
-            double[][] population = new double[POPULATION_SIZE][];
-            double[] fitness = new double[POPULATION_SIZE];
-
-            for (int i = 0; i < POPULATION_SIZE; i++)
-            {
-                population[i] = new double[10];
-
-                if (i == 0)
-                {
-                    population[i] = (double[])current.Clone();
-                }
-                else
-                {
-                    for (int j = 0; j < 10; j++)
-                        population[i][j] = mins[j] + rand.NextDouble() * (maxs[j] - mins[j]);
-                }
-
-                ProjectToBudget(population[i], targetBudget);
-                fitness[i] = Evaluate(population[i]);
-            }
-
-            int bestIdx = 0;
-            for (int i = 1; i < POPULATION_SIZE; i++)
-                if (fitness[i] > fitness[bestIdx]) bestIdx = i;
-
-            // ============================================================
-            // ЭВОЛЮЦИЯ
-            // ============================================================
-            for (int gen = 0; gen < MAX_GENERATIONS; gen++)
-            {
-                for (int i = 0; i < POPULATION_SIZE; i++)
-                {
-                    int a, b, c;
-                    do { a = rand.Next(POPULATION_SIZE); } while (a == i);
-                    do { b = rand.Next(POPULATION_SIZE); } while (b == i || b == a);
-                    do { c = rand.Next(POPULATION_SIZE); } while (c == i || c == a || c == b);
-
-                    // Мутация: v = a + F * (b - c)
-                    double[] mutant = new double[10];
-                    for (int j = 0; j < 10; j++)
-                    {
-                        mutant[j] = population[a][j] + F * (population[b][j] - population[c][j]);
-                        mutant[j] = Clamp(mutant[j], mins[j], maxs[j]);
-                    }
-                    ProjectToBudget(mutant, targetBudget);
-
-                    // Кроссовер
-                    double[] trial = new double[10];
-                    int jRand = rand.Next(10);
-                    for (int j = 0; j < 10; j++)
-                    {
-                        if (rand.NextDouble() < CR || j == jRand)
-                            trial[j] = mutant[j];
-                        else
-                            trial[j] = population[i][j];
-                    }
-                    ProjectToBudget(trial, targetBudget);
-
-                    // Селекция
-                    double trialFitness = Evaluate(trial);
-                    if (trialFitness > fitness[i])
-                    {
-                        population[i] = trial;
-                        fitness[i] = trialFitness;
-
-                        if (trialFitness > fitness[bestIdx])
-                        {
-                            bestIdx = i;
-                            Status = $"DE: gen={gen}, DD={(int)(trialFitness)}";
-                        }
-                    }
-                }
-            }
-
-            // ============================================================
-            // ЛУЧШЕЕ РЕШЕНИЕ
-            // ============================================================
-            double[] bestSolution = population[bestIdx];
-
-            double[] rounded = new double[10];
-            for (int i = 0; i < 10; i++)
-                rounded[i] = Round01(bestSolution[i]);
-
-            // На всякий случай снова в бюджет и в границы
-            ProjectToBudget(rounded, targetBudget);
-            for (int i = 0; i < 10; i++)
-                rounded[i] = Clamp(Round01(rounded[i]), mins[i], maxs[i]);
 
             ApplyToDataSet(rounded);
             Calculate();
@@ -6217,10 +6095,8 @@ namespace ViewModel
         hasBookAc, hasBookASt, hasBookPA, hasBookR, hasBookF
     };
 
-            // Если у тебя SaveResults уже обновлён под startStats — передавай original
             SaveResults(rounded, bestDD, targetBudget, baseStats, original, sw, "de", branch, bookFlags);
 
-            // Возврат исходного
             ApplyToDataSet(original);
             Calculate();
 
@@ -6248,29 +6124,32 @@ namespace ViewModel
             TimeRec = sw.ElapsedMilliseconds;
 
             // Веса
-            const double wSC = 1.88;   // CDR
-            const double wASp = 1.91;  // AS
-            const double wCH = 3.68;   // CH
-            const double wCD = 5.15;   // CD
-            const double wP = 4.46;    // PEN
-            const double wAc = 2.73;   // ACC
-            const double wASt = 3.55;  // ATK
-            const double wPA = 11.36;  // PA
-            const double wR = 7.94;    // RAGE
-            const double wF = 11.11;   // FAC
+            const double wSC = 0.1447; // SkillCooldown
+            const double wASp = 0.1158; // AttackSpeed
+            const double wCH = 0.1159; // CriticalHit
+            const double wCD = 0.0892; // CriticalDamage
+            const double wP = 0.0846;  // Penetration
+            const double wAc = 0.0882; // Accuracy
+            const double wASt = 0.0593; // AttackStrength
+            const double wPA = 0.0675; // PiercingAttack
+            const double wR = 0.1097;  // Rage
+            const double wF = 0.0797;  // Facilitation
+            const double wSP = 0.0454; // SkillPower
 
-            double[] weights = { wSC, wASp, wCH, wCD, wP, wAc, wASt, wPA, wR, wF };
+            double[] weights = { wSC, wASp, wCH, wCD, wP, wAc, wASt, wPA, wR, wF, wSP };
             //double[] weights = { 0.42, 1.07, 0.78, 1.46, 1.24, 0.86, 1.23, 0.97, 0.93, 1.77 };
 
+            int n = solution.Length;
+
             double gearBudget = 0;
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < n; i++)
                 gearBudget += weights[i] * (solution[i] - baseStats[i]);
 
             // Стартовый бюджет (только шмот+кристаллы) для сравнения
             double startGearBudget = 0;
-            if (startStats != null && startStats.Length == 10)
+            if (startStats != null && startStats.Length == n)
             {
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < n; i++)
                     startGearBudget += weights[i] * (startStats[i] - baseStats[i]);
             }
 
@@ -6284,7 +6163,7 @@ namespace ViewModel
             {
         "SkillCooldown", "AttackSpeed", "CriticalHit", "CriticalDamage",
         "Penetration", "Accuracy", "AttackStrength", "PiercingAttack",
-        "Rage", "Facilitation"
+        "Rage", "Facilitation", "SkillPower"
     };
 
             string[] bookNames =
@@ -6324,7 +6203,7 @@ namespace ViewModel
                 writer.WriteLine("Budget Diff: " + System.Math.Abs(gearBudget - targetBudget).ToString("0.###"));
                 writer.WriteLine();
 
-                if (startStats != null && startStats.Length == 10)
+                if (startStats != null && startStats.Length == n)
                 {
                     writer.WriteLine("Start Gear Budget (W):  " + startGearBudget.ToString("0.###"));
                     writer.WriteLine("ΔBudget (rec-start):    " + (gearBudget - startGearBudget).ToString("0.###"));
@@ -6336,10 +6215,10 @@ namespace ViewModel
                 writer.WriteLine();
 
                 // NEW: разница статов старт/рекомендовано
-                if (startStats != null && startStats.Length == 10)
+                if (startStats != null && startStats.Length == n)
                 {
                     writer.WriteLine("РАЗНИЦА СТАТОВ (recommended - start):");
-                    for (int i = 0; i < 10; i++)
+                    for (int i = 0; i < n; i++)
                     {
                         double start = startStats[i];
                         double rec = solution[i];
@@ -6353,7 +6232,7 @@ namespace ViewModel
                 }
 
                 writer.WriteLine("ИТОГОВЫЕ СТАТЫ (база + шмот+кристаллы):");
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < n; i++)
                 {
                     writer.WriteLine(
                         $"{statNames[i],-20} = {solution[i]:F1} " +
@@ -6363,11 +6242,11 @@ namespace ViewModel
 
                 writer.WriteLine();
                 writer.WriteLine("КОНТРОЛЬНАЯ СУММА (только шмот+кристаллы):");
-                for (int i = 0; i < 10; i++)
+                for (int i = 0; i < n; i++)
                 {
                     double gear = solution[i] - baseStats[i];
                     double contribution = weights[i] * gear;
-                    writer.WriteLine($"{statNames[i],-20}: {gear:F1} × {weights[i]:F2} = {contribution:F3}");
+                    writer.WriteLine($"{statNames[i],-20}: {gear:F1} × {weights[i]:F4} = {contribution:F3}");
                 }
                 writer.WriteLine($"{"ИТОГО:",-20}                    = {gearBudget:F3}");
             }
@@ -6379,7 +6258,7 @@ namespace ViewModel
         private ICommand getRecommendCommand;
         public ICommand GetRecommendCommand
         {
-            get => getRecommendCommand == null ? new RelayCommand(OptimizeByMCTS) : getRecommendCommand;
+            get => getRecommendCommand ?? (getRecommendCommand = new RelayCommand(() => _ = OptimizeByDEAsync()));
         }
 
         private long timeRec = 0;

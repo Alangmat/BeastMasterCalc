@@ -4149,7 +4149,7 @@
                         VerticalAlignment="Top"
                         Width="98"/>
                     <Label Content="{Binding TimeRec}" HorizontalAlignment="Left" Height="25" Margin="240,311,0,0" VerticalAlignment="Top" Width="98"/>
-                    <Label Content="{Binding Status}" HorizontalAlignment="Left" Height="25" Margin="228,369,0,0" VerticalAlignment="Top" Width="98"/>
+                    <Label Content="{Binding Status}" HorizontalAlignment="Left" Height="88" Margin="208,437,0,0" VerticalAlignment="Top" Width="377"/>
                     <Button Content="Recs" HorizontalAlignment="Left" Margin="375,369,0,0" VerticalAlignment="Top" Height="28" Width="97" 
                             Command="{Binding GetRecommendCommand}"/>
                     <!--
