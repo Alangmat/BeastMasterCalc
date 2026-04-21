@@ -39,6 +39,8 @@ namespace Model
                 throw new InvalidOperationException("В конфиге DoubleConcentration пустой Levels.");
         }
 
+        public string Description { get; set; } = "";
+
         /// <summary>Прибавка крит урона (под 4 стаками)</summary>
         [JsonIgnore] public double AdditionCriticalDamage = 8;
 

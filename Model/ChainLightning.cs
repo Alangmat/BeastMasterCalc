@@ -35,6 +35,8 @@ namespace Model
                 throw new InvalidOperationException("В конфиге ChainLightning пустой Levels.");
         }
 
+        public string Description { get; set; } = "";
+
         private int level = 1;
         public int Level
         {

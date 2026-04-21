@@ -40,6 +40,7 @@ namespace Model
         }
 
         // ===== Публичные поля/свойства (имена как в исходнике) =====
+        public string Description { get; set; } = "";
 
         /// <summary>Прибавка шанса крита</summary>
         [JsonIgnore] public int AdditionCriticalHit = 8;

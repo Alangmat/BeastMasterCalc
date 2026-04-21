@@ -125,6 +125,7 @@ namespace Model
         public bool TalentDamageModifierActive = false;
         //public string NumberCastle { get; set; } = "Без замка";
         public CastleSectors SelectedCastle = CastleSectors.Empty;
+        public CastleSectors SelectedCastleStart = CastleSectors.Empty;
         public bool BPDungeon { get; set; } = false;
         public bool SacredShieldHeroActive = false;
         public bool SacredShieldLunaActive = false;

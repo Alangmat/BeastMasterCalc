@@ -45,6 +45,8 @@ namespace Model
         }
 
         // ===== Публичный API (имена сохранены) =====
+        public string Description { get; set; } = "";
+
         private int level = 1;
         public int Level
         {
