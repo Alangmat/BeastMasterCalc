@@ -639,6 +639,26 @@
   <ItemGroup>
     <Resource Include="icons\stats\SkillPower.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\other\blue.png" />
+    <Resource Include="icons\other\green.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\books\bookFacilitation.png" />
+    <Resource Include="icons\books\bookSkillCooldown.png" />
+    <Resource Include="icons\books\bookAttackSpeed.png" />
+    <Resource Include="icons\books\bookCriticalHit.png" />
+    <Resource Include="icons\books\bookCriticalDamage.png" />
+    <Resource Include="icons\books\bookPiercingAttack.png" />
+    <Resource Include="icons\books\bookAttackStrength.png" />
+    <Resource Include="icons\books\bookAccurasy.png" />
+    <Resource Include="icons\books\bookPenetration.png" />
+    <Resource Include="icons\books\bookRage.png" />
+    <Resource Include="icons\other\PunishingAbility.png" />
+    <Content Include="videos\Calc Logo.mp4">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.6.5.5\build\Fody.targets" Condition="Exists('..\packages\Fody.6.5.5\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

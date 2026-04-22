@@ -44,9 +44,93 @@ namespace View
 
             Load();
 
-
-
+            PlaySplash();
         }
+
+        private void PlaySplash()
+        {
+            string videoPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "videos", "Calc Logo.mp4");
+            if (!System.IO.File.Exists(videoPath))
+            {
+                splashVideo.Visibility = Visibility.Collapsed;
+                return;
+            }
+            splashVideo.Source = new Uri(videoPath);
+            splashVideo.Play();
+        }
+
+        private void SplashVideo_MediaEnded(object sender, RoutedEventArgs e)
+        {
+            splashVideo.Stop();
+            splashVideo.Visibility = Visibility.Collapsed;
+        }
+
+        private void SplashVideo_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            splashVideo.Stop();
+            splashVideo.Visibility = Visibility.Collapsed;
+        }
+        private void BuildsListView_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var lv = (System.Windows.Controls.ListView)sender;
+            double remaining = lv.ActualWidth - 120 - 200 - SystemParameters.VerticalScrollBarWidth - 4;
+            if (remaining > 0) resultDDColumn.Width = remaining;
+        }
+
+        private void MainTabControl_Loaded(object sender, RoutedEventArgs e) => UpdateTabWidths();
+        private void MainTabControl_SizeChanged(object sender, SizeChangedEventArgs e) => UpdateTabWidths();
+
+        private void UpdateTabWidths()
+        {
+            var tabs = mainTabControl.Items.OfType<TabItem>()
+                .Where(t => t.Visibility == Visibility.Visible)
+                .ToList();
+
+            double available = mainTabControl.ActualWidth;
+            if (available <= 0 || !tabs.Any()) return;
+
+            double hPad = 32; // Padding="16,7" → 16*2
+            double pixelsPerDip = VisualTreeHelper.GetDpi(this).PixelsPerDip;
+            var typeface = new Typeface("Segoe UI");
+
+            var naturalWidths = tabs.Select(tab =>
+            {
+                string header = tab.Header?.ToString() ?? "";
+                if (string.IsNullOrEmpty(header)) return hPad;
+                var ft = new FormattedText(header,
+                    System.Globalization.CultureInfo.CurrentCulture,
+                    FlowDirection.LeftToRight,
+                    typeface, 13, Brushes.White, pixelsPerDip);
+                return ft.Width + hPad;
+            }).ToList();
+
+            // Жадная группировка по строкам
+            var rows = new List<List<int>>();
+            var row = new List<int>();
+            double rowW = 0;
+            for (int i = 0; i < tabs.Count; i++)
+            {
+                if (row.Count > 0 && rowW + naturalWidths[i] > available)
+                {
+                    rows.Add(row);
+                    row = new List<int>();
+                    rowW = 0;
+                }
+                row.Add(i);
+                rowW += naturalWidths[i];
+            }
+            if (row.Count > 0) rows.Add(row);
+
+            // Раздаём остаток пространства равномерно
+            foreach (var r in rows)
+            {
+                double sumNatural = r.Sum(i => naturalWidths[i]);
+                double extra = (available - sumNatural) / r.Count;
+                foreach (int i in r)
+                    tabs[i].Width = Math.Floor(naturalWidths[i] + extra);
+            }
+        }
+
         private void LoadHints()
         {
             string basicSkillPath = "hints/basicSkillHint.txt";
@@ -676,6 +760,10 @@ namespace View
                     orderToAttackButton_Click(this, e);
                 }
             }
+            else
+            {
+                moonlightNonPermanentButton_Click(this, e);
+            }
         }
 
         private void chainLightningButton_Click(object sender, RoutedEventArgs e)
@@ -745,7 +833,8 @@ namespace View
 
         private void moonlightNonPermanentButton_Click(object sender, RoutedEventArgs e)
         {
-            Logic.MoonlightNonPermanentActive = !Logic.MoonlightNonPermanentActive;
+            if (!Logic.BeastAwakeningActive) Logic.MoonlightNonPermanentActive = !Logic.MoonlightNonPermanentActive;
+            else Logic.MoonlightNonPermanentActive = false;
             // updateStateButton(Logic.MoonlightNonPermanentActive, moonlightNonPermanentButton);
         }
 

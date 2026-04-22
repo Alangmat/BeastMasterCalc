@@ -367,6 +367,7 @@ namespace ViewModel
             //PercentPhysicalDD = DataSet.PercentPhysicalDD;
 
             SelectedCastle = DataSet.SelectedCastle;
+            SelectedCastleStart = DataSet.SelectedCastleStart;
             //NumberCastle = DataSet.NumberCastle;
             IsUsingBlessingOfTheMoonOnLuna = DataSet.IsUsingBlessingOfTheMoonOnLuna;
             CrushingWillActive = DataSet.CrushingWill;
@@ -490,6 +491,7 @@ namespace ViewModel
                     //OutDD = resultDD.ToString();
                     DataSet.ResultDD = resultDD;
                     NotifyPropertyChanged(nameof(OutDD));
+                    getRecommendCommand?.RaiseCanExecuteChanged();
                     OutDDHero = resultDDHero.ToString();
                     OutDDLuna = resultDDLuna.ToString();
                 }
@@ -833,74 +835,57 @@ namespace ViewModel
             result.Add(SourcesDamage.Hero, 0);
             result.Add(SourcesDamage.Luna, 0);
 
+            double coeffsForLunaStart = FormulaCoefficientOfCriticalHitHeroForAutoattack()
+                    * FormulaCoefficientOfPiercingAttack()
+                    * FormulaCoefficientOfAccuracy()
+                    * FormulaCoefficientOfAttackStrength();
+            double coeffsForHeroStart = FormulaCoefficientOfCriticalHitLuna()
+                    * FormulaCoefficientOfPiercingAttackLuna()
+                    * FormulaCoefficientOfAccuracyLuna()
+                    * FormulaCoefficientOfAttackStrengthLuna();
+
+
+            double coeffsForLunaFinal = coefficientPredatoryDeliriumTalant
+                * CoefficientOfMoonTouchForLuna()
+                * coefficientBPDungeon()
+                * FormulaCoefficientOfPiercingAttackLuna();
+            double coeffsForHeroFinal = coefficientPredatoryDeliriumTalant
+                * CoefficientOfMoonTouchForLuna()
+                * coefficientBPDungeon()
+                * FormulaCoefficientOfPiercingAttack();
+
             double Tp = AttackDelay();
             double Tl = Beast_Awakening.BaseDelay * (1 - (GodsAidLuna ? ModifiersDamage.GODS_AID_ATTACK_SPEED : 0) / 100);
             double T = Math.Max(Tp, Tl);
             double DpmHero = 0.15 * 60 / T * (
-                    Beast_Awakening.Formula(magedd, physdd)
-                    * FormulaCoefficientOfCriticalHitLuna()
-                    * FormulaCoefficientOfPiercingAttackLuna()
-                    * FormulaCoefficientOfAccuracyLuna()
-                    * FormulaCoefficientOfAttackStrengthLuna()
-                    );
+                    Beast_Awakening.Formula(magedd, physdd) * coeffsForHeroStart);
             double DpmLuna = 0.15 * 60 / T * (
-                    Attack.Formula(magedd, physdd)
-                    * FormulaCoefficientOfCriticalHitHeroForAutoattack()
-                    * FormulaCoefficientOfPiercingAttack()
-                    * FormulaCoefficientOfAccuracy()
-                    * FormulaCoefficientOfAttackStrength()
-                    );
+                    Attack.Formula(magedd, physdd) * coeffsForLunaStart);
 
             if (BestialRampageActive)
             {
                 double Tbr = AttackDelayLunaWithBestialRampage();
                 T = Math.Max(Tp, Tbr);
                 double DpmBestialRampageHero = 0.15 * 60 / T * (
-                    Bestial_Rampage.Formula(magedd, physdd)
-                    * FormulaCoefficientOfCriticalHitLuna()
-                    * FormulaCoefficientOfPiercingAttackLuna()
-                    * FormulaCoefficientOfAccuracyLuna()
-                    * FormulaCoefficientOfAttackStrengthLuna()
-                    );
+                    Bestial_Rampage.Formula(magedd, physdd) * coeffsForHeroStart);
                 double DpmBestialRampageLuna = 0.15 * 60 / T * (
-                    Attack.Formula(magedd, physdd)
-                    * FormulaCoefficientOfCriticalHitHeroForAutoattack()
-                    * FormulaCoefficientOfPiercingAttack()
-                    * FormulaCoefficientOfAccuracy()
-                    * FormulaCoefficientOfAttackStrength()
-                    );
+                    Attack.Formula(magedd, physdd) * coeffsForLunaStart);
 
                 result[SourcesDamage.Hero] = (int)(
                     (DpmHero * TimeWithoutBestialRampage() + DpmBestialRampageHero * TimeBestialRampage())
-                    * coefficientPredatoryDeliriumTalant
-                    * CoefficientOfMoonTouchForLuna()
-                    * coefficientBPDungeon()
-                    );
+                    * coeffsForHeroFinal);
                 result[SourcesDamage.Luna] = (int)(
                     (DpmLuna * TimeWithoutBestialRampage() + DpmBestialRampageLuna * TimeBestialRampage())
-                    * coefficientPredatoryDeliriumTalant
-                    * CoefficientOfMoonTouchForLuna()
-                    * coefficientBPDungeon()
-                    );
+                    * coeffsForLunaFinal);
 
 
                 OutSymbiosisDPM = (result[SourcesDamage.Hero] + result[SourcesDamage.Luna]).ToString();
 
                 return result;
             }
-            result[SourcesDamage.Hero] = (int)(
-                DpmHero
-                * coefficientPredatoryDeliriumTalant
-                * CoefficientOfMoonTouchForLuna()
-                * coefficientBPDungeon()
-                );
+            result[SourcesDamage.Hero] = (int)(DpmHero * coeffsForHeroFinal);
 
-            result[SourcesDamage.Luna] = (int)(
-                DpmLuna
-                * coefficientPredatoryDeliriumTalant
-                * CoefficientOfMoonTouchForLuna()
-                * coefficientBPDungeon()
-                );
+            result[SourcesDamage.Luna] = (int)(DpmLuna * coeffsForLunaFinal);
 
             OutSymbiosisDPM = (result[SourcesDamage.Hero] + result[SourcesDamage.Luna]).ToString();
 
@@ -1818,9 +1803,12 @@ namespace ViewModel
         {
             SkillPowerFinal = 0;
             SkillPowerFinal += SkillPower;
+            if (coefficientCastleStart != 0) SkillPowerFinal -= Math.Round((coefficientCastleStart - 1) * 100, 1);
+            SkillPowerFinal = Math.Max(SkillPowerFinal, 0);
             SkillPowerFinal += SkillPowerPot;
-            if (coefficientCastle != 0) SkillPowerFinal += (coefficientCastle - 1) * 100;
+            if (coefficientCastle != 0) SkillPowerFinal += Math.Round((coefficientCastle - 1) * 100, 1);
             SkillPowerFinal = StatsLimit.CheckLimit(SkillPowerFinal, StatsLimit.MAX_SKILL_POWER);
+            //SkillPowerFinal = Math.Round(SkillPowerFinal, 1);
         }
         #endregion
         #region Гнев Глубин
@@ -3660,6 +3648,18 @@ namespace ViewModel
                 NotifyPropertyChanged(nameof(SelectedCastle));
             }
         }
+        public CastleSectors SelectedCastleStart
+        {
+            //get => selectedCastle;
+            get => DataSet.SelectedCastleStart;
+            set
+            {
+                DataSet.SelectedCastleStart = value;
+                coefficientCastleStart = (2.5 * (int)value).ConvertToCoefficient();
+                Calculate();
+                NotifyPropertyChanged(nameof(SelectedCastleStart));
+            }
+        }
 
         #endregion
 
@@ -3690,6 +3690,7 @@ namespace ViewModel
         }
 
         public double coefficientCastle = 1;
+        public double coefficientCastleStart = 1;
 
         public bool HasTalantBeastAwakeningMage
         {
@@ -5031,15 +5032,15 @@ namespace ViewModel
             // ============================================================
             // СОФТ-КАПЫ
             // ============================================================
-            const double softGearASp = 38.1;
-            const double softGearCH = 49.2;
+            const double softGearASp = 41.8;
+            const double softGearCH = 48.4;
             const double softGearCD = 24.0;
-            const double softGearSC = 102.8;
-            const double softGearP = 29.9;
-            const double softGearAc = 47.7;
-            const double softGearPA = 19;
-            //const double softGearPA = 42.8;
-            const double softGearASt = 33.8;
+            const double softGearSC = 90.5;
+            const double softGearP = 37.5;
+            const double softGearAc = 52.2;
+            const double softGearPA = 34.5;
+            //const double softGearPA = 34.5;
+            const double softGearASt = 30.0;
             const double softGearR = 41.9;
             const double softGearF = 23.8;
 
@@ -5432,21 +5433,22 @@ namespace ViewModel
             double bR = hasBookR ? 8 : 0;
             double bF = hasBookF ? 7.5 : 0;
 
+            double cFlat = CastleStartModifierActive ? 5 : 0;
             double[] baseStats = {
-        15 + tSC + bSC,           // SC
-        15 + tASp + bASp,         // ASp
-        5 + 6 + tCH + bCH,        // CH (врожденный + гильдия + талант + книга)
-        20 + tCD + bCD,           // CD
-        6 + tP + bP,              // P
-        7 + tAc + bAc,            // Ac
-        bASt,                     // ASt
-        bPA,                      // PA
-        bR,                       // R
-        bF                        // F
+        15 + tSC  + bSC  - cFlat, // SC
+        15 + tASp + bASp - cFlat, // ASp
+        5 + 6 + tCH + bCH - cFlat,// CH
+        20 + tCD + bCD,            // CD
+        6 + tP  + bP  - cFlat,   // P
+        7 + tAc + bAc - cFlat,   // Ac
+        bASt,                      // ASt
+        bPA,                       // PA
+        bR,                        // R
+        bF                         // F
     };
 
             // СОФТ-КАПЫ (шмот + кристаллы)
-            double[] softGear = { 102.8, 38.1, 49.2, 24.0, 29.9, 47.7, 33.8, 42.8, 41.9, 23.8 };
+            double[] softGear = { 90.5, 41.8, 48.4, 24.0, 37.5, 52.2, 30.0, 34.5, 41.9, 23.8 };
 
             // MIN и MAX
             double[] mins = new double[10];
@@ -5619,7 +5621,7 @@ namespace ViewModel
             // ВЕСА И ПАРАМЕТРЫ
             double[] weights = { 1.88, 1.91, 3.68, 5.15, 4.46, 2.73, 3.55, 11.36, 7.94, 11.11 };
             double[] hardCaps = { 200, 70, 53, 200, 50, 50, 100, 50, 50, 50 };
-            double[] softGear = { 102.8, 38.1, 49.2, 24.0, 29.9, 47.7, 33.8, 42.8, 41.9, 23.8 };
+            double[] softGear = { 90.5, 41.8, 48.4, 24.0, 37.5, 52.2, 30.0, 34.5, 41.9, 23.8 };
 
             int branch = DataSet.DualRageActive ? 2 : DataSet.ForestInspirationActive ? 3 : 1;
 
@@ -5652,9 +5654,10 @@ namespace ViewModel
             double bR = hasBookR ? 8 : 0;
             double bF = hasBookF ? 7.5 : 0;
 
+            double cFlat = CastleStartModifierActive ? 5 : 0;
             double[] baseStats = {
-        15 + tSC + bSC, 15 + tASp + bASp, 5 + 6 + tCH + bCH, 20 + tCD + bCD,
-        6 + tP + bP, 7 + tAc + bAc, bASt, bPA, bR, bF
+        15 + tSC  + bSC  - cFlat, 15 + tASp + bASp - cFlat, 5 + 6 + tCH + bCH - cFlat, 20 + tCD + bCD,
+        6 + tP + bP - cFlat, 7 + tAc + bAc - cFlat, bASt, bPA, bR, bF
     };
 
             double[] mins = new double[10];
@@ -5922,45 +5925,46 @@ namespace ViewModel
             // Порядок статов: 0 SC, 1 ASp, 2 CH, 3 CD, 4 P, 5 Ac, 6 ASt, 7 PA, 8 R, 9 F, 10 SP
 
             // Веса
-            const double wSC = 0.1447; // SkillCooldown
-            const double wASp = 0.1158; // AttackSpeed
-            const double wCH = 0.1159; // CriticalHit
-            const double wCD = 0.0892; // CriticalDamage
-            const double wP = 0.0846;  // Penetration
-            const double wAc = 0.0882; // Accuracy
-            const double wASt = 0.0593; // AttackStrength
-            const double wPA = 0.0675; // PiercingAttack
-            const double wR = 0.1097;  // Rage
-            const double wF = 0.0797;  // Facilitation
-            const double wSP = 0.0454; // SkillPower
+            const double wSC  = 0.0315; // SkillCooldown
+            const double wASp = 0.0681; // AttackSpeed
+            const double wCH  = 0.0588; // CriticalHit
+            const double wCD  = 0.1186; // CriticalDamage
+            const double wP   = 0.0759; // Penetration
+            const double wAc  = 0.0545; // Accuracy
+            const double wASt = 0.0949; // AttackStrength
+            const double wPA  = 0.0825; // PiercingAttack
+            const double wR   = 0.0679; // Rage
+            const double wF   = 0.1196; // Facilitation
+            const double wSP  = 0.2277; // SkillPower
 
             double[] weights = { wSC, wASp, wCH, wCD, wP, wAc, wASt, wPA, wR, wF, wSP };
             //double[] weights = { 0.42, 1.07, 0.78, 1.46, 1.24, 0.86, 1.23, 0.97, 0.93, 1.77 };
             double[] hardCaps = { 200, 70, 53, 200, 50, 50, 100, 50, 50, 50, 100 };
-            double[] softGear = { 102.8, 38.1, 49.2, 24.0, 29.9, 47.7, 33.8, 42.8, 41.9, 23.8, 12.0 };
+            double[] softGear = { 90.5, 41.8, 48.4, 24.0, 37.5, 52.2, 30.0, 34.5, 41.9, 23.8, 12.5 };
 
+            bool hasBranch = DataSet.DualRageActive || DataSet.ForestInspirationActive || DataSet.GuardianUnityActive;
             int branch = DataSet.DualRageActive ? 2 : DataSet.ForestInspirationActive ? 3 : 1;
 
-            double tASp = (branch == 2) ? 5.75 : 4.25;
-            double tCH = 4.75;
-            double tCD = (branch == 2) ? 3.0 : 1.5;
-            double tSC = (branch == 2) ? 4.25 : 5.75;
-            double tP = (branch == 3) ? 2.75 : 3.75;
-            double tAc = (branch == 1) ? 4.75 : 3.5;
+            double tASp = hasBranch ? ((branch == 2) ? 5.75 : 4.25) : 0;
+            double tCH  = hasBranch ? 4.75 : 0;
+            double tCD  = hasBranch ? ((branch == 2) ? 3.0  : 1.5)  : 0;
+            double tSC  = hasBranch ? ((branch == 2) ? 4.25 : 5.75) : 0;
+            double tP   = hasBranch ? ((branch == 3) ? 2.75 : 3.75) : 0;
+            double tAc  = hasBranch ? ((branch == 1) ? 4.75 : 3.5)  : 0;
 
             // ============================================================
             // КНИГИ: раздельные флаги (ЗАМЕНИ на реальные поля DataSet.*)
             // ============================================================
-            bool hasBookSC = true; // DataSet.HasBookSC;
-            bool hasBookASp = false; // DataSet.HasBookASp;
-            bool hasBookCH = true; // DataSet.HasBookCH;
-            bool hasBookCD = false; // DataSet.HasBookCD;
-            bool hasBookP = true; // DataSet.HasBookP;
-            bool hasBookAc = true; // DataSet.HasBookAc;
-            bool hasBookASt = true; // DataSet.HasBookASt;
-            bool hasBookPA = true; // DataSet.HasBookPA;
-            bool hasBookR = false; // DataSet.HasBookR;
-            bool hasBookF = false; // DataSet.HasBookF;
+            bool hasBookSC = RecHasBookSC;
+            bool hasBookASp = RecHasBookASp;
+            bool hasBookCH = RecHasBookCH;
+            bool hasBookCD = RecHasBookCD;
+            bool hasBookP = RecHasBookP;
+            bool hasBookAc = RecHasBookAc;
+            bool hasBookASt = RecHasBookASt;
+            bool hasBookPA = RecHasBookPA;
+            bool hasBookR = RecHasBookR;
+            bool hasBookF = RecHasBookF;
 
             double bSC = hasBookSC ? 8 : 0;
             double bASp = hasBookASp ? 7 : 0;
@@ -5974,22 +5978,25 @@ namespace ViewModel
             double bF = hasBookF ? 7.5 : 0;
 
             // ============================================================
-            // БАЗА (врождённое + гильдия + таланты + книги)
+            // БАЗА (врождённое + гильдия + таланты + книги + замковый дебаф)
             // ============================================================
+            double[] g = GetGuildStatBonuses(GuildLevel);
+            double cFlat = CastleStartModifierActive ? 5 : 0;
+            double cSP   = coefficientCastleStart != 0 ? System.Math.Round((coefficientCastleStart - 1) * 100, 1) : 0;
             double[] baseStats =
             {
-        15 + tSC + bSC,            // SC
-        15 + tASp + bASp,          // ASp
-        5 + 6 + tCH + bCH,         // CH
-        20 + tCD + bCD,            // CD
-        6 + tP + bP,               // P
-        7 + tAc + bAc,             // Ac
-        bASt,                      // ASt
-        bPA,                       // PA
-        bR,                        // R
-        bF,                        // F
-        0                          // SP
-    };
+                tSC  + bSC  + g[0] - cFlat,  // SC
+                tASp + bASp + g[1] - cFlat,  // ASp
+                5 + tCH + bCH + g[2] - cFlat, // CH
+                tCD + bCD + g[3],             // CD
+                tP  + bP  + g[4] - cFlat,     // P
+                tAc + bAc + g[5] - cFlat,     // Ac
+                bASt + g[6],                       // ASt
+                bPA  + g[7],                       // PA
+                bR   + g[8],                       // R
+                bF   + g[9],                       // F
+                g[10] - cSP                        // SP
+            };
 
             // ============================================================
             // MIN/MAX по перебору (min = база, max = min(hard, база + soft))
@@ -6009,17 +6016,17 @@ namespace ViewModel
             // ============================================================
             double[] userMins =
             {
-        0,   // SC
-        0,   // ASp
-        30,  // CH
-        0,   // CD
-        24,  // P
-        0,   // Ac
-        0,   // ASt
-        0,   // PA
-        8.1, // R
-        0,   // F
-        0    // SK
+        UserMinSC,   // SC
+        UserMinASp,  // ASp
+        UserMinCH,   // CH
+        UserMinCD,   // CD
+        UserMinP,    // P
+        UserMinAc,   // Ac
+        UserMinASt,  // ASt
+        UserMinPA,   // PA
+        UserMinR,    // R
+        UserMinF,    // F
+        UserMinSP    // SP
     };
 
             for (int i = 0; i < 11; i++)
@@ -6059,9 +6066,17 @@ namespace ViewModel
                 DataSet.SkillPower = Round01(x[10]);
             }
 
+            double originalBudget = 0;
+            for (int i = 0; i < 11; i++)
+                originalBudget += weights[i] * (original[i] - baseStats[i]);
+
             double targetBudget = 0;
             for (int i = 0; i < 11; i++)
                 targetBudget += weights[i] * (current[i] - baseStats[i]);
+
+            double maxAllowedBudget = originalBudget * 1.03;
+            if (targetBudget > maxAllowedBudget)
+                targetBudget = maxAllowedBudget;
 
             // ============================================================
             // ЗАПУСК DE АСИНХРОННО (UI не блокируется)
@@ -6085,9 +6100,38 @@ namespace ViewModel
                 _suppressNotifications = false;
             }
 
+            _lastRounded = rounded;
+            _applyRecResultCommand?.RaiseCanExecuteChanged();
+
             ApplyToDataSet(rounded);
             Calculate();
             int bestDD = DataSet.ResultDD;
+
+            RecFinalSC  = SkillCooldownFinal.ToString("F1");
+            RecFinalASp = AttackSpeedFinal.ToString("F1");
+            RecFinalCH  = CriticalHitHeroFinal.ToString("F1");
+            RecFinalCD  = CriticalDamageFinal.ToString("F1");
+            RecFinalP   = PenetrationHeroFinal.ToString("F1");
+            RecFinalAc  = AccuracyHeroFinal.ToString("F1");
+            RecFinalASt = AttackStrengthFinal.ToString("F1");
+            RecFinalPA  = PiercingAttackFinal.ToString("F1");
+            RecFinalR   = RageFinal.ToString("F1");
+            RecFinalF   = FacilitationFinal.ToString("F1");
+            RecFinalSP  = SkillPowerFinal.ToString("F1");
+            IsRecFinalVisible = true;
+
+            RecValSC  = rounded[0].ToString("F1");  DeltaSC  = FormatDelta(rounded[0]  - original[0]);
+            RecValASp = rounded[1].ToString("F1");  DeltaASp = FormatDelta(rounded[1]  - original[1]);
+            RecValCH  = rounded[2].ToString("F1");  DeltaCH  = FormatDelta(rounded[2]  - original[2]);
+            RecValCD  = rounded[3].ToString("F1");  DeltaCD  = FormatDelta(rounded[3]  - original[3]);
+            RecValP   = rounded[4].ToString("F1");  DeltaP   = FormatDelta(rounded[4]  - original[4]);
+            RecValAc  = rounded[5].ToString("F1");  DeltaAc  = FormatDelta(rounded[5]  - original[5]);
+            RecValASt = rounded[6].ToString("F1");  DeltaASt = FormatDelta(rounded[6]  - original[6]);
+            RecValPA  = rounded[7].ToString("F1");  DeltaPA  = FormatDelta(rounded[7]  - original[7]);
+            RecValR   = rounded[8].ToString("F1");  DeltaR   = FormatDelta(rounded[8]  - original[8]);
+            RecValF   = rounded[9].ToString("F1");  DeltaF   = FormatDelta(rounded[9]  - original[9]);
+            RecValSP  = rounded[10].ToString("F1"); DeltaSP  = FormatDelta(rounded[10] - original[10]);
+            RecDPMDisplay = bestDD.ToString();
 
             bool[] bookFlags =
             {
@@ -6124,17 +6168,17 @@ namespace ViewModel
             TimeRec = sw.ElapsedMilliseconds;
 
             // Веса
-            const double wSC = 0.1447; // SkillCooldown
-            const double wASp = 0.1158; // AttackSpeed
-            const double wCH = 0.1159; // CriticalHit
-            const double wCD = 0.0892; // CriticalDamage
-            const double wP = 0.0846;  // Penetration
-            const double wAc = 0.0882; // Accuracy
-            const double wASt = 0.0593; // AttackStrength
-            const double wPA = 0.0675; // PiercingAttack
-            const double wR = 0.1097;  // Rage
-            const double wF = 0.0797;  // Facilitation
-            const double wSP = 0.0454; // SkillPower
+            const double wSC  = 0.0315; // SkillCooldown
+            const double wASp = 0.0681; // AttackSpeed
+            const double wCH  = 0.0588; // CriticalHit
+            const double wCD  = 0.1186; // CriticalDamage
+            const double wP   = 0.0759; // Penetration
+            const double wAc  = 0.0545; // Accuracy
+            const double wASt = 0.0949; // AttackStrength
+            const double wPA  = 0.0825; // PiercingAttack
+            const double wR   = 0.0679; // Rage
+            const double wF   = 0.1196; // Facilitation
+            const double wSP  = 0.2277; // SkillPower
 
             double[] weights = { wSC, wASp, wCH, wCD, wP, wAc, wASt, wPA, wR, wF, wSP };
             //double[] weights = { 0.42, 1.07, 0.78, 1.46, 1.24, 0.86, 1.23, 0.97, 0.93, 1.77 };
@@ -6255,10 +6299,54 @@ namespace ViewModel
 
         #endregion
 
-        private ICommand getRecommendCommand;
+        private RelayCommand getRecommendCommand;
         public ICommand GetRecommendCommand
         {
-            get => getRecommendCommand ?? (getRecommendCommand = new RelayCommand(() => _ = OptimizeByDEAsync()));
+            get => getRecommendCommand ?? (getRecommendCommand = new RelayCommand(
+                () => _ = OptimizeByDEAsync(),
+                () => DataSet.SkillCooldown > 0 || DataSet.AttackSpeed > 0 || DataSet.CriticalHit > 0 ||
+                      DataSet.CriticalDamage > 0 || DataSet.Penetration > 0 || DataSet.Accuracy > 0 ||
+                      DataSet.AttackStrength > 0 || DataSet.PiercingAttack > 0 || DataSet.Rage > 0 ||
+                      DataSet.Facilitation > 0 || DataSet.SkillPower > 0));
+        }
+
+        private double[] _lastRounded = null;
+
+        private RelayCommand _applyRecResultCommand;
+        public ICommand ApplyRecResultCommand
+        {
+            get => _applyRecResultCommand ?? (_applyRecResultCommand = new RelayCommand(
+                ApplyRecResult,
+                () => _lastRounded != null));
+        }
+
+        private void ApplyRecResult()
+        {
+            if (_lastRounded == null) return;
+            double Round01(double val) => System.Math.Round(val * 10) / 10.0;
+            DataSet.SkillCooldown    = Round01(_lastRounded[0]);
+            DataSet.AttackSpeed      = Round01(_lastRounded[1]);
+            DataSet.CriticalHit      = Round01(_lastRounded[2]);
+            DataSet.CriticalDamage   = Round01(_lastRounded[3]);
+            DataSet.Penetration      = Round01(_lastRounded[4]);
+            DataSet.Accuracy         = Round01(_lastRounded[5]);
+            DataSet.AttackStrength   = Round01(_lastRounded[6]);
+            DataSet.PiercingAttack   = Round01(_lastRounded[7]);
+            DataSet.Rage             = Round01(_lastRounded[8]);
+            DataSet.Facilitation     = Round01(_lastRounded[9]);
+            DataSet.SkillPower       = Round01(_lastRounded[10]);
+            NotifyPropertyChanged(nameof(SkillCooldown));
+            NotifyPropertyChanged(nameof(AttackSpeed));
+            NotifyPropertyChanged(nameof(CriticalHit));
+            NotifyPropertyChanged(nameof(CriticalDamage));
+            NotifyPropertyChanged(nameof(Penetration));
+            NotifyPropertyChanged(nameof(Accuracy));
+            NotifyPropertyChanged(nameof(AttackStrength));
+            NotifyPropertyChanged(nameof(PiercingAttack));
+            NotifyPropertyChanged(nameof(Rage));
+            NotifyPropertyChanged(nameof(Facilitation));
+            NotifyPropertyChanged(nameof(SkillPower));
+            Calculate();
         }
 
         private long timeRec = 0;
@@ -6281,6 +6369,210 @@ namespace ViewModel
                 NotifyPropertyChanged(nameof(Status));
             }
         }
+
+        #region СППР настройки
+
+        private int _guildLevel = 0;
+        public int GuildLevel
+        {
+            get => _guildLevel;
+            set { _guildLevel = Math.Max(0, Math.Min(12, value)); NotifyPropertyChanged(nameof(GuildLevel)); RefreshRecBaseDisplay(); }
+        }
+
+        private bool _recHasBookSC;
+        public bool RecHasBookSC { get => _recHasBookSC; set { _recHasBookSC = value; NotifyPropertyChanged(nameof(RecHasBookSC)); RefreshRecBaseDisplay(); } }
+        private bool _recHasBookASp;
+        public bool RecHasBookASp { get => _recHasBookASp; set { _recHasBookASp = value; NotifyPropertyChanged(nameof(RecHasBookASp)); RefreshRecBaseDisplay(); } }
+        private bool _recHasBookCH;
+        public bool RecHasBookCH { get => _recHasBookCH; set { _recHasBookCH = value; NotifyPropertyChanged(nameof(RecHasBookCH)); RefreshRecBaseDisplay(); } }
+        private bool _recHasBookCD;
+        public bool RecHasBookCD { get => _recHasBookCD; set { _recHasBookCD = value; NotifyPropertyChanged(nameof(RecHasBookCD)); RefreshRecBaseDisplay(); } }
+        private bool _recHasBookP;
+        public bool RecHasBookP { get => _recHasBookP; set { _recHasBookP = value; NotifyPropertyChanged(nameof(RecHasBookP)); RefreshRecBaseDisplay(); } }
+        private bool _recHasBookAc;
+        public bool RecHasBookAc { get => _recHasBookAc; set { _recHasBookAc = value; NotifyPropertyChanged(nameof(RecHasBookAc)); RefreshRecBaseDisplay(); } }
+        private bool _recHasBookASt;
+        public bool RecHasBookASt { get => _recHasBookASt; set { _recHasBookASt = value; NotifyPropertyChanged(nameof(RecHasBookASt)); RefreshRecBaseDisplay(); } }
+        private bool _recHasBookPA;
+        public bool RecHasBookPA { get => _recHasBookPA; set { _recHasBookPA = value; NotifyPropertyChanged(nameof(RecHasBookPA)); RefreshRecBaseDisplay(); } }
+        private bool _recHasBookR;
+        public bool RecHasBookR { get => _recHasBookR; set { _recHasBookR = value; NotifyPropertyChanged(nameof(RecHasBookR)); RefreshRecBaseDisplay(); } }
+        private bool _recHasBookF;
+        public bool RecHasBookF { get => _recHasBookF; set { _recHasBookF = value; NotifyPropertyChanged(nameof(RecHasBookF)); RefreshRecBaseDisplay(); } }
+
+        // Бонусы гильдии нарастающим итогом по уровню
+        // 0=SC, 1=ASp, 2=CH, 3=CD, 4=P, 5=Ac, 6=ASt, 7=PA, 8=R, 9=F, 10=SP
+        private static double[] GetGuildStatBonuses(int level)
+        {
+            double sc = 0, asp = 0, ch = 0, cd = 0, p = 0, ac = 0, ast = 0, pa = 0, r = 0, f = 0, sp = 0;
+            if (level <= 0)  return new double[] { sc, asp, ch, cd, p, ac, ast, pa, r, f, sp };
+            if (level >= 8)  { ch += 6; p += 6; }
+            if (level >= 9)  { cd += 20; }
+            if (level >= 10) { sc += 15; asp += 15; }
+            if (level >= 11) { ac += 7; }
+            return new double[] { sc, asp, ch, cd, p, ac, ast, pa, r, f, sp };
+        }
+
+        private double[] ComputeRecBaseStats()
+        {
+            bool hasBranch = DataSet.DualRageActive || DataSet.ForestInspirationActive || DataSet.GuardianUnityActive;
+            int branch = DataSet.DualRageActive ? 2 : DataSet.ForestInspirationActive ? 3 : 1;
+            double tASp = hasBranch ? ((branch == 2) ? 5.75 : 4.25) : 0;
+            double tCH  = hasBranch ? 4.75 : 0;
+            double tCD  = hasBranch ? ((branch == 2) ? 3.0  : 1.5)  : 0;
+            double tSC  = hasBranch ? ((branch == 2) ? 4.25 : 5.75) : 0;
+            double tP   = hasBranch ? ((branch == 3) ? 2.75 : 3.75) : 0;
+            double tAc  = hasBranch ? ((branch == 1) ? 4.75 : 3.5)  : 0;
+
+            double bSC  = RecHasBookSC  ? 8   : 0;
+            double bASp = RecHasBookASp ? 7   : 0;
+            double bCH  = RecHasBookCH  ? 3   : 0;
+            double bCD  = RecHasBookCD  ? 10  : 0;
+            double bP   = RecHasBookP   ? 3   : 0;
+            double bAc  = RecHasBookAc  ? 4   : 0;
+            double bASt = RecHasBookASt ? 4.7 : 0;
+            double bPA  = RecHasBookPA  ? 4   : 0;
+            double bR   = RecHasBookR   ? 8   : 0;
+            double bF   = RecHasBookF   ? 7.5 : 0;
+
+            double[] g = GetGuildStatBonuses(GuildLevel);
+            double cFlat = CastleStartModifierActive ? 5 : 0;
+            double cSP   = coefficientCastleStart != 0 ? System.Math.Round((coefficientCastleStart - 1) * 100, 1) : 0;
+            return new double[]
+            {
+                15 + tSC  + bSC  + g[0] - cFlat,
+                15 + tASp + bASp + g[1] - cFlat,
+                5 + 6 + tCH + bCH + g[2] - cFlat,
+                20 + tCD + bCD + g[3],
+                6 + tP  + bP  + g[4] - cFlat,
+                7 + tAc + bAc + g[5] - cFlat,
+                bASt + g[6],
+                bPA  + g[7],
+                bR   + g[8],
+                bF   + g[9],
+                g[10] - cSP
+            };
+        }
+
+        private void RefreshRecBaseDisplay()
+        {
+            var b = ComputeRecBaseStats();
+            RecBaseSC  = b[0].ToString("F1");
+            RecBaseASp = b[1].ToString("F1");
+            RecBaseCH  = b[2].ToString("F1");
+            RecBaseCD  = b[3].ToString("F1");
+            RecBaseP   = b[4].ToString("F1");
+            RecBaseAc  = b[5].ToString("F1");
+            RecBaseASt = b[6].ToString("F1");
+            RecBasePA  = b[7].ToString("F1");
+            RecBaseR   = b[8].ToString("F1");
+            RecBaseF   = b[9].ToString("F1");
+            RecBaseSP  = b[10].ToString("F1");
+        }
+
+        private string _recBaseSC  = "0"; public string RecBaseSC  { get => _recBaseSC;  private set { _recBaseSC  = value; NotifyPropertyChanged(nameof(RecBaseSC));  } }
+        private string _recBaseASp = "0"; public string RecBaseASp { get => _recBaseASp; private set { _recBaseASp = value; NotifyPropertyChanged(nameof(RecBaseASp)); } }
+        private string _recBaseCH  = "0"; public string RecBaseCH  { get => _recBaseCH;  private set { _recBaseCH  = value; NotifyPropertyChanged(nameof(RecBaseCH));  } }
+        private string _recBaseCD  = "0"; public string RecBaseCD  { get => _recBaseCD;  private set { _recBaseCD  = value; NotifyPropertyChanged(nameof(RecBaseCD));  } }
+        private string _recBaseP   = "0"; public string RecBaseP   { get => _recBaseP;   private set { _recBaseP   = value; NotifyPropertyChanged(nameof(RecBaseP));   } }
+        private string _recBaseAc  = "0"; public string RecBaseAc  { get => _recBaseAc;  private set { _recBaseAc  = value; NotifyPropertyChanged(nameof(RecBaseAc));  } }
+        private string _recBaseASt = "0"; public string RecBaseASt { get => _recBaseASt; private set { _recBaseASt = value; NotifyPropertyChanged(nameof(RecBaseASt)); } }
+        private string _recBasePA  = "0"; public string RecBasePA  { get => _recBasePA;  private set { _recBasePA  = value; NotifyPropertyChanged(nameof(RecBasePA));  } }
+        private string _recBaseR   = "0"; public string RecBaseR   { get => _recBaseR;   private set { _recBaseR   = value; NotifyPropertyChanged(nameof(RecBaseR));   } }
+        private string _recBaseF   = "0"; public string RecBaseF   { get => _recBaseF;   private set { _recBaseF   = value; NotifyPropertyChanged(nameof(RecBaseF));   } }
+        private string _recBaseSP  = "0"; public string RecBaseSP  { get => _recBaseSP;  private set { _recBaseSP  = value; NotifyPropertyChanged(nameof(RecBaseSP));  } }
+
+        private double _userMinSC = 0;
+        public double UserMinSC { get => _userMinSC; set { _userMinSC = value; NotifyPropertyChanged(nameof(UserMinSC)); } }
+        private double _userMinASp = 0;
+        public double UserMinASp { get => _userMinASp; set { _userMinASp = value; NotifyPropertyChanged(nameof(UserMinASp)); } }
+        private double _userMinCH = 30;
+        public double UserMinCH { get => _userMinCH; set { _userMinCH = value; NotifyPropertyChanged(nameof(UserMinCH)); } }
+        private double _userMinCD = 0;
+        public double UserMinCD { get => _userMinCD; set { _userMinCD = value; NotifyPropertyChanged(nameof(UserMinCD)); } }
+        private double _userMinP = 24;
+        public double UserMinP { get => _userMinP; set { _userMinP = value; NotifyPropertyChanged(nameof(UserMinP)); } }
+        private double _userMinAc = 0;
+        public double UserMinAc { get => _userMinAc; set { _userMinAc = value; NotifyPropertyChanged(nameof(UserMinAc)); } }
+        private double _userMinASt = 0;
+        public double UserMinASt { get => _userMinASt; set { _userMinASt = value; NotifyPropertyChanged(nameof(UserMinASt)); } }
+        private double _userMinPA = 0;
+        public double UserMinPA { get => _userMinPA; set { _userMinPA = value; NotifyPropertyChanged(nameof(UserMinPA)); } }
+        private double _userMinR = 8.1;
+        public double UserMinR { get => _userMinR; set { _userMinR = value; NotifyPropertyChanged(nameof(UserMinR)); } }
+        private double _userMinF = 0;
+        public double UserMinF { get => _userMinF; set { _userMinF = value; NotifyPropertyChanged(nameof(UserMinF)); } }
+        private double _userMinSP = 0;
+        public double UserMinSP { get => _userMinSP; set { _userMinSP = value; NotifyPropertyChanged(nameof(UserMinSP)); } }
+
+        private string _recValSC = "—";
+        public string RecValSC { get => _recValSC; private set { _recValSC = value; NotifyPropertyChanged(nameof(RecValSC)); } }
+        private string _recValASp = "—";
+        public string RecValASp { get => _recValASp; private set { _recValASp = value; NotifyPropertyChanged(nameof(RecValASp)); } }
+        private string _recValCH = "—";
+        public string RecValCH { get => _recValCH; private set { _recValCH = value; NotifyPropertyChanged(nameof(RecValCH)); } }
+        private string _recValCD = "—";
+        public string RecValCD { get => _recValCD; private set { _recValCD = value; NotifyPropertyChanged(nameof(RecValCD)); } }
+        private string _recValP = "—";
+        public string RecValP { get => _recValP; private set { _recValP = value; NotifyPropertyChanged(nameof(RecValP)); } }
+        private string _recValAc = "—";
+        public string RecValAc { get => _recValAc; private set { _recValAc = value; NotifyPropertyChanged(nameof(RecValAc)); } }
+        private string _recValASt = "—";
+        public string RecValASt { get => _recValASt; private set { _recValASt = value; NotifyPropertyChanged(nameof(RecValASt)); } }
+        private string _recValPA = "—";
+        public string RecValPA { get => _recValPA; private set { _recValPA = value; NotifyPropertyChanged(nameof(RecValPA)); } }
+        private string _recValR = "—";
+        public string RecValR { get => _recValR; private set { _recValR = value; NotifyPropertyChanged(nameof(RecValR)); } }
+        private string _recValF = "—";
+        public string RecValF { get => _recValF; private set { _recValF = value; NotifyPropertyChanged(nameof(RecValF)); } }
+        private string _recValSP = "—";
+        public string RecValSP { get => _recValSP; private set { _recValSP = value; NotifyPropertyChanged(nameof(RecValSP)); } }
+
+        private string _deltaSC = "";
+        public string DeltaSC { get => _deltaSC; private set { _deltaSC = value; NotifyPropertyChanged(nameof(DeltaSC)); } }
+        private string _deltaASp = "";
+        public string DeltaASp { get => _deltaASp; private set { _deltaASp = value; NotifyPropertyChanged(nameof(DeltaASp)); } }
+        private string _deltaCH = "";
+        public string DeltaCH { get => _deltaCH; private set { _deltaCH = value; NotifyPropertyChanged(nameof(DeltaCH)); } }
+        private string _deltaCD = "";
+        public string DeltaCD { get => _deltaCD; private set { _deltaCD = value; NotifyPropertyChanged(nameof(DeltaCD)); } }
+        private string _deltaP = "";
+        public string DeltaP { get => _deltaP; private set { _deltaP = value; NotifyPropertyChanged(nameof(DeltaP)); } }
+        private string _deltaAc = "";
+        public string DeltaAc { get => _deltaAc; private set { _deltaAc = value; NotifyPropertyChanged(nameof(DeltaAc)); } }
+        private string _deltaASt = "";
+        public string DeltaASt { get => _deltaASt; private set { _deltaASt = value; NotifyPropertyChanged(nameof(DeltaASt)); } }
+        private string _deltaPA = "";
+        public string DeltaPA { get => _deltaPA; private set { _deltaPA = value; NotifyPropertyChanged(nameof(DeltaPA)); } }
+        private string _deltaR = "";
+        public string DeltaR { get => _deltaR; private set { _deltaR = value; NotifyPropertyChanged(nameof(DeltaR)); } }
+        private string _deltaF = "";
+        public string DeltaF { get => _deltaF; private set { _deltaF = value; NotifyPropertyChanged(nameof(DeltaF)); } }
+        private string _deltaSP = "";
+        public string DeltaSP { get => _deltaSP; private set { _deltaSP = value; NotifyPropertyChanged(nameof(DeltaSP)); } }
+
+        private string _recDPMDisplay = "—";
+        public string RecDPMDisplay { get => _recDPMDisplay; private set { _recDPMDisplay = value; NotifyPropertyChanged(nameof(RecDPMDisplay)); } }
+
+        private bool _isRecFinalVisible = false;
+        public bool IsRecFinalVisible { get => _isRecFinalVisible; private set { _isRecFinalVisible = value; NotifyPropertyChanged(nameof(IsRecFinalVisible)); } }
+
+        private string _recFinalSC  = "0.0"; public string RecFinalSC  { get => _recFinalSC;  private set { _recFinalSC  = value; NotifyPropertyChanged(nameof(RecFinalSC));  } }
+        private string _recFinalASp = "0.0"; public string RecFinalASp { get => _recFinalASp; private set { _recFinalASp = value; NotifyPropertyChanged(nameof(RecFinalASp)); } }
+        private string _recFinalCH  = "0.0"; public string RecFinalCH  { get => _recFinalCH;  private set { _recFinalCH  = value; NotifyPropertyChanged(nameof(RecFinalCH));  } }
+        private string _recFinalCD  = "0.0"; public string RecFinalCD  { get => _recFinalCD;  private set { _recFinalCD  = value; NotifyPropertyChanged(nameof(RecFinalCD));  } }
+        private string _recFinalP   = "0.0"; public string RecFinalP   { get => _recFinalP;   private set { _recFinalP   = value; NotifyPropertyChanged(nameof(RecFinalP));   } }
+        private string _recFinalAc  = "0.0"; public string RecFinalAc  { get => _recFinalAc;  private set { _recFinalAc  = value; NotifyPropertyChanged(nameof(RecFinalAc));  } }
+        private string _recFinalASt = "0.0"; public string RecFinalASt { get => _recFinalASt; private set { _recFinalASt = value; NotifyPropertyChanged(nameof(RecFinalASt)); } }
+        private string _recFinalPA  = "0.0"; public string RecFinalPA  { get => _recFinalPA;  private set { _recFinalPA  = value; NotifyPropertyChanged(nameof(RecFinalPA));  } }
+        private string _recFinalR   = "0.0"; public string RecFinalR   { get => _recFinalR;   private set { _recFinalR   = value; NotifyPropertyChanged(nameof(RecFinalR));   } }
+        private string _recFinalF   = "0.0"; public string RecFinalF   { get => _recFinalF;   private set { _recFinalF   = value; NotifyPropertyChanged(nameof(RecFinalF));   } }
+        private string _recFinalSP  = "0.0"; public string RecFinalSP  { get => _recFinalSP;  private set { _recFinalSP  = value; NotifyPropertyChanged(nameof(RecFinalSP));  } }
+
+        private static string FormatDelta(double d) => d >= 0 ? $"+{d:F1}" : $"{d:F1}";
+
+        #endregion
+
         #endregion
 
 
