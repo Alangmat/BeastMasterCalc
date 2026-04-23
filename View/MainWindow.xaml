@@ -238,6 +238,28 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style x:Key="ModifierToggleStyle" TargetType="ToggleButton">
+            <Setter Property="Opacity" Value="0.3"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border Background="Transparent">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter Property="Opacity" Value="1.0"/>
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="0.65"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
     <Grid>
         <Grid.Background>
@@ -1403,66 +1425,46 @@
 
                             </Grid.RowDefinitions>
                             <Grid Grid.Row="0">
-                                <Image Source="icons/other/GuildDamage.png"
-                                   Width="36"
-                                   Height="36"
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Center"
-                                   Margin="5"/>
-                                <CheckBox HorizontalAlignment="Left" 
-                                      Margin="50,0,0,0"
-                                      IsChecked="{Binding GuildDamageStartModifierActive}"
-                                      VerticalAlignment="Center">
-                                    <TextBlock>
-                                    7 уровень гильдии (10%)
-                                    </TextBlock>
-                                </CheckBox>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,0">
+                                    <ToggleButton IsChecked="{Binding GuildDamageStartModifierActive}"
+                                                  Style="{StaticResource ModifierToggleStyle}">
+                                        <Image Source="icons/other/GuildDamage.png" Width="44" Height="44" Stretch="Uniform"/>
+                                    </ToggleButton>
+                                    <TextBlock Text="7 уровень гильдии (10%)" Foreground="White"
+                                               TextWrapping="Wrap" Width="160" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                                </StackPanel>
                             </Grid>
                             <Grid Grid.Row="1">
-                                <Image Source="icons/talents/PowerAttack.png"
-                                   Width="36"
-                                   Height="36"
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Center"
-                                   Margin="5"/>
-                                <CheckBox HorizontalAlignment="Left" 
-                                      Margin="50, 0, 0, 0"
-                                      IsChecked="{Binding TalentDamageStartModifierActive}"
-                                      VerticalAlignment="Center">
-                                    <TextBlock>
-                                    Таланты (4.75%)
-                                    </TextBlock>
-                                </CheckBox>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,0">
+                                    <ToggleButton IsChecked="{Binding TalentDamageStartModifierActive}"
+                                                  Style="{StaticResource ModifierToggleStyle}">
+                                        <Image Source="icons/talents/PowerAttack.png" Width="44" Height="44" Stretch="Uniform"/>
+                                    </ToggleButton>
+                                    <TextBlock Text="Таланты (4.75%)" Foreground="White"
+                                               TextWrapping="Wrap" Width="160" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                                </StackPanel>
                             </Grid>
 
                             <Grid Grid.Row="2">
-                                <Image Source="/icons/castle/CastleSword.png"
-                                Width="36"
-                                Height="36"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                Margin="5,0,0,0"/>
-                                <CheckBox HorizontalAlignment="Left" 
-                                Margin="50,0,0,0"
-                                IsChecked="{Binding CastleStartModifierActive}"
-                                VerticalAlignment="Center">
-                                    <TextBlock><Run Text="Инстинкт нападения"/></TextBlock>
-                                </CheckBox>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,0">
+                                    <ToggleButton IsChecked="{Binding CastleStartModifierActive}"
+                                                  Style="{StaticResource ModifierToggleStyle}">
+                                        <Image Source="/icons/castle/CastleSword.png" Width="44" Height="44" Stretch="Uniform"/>
+                                    </ToggleButton>
+                                    <TextBlock Text="Инстинкт нападения" Foreground="White"
+                                               TextWrapping="Wrap" Width="160" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                                </StackPanel>
                             </Grid>
 
                             <Grid Grid.Row="3">
-                                <Image Source="/icons/talents/HarmoniousPower.png"
-                                Width="36"
-                                Height="36"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                Margin="5,0,0,0"/>
-                                <CheckBox HorizontalAlignment="Left" 
-                                Margin="50,0,0,0"
-                                IsChecked="{Binding HarmoniousPowerStartModifierActive}"
-                                VerticalAlignment="Center">
-                                    <TextBlock><Run Text="Гармония силы"/></TextBlock>
-                                </CheckBox>
+                                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,0">
+                                    <ToggleButton IsChecked="{Binding HarmoniousPowerStartModifierActive}"
+                                                  Style="{StaticResource ModifierToggleStyle}">
+                                        <Image Source="/icons/talents/HarmoniousPower.png" Width="44" Height="44" Stretch="Uniform"/>
+                                    </ToggleButton>
+                                    <TextBlock Text="Гармония силы" Foreground="White"
+                                               TextWrapping="Wrap" Width="160" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                                </StackPanel>
                             </Grid>
                             <Grid Grid.Row="4">
                                 <Image Source="/icons/stats/mdd.png"
@@ -3605,62 +3607,35 @@
                                 
 
                                 <Grid Grid.Row="1">
-                                    <Image Source="icons/other/GodsAid.png"
-                                           Width="36"
-                                           Height="36"
-                                           Margin="5"
-                                           HorizontalAlignment="Left"
-                                           VerticalAlignment="Center"
-                                           />
-                                    <CheckBox
-                                        IsChecked="{Binding GodsAid}"
-                                        HorizontalAlignment="Left" 
-                                        Height="18" 
-                                        Margin="50,0,0,0"
-                                        VerticalAlignment="Center" 
-                                        Width="194">
-                                        <TextBlock
-                                        TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Крылья жреца"/></TextBlock>
-                                    </CheckBox>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,0">
+                                        <ToggleButton IsChecked="{Binding GodsAid}"
+                                                      Style="{StaticResource ModifierToggleStyle}">
+                                            <Image Source="icons/other/GodsAid.png" Width="40" Height="40" Stretch="Uniform"/>
+                                        </ToggleButton>
+                                        <TextBlock Text="Крылья жреца" Foreground="White"
+                                                   TextWrapping="Wrap" Width="150" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                                    </StackPanel>
                                 </Grid>
                                 <Grid Grid.Row="2">
-                                    <Image Source="icons/other/GodsAid.png"
-                                           Width="36"
-                                           Height="36"
-                                           Margin="5"
-                                           HorizontalAlignment="Left"
-                                           VerticalAlignment="Center"
-                                           />
-                                    <CheckBox
-                                        IsChecked="{Binding GodsAidLuna}"
-                                        HorizontalAlignment="Left" 
-                                        Height="18" 
-                                        Margin="50,0,0,0"
-                                        VerticalAlignment="Center" 
-                                        Width="194">
-                                        <TextBlock
-                                        TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Крылья жреца на Луну"/></TextBlock>
-                                    </CheckBox>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,0">
+                                        <ToggleButton IsChecked="{Binding GodsAidLuna}"
+                                                      Style="{StaticResource ModifierToggleStyle}">
+                                            <Image Source="icons/other/GodsAid.png" Width="40" Height="40" Stretch="Uniform"/>
+                                        </ToggleButton>
+                                        <TextBlock Text="Крылья жреца на Луну" Foreground="White"
+                                                   TextWrapping="Wrap" Width="150" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                                    </StackPanel>
                                 </Grid>
 
                                 <Grid Grid.Row="3">
-                                    <Image Source="icons/other/bp.png"
-                                           Width="36"
-                                           Height="36"
-                                           Margin="5"
-                                           HorizontalAlignment="Left"
-                                           VerticalAlignment="Center"
-                                           />
-                                    <CheckBox
-                                        IsChecked="{Binding ChechBPDungeon}"
-                                        HorizontalAlignment="Left" 
-                                        Height="18" 
-                                        Margin="50,0,0,0"
-                                        VerticalAlignment="Center" 
-                                        Width="194">
-                                        <TextBlock
-                                        TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Сила древних"/></TextBlock>
-                                    </CheckBox>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,0">
+                                        <ToggleButton IsChecked="{Binding ChechBPDungeon}"
+                                                      Style="{StaticResource ModifierToggleStyle}">
+                                            <Image Source="icons/other/bp.png" Width="40" Height="40" Stretch="Uniform"/>
+                                        </ToggleButton>
+                                        <TextBlock Text="Сила древних" Foreground="White"
+                                                   TextWrapping="Wrap" Width="150" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                                    </StackPanel>
                                 </Grid>
 
                                 <Grid Grid.Row="4">
@@ -3688,6 +3663,7 @@
                                     </CheckBox>
                                 </Grid>
                                 <Grid Grid.Row="6">
+                                    <!--
                                     <Image Source="/icons/talents/almahad/pairing.png"
                                        Width="36"
                                        Height="36"
@@ -3695,18 +3671,18 @@
                                        HorizontalAlignment="Left"
                                        VerticalAlignment="Center"
                                        />
-                                    <CheckBox
-                                        IsChecked="{Binding PairingTalentAlmahadActive}"
-                                        HorizontalAlignment="Left" 
-                                        Height="18" 
-                                        Margin="50,0,0,0"
-                                        VerticalAlignment="Center" 
-                                        Width="194">
-                                        <TextBlock
-                                            TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Сопряжение"/></TextBlock>
-                                    </CheckBox>
+                                    -->
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,0">
+                                        <ToggleButton IsChecked="{Binding PairingTalentAlmahadActive}"
+                                                      Style="{StaticResource ModifierToggleStyle}">
+                                            <Image Source="/icons/talents/almahad/pairing.png" Width="40" Height="40" Stretch="Uniform"/>
+                                        </ToggleButton>
+                                        <TextBlock Text="Сопряжение" Foreground="White"
+                                                   TextWrapping="Wrap" Width="150" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                                    </StackPanel>
                                 </Grid>
                                 <Grid Grid.Row="7">
+                                    <!--
                                     <Image Source="/icons/talents/almahad/roar.png"
                                        Width="36"
                                        Height="36"
@@ -3714,18 +3690,18 @@
                                        HorizontalAlignment="Left"
                                        VerticalAlignment="Center"
                                        />
-                                    <CheckBox
-                                        IsChecked="{Binding RoarTalentAlmahadActive}"
-                                        HorizontalAlignment="Left" 
-                                        Height="18" 
-                                        Margin="50,0,0,0"
-                                        VerticalAlignment="Center" 
-                                        Width="194">
-                                        <TextBlock
-                                            TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Рык хищника"/></TextBlock>
-                                    </CheckBox>
+                                    -->
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,0">
+                                        <ToggleButton IsChecked="{Binding RoarTalentAlmahadActive}"
+                                                      Style="{StaticResource ModifierToggleStyle}">
+                                            <Image Source="/icons/talents/almahad/roar.png" Width="40" Height="40" Stretch="Uniform"/>
+                                        </ToggleButton>
+                                        <TextBlock Text="Рык хищника" Foreground="White"
+                                                   TextWrapping="Wrap" Width="150" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                                    </StackPanel>
                                 </Grid>
                                 <Grid Grid.Row="8">
+                                    <!--
                                     <Image Source="/icons/talents/almahad/PredatoryBond.jpg"
                                            Width="36"
                                            Height="36"
@@ -3733,16 +3709,15 @@
                                            HorizontalAlignment="Left"
                                            VerticalAlignment="Center"
                                            />
-                                    <CheckBox
-                                            IsChecked="{Binding PredatoryBondTalentAlmahadActive}"
-                                            HorizontalAlignment="Left" 
-                                            Height="18" 
-                                            Margin="50,0,0,0"
-                                            VerticalAlignment="Center" 
-                                            Width="194">
-                                        <TextBlock
-                                                TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Хищный тандем"/></TextBlock>
-                                    </CheckBox>
+                                    -->
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,0">
+                                        <ToggleButton IsChecked="{Binding PredatoryBondTalentAlmahadActive}"
+                                                      Style="{StaticResource ModifierToggleStyle}">
+                                            <Image Source="/icons/talents/almahad/PredatoryBond.jpg" Width="40" Height="40" Stretch="Uniform"/>
+                                        </ToggleButton>
+                                        <TextBlock Text="Хищный тандем" Foreground="White"
+                                                   TextWrapping="Wrap" Width="150" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                                    </StackPanel>
                                 </Grid>
                             </Grid>
                         </Border>
@@ -3766,57 +3741,36 @@
                                     <RowDefinition Height="*"/>
                                 </Grid.RowDefinitions>
                                 <Grid Grid.Row="0">
-                                    <Image Source="icons/other/GuildDamage.png"
-                                   Width="36"
-                                   Height="36"
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Center"
-                                   Margin="5"/>
-                                    <CheckBox HorizontalAlignment="Left" 
-                                              Margin="50,0,0,0"
-                                      IsChecked="{Binding GuildDamageModifierActive}"
-                                      VerticalAlignment="Center">
-                                        <TextBlock>
-                                    7 уровень гильдии (10%)
-                                        </TextBlock>
-                                    </CheckBox>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,0">
+                                        <ToggleButton IsChecked="{Binding GuildDamageModifierActive}"
+                                                      Style="{StaticResource ModifierToggleStyle}">
+                                            <Image Source="icons/other/GuildDamage.png" Width="40" Height="40" Stretch="Uniform"/>
+                                        </ToggleButton>
+                                        <TextBlock Text="7 уровень гильдии (10%)" Foreground="White"
+                                                   TextWrapping="Wrap" Width="150" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                                    </StackPanel>
                                 </Grid>
 
                                 <Grid Grid.Row="1">
-                                    <Image Source="icons/talents/PowerAttack.png"
-                                   Width="36"
-                                   Height="36"
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Center"
-                                   Margin="5"/>
-                                    <CheckBox HorizontalAlignment="Left" 
-                                      Margin="50, 0, 0, 0"
-                                      IsChecked="{Binding TalentDamageModifierActive}"
-                                      VerticalAlignment="Center">
-                                        <TextBlock>
-                                    Таланты (4.75%)
-                                        </TextBlock>
-                                    </CheckBox>
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,0">
+                                        <ToggleButton IsChecked="{Binding TalentDamageModifierActive}"
+                                                      Style="{StaticResource ModifierToggleStyle}">
+                                            <Image Source="icons/talents/PowerAttack.png" Width="40" Height="40" Stretch="Uniform"/>
+                                        </ToggleButton>
+                                        <TextBlock Text="Таланты (4.75%)" Foreground="White"
+                                                   TextWrapping="Wrap" Width="150" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                                    </StackPanel>
                                 </Grid>
 
                                 <Grid Grid.Row="2">
-                                    <Image Source="/icons/castle/CastleSword.png"
-                                    Width="36"
-                                    Height="36"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"
-                                    Margin="5,7,0,0"/>
-                                    <CheckBox
-                                        IsChecked="{Binding CastleSwordActive}"
-                                        HorizontalAlignment="Left" 
-                                        Height="18" 
-                                        Margin="50,0,0,0"
-                                        VerticalAlignment="Center" 
-                                        >
-                                        <TextBlock
-                                            TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Инстинкт нападения"/></TextBlock>
-                                    </CheckBox>
-
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,0">
+                                        <ToggleButton IsChecked="{Binding CastleSwordActive}"
+                                                      Style="{StaticResource ModifierToggleStyle}">
+                                            <Image Source="/icons/castle/CastleSword.png" Width="40" Height="40" Stretch="Uniform"/>
+                                        </ToggleButton>
+                                        <TextBlock Text="Инстинкт нападения" Foreground="White"
+                                                   TextWrapping="Wrap" Width="150" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                                    </StackPanel>
                                 </Grid>
 
                                 <Grid Grid.Row="3">
@@ -3891,6 +3845,7 @@
                                 </Grid.RowDefinitions>
 
                                 <Grid Grid.Row="0">
+                                    <!--
                                     <Image Source="icons/stats/rbreduction.png"
                                        Width="36"
                                        Height="36"
@@ -3898,16 +3853,15 @@
                                        HorizontalAlignment="Left"
                                        VerticalAlignment="Center"
                                        />
-                                    <CheckBox
-                                    IsChecked="{Binding Counterstand}"
-                                    HorizontalAlignment="Left"
-                                    Margin="50,0,0,0"
-                                    Height="18"
-                                    VerticalAlignment="Center" 
-                                    >
-                                        <TextBlock
-                                        TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text=" Снижение длительности эффектов "/></TextBlock>
-                                    </CheckBox>
+                                    -->
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,0">
+                                        <ToggleButton IsChecked="{Binding Counterstand}"
+                                                      Style="{StaticResource ModifierToggleStyle}">
+                                            <Image Source="icons/stats/rbreduction.png" Width="40" Height="40" Stretch="Uniform"/>
+                                        </ToggleButton>
+                                        <TextBlock Text="Снижение длительности эффектов" Foreground="White"
+                                                   TextWrapping="Wrap" Width="150" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                                    </StackPanel>
                                 </Grid>
 
                             </Grid>
