@@ -838,23 +838,21 @@
                     </Button>
                     <CheckBox Grid.Column="2"
                         IsChecked="{Binding IsUsingBlessingOfTheMoonOnLuna}"
-                        HorizontalAlignment="Center" 
-                        Height="50" 
-                        Margin="0,153,0,0"
+                        HorizontalAlignment="Right" 
+                        Margin="0,153,22,0"
                         Grid.Row="2" 
-                        VerticalAlignment="Top" 
-                        Width="194" Click="CheckBox_Checked">
+                        Width="216" Click="CheckBox_Checked" Height="38" VerticalAlignment="Top">
                         <TextBlock Foreground="White" Text="Использование Благословения луны на героя и на Луну "
-                            TextWrapping="Wrap" Height="52"/>
+                            TextWrapping="Wrap" Height="38" Width="187"/>
                     </CheckBox>
                     <CheckBox Grid.Column="2"
                         IsChecked="{Binding AuraTalentAbuse}"
-                        HorizontalAlignment="Center" 
+                        HorizontalAlignment="Right" 
                         Height="19" 
-                        Margin="0,210,0,0"
+                        Margin="0,210,22,0"
                         Grid.Row="2" 
                         VerticalAlignment="Top" 
-                        Width="194" Click="CheckBox_Checked">
+                        Width="216" Click="CheckBox_Checked">
                         <TextBlock Foreground="White" Text="Абьюз таланта на ауру"
                             TextWrapping="Wrap" Height="19"/>
                     </CheckBox>
@@ -3604,27 +3602,7 @@
                                     -->
 
 
-                                <Grid Grid.Row="0">
-                                    <ComboBox
-                                        ItemsSource="{Binding CastlesNew}"
-                                      DisplayMemberPath="Value"
-                                      SelectedValuePath="Key"
-                                        SelectedValue="{Binding SelectedCastle}"
-                                        
-                                        HorizontalAlignment="Left"
-                                    Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="111" Height="22">
-                                        <ComboBox.Background>
-                                            <LinearGradientBrush EndPoint="0,1">
-                                                <GradientStop Color="#FFF0F0F0"/>
-                                                <GradientStop Color="#FFC7C6BB" Offset="1"/>
-                                            </LinearGradientBrush>
-                                        </ComboBox.Background>
-                                    </ComboBox>
-                                    <TextBlock
-                                        TextWrapping="Wrap" 
-                                        HorizontalAlignment="Left"
-                                        VerticalAlignment="Center" Width="174" Text="урон навыков от замка" Margin="128,0,0,0"/>
-                                </Grid>
+                                
 
                                 <Grid Grid.Row="1">
                                     <Image Source="icons/other/GodsAid.png"
@@ -3772,7 +3750,7 @@
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="85*"/>
-                            <RowDefinition Height="56*"/>
+                            <RowDefinition Height="36*"/>
                         </Grid.RowDefinitions>
                         <Border BorderBrush="Black"
                         BorderThickness="2"
@@ -3780,6 +3758,7 @@
                             <!--Margin="21,20,19,242"-->
                             <Grid Margin="5, 10, 5, 10">
                                 <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="*"/>
@@ -3877,7 +3856,27 @@
                                    VerticalAlignment="Center"
                                    />
                                 </Grid>
-
+                                <Grid Grid.Row="5">
+                                    <ComboBox
+                                        ItemsSource="{Binding CastlesNew}"
+                                      DisplayMemberPath="Value"
+                                      SelectedValuePath="Key"
+                                        SelectedValue="{Binding SelectedCastle}"
+        
+                                        HorizontalAlignment="Left"
+                                    Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="115" Height="22">
+                                                                        <ComboBox.Background>
+                                                                            <LinearGradientBrush EndPoint="0,1">
+                                                                                <GradientStop Color="#FFF0F0F0"/>
+                                                                                <GradientStop Color="#FFC7C6BB" Offset="1"/>
+                                                                            </LinearGradientBrush>
+                                                                        </ComboBox.Background>
+                                                                    </ComboBox>
+                                                                    <TextBlock
+                                        TextWrapping="Wrap" 
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center" Width="174" Text="урон навыков от замка" Margin="128,0,0,0"/>
+                                </Grid>
 
                             </Grid>
                         </Border>
@@ -3888,7 +3887,7 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition/>
-                                    <RowDefinition/>
+                                    
                                 </Grid.RowDefinitions>
 
                                 <Grid Grid.Row="0">
@@ -4684,6 +4683,32 @@
                 </Grid>
             </TabItem>
 
+            <TabItem Header="Диаграмма">
+                <TabItem.Background>
+                    <ImageBrush Stretch="Fill">
+                        <ImageBrush.ImageSource>
+                            <BitmapImage CacheOption="OnLoad" CreateOptions="IgnoreImageCache" UriSource="file:///C:/Users/alang/AppData/Local/Microsoft/VisualStudio/17.0_d16ae560/Designer/Cache/1-1304780971x86DD/icons/other/blue.png"/>
+                        </ImageBrush.ImageSource>
+                    </ImageBrush>
+                </TabItem.Background>
+                <Grid>
+                    <Grid.Background>
+                        <ImageBrush
+                            ImageSource="icons/other/back.png"
+                            TileMode="Tile"
+                            Viewport="0,0,283,193"
+                            ViewportUnits="Absolute"
+                            Stretch="None"/>
+                    </Grid.Background>
+                    <ScrollViewer x:Name="dpmScrollViewer"
+                                  HorizontalScrollBarVisibility="Disabled"
+                                  VerticalScrollBarVisibility="Auto"
+                                  Background="Transparent"
+                                  SizeChanged="DpmScrollViewer_SizeChanged">
+                        <Canvas x:Name="dpmChartCanvas"/>
+                    </ScrollViewer>
+                </Grid>
+            </TabItem>
             <TabItem Header="debug">
                 <TabItem.Background>
                     <ImageBrush Stretch="Fill">

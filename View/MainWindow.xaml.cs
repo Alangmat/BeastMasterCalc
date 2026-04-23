@@ -33,6 +33,7 @@ namespace View
             this.ResizeMode = ResizeMode.CanMinimize;
             Logic = new ViewModel.ViewModel();
             DataContext = Logic;
+            Logic.PropertyChanged += OnLogicPropertyChanged;
             LoadHints();
 
             iconsAmulet = new List<BitmapImage> { emptyAmulet, sixMagicalAmulet, tenMagicalAmulet, fifteenMagicalAmulet, fourPhysicalAmulet, sevenPhysicalAmulet };
@@ -47,10 +48,33 @@ namespace View
             PlaySplash();
         }
 
+        private string _splashTempPath;
+
         private void PlaySplash()
         {
+            var assembly = System.Reflection.Assembly.GetExecutingAssembly();
+            var resourceName = assembly.GetManifestResourceNames()
+                .FirstOrDefault(n => n.EndsWith(".mp4", StringComparison.OrdinalIgnoreCase));
+
+            if (resourceName != null)
+            {
+                try
+                {
+                    _splashTempPath = System.IO.Path.Combine(System.IO.Path.GetTempPath(),
+                        "WarspearCalcSplash_" + Guid.NewGuid().ToString("N") + ".mp4");
+                    using (var stream = assembly.GetManifestResourceStream(resourceName))
+                    using (var file = File.Create(_splashTempPath))
+                        stream.CopyTo(file);
+
+                    splashVideo.Source = new Uri(_splashTempPath);
+                    splashVideo.Play();
+                    return;
+                }
+                catch { }
+            }
+
             string videoPath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "videos", "Calc Logo.mp4");
-            if (!System.IO.File.Exists(videoPath))
+            if (!File.Exists(videoPath))
             {
                 splashVideo.Visibility = Visibility.Collapsed;
                 return;
@@ -59,10 +83,20 @@ namespace View
             splashVideo.Play();
         }
 
+        private void CleanupSplashTemp()
+        {
+            if (_splashTempPath == null) return;
+            splashVideo.Stop();
+            splashVideo.Source = null;
+            try { File.Delete(_splashTempPath); } catch { }
+            _splashTempPath = null;
+        }
+
         private void SplashVideo_MediaEnded(object sender, RoutedEventArgs e)
         {
             splashVideo.Stop();
             splashVideo.Visibility = Visibility.Collapsed;
+            CleanupSplashTemp();
         }
 
         private void SplashVideo_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
@@ -285,6 +319,7 @@ namespace View
         private void Window_Closed(object sender, EventArgs e)
         {
             Logic.SaveBuilds();
+            CleanupSplashTemp();
         }
 
         private void addAndGenerateDataSetButton_Click(object sender, RoutedEventArgs e)
@@ -1618,6 +1653,189 @@ namespace View
             }
         }
 
+
+        #region Диаграмма DPM
+
+        private void OnLogicPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName?.StartsWith("Dpm") == true)
+                DrawDpmChart();
+        }
+
+        private void DpmScrollViewer_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            DrawDpmChart();
+        }
+
+        private void DrawDpmChart()
+        {
+            if (dpmChartCanvas == null || dpmScrollViewer == null) return;
+            dpmChartCanvas.Children.Clear();
+
+            double svWidth = dpmScrollViewer.ActualWidth;
+            if (svWidth <= 0) return;
+
+            var dpmData = new List<(string Name, int Value)>
+            {
+                ("Атака персонажа",           Logic.DpmAttack),
+                ("Лунное касание",    Logic.DpmMoonTouch),
+                ("Цепная молния",   Logic.DpmChainLightning),
+                ("Лунный свет",     Logic.DpmMoonLight),
+                ("Атака Луны",     Logic.DpmBeastAwakening),
+                ("Буйство",         Logic.DpmBestialRampage),
+                ("Приказ к атаке",          Logic.DpmOrderToAttack),
+                ("Аура леса (герой)",    Logic.DpmAuraOfTheForestHero),
+                ("Аура леса (Луна)",     Logic.DpmAuraOfTheForestLuna),
+                ("Симбиоз (Луна)",  Logic.DpmSymbiosisLuna),
+                ("Симбиоз (Герой)", Logic.DpmSymbiosisHero),
+            }.Where(d => d.Value > 0).OrderByDescending(d => d.Value).ToList();
+
+            const double marginLeft   = 10;
+            const double marginRight  = 10;
+            const double marginTop    = 52;
+            const double marginBottom = 14;
+            const double barH         = 32;
+            const double gap          = 10;
+            const double rowH         = barH + gap;
+            const double nameW        = 120;
+            const double nameBarGap   = 8;
+            const double barValGap    = 8;
+            const double valW         = 95;
+
+            double barAreaW = svWidth - marginLeft - nameW - nameBarGap - barValGap - valW - marginRight;
+            double axisX    = marginLeft + nameW + nameBarGap;
+
+            int    count          = dpmData.Count;
+            double contentH       = count > 0 ? count * rowH - gap : 0;
+            double canvasH        = Math.Max(marginTop + contentH + marginBottom, dpmScrollViewer.ActualHeight);
+
+            dpmChartCanvas.Width  = svWidth;
+            dpmChartCanvas.Height = canvasH;
+
+            var header = new TextBlock
+            {
+                Text           = "DPM по источникам урона",
+                Foreground     = new SolidColorBrush(Color.FromRgb(0xFF, 0xE0, 0x00)),
+                FontSize       = 18,
+                FontWeight     = FontWeights.Bold,
+                FontFamily     = new FontFamily("Palatino Linotype"),
+                Width          = svWidth,
+                TextAlignment  = TextAlignment.Center
+            };
+            Canvas.SetLeft(header, 0);
+            Canvas.SetTop(header, 5);
+            dpmChartCanvas.Children.Add(header);
+
+            if (!dpmData.Any())
+            {
+                var noData = new TextBlock
+                {
+                    Text          = "Нет данных. Выполните расчёт.",
+                    Foreground    = Brushes.White,
+                    FontSize      = 18,
+                    Width         = svWidth,
+                    TextAlignment = TextAlignment.Center
+                };
+                Canvas.SetLeft(noData, 0);
+                Canvas.SetTop(noData, canvasH / 2 - 10);
+                dpmChartCanvas.Children.Add(noData);
+                return;
+            }
+
+            int totalDpm = dpmData.Sum(d => d.Value);
+            int maxDpm   = dpmData.Max(d => d.Value);
+
+            var totalLabel = new TextBlock
+            {
+                Text          = $"Итого: {totalDpm:N0}",
+                Foreground    = Brushes.White,
+                FontSize      = 11,
+                Width         = svWidth,
+                TextAlignment = TextAlignment.Center
+            };
+            Canvas.SetLeft(totalLabel, 0);
+            Canvas.SetTop(totalLabel, 26);
+            dpmChartCanvas.Children.Add(totalLabel);
+
+            // вертикальная ось
+            var axis = new Rectangle
+            {
+                Width  = 1,
+                Height = contentH,
+                Fill   = new SolidColorBrush(Color.FromRgb(0xE7, 0xCE, 0x63))
+            };
+            Canvas.SetLeft(axis, axisX - 1);
+            Canvas.SetTop(axis, marginTop);
+            dpmChartCanvas.Children.Add(axis);
+
+            var barFill = new LinearGradientBrush(
+                Color.FromRgb(0x8B, 0x6D, 0x00),
+                Color.FromRgb(0xFF, 0xE0, 0x00),
+                new Point(0, 0), new Point(1, 0));
+            barFill.Freeze();
+
+            for (int i = 0; i < count; i++)
+            {
+                var (name, value) = dpmData[i];
+                double y       = marginTop + i * rowH;
+                double barW    = Math.Max(barAreaW * value / maxDpm, 2);
+                double percent = value * 100.0 / totalDpm;
+                double centerY = y + (barH - 14) / 2.0;
+
+                // имя источника (выравнивание по правому краю)
+                var nameLabel = new TextBlock
+                {
+                    Text          = name,
+                    Foreground    = Brushes.White,
+                    FontSize      = 14,
+                    Width         = nameW,
+                    TextAlignment = TextAlignment.Right
+                };
+                Canvas.SetLeft(nameLabel, marginLeft);
+                Canvas.SetTop(nameLabel, centerY);
+                dpmChartCanvas.Children.Add(nameLabel);
+
+                // полоса
+                var rect = new Rectangle
+                {
+                    Width   = barW,
+                    Height  = barH,
+                    Fill    = barFill,
+                    RadiusX = 3,
+                    RadiusY = 3
+                };
+                Canvas.SetLeft(rect, axisX);
+                Canvas.SetTop(rect, y);
+                dpmChartCanvas.Children.Add(rect);
+
+                // значение DPM
+                var valLabel = new TextBlock
+                {
+                    Text       = value.ToString("N0"),
+                    Foreground = Brushes.White,
+                    FontSize   = 14,
+                    FontWeight = FontWeights.Bold,
+                    Width      = valW
+                };
+                Canvas.SetLeft(valLabel, axisX + barW + barValGap);
+                Canvas.SetTop(valLabel, y + 2);
+                dpmChartCanvas.Children.Add(valLabel);
+
+                // процент
+                var pctLabel = new TextBlock
+                {
+                    Text       = $"{percent:F1}%",
+                    Foreground = new SolidColorBrush(Color.FromRgb(0xFF, 0xE0, 0x00)),
+                    FontSize   = 12,
+                    Width      = valW
+                };
+                Canvas.SetLeft(pctLabel, axisX + barW + barValGap);
+                Canvas.SetTop(pctLabel, y + 16);
+                dpmChartCanvas.Children.Add(pctLabel);
+            }
+        }
+
+        #endregion
 
         #region Изначальные модификаторы дд
         private void updateAmulet()

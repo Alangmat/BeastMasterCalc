@@ -450,9 +450,15 @@ namespace ViewModel
 
                     // Перенести все проверки на активность внутрь калькуляторов
                     if (AttackActive)
+                    {
                         resultDDHero += dpmAttack;
+                        DpmAttack = dpmAttack;
+                    }
                     if (MoonTouchActive)
+                    {
                         resultDDHero += dpmMoonTouch;
+                        DpmMoonTouch = dpmMoonTouch;
+                    }
 
                     if (BeastAwakeningActive)
                     {
@@ -460,32 +466,45 @@ namespace ViewModel
                         {
                             resultDDLuna += (int)(dpmBeastAwakening * TimeWithoutBestialRampage()
                                             + dpmBestialRampage * TimeBestialRampage());
+                            DpmBestialRampage = (int)(dpmBestialRampage * TimeBestialRampage());
+                            DpmBeastAwakening = (int)(dpmBeastAwakening * TimeWithoutBestialRampage());
                         }
                         else
                         {
                             resultDDLuna += dpmBeastAwakening;
+                            DpmBeastAwakening = dpmBeastAwakening;
                         }
                         if (OrderToAttackActive)
                         {
                             resultDDLuna += dpmOrderToAttack;
+                            DpmOrderToAttack = dpmOrderToAttack;
                         }
                         if (HasTalantSymbiosis)
                         {
                             resultDDHero += dpmSymbiosisHero;
                             resultDDLuna += dpmSymbiosisLuna;
+                            DpmSymbiosisLuna = dpmSymbiosisLuna;
+                            DpmSymbiosisHero = dpmSymbiosisHero;
                         }
 
                     }
-                    if (ChainLightningActive) resultDDHero += dpmChainLightning;
+                    if (ChainLightningActive)
+                    {
+                        resultDDHero += dpmChainLightning;
+                        DpmChainLightning = dpmChainLightning;
+                    }
                     if (AuraOfTheForestActive)
                     {
                         resultDDLuna += dpmAuraOfTheForestLuna;
                         resultDDHero += dpmAuraOfTheForestHero;
+                        DpmAuraOfTheForestHero = dpmAuraOfTheForestHero;
+                        DpmAuraOfTheForestLuna = dpmAuraOfTheForestLuna;
                     }
                     resultDDHero += dpmMoonlight;
+                    DpmMoonLight = dpmMoonlight;
 
-                    resultDDHero = (int)(resultDDHero * sacredShieldHeroCoef());
-                    resultDDLuna = (int)(resultDDLuna * sacredShieldLunaCoef());
+                    //resultDDHero = (int)(resultDDHero * sacredShieldHeroCoef());
+                    //resultDDLuna = (int)(resultDDLuna * sacredShieldLunaCoef());
 
                     resultDD = resultDDHero + resultDDLuna;
                     //OutDD = resultDD.ToString();
@@ -536,19 +555,24 @@ namespace ViewModel
         }
         public int CalcAttack(int magedd, int physdd)
         {
-            int result = (int)(Attack.Formula(magedd, physdd)
-                * coefficientPredatoryDeliriumTalant
+            double coeffsStart = coefficientPredatoryDeliriumTalant
                 * FormulaCoefficientOfAttackStrength()
-                * FormulaCoefficientOfPiercingAttack());
+                * FormulaCoefficientOfPiercingAttack();
+
+            double coeffsFinal = FormulaCoefficientOfCriticalHitHeroForAutoattack()
+                * FormulaCoefficientOfAccuracy()
+                * coefficientBPDungeon()
+                * sacredShieldHeroCoef();
+
+            int result = (int)(Attack.Formula(magedd, physdd)
+                * coeffsStart);
             OutAttackDD = result.ToString();
             result = (int)(result / AttackDelay() * 60);
             OutAttackDPM = result.ToString();
             // тут не умножается на пробив потому что формула пронзы в себе содержит коэффициент пробива просто с учетом пронзы
             // так что не надо дополнительно еще на пробив умножать
             result = (int)(result
-                * FormulaCoefficientOfCriticalHitHeroForAutoattack()
-                * FormulaCoefficientOfAccuracy()
-                * coefficientBPDungeon());
+                * coeffsFinal);
             return result;
         }
         private double MoonTouchCooldown()
@@ -558,21 +582,23 @@ namespace ViewModel
         }
         public int CalcMoonTouch(int magedd)
         {
-            int result = (int)(Moon_Touch.Formula(magedd)
-                //* coefficientCastle
-                * FormulaCoefficientSkillPower()
+            double coeffsStart = FormulaCoefficientSkillPower()
                 * coefficientBestialRageTalant
                 * coefficientPredatoryDeliriumTalant
                 * coefficientMomentOfPowerTalant
-                * FormulaCoefficientOfPenetration()
-                );
+                * FormulaCoefficientOfPenetration();
+
+            double coeffsFinal = FormulaCoefficientOfCriticalHitForSkill()
+                * FormulaCoefficientOfAccuracy()
+                * coefficientBPDungeon()
+                * sacredShieldHeroCoef();
+
+            int result = (int)(Moon_Touch.Formula(magedd)
+                * coeffsStart);
             OutMoonTouchDD = result.ToString();
             result = (int)(result * 60 / MoonTouchCooldown());
             OutMoonTouchDPM = result.ToString();
-            result = (int)(result
-                * FormulaCoefficientOfCriticalHitForSkill()
-                * FormulaCoefficientOfAccuracy()
-                * coefficientBPDungeon());
+            result = (int)(result * coeffsFinal);
             return result;
         }
         public double CoefficientOfMoonTouchForLuna()
@@ -590,35 +616,42 @@ namespace ViewModel
         }
         public int CalcChainLightning(int magedd, int physdd)
         {
-            int result = (int)(Chain_Lightning.Formula(magedd, physdd)
-                //* coefficientCastle
-                * FormulaCoefficientSkillPower()
+            double coeffsStart = FormulaCoefficientSkillPower()
                 * coefficientBestialRageTalant
                 * coefficientPredatoryDeliriumTalant
                 * coefficientMomentOfPowerTalant
-                * FormulaCoefficientOfPenetration());
+                * FormulaCoefficientOfPenetration();
+
+            double coeffsFinal = FormulaCoefficientOfCriticalHitForSkill()
+                * FormulaCoefficientOfAccuracy()
+                * coefficientBPDungeon()
+                * sacredShieldHeroCoef();
+
+            int result = (int)(Chain_Lightning.Formula(magedd, physdd)
+                * coeffsStart);
 
             OutChainLightningDD = result.ToString();
             result = (int)(result * 60 / ChainLightningCooldown() * LegendaryCoefficientChainLightning());
             OutChainLightningDPM = result.ToString();
-            result = (int)(result
-                * FormulaCoefficientOfCriticalHitForSkill()
-                * FormulaCoefficientOfAccuracy()
-                * coefficientBPDungeon());
+            result = (int)(result * coeffsFinal);
             return result;
         }
         public int CalcBeastAwakening(int magedd, int physdd)
         {
+            double coeffsStart = FormulaCoefficientOfAttackStrengthLuna()
+                * FormulaCoefficientOfPiercingAttackLuna();
+
+            double coeffsFinal = CoefficientOfMoonTouchForLuna()
+                * FormulaCoefficientOfCriticalHitLuna()
+                * FormulaCoefficientOfAccuracyLuna()
+                * sacredShieldLunaCoef();
+
             int result = (int)(Beast_Awakening.Formula(magedd, physdd)
-                * FormulaCoefficientOfAttackStrengthLuna()
-                * FormulaCoefficientOfPiercingAttackLuna());
+                * coeffsStart);
             OutBeastAwakeningDD = result.ToString();
             result = (int)(result * 60 / (Beast_Awakening.BaseDelay * ((100 - (GodsAidLuna ? ModifiersDamage.GODS_AID_ATTACK_SPEED : 0)) / 100.0)));
             OutBeastAwakeningDPM = result.ToString();
-            result = (int)(result
-                * CoefficientOfMoonTouchForLuna()
-                * FormulaCoefficientOfCriticalHitLuna()
-                * FormulaCoefficientOfAccuracyLuna());
+            result = (int)(result * coeffsFinal);
             return result;
         }
         public double BestialRampageCooldown()
@@ -655,18 +688,23 @@ namespace ViewModel
         }
         public int CalcBestialRampage(int magedd, int physdd)
         {
+            double coeffsStart = FormulaCoefficientOfAttackStrengthLuna()
+                * FormulaCoefficientOfPiercingAttackLuna();
+
+            double coeffsFinal = CoefficientOfMoonTouchForLuna()
+                * FormulaCoefficientOfCriticalHitLuna()
+                * FormulaCoefficientOfAccuracyLuna()
+                * sacredShieldLunaCoef();
+
             int result = (int)(Bestial_Rampage.Formula(magedd, physdd)
-                * FormulaCoefficientOfAttackStrengthLuna()
-                * FormulaCoefficientOfPiercingAttackLuna());
+                * coeffsStart);
 
             OutBestialRampageDD = result.ToString();
             double increaseAttackSpeed = (100 - (Bestial_Rampage.IncreaseAttackSpeed + (GodsAidLuna ? ModifiersDamage.GODS_AID_ATTACK_SPEED : 0))) / 100;
             result = (int)(result * 60 / (Bestial_Rampage.Luna.BaseDelay * increaseAttackSpeed));
             OutBestialRampageDPM = result.ToString();
             result = (int)(result
-                * CoefficientOfMoonTouchForLuna()
-                * FormulaCoefficientOfCriticalHitLuna()
-                * FormulaCoefficientOfAccuracyLuna());
+                * coeffsFinal);
             return result;
         }
         public double AuraOfTheForestCooldown()
@@ -682,17 +720,29 @@ namespace ViewModel
             result.Add(SourcesDamage.Hero, 0);
             result.Add(SourcesDamage.Luna, 0);
             double coefGrandeurOfTheLotus = 0.75;
-            int countHitByHero = (int)(AuraOfTheForest.TimeActive * FacilitationFinal.ConvertToCoefficient() / AuraOfTheForest.Delay);
-            int countHitByLuna = (int)(AuraOfTheForest.TimeActive * FacilitationLuna.ConvertToCoefficient() / AuraOfTheForest.Delay);
-            int LunaAura = (int)(AuraOfTheForest.Formula(magedd)
-                * FormulaCoefficientOfPenetrationLuna());
-            int HeroesAura = (int)(AuraOfTheForest.Formula(magedd)
-                //* coefficientCastle
-                * FormulaCoefficientSkillPower()
+
+            double coeffsLunaStart = FormulaCoefficientOfPenetrationLuna();
+            double coeffsHeroStart = FormulaCoefficientSkillPower()
                 * coefficientBestialRageTalant
                 * coefficientPredatoryDeliriumTalant
                 * coefficientMomentOfPowerTalant
-                * FormulaCoefficientOfPenetration());
+                * FormulaCoefficientOfPenetration();
+
+            double coeffsLunaFinal = CoefficientOfMoonTouchForLuna()
+                        * FormulaCoefficientOfCriticalHitLuna()
+                        * FormulaCoefficientOfAccuracyLuna()
+                        * sacredShieldLunaCoef();
+            double coeffsHeroFinal = FormulaCoefficientOfCriticalHitForSkill()
+                * FormulaCoefficientOfAccuracy()
+                * coefficientBPDungeon()
+                * sacredShieldHeroCoef();
+
+            int countHitByHero = (int)(AuraOfTheForest.TimeActive * FacilitationFinal.ConvertToCoefficient() / AuraOfTheForest.Delay);
+            int countHitByLuna = (int)(AuraOfTheForest.TimeActive * FacilitationLuna.ConvertToCoefficient() / AuraOfTheForest.Delay);
+            int LunaAura = (int)(AuraOfTheForest.Formula(magedd)
+                * coeffsLunaStart);
+            int HeroesAura = (int)(AuraOfTheForest.Formula(magedd)
+                * coeffsHeroStart);
             double realCooldown = AuraOfTheForest.BaseTimeCooldown / SkillCooldownFinal.ConvertToCoefficient() + TIME_CAST;
             if (HasTalantGrandeurOfTheLotus)
             {
@@ -704,9 +754,7 @@ namespace ViewModel
                     OutAuraOfTheForestLunaDPM = LunaAura.ToString();
                     // ИТОГОВЫЙ ДД АУРЫ ЛЕСА ЛУНЫ НА ВСЕ КЭФЫ
                     result[SourcesDamage.Luna] += (int)(LunaAura
-                        * CoefficientOfMoonTouchForLuna()
-                        * FormulaCoefficientOfCriticalHitLuna()
-                        * FormulaCoefficientOfAccuracyLuna());
+                        * coeffsLunaFinal);
                 }
                 else
                 {
@@ -718,9 +766,7 @@ namespace ViewModel
                 HeroesAura = (int)(HeroesAura * 60 / AuraOfTheForestCooldown() * countHitByHero);
                 OutAuraOfTheForestHeroDPM = HeroesAura.ToString();
                 result[SourcesDamage.Hero] += (int)(HeroesAura
-                    * FormulaCoefficientOfCriticalHitForSkill()
-                    * FormulaCoefficientOfAccuracy()
-                    * coefficientBPDungeon());
+                    * coeffsHeroFinal);
                 return result;
             }
             if (BeastAwakeningActive)
@@ -732,9 +778,7 @@ namespace ViewModel
                 OutAuraOfTheForestHeroDD = "0";
                 // ИТОГОВЫЙ ДД АУРЫ ЛЕСА ЛУНЫ НА ВСЕ КЭФЫ
                 result[SourcesDamage.Luna] += (int)(LunaAura
-                    * CoefficientOfMoonTouchForLuna()
-                    * FormulaCoefficientOfCriticalHitLuna()
-                    * FormulaCoefficientOfAccuracyLuna());
+                    * coeffsLunaFinal);
                 return result;
             }
             OutAuraOfTheForestHeroDD = HeroesAura.ToString();
@@ -743,9 +787,7 @@ namespace ViewModel
             OutAuraOfTheForestLunaDD = "0";
             OutAuraOfTheForestLunaDPM = "0";
             result[SourcesDamage.Hero] += (int)(HeroesAura
-                * FormulaCoefficientOfCriticalHitForSkill()
-                * FormulaCoefficientOfAccuracy()
-                * coefficientBPDungeon());
+                * coeffsHeroFinal);
             return result;
         }
 
@@ -758,15 +800,19 @@ namespace ViewModel
         public int CalcMoonlight(int magicaldd, int pureMagicalDD)
         {
             int result = 0;
-            if (MoonlightPermanentActive)
-            {
-                int permanentDD = (int)(3 * Moonlight.Formula((int)(pureMagicalDD * coefficientTriton + magicaldd))
-                    //* coefficientCastle
-                    * FormulaCoefficientSkillPower()
+
+            double coeffsStart = FormulaCoefficientSkillPower()
                     * coefficientBestialRageTalant
                     * coefficientPredatoryDeliriumTalant
                     * coefficientLongDeathTalant
-                    * FormulaCoefficientOfPenetration());
+                    * FormulaCoefficientOfPenetration();
+
+            double coeffsFinal = FormulaCoefficientOfCriticalHitForSkill() * coefficientBPDungeon() * sacredShieldHeroCoef();
+
+            if (MoonlightPermanentActive)
+            {
+                int permanentDD = (int)(3 * Moonlight.Formula((int)(pureMagicalDD * coefficientTriton + magicaldd))
+                    * coeffsStart);
 
                 OutMoonlightPermanentDD = permanentDD.ToString();
                 int permanentDPM = permanentDD * 30;
@@ -778,12 +824,7 @@ namespace ViewModel
                 //double realCooldown = Moonlight.BaseTimeCooldown / SkillCooldownFinal.ConvertToCoefficient() + TIME_CAST;
 
                 int nonPermanentDD = (int)(Moonlight.Formula(magicaldd)
-                    //* coefficientCastle
-                    * FormulaCoefficientSkillPower()
-                    * coefficientBestialRageTalant
-                    * coefficientPredatoryDeliriumTalant
-                    * coefficientLongDeathTalant
-                    * FormulaCoefficientOfPenetration());
+                    * coeffsStart);
 
                 OutMoonlightNonPermanentDD = nonPermanentDD.ToString();
                 int nonPermanentDPM = (int)((nonPermanentDD * 4) / MoonLightCooldown() * 60 * LegendaryCoefficientMoonLight());
@@ -791,7 +832,7 @@ namespace ViewModel
                 result += (int)(nonPermanentDPM * FormulaCoefficientOfAccuracy());
             }
 
-            result = (int)(result * FormulaCoefficientOfCriticalHitForSkill() * coefficientBPDungeon());
+            result = (int)(result * coeffsFinal);
 
             return result;
         }
@@ -804,9 +845,16 @@ namespace ViewModel
         {
             int result = 0;
 
+            double coeffsStart = FormulaCoefficientOfAttackStrengthLuna()
+                * FormulaCoefficientOfPiercingAttackLuna();
+
+            double coeffsFinal = CoefficientOfMoonTouchForLuna()
+                * FormulaCoefficientOfCriticalHitLuna()
+                * FormulaCoefficientOfAccuracyLuna()
+                * sacredShieldLunaCoef();
+
             result = (int)(OrderToAttack.Formula(magedd, physdd)
-                * FormulaCoefficientOfAttackStrengthLuna()
-                * FormulaCoefficientOfPiercingAttackLuna());
+                * coeffsStart);
 
             OutOrderToAttackDD = result.ToString();
 
@@ -815,10 +863,7 @@ namespace ViewModel
                 result = (int)(result * (1 + (Bestial_Rampage.IncreaseDD - 1) * TimeBestialRampage()));
             OutOrderToAttackDPM = result.ToString();
 
-            result = (int)(result
-                * CoefficientOfMoonTouchForLuna()
-                * FormulaCoefficientOfCriticalHitLuna()
-                * FormulaCoefficientOfAccuracyLuna());
+            result = (int)(result * coeffsFinal);
 
             return result;
         }
@@ -838,21 +883,25 @@ namespace ViewModel
             double coeffsForLunaStart = FormulaCoefficientOfCriticalHitHeroForAutoattack()
                     * FormulaCoefficientOfPiercingAttack()
                     * FormulaCoefficientOfAccuracy()
-                    * FormulaCoefficientOfAttackStrength();
+                    * FormulaCoefficientOfAttackStrength()
+                    * sacredShieldHeroCoef();
             double coeffsForHeroStart = FormulaCoefficientOfCriticalHitLuna()
                     * FormulaCoefficientOfPiercingAttackLuna()
                     * FormulaCoefficientOfAccuracyLuna()
-                    * FormulaCoefficientOfAttackStrengthLuna();
+                    * FormulaCoefficientOfAttackStrengthLuna()
+                    * sacredShieldLunaCoef();
 
 
             double coeffsForLunaFinal = coefficientPredatoryDeliriumTalant
                 * CoefficientOfMoonTouchForLuna()
                 * coefficientBPDungeon()
-                * FormulaCoefficientOfPiercingAttackLuna();
+                * FormulaCoefficientOfPiercingAttackLuna()
+                * sacredShieldLunaCoef();
             double coeffsForHeroFinal = coefficientPredatoryDeliriumTalant
                 * CoefficientOfMoonTouchForLuna()
                 * coefficientBPDungeon()
-                * FormulaCoefficientOfPiercingAttack();
+                * FormulaCoefficientOfPiercingAttack()
+                * sacredShieldHeroCoef();
 
             double Tp = AttackDelay();
             double Tl = Beast_Awakening.BaseDelay * (1 - (GodsAidLuna ? ModifiersDamage.GODS_AID_ATTACK_SPEED : 0) / 100);
@@ -6469,7 +6518,7 @@ namespace ViewModel
             RecBaseF   = b[9].ToString("F1");
             RecBaseSP  = b[10].ToString("F1");
         }
-
+        #region свойства для полей в рекомендации
         private string _recBaseSC  = "0"; public string RecBaseSC  { get => _recBaseSC;  private set { _recBaseSC  = value; NotifyPropertyChanged(nameof(RecBaseSC));  } }
         private string _recBaseASp = "0"; public string RecBaseASp { get => _recBaseASp; private set { _recBaseASp = value; NotifyPropertyChanged(nameof(RecBaseASp)); } }
         private string _recBaseCH  = "0"; public string RecBaseCH  { get => _recBaseCH;  private set { _recBaseCH  = value; NotifyPropertyChanged(nameof(RecBaseCH));  } }
@@ -6570,7 +6619,121 @@ namespace ViewModel
         private string _recFinalSP  = "0.0"; public string RecFinalSP  { get => _recFinalSP;  private set { _recFinalSP  = value; NotifyPropertyChanged(nameof(RecFinalSP));  } }
 
         private static string FormatDelta(double d) => d >= 0 ? $"+{d:F1}" : $"{d:F1}";
+        #endregion
 
+        #region поля для статистики дпм
+        private int dpmAttack = 0;
+        public int DpmAttack
+        {
+            get => dpmAttack;
+            set
+            {
+                dpmAttack = value;
+                NotifyPropertyChanged(nameof(DpmAttack));
+            }
+        }
+        private int dpmMoonTouch = 0;
+        public int DpmMoonTouch
+        {
+            get => dpmMoonTouch;
+            set
+            {
+                dpmMoonTouch = value;
+                NotifyPropertyChanged(nameof(DpmMoonTouch));
+            }
+        }
+        private int dpmChainLightning = 0;
+        public int DpmChainLightning
+        {
+            get => dpmChainLightning;
+            set
+            {
+                dpmChainLightning = value;
+                NotifyPropertyChanged(nameof(DpmChainLightning));
+            }
+        }
+        private int dpmMoonLight = 0;
+        public int DpmMoonLight
+        {
+            get => dpmMoonLight;
+            set
+            {
+                dpmMoonLight = value;
+                NotifyPropertyChanged(nameof(DpmMoonLight));
+            }
+        }
+        private int dpmBeastAwakening = 0;
+        public int DpmBeastAwakening
+        {
+            get => dpmBeastAwakening;
+            set
+            {
+                dpmBeastAwakening = value;
+                NotifyPropertyChanged(nameof(DpmBeastAwakening));
+            }
+        }
+        private int dpmBestialRampage = 0;
+        public int DpmBestialRampage
+        {
+            get => dpmBestialRampage;
+            set
+            {
+                dpmBestialRampage = value;
+                NotifyPropertyChanged(nameof(DpmBestialRampage));
+            }
+        }
+        private int dpmOrderToAttack = 0;
+        public int DpmOrderToAttack
+        {
+            get => dpmOrderToAttack;
+            set
+            {
+                dpmOrderToAttack = value;
+                NotifyPropertyChanged(nameof(DpmOrderToAttack));
+            }
+        }
+        private int dpmAuraOfTheForestHero = 0;
+        public int DpmAuraOfTheForestHero
+        {
+            get => dpmAuraOfTheForestHero;
+            set
+            {
+                dpmAuraOfTheForestHero = value;
+                NotifyPropertyChanged(nameof(DpmAuraOfTheForestHero));
+            }
+        }
+        private int dpmAuraOfTheForestLuna = 0;
+        public int DpmAuraOfTheForestLuna
+        {
+            get => dpmAuraOfTheForestLuna;
+            set
+            {
+                dpmAuraOfTheForestLuna = value;
+                NotifyPropertyChanged(nameof(DpmAuraOfTheForestLuna));
+            }
+        }
+        private int dpmSymbiosisLuna = 0;
+        public int DpmSymbiosisLuna
+        {
+            get => dpmSymbiosisLuna;
+            set
+            {
+                dpmSymbiosisLuna = value;
+                NotifyPropertyChanged(nameof(DpmSymbiosisLuna));
+            }
+        }
+        private int dpmSymbiosisHero = 0;
+        public int DpmSymbiosisHero
+        {
+            get => dpmSymbiosisHero;
+            set
+            {
+                dpmSymbiosisHero = value;
+                NotifyPropertyChanged(nameof(DpmSymbiosisHero));
+            }
+        }
+
+        #endregion
         #endregion
 
         #endregion
