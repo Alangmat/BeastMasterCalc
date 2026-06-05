@@ -36,7 +36,7 @@ namespace Model
             TalentPlusBonusCfg = (double?)_cfg["TalentPlusBonus"] ?? 5.0;
         }
 
-        public string Description { get; set; } = "";
+        [JsonIgnore] public string Description { get; set; } = "";
 
         // ====== Публичные поля, как в оригинале ======
         [JsonIgnore] public int _level;

@@ -39,7 +39,7 @@ namespace Model
         }
 
         // ===== Твоё API (имена/стиль как в исходнике) =====
-        public string Description { get; set; } = "";
+        [JsonIgnore] public string Description { get; set; } = "";
 
         private int level = 1;
         public int Level

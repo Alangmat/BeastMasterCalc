@@ -630,13 +630,6 @@
     <Resource Include="icons\stats\DepthsFury.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="icons\talents\almahad\pairing.png" />
-    <Resource Include="icons\talents\almahad\roar.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="icons\talents\almahad\PredatoryBond.jpg" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="icons\stats\SkillPower.png" />
   </ItemGroup>
   <ItemGroup>
@@ -656,6 +649,19 @@
     <Resource Include="icons\books\bookRage.png" />
     <Resource Include="icons\other\PunishingAbility.png" />
     <EmbeddedResource Include="videos\Calc Logo.mp4" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\buttons\buttonDownloadFromFile.png" />
+    <Resource Include="icons\buttons\buttonSaveAsFile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\almahad\pairing.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\almahad\PredatoryBond.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\almahad\roar.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.6.5.5\build\Fody.targets" Condition="Exists('..\packages\Fody.6.5.5\build\Fody.targets')" />

@@ -47,7 +47,7 @@ namespace Model
         }
 
         // ===== Публичные поля/свойства — как у тебя =====
-        public string Description { get; set; } = "";
+        [JsonIgnore] public string Description { get; set; } = "";
 
         [JsonIgnore] public int _level;
         public int Level

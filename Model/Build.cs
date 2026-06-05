@@ -215,6 +215,7 @@ namespace Model
         #region weapon
         public bool StaffSelected { get; set; }
         public bool SpearSelected { get; set; }
+        [System.ComponentModel.DefaultValue(true)]
         public bool MaceSelected { get; set; } = true;
         public bool SwordSelected { get; set; }
         public bool AxeSelected { get; set; }

@@ -45,7 +45,7 @@ namespace Model
         }
 
         // ===== Публичный API =====
-        public string Description { get; set; } = "Накладывает на монстра Луна атакующий положительный эффект \"Аура Леса\" на некоторое время...";
+        [JsonIgnore] public string Description { get; set; } = "Накладывает на монстра Луна атакующий положительный эффект \"Аура Леса\" на некоторое время...";
         private string description = "";
 
         private int level = 1;

@@ -36,7 +36,7 @@ namespace Model
                 throw new InvalidOperationException("В конфиге BestialRampage пустой Levels.");
         }
 
-        public string Description { get; set; } = "";
+        [JsonIgnore] public string Description { get; set; } = "";
 
         // ===== Конструктор (как у тебя) =====
         public BestialRampage(BeastAwakening luna)

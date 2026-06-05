@@ -17,6 +17,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Microsoft.Win32;
 using ViewModel;
 using Shared;
 
@@ -493,6 +494,54 @@ namespace View
         {
             Logic.DeleteSelectedDataSet();
             Logic.SaveBuilds();
+        }
+
+        private void saveToFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            string buildName = Logic.Name;
+            if (string.IsNullOrWhiteSpace(buildName))
+                buildName = "build";
+
+            foreach (char c in System.IO.Path.GetInvalidFileNameChars())
+                buildName = buildName.Replace(c, '_');
+
+            string filePath = System.IO.Path.Combine(
+                AppDomain.CurrentDomain.BaseDirectory, buildName + ".json");
+
+            try
+            {
+                Logic.SaveBuildToFile(filePath);
+                MessageBox.Show($"Сборка сохранена:\n{filePath}",
+                    "Сохранено", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при сохранении:\n{ex.Message}",
+                    "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+        private void loadFromFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            var dialog = new OpenFileDialog
+            {
+                Filter = "JSON файлы (*.json)|*.json",
+                InitialDirectory = AppDomain.CurrentDomain.BaseDirectory,
+                Title = "Загрузить сборку из файла"
+            };
+
+            if (dialog.ShowDialog() != true) return;
+
+            try
+            {
+                Logic.LoadBuildFromFile(dialog.FileName);
+                Load();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при загрузке:\n{ex.Message}",
+                    "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
 
         #region Методы изменения состояния кнопок

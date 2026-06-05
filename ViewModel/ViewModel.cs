@@ -49,10 +49,15 @@ namespace ViewModel
             string jsonFromFile = File.ReadAllText(FILE_SAVE);
             Builds = JsonConvert.DeserializeObject<ObservableCollection<Build>>(jsonFromFile);
         }
+        private static readonly JsonSerializerSettings _saveSettings = new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Ignore,
+            DefaultValueHandling = DefaultValueHandling.Ignore
+        };
+
         public void SaveBuilds()
         {
-
-            string json = JsonConvert.SerializeObject(Builds);
+            string json = JsonConvert.SerializeObject(Builds, _saveSettings);
             File.WriteAllText(FILE_SAVE, json);
         }
         public void AddDataSet()
@@ -126,6 +131,24 @@ namespace ViewModel
         {
             Builds.Remove(SelectedDataSet);
         }
+
+        public void SaveBuildToFile(string filePath)
+        {
+            string json = JsonConvert.SerializeObject(DataSet, Formatting.Indented, _saveSettings);
+            File.WriteAllText(filePath, json);
+        }
+
+        public void LoadBuildFromFile(string filePath)
+        {
+            string json = File.ReadAllText(filePath);
+            var loaded = JsonConvert.DeserializeObject<Build>(json);
+            if (loaded != null)
+            {
+                DataSet = loaded;
+                updateStateDataSet();
+            }
+        }
+
         private void GenerateNewDataSet()
         {
             DataSet = new Build();
@@ -393,6 +416,8 @@ namespace ViewModel
         }
         #endregion
 
+
+
         #region Калькуляторы
         public void Calculate()
         {
@@ -406,7 +431,7 @@ namespace ViewModel
                     CalcStats();
 
                     CalcPercents();
-
+                    #region Вычисление чистой и итоговой силы персонажа
                     double coefRage = FormulaCoefficientOfRage();
 
                     int pureMagicalDD = (int)(magicdd / percentMagicalDDStart.ConvertToCoefficient());
@@ -428,7 +453,7 @@ namespace ViewModel
                         physdd = (int)(physdd * harmoniousPowerPDD.ConvertToCoefficient());
 
                     }
-
+                    #endregion
                     int dpmAttack = CalcAttack(magicdd, physdd);
                     int dpmMoonTouch = CalcMoonTouch(magicdd);
                     int dpmBeastAwakening = CalcBeastAwakening(magicdd, physdd);
@@ -443,22 +468,24 @@ namespace ViewModel
                     var dpmSymbiosis = CalcSymbiosis(magicdd, physdd);
                     int dpmSymbiosisLuna = dpmSymbiosis[SourcesDamage.Luna];
                     int dpmSymbiosisHero = dpmSymbiosis[SourcesDamage.Hero];
-                    //double realCooldawnBestialRampage = (Bestial_Rampage.BaseTimeCooldown / (1 + SkillCooldown / 100)) + TIME_CAST;
+
                     int resultDD = 0;
                     int resultDDLuna = 0;
                     int resultDDHero = 0;
 
-                    // Перенести все проверки на активность внутрь калькуляторов
                     if (AttackActive)
                     {
                         resultDDHero += dpmAttack;
                         DpmAttack = dpmAttack;
                     }
+                    else DpmAttack = 0;
+
                     if (MoonTouchActive)
                     {
                         resultDDHero += dpmMoonTouch;
                         DpmMoonTouch = dpmMoonTouch;
                     }
+                    else DpmMoonTouch = 0;
 
                     if (BeastAwakeningActive)
                     {
@@ -473,12 +500,15 @@ namespace ViewModel
                         {
                             resultDDLuna += dpmBeastAwakening;
                             DpmBeastAwakening = dpmBeastAwakening;
+                            DpmBestialRampage = 0;
                         }
                         if (OrderToAttackActive)
                         {
                             resultDDLuna += dpmOrderToAttack;
                             DpmOrderToAttack = dpmOrderToAttack;
                         }
+                        else DpmOrderToAttack = 0;
+
                         if (HasTalantSymbiosis)
                         {
                             resultDDHero += dpmSymbiosisHero;
@@ -486,13 +516,28 @@ namespace ViewModel
                             DpmSymbiosisLuna = dpmSymbiosisLuna;
                             DpmSymbiosisHero = dpmSymbiosisHero;
                         }
-
+                        else
+                        {
+                            DpmSymbiosisLuna = 0;
+                            DpmSymbiosisHero = 0;
+                        }
                     }
+                    else
+                    {
+                        DpmBeastAwakening = 0;
+                        DpmBestialRampage = 0;
+                        DpmOrderToAttack = 0;
+                        DpmSymbiosisLuna = 0;
+                        DpmSymbiosisHero = 0;
+                    }
+
                     if (ChainLightningActive)
                     {
                         resultDDHero += dpmChainLightning;
                         DpmChainLightning = dpmChainLightning;
                     }
+                    else DpmChainLightning = 0;
+
                     if (AuraOfTheForestActive)
                     {
                         resultDDLuna += dpmAuraOfTheForestLuna;
@@ -500,6 +545,12 @@ namespace ViewModel
                         DpmAuraOfTheForestHero = dpmAuraOfTheForestHero;
                         DpmAuraOfTheForestLuna = dpmAuraOfTheForestLuna;
                     }
+                    else
+                    {
+                        DpmAuraOfTheForestHero = 0;
+                        DpmAuraOfTheForestLuna = 0;
+                    }
+
                     resultDDHero += dpmMoonlight;
                     DpmMoonLight = dpmMoonlight;
 
@@ -593,12 +644,13 @@ namespace ViewModel
                 * coefficientBPDungeon()
                 * sacredShieldHeroCoef();
 
-            int result = (int)(Moon_Touch.Formula(magedd)
-                * coeffsStart);
+            int result = (int)(Moon_Touch.Formula(magedd) * coeffsStart);
             OutMoonTouchDD = result.ToString();
-            result = (int)(result * 60 / MoonTouchCooldown());
-            OutMoonTouchDPM = result.ToString();
+          
+            result = (int)(result * 60 / MoonTouchCooldown());  
             result = (int)(result * coeffsFinal);
+            OutMoonTouchDPM = result.ToString();
+            
             return result;
         }
         public double CoefficientOfMoonTouchForLuna()
@@ -2951,6 +3003,18 @@ namespace ViewModel
         #region неотобранные элементы 
         private readonly RecommendationSystem _rs = new RecommendationSystem();
         private volatile bool _suppressNotifications = false;
+        private bool _isRecommendationTestRunning = false;
+
+        private class RecommendationRunResult
+        {
+            public int Dpm { get; set; }
+            public long TimeMs { get; set; }
+            public long EvalCallCount { get; set; }
+            public double[] Solution { get; set; }
+        }
+
+        private RecommendationAlgorithm CurrentRecommendationAlgorithm
+            => SelectedRecommendationAlgorithm == "MCTS" ? RecommendationAlgorithm.MCTS : RecommendationAlgorithm.DE;
 
         public event PropertyChangedEventHandler PropertyChanged;
         /// <summary>
@@ -5966,9 +6030,10 @@ namespace ViewModel
         // ============================================================
         public void OptimizeByDE() => _ = OptimizeByDEAsync();
 
-        private async Task OptimizeByDEAsync()
+        private async Task<RecommendationRunResult> OptimizeByDEAsync(bool saveSingleResult = true)
         {
-            Status = "Differential Evolution";
+            var algorithm = CurrentRecommendationAlgorithm;
+            Status = RecommendationSystem.GetAlgorithmName(algorithm);
             var sw = System.Diagnostics.Stopwatch.StartNew();
 
             // Порядок статов: 0 SC, 1 ASp, 2 CH, 3 CD, 4 P, 5 Ac, 6 ASt, 7 PA, 8 R, 9 F, 10 SP
@@ -5991,61 +6056,11 @@ namespace ViewModel
             double[] hardCaps = { 200, 70, 53, 200, 50, 50, 100, 50, 50, 50, 100 };
             double[] softGear = { 90.5, 41.8, 48.4, 24.0, 37.5, 52.2, 30.0, 34.5, 41.9, 23.8, 12.5 };
 
-            bool hasBranch = DataSet.DualRageActive || DataSet.ForestInspirationActive || DataSet.GuardianUnityActive;
-            int branch = DataSet.DualRageActive ? 2 : DataSet.ForestInspirationActive ? 3 : 1;
-
-            double tASp = hasBranch ? ((branch == 2) ? 5.75 : 4.25) : 0;
-            double tCH  = hasBranch ? 4.75 : 0;
-            double tCD  = hasBranch ? ((branch == 2) ? 3.0  : 1.5)  : 0;
-            double tSC  = hasBranch ? ((branch == 2) ? 4.25 : 5.75) : 0;
-            double tP   = hasBranch ? ((branch == 3) ? 2.75 : 3.75) : 0;
-            double tAc  = hasBranch ? ((branch == 1) ? 4.75 : 3.5)  : 0;
-
             // ============================================================
-            // КНИГИ: раздельные флаги (ЗАМЕНИ на реальные поля DataSet.*)
+            // БАЗА (таланты + книги + гильдия; без расовых, без замка)
             // ============================================================
-            bool hasBookSC = RecHasBookSC;
-            bool hasBookASp = RecHasBookASp;
-            bool hasBookCH = RecHasBookCH;
-            bool hasBookCD = RecHasBookCD;
-            bool hasBookP = RecHasBookP;
-            bool hasBookAc = RecHasBookAc;
-            bool hasBookASt = RecHasBookASt;
-            bool hasBookPA = RecHasBookPA;
-            bool hasBookR = RecHasBookR;
-            bool hasBookF = RecHasBookF;
-
-            double bSC = hasBookSC ? 8 : 0;
-            double bASp = hasBookASp ? 7 : 0;
-            double bCH = hasBookCH ? 3 : 0;
-            double bCD = hasBookCD ? 10 : 0;
-            double bP = hasBookP ? 3 : 0;
-            double bAc = hasBookAc ? 4 : 0;
-            double bPA = hasBookPA ? 4 : 0;
-            double bASt = hasBookASt ? 4.7 : 0;
-            double bR = hasBookR ? 8 : 0;
-            double bF = hasBookF ? 7.5 : 0;
-
-            // ============================================================
-            // БАЗА (врождённое + гильдия + таланты + книги + замковый дебаф)
-            // ============================================================
-            double[] g = GetGuildStatBonuses(GuildLevel);
             double cFlat = CastleStartModifierActive ? 5 : 0;
-            double cSP   = coefficientCastleStart != 0 ? System.Math.Round((coefficientCastleStart - 1) * 100, 1) : 0;
-            double[] baseStats =
-            {
-                tSC  + bSC  + g[0] - cFlat,  // SC
-                tASp + bASp + g[1] - cFlat,  // ASp
-                5 + tCH + bCH + g[2] - cFlat, // CH
-                tCD + bCD + g[3],             // CD
-                tP  + bP  + g[4] - cFlat,     // P
-                tAc + bAc + g[5] - cFlat,     // Ac
-                bASt + g[6],                       // ASt
-                bPA  + g[7],                       // PA
-                bR   + g[8],                       // R
-                bF   + g[9],                       // F
-                g[10] - cSP                        // SP
-            };
+            double[] baseStats = ComputeRecBaseStats();
 
             // ============================================================
             // MIN/MAX по перебору (min = база, max = min(hard, база + soft))
@@ -6085,7 +6100,7 @@ namespace ViewModel
             }
 
             // ============================================================
-            // Сохраняем исходные значения
+            // Сохраняем исходные значения (до-замковые, как хранит DataSet)
             // ============================================================
             double[] original =
             {
@@ -6102,17 +6117,17 @@ namespace ViewModel
 
             void ApplyToDataSet(double[] x)
             {
-                DataSet.SkillCooldown = Round01(x[0]);
-                DataSet.AttackSpeed = Round01(x[1]);
-                DataSet.CriticalHit = Round01(x[2]);
+                DataSet.SkillCooldown  = Round01(x[0]);
+                DataSet.AttackSpeed    = Round01(x[1]);
+                DataSet.CriticalHit    = Round01(x[2]);
                 DataSet.CriticalDamage = Round01(x[3]);
-                DataSet.Penetration = Round01(x[4]);
-                DataSet.Accuracy = Round01(x[5]);
+                DataSet.Penetration    = Round01(x[4]);
+                DataSet.Accuracy       = Round01(x[5]);
                 DataSet.AttackStrength = Round01(x[6]);
                 DataSet.PiercingAttack = Round01(x[7]);
-                DataSet.Rage = Round01(x[8]);
-                DataSet.Facilitation = Round01(x[9]);
-                DataSet.SkillPower = Round01(x[10]);
+                DataSet.Rage           = Round01(x[8]);
+                DataSet.Facilitation   = Round01(x[9]);
+                DataSet.SkillPower     = Round01(x[10]);
             }
 
             double originalBudget = 0;
@@ -6132,22 +6147,36 @@ namespace ViewModel
             // ============================================================
             _suppressNotifications = true;
             double[] rounded;
+            var recInp = new RecommendationInput
+            {
+                Algorithm      = algorithm,
+                DePopulationSize = RecommendationDePopulationSize,
+                DeMaxGenerations = RecommendationDeMaxGenerations,
+                DeMutationFactor = RecommendationDeMutationFactor,
+                DeCrossoverRate  = RecommendationDeCrossoverRate,
+                MctsMaxIterations = RecommendationMctsMaxIterations,
+                MctsTop          = RecommendationMctsTop,
+                MctsMinSteps     = RecommendationMctsMinSteps,
+                MctsMaxSteps     = RecommendationMctsMaxSteps,
+                BudgetTolerance  = RecommendationBudgetTolerance,
+                Initial        = current,
+                Weights        = weights,
+                BaseStats      = baseStats,
+                Mins           = mins,
+                Maxs           = maxs,
+                TargetBudget   = targetBudget,
+                Evaluate       = x => { ApplyToDataSet(x); Calculate(); return DataSet.ResultDD; },
+                ReportStatus   = s => SetStatusDirect(s),
+            };
             try
             {
-                rounded = await _rs.RunDEAsync(
-                    initial: current,
-                    weights: weights,
-                    baseStats: baseStats,
-                    mins: mins,
-                    maxs: maxs,
-                    targetBudget: targetBudget,
-                    evaluate: x => { ApplyToDataSet(x); Calculate(); return DataSet.ResultDD; },
-                    reportStatus: s => SetStatusDirect(s));
+                rounded = await _rs.GetRecommendationAsync(recInp);
             }
             finally
             {
                 _suppressNotifications = false;
             }
+            RecCalcCount = recInp.EvalCallCount;
 
             _lastRounded = rounded;
             _applyRecResultCommand?.RaiseCanExecuteChanged();
@@ -6182,18 +6211,32 @@ namespace ViewModel
             RecValSP  = rounded[10].ToString("F1"); DeltaSP  = FormatDelta(rounded[10] - original[10]);
             RecDPMDisplay = bestDD.ToString();
 
+            int branch = DataSet.DualRageActive ? 2 : DataSet.ForestInspirationActive ? 3 : 1;
             bool[] bookFlags =
             {
-        hasBookSC, hasBookASp, hasBookCH, hasBookCD, hasBookP,
-        hasBookAc, hasBookASt, hasBookPA, hasBookR, hasBookF
+        RecHasBookSC, RecHasBookASp, RecHasBookCH, RecHasBookCD, RecHasBookP,
+        RecHasBookAc, RecHasBookASt, RecHasBookPA, RecHasBookR, RecHasBookF
     };
 
-            SaveResults(rounded, bestDD, targetBudget, baseStats, original, sw, "de", branch, bookFlags);
+            if (saveSingleResult)
+                SaveResults(rounded, bestDD, targetBudget, baseStats, original, sw, RecommendationSystem.GetAlgorithmCode(algorithm), branch, bookFlags);
+            else
+            {
+                sw.Stop();
+                TimeRec = sw.ElapsedMilliseconds;
+            }
 
             ApplyToDataSet(original);
             Calculate();
 
-            Status = "Differential Evolution завершена";
+            Status = RecommendationSystem.GetAlgorithmName(algorithm) + " завершена";
+            return new RecommendationRunResult
+            {
+                Dpm = bestDD,
+                TimeMs = TimeRec,
+                EvalCallCount = recInp.EvalCallCount,
+                Solution = rounded
+            };
         }
 
         // ============================================================
@@ -6201,6 +6244,128 @@ namespace ViewModel
         // + разница статов (recommended - start)
         // bookFlags: 10 bool в порядке statNames: SC,ASp,CH,CD,P,Ac,ASt,PA,R,F
         // ============================================================
+        private double[] GetCurrentRecommendationStats()
+        {
+            return new double[]
+            {
+                DataSet.SkillCooldown, DataSet.AttackSpeed, DataSet.CriticalHit, DataSet.CriticalDamage,
+                DataSet.Penetration, DataSet.Accuracy, DataSet.AttackStrength, DataSet.PiercingAttack,
+                DataSet.Rage, DataSet.Facilitation, DataSet.SkillPower
+            };
+        }
+
+        private void ApplyRecommendationStats(double[] stats)
+        {
+            if (stats == null || stats.Length < 11) return;
+
+            DataSet.SkillCooldown  = stats[0];
+            DataSet.AttackSpeed    = stats[1];
+            DataSet.CriticalHit    = stats[2];
+            DataSet.CriticalDamage = stats[3];
+            DataSet.Penetration    = stats[4];
+            DataSet.Accuracy       = stats[5];
+            DataSet.AttackStrength = stats[6];
+            DataSet.PiercingAttack = stats[7];
+            DataSet.Rage           = stats[8];
+            DataSet.Facilitation   = stats[9];
+            DataSet.SkillPower     = stats[10];
+        }
+
+        private async Task RunRecommendationTestAsync()
+        {
+            if (_isRecommendationTestRunning) return;
+
+            int runs = Math.Max(1, RecommendationTestRuns);
+            RecommendationTestRuns = runs;
+
+            _isRecommendationTestRunning = true;
+            _recommendationTestCommand?.RaiseCanExecuteChanged();
+
+            var startStats = GetCurrentRecommendationStats();
+            var results = new List<RecommendationRunResult>();
+
+            try
+            {
+                for (int i = 0; i < runs; i++)
+                {
+                    ApplyRecommendationStats(startStats);
+                    Calculate();
+                    Status = $"Тест рекомендаций: {i + 1}/{runs}";
+
+                    var result = await OptimizeByDEAsync(false);
+                    results.Add(result);
+                }
+            }
+            finally
+            {
+                ApplyRecommendationStats(startStats);
+                Calculate();
+                _isRecommendationTestRunning = false;
+                _recommendationTestCommand?.RaiseCanExecuteChanged();
+            }
+
+            string filePath = SaveRecommendationTestResults(results);
+            Status = $"Тест рекомендаций завершен: {System.IO.Path.GetFileName(filePath)}";
+        }
+
+        private string SaveRecommendationTestResults(List<RecommendationRunResult> results)
+        {
+            var algorithm = CurrentRecommendationAlgorithm;
+            string resultsDir = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "results");
+            System.IO.Directory.CreateDirectory(resultsDir);
+
+            string fileName = DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss") + "_recommendation_test.txt";
+            string filePath = System.IO.Path.Combine(resultsDir, fileName);
+
+            int maxDpm = results.Count > 0 ? results.Max(x => x.Dpm) : 0;
+            int minDpm = results.Count > 0 ? results.Min(x => x.Dpm) : 0;
+            double avgDpm = results.Count > 0 ? results.Average(x => x.Dpm) : 0;
+            double avgTime = results.Count > 0 ? results.Average(x => x.TimeMs) : 0;
+
+            using (var writer = new System.IO.StreamWriter(filePath, false, System.Text.Encoding.UTF8))
+            {
+                writer.WriteLine("=== BeastMasterCalc | Recommendation Algorithm Test ===");
+                writer.WriteLine("Algorithm: " + RecommendationSystem.GetAlgorithmName(algorithm));
+                writer.WriteLine("Algorithm code: " + RecommendationSystem.GetAlgorithmCode(algorithm));
+                writer.WriteLine("Hyperparameters:");
+                if (algorithm == RecommendationAlgorithm.DE)
+                {
+                    writer.WriteLine("  populationSize = " + RecommendationDePopulationSize);
+                    writer.WriteLine("  maxGenerations = " + RecommendationDeMaxGenerations);
+                    writer.WriteLine("  F = " + RecommendationDeMutationFactor.ToString("0.###"));
+                    writer.WriteLine("  CR = " + RecommendationDeCrossoverRate.ToString("0.###"));
+                }
+                else
+                {
+                    writer.WriteLine("  maxIterations = " + RecommendationMctsMaxIterations);
+                    writer.WriteLine("  top = " + RecommendationMctsTop);
+                    writer.WriteLine("  minSteps = " + RecommendationMctsMinSteps);
+                    writer.WriteLine("  maxSteps = " + RecommendationMctsMaxSteps);
+                }
+                writer.WriteLine("  budgetTolerance = " + RecommendationBudgetTolerance.ToString("0.###"));
+                writer.WriteLine();
+                writer.WriteLine("Runs: " + results.Count);
+                writer.WriteLine("Max DPM: " + maxDpm);
+                writer.WriteLine("Min DPM: " + minDpm);
+                writer.WriteLine("Avg DPM: " + avgDpm.ToString("0.##"));
+                writer.WriteLine("Avg time: " + avgTime.ToString("0.##") + " ms");
+                writer.WriteLine();
+                writer.WriteLine("=== ALL RUNS ===");
+                writer.WriteLine("Run\tDPM\tTimeMs\tCalculateCalls\tSC\tASp\tCH\tCD\tP\tAc\tASt\tPA\tR\tF\tSP");
+
+                for (int i = 0; i < results.Count; i++)
+                {
+                    var r = results[i];
+                    string solution = r.Solution != null
+                        ? string.Join("\t", r.Solution.Select(x => x.ToString("F1")))
+                        : "";
+                    writer.WriteLine($"{i + 1}\t{r.Dpm}\t{r.TimeMs}\t{r.EvalCallCount}\t{solution}");
+                }
+            }
+
+            return filePath;
+        }
+
         private void SaveResults(
             double[] solution,
             int dd,
@@ -6359,6 +6524,103 @@ namespace ViewModel
                       DataSet.Facilitation > 0 || DataSet.SkillPower > 0));
         }
 
+        private string _selectedRecommendationAlgorithm = "DE";
+        public string SelectedRecommendationAlgorithm
+        {
+            get => _selectedRecommendationAlgorithm;
+            set
+            {
+                _selectedRecommendationAlgorithm = value == "MCTS" ? "MCTS" : "DE";
+                NotifyPropertyChanged(nameof(SelectedRecommendationAlgorithm));
+            }
+        }
+
+        private int _recommendationDePopulationSize = RecommendationSystem.DefaultDePopulationSize;
+        public int RecommendationDePopulationSize
+        {
+            get => _recommendationDePopulationSize;
+            set { _recommendationDePopulationSize = Math.Max(4, value); NotifyPropertyChanged(nameof(RecommendationDePopulationSize)); }
+        }
+
+        private int _recommendationDeMaxGenerations = RecommendationSystem.DefaultDeMaxGenerations;
+        public int RecommendationDeMaxGenerations
+        {
+            get => _recommendationDeMaxGenerations;
+            set { _recommendationDeMaxGenerations = Math.Max(1, value); NotifyPropertyChanged(nameof(RecommendationDeMaxGenerations)); }
+        }
+
+        private double _recommendationDeMutationFactor = RecommendationSystem.DefaultDeMutationFactor;
+        public double RecommendationDeMutationFactor
+        {
+            get => _recommendationDeMutationFactor;
+            set { _recommendationDeMutationFactor = Math.Max(0.001, value); NotifyPropertyChanged(nameof(RecommendationDeMutationFactor)); }
+        }
+
+        private double _recommendationDeCrossoverRate = RecommendationSystem.DefaultDeCrossoverRate;
+        public double RecommendationDeCrossoverRate
+        {
+            get => _recommendationDeCrossoverRate;
+            set { _recommendationDeCrossoverRate = Math.Max(0, Math.Min(1, value)); NotifyPropertyChanged(nameof(RecommendationDeCrossoverRate)); }
+        }
+
+        private int _recommendationMctsMaxIterations = RecommendationSystem.DefaultMctsMaxIterations;
+        public int RecommendationMctsMaxIterations
+        {
+            get => _recommendationMctsMaxIterations;
+            set { _recommendationMctsMaxIterations = Math.Max(1, value); NotifyPropertyChanged(nameof(RecommendationMctsMaxIterations)); }
+        }
+
+        private int _recommendationMctsTop = RecommendationSystem.DefaultMctsTop;
+        public int RecommendationMctsTop
+        {
+            get => _recommendationMctsTop;
+            set { _recommendationMctsTop = Math.Max(1, value); NotifyPropertyChanged(nameof(RecommendationMctsTop)); }
+        }
+
+        private int _recommendationMctsMinSteps = RecommendationSystem.DefaultMctsMinSteps;
+        public int RecommendationMctsMinSteps
+        {
+            get => _recommendationMctsMinSteps;
+            set { _recommendationMctsMinSteps = Math.Max(1, value); NotifyPropertyChanged(nameof(RecommendationMctsMinSteps)); }
+        }
+
+        private int _recommendationMctsMaxSteps = RecommendationSystem.DefaultMctsMaxSteps;
+        public int RecommendationMctsMaxSteps
+        {
+            get => _recommendationMctsMaxSteps;
+            set { _recommendationMctsMaxSteps = Math.Max(RecommendationMctsMinSteps + 1, value); NotifyPropertyChanged(nameof(RecommendationMctsMaxSteps)); }
+        }
+
+        private double _recommendationBudgetTolerance = 0.2;
+        public double RecommendationBudgetTolerance
+        {
+            get => _recommendationBudgetTolerance;
+            set { _recommendationBudgetTolerance = Math.Max(0, value); NotifyPropertyChanged(nameof(RecommendationBudgetTolerance)); }
+        }
+
+        private int _recommendationTestRuns = 10;
+        public int RecommendationTestRuns
+        {
+            get => _recommendationTestRuns;
+            set
+            {
+                _recommendationTestRuns = Math.Max(1, value);
+                NotifyPropertyChanged(nameof(RecommendationTestRuns));
+            }
+        }
+
+        private RelayCommand _recommendationTestCommand;
+        public ICommand RecommendationTestCommand
+        {
+            get => _recommendationTestCommand ?? (_recommendationTestCommand = new RelayCommand(
+                () => _ = RunRecommendationTestAsync(),
+                () => !_isRecommendationTestRunning &&
+                      (DataSet.SkillCooldown > 0 || DataSet.AttackSpeed > 0 || DataSet.CriticalHit > 0 ||
+                       DataSet.CriticalDamage > 0 || DataSet.Penetration > 0 || DataSet.Accuracy > 0 ||
+                       DataSet.AttackStrength > 0 || DataSet.PiercingAttack > 0 || DataSet.Rage > 0 ||
+                       DataSet.Facilitation > 0 || DataSet.SkillPower > 0)));
+        }
+
         private double[] _lastRounded = null;
 
         private RelayCommand _applyRecResultCommand;
@@ -6402,11 +6664,14 @@ namespace ViewModel
         public long TimeRec
         {
             get => timeRec;
-            set
-            {
-                timeRec = value;
-                NotifyPropertyChanged(nameof(TimeRec));
-            }
+            set { timeRec = value; NotifyPropertyChanged(nameof(TimeRec)); }
+        }
+
+        private long _recCalcCount = 0;
+        public long RecCalcCount
+        {
+            get => _recCalcCount;
+            set { _recCalcCount = value; NotifyPropertyChanged(nameof(RecCalcCount)); }
         }
         private string status = "Отключен";
         public string Status
@@ -6489,12 +6754,12 @@ namespace ViewModel
             double cSP   = coefficientCastleStart != 0 ? System.Math.Round((coefficientCastleStart - 1) * 100, 1) : 0;
             return new double[]
             {
-                15 + tSC  + bSC  + g[0] - cFlat,
-                15 + tASp + bASp + g[1] - cFlat,
-                5 + 6 + tCH + bCH + g[2] - cFlat,
-                20 + tCD + bCD + g[3],
-                6 + tP  + bP  + g[4] - cFlat,
-                7 + tAc + bAc + g[5] - cFlat,
+                tSC  + bSC  + g[0],
+                tASp + bASp + g[1],
+                5 + tCH + bCH + g[2],
+                tCD + bCD + g[3],
+                tP  + bP  + g[4],
+                tAc + bAc + g[5],
                 bASt + g[6],
                 bPA  + g[7],
                 bR   + g[8],

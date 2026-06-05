@@ -3573,7 +3573,7 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <Grid Grid.Column="0">
-                        <Border BorderBrush="Black"
+                        <Border BorderBrush="#FFE7CE63"
                                 BorderThickness="2"
                                 Margin="20" CornerRadius="10" >
                             <Grid Margin="5, 10, 5, 10">
@@ -3604,9 +3604,9 @@
                                     -->
 
 
-                                
 
-                                <Grid Grid.Row="1">
+
+                                <Grid Grid.Row="0">
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,0">
                                         <ToggleButton IsChecked="{Binding GodsAid}"
                                                       Style="{StaticResource ModifierToggleStyle}">
@@ -3616,7 +3616,7 @@
                                                    TextWrapping="Wrap" Width="150" VerticalAlignment="Center" Margin="8,0,0,0"/>
                                     </StackPanel>
                                 </Grid>
-                                <Grid Grid.Row="2">
+                                <Grid Grid.Row="1">
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,0">
                                         <ToggleButton IsChecked="{Binding GodsAidLuna}"
                                                       Style="{StaticResource ModifierToggleStyle}">
@@ -3627,7 +3627,7 @@
                                     </StackPanel>
                                 </Grid>
 
-                                <Grid Grid.Row="3">
+                                <Grid Grid.Row="2">
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,0">
                                         <ToggleButton IsChecked="{Binding ChechBPDungeon}"
                                                       Style="{StaticResource ModifierToggleStyle}">
@@ -3638,7 +3638,7 @@
                                     </StackPanel>
                                 </Grid>
 
-                                <Grid Grid.Row="4">
+                                <Grid Grid.Row="3">
                                     <CheckBox
                                         IsChecked="{Binding SacredShieldHeroActive}"
                                         HorizontalAlignment="Left" 
@@ -3650,7 +3650,7 @@
                                             TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Сакральный щит паладина на персонажа"/></TextBlock>
                                     </CheckBox>
                                 </Grid>
-                                <Grid Grid.Row="5">
+                                <Grid Grid.Row="4">
                                     <CheckBox
                                         IsChecked="{Binding SacredShieldLunaActive}"
                                         HorizontalAlignment="Left" 
@@ -3662,7 +3662,7 @@
                                             TextWrapping="Wrap" Height="18"><Run Language="ru-ru" Text="Сакральный щит паладина на Луну"/></TextBlock>
                                     </CheckBox>
                                 </Grid>
-                                <Grid Grid.Row="6">
+                                <Grid Grid.Row="5">
                                     <!--
                                     <Image Source="/icons/talents/almahad/pairing.png"
                                        Width="36"
@@ -3681,7 +3681,7 @@
                                                    TextWrapping="Wrap" Width="150" VerticalAlignment="Center" Margin="8,0,0,0"/>
                                     </StackPanel>
                                 </Grid>
-                                <Grid Grid.Row="7">
+                                <Grid Grid.Row="6">
                                     <!--
                                     <Image Source="/icons/talents/almahad/roar.png"
                                        Width="36"
@@ -3700,7 +3700,7 @@
                                                    TextWrapping="Wrap" Width="150" VerticalAlignment="Center" Margin="8,0,0,0"/>
                                     </StackPanel>
                                 </Grid>
-                                <Grid Grid.Row="8">
+                                <Grid Grid.Row="7">
                                     <!--
                                     <Image Source="/icons/talents/almahad/PredatoryBond.jpg"
                                            Width="36"
@@ -3713,7 +3713,7 @@
                                     <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,0">
                                         <ToggleButton IsChecked="{Binding PredatoryBondTalentAlmahadActive}"
                                                       Style="{StaticResource ModifierToggleStyle}">
-                                            <Image Source="/icons/talents/almahad/PredatoryBond.jpg" Width="40" Height="40" Stretch="Uniform"/>
+                                            <Image Source="/icons/talents/almahad/PredatoryBond.png" Width="40" Height="40" Stretch="Uniform"/>
                                         </ToggleButton>
                                         <TextBlock Text="Хищный тандем" Foreground="White"
                                                    TextWrapping="Wrap" Width="150" VerticalAlignment="Center" Margin="8,0,0,0"/>
@@ -3727,7 +3727,7 @@
                             <RowDefinition Height="85*"/>
                             <RowDefinition Height="36*"/>
                         </Grid.RowDefinitions>
-                        <Border BorderBrush="Black"
+                        <Border BorderBrush="#FFE7CE63"
                         BorderThickness="2"
                         Margin="21,20,19,20" CornerRadius="10" Grid.Row="0">
                             <!--Margin="21,20,19,242"-->
@@ -3818,30 +3818,30 @@
                                         SelectedValue="{Binding SelectedCastle}"
         
                                         HorizontalAlignment="Left"
-                                    Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="115" Height="22">
-                                                                        <ComboBox.Background>
-                                                                            <LinearGradientBrush EndPoint="0,1">
-                                                                                <GradientStop Color="#FFF0F0F0"/>
-                                                                                <GradientStop Color="#FFC7C6BB" Offset="1"/>
-                                                                            </LinearGradientBrush>
-                                                                        </ComboBox.Background>
-                                                                    </ComboBox>
-                                                                    <TextBlock
+                                    Margin="10,0,0,0" Grid.Row="1" VerticalAlignment="Center" Width="125" Height="22">
+                                        <ComboBox.Background>
+                                            <LinearGradientBrush EndPoint="0,1">
+                                                <GradientStop Color="#FFF0F0F0"/>
+                                                <GradientStop Color="#FFC7C6BB" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </ComboBox.Background>
+                                    </ComboBox>
+                                    <TextBlock
                                         TextWrapping="Wrap" 
                                         HorizontalAlignment="Left"
-                                        VerticalAlignment="Center" Width="174" Text="урон навыков от замка" Margin="128,0,0,0"/>
+                                        VerticalAlignment="Center" Width="159" Text="урон навыков от замка" Margin="143,0,0,0"/>
                                 </Grid>
 
                             </Grid>
                         </Border>
-                        <Border BorderBrush="Black"
+                        <Border BorderBrush="#FFE7CE63"
                         BorderThickness="2"
                         Margin="21,20,19,20" CornerRadius="10" Grid.Row="1">
                             <Grid Margin="5, 10, 5, 10">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition/>
-                                    
+
                                 </Grid.RowDefinitions>
 
                                 <Grid Grid.Row="0">
@@ -3859,8 +3859,9 @@
                                                       Style="{StaticResource ModifierToggleStyle}">
                                             <Image Source="icons/stats/rbreduction.png" Width="40" Height="40" Stretch="Uniform"/>
                                         </ToggleButton>
-                                        <TextBlock Text="Снижение длительности эффектов" Foreground="White"
-                                                   TextWrapping="Wrap" Width="150" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                                        <TextBlock Text="Снижение длительности эффектов 
+                                                   у босса" Foreground="White"
+                                                   TextWrapping="Wrap" Width="249" VerticalAlignment="Center" Margin="8,0,0,0"/>
                                     </StackPanel>
                                 </Grid>
 
@@ -4041,9 +4042,9 @@
                     </ListView>
                     <Grid>
                         <Grid.RowDefinitions>
-                            <RowDefinition Height="64*"/>
-                            <RowDefinition Height="215*"/>
-                            <RowDefinition Height="269*"/>
+                            <RowDefinition Height="62*"/>
+                            <RowDefinition Height="152*"/>
+                            <RowDefinition Height="315*"/>
 
                             <!--
                             <RowDefinition Height="100*"/>
@@ -4051,7 +4052,7 @@
                             <RowDefinition Height="83*"/>
                             -->
                         </Grid.RowDefinitions>
-                        <Grid>
+                        <Grid Margin="0,0,0,6">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="*"/>
                                 <RowDefinition Height="*"/>
@@ -4068,7 +4069,7 @@
                                      Margin="0,32,0,0"
                                      TextWrapping="Wrap" Text="{Binding Name}" VerticalAlignment="Top" Width="220" Grid.RowSpan="2"/>
                         </Grid>
-                        <Grid Margin="0,14,0,0" Grid.Row="1">
+                        <Grid Margin="0,62,0,258" Grid.RowSpan="3">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="12*"/>
                                 <RowDefinition Height="55*"/>
@@ -4083,7 +4084,7 @@
 
                             <TextBox HorizontalAlignment="Center"
                                      Margin="0,4,0,0"
-                                     TextWrapping="Wrap" Text="{Binding Description}" VerticalAlignment="Top" Width="220" Grid.Row="1" Height="152"
+                                     TextWrapping="Wrap" Text="{Binding Description}" VerticalAlignment="Top" Width="220" Grid.Row="1" Height="100"
                                      VerticalContentAlignment="Top"/>
                             <!--
                             <Button Content="COpy" 
@@ -4098,7 +4099,7 @@
                         <Button   
                                 x:Name="editDataSetButton"
                                 Height="40" 
-                                Margin="0,15,0,0" 
+                                Margin="0,0,0,0" 
                                 VerticalAlignment="Top" 
                                 HorizontalAlignment="Center"
                                 Grid.Row="2" 
@@ -4172,7 +4173,7 @@
                         <Button 
                                 HorizontalAlignment="Center" 
                                 Height="40" 
-                                Margin="0,150,0,0" 
+                                Margin="0,135,0,0" 
                                 x:Name="deleteDataSetButton"
                                 VerticalAlignment="Top" 
                                 Width="230"  
@@ -4188,7 +4189,7 @@
                                 Height="40"
                             HorizontalAlignment="Center"
                                  Style="{StaticResource CustomButtonStyle}"
-                                Margin="0,60,0,0" VerticalAlignment="Top" Grid.Row="2"
+                                Margin="0,45,0,0" VerticalAlignment="Top" Grid.Row="2"
                             Width="230" Click="choiceDataSet_Click">
                             <Button.Background>
                                 <ImageBrush Stretch="Uniform" ImageSource="icons/buttons/download.png"/>
@@ -4200,14 +4201,14 @@
                                 x:Name="addDataSetButton"
                                  Style="{StaticResource CustomButtonStyle}"
                             
-                                VerticalAlignment="Top" Width="230" Grid.Row="2" Click="addDataSetButton_Click" Margin="0,105,0,0" >
+                                VerticalAlignment="Top" Width="230" Grid.Row="2" Click="addDataSetButton_Click" Margin="0,90,0,0" >
                             <Button.Background>
                                 <ImageBrush Stretch="Uniform" ImageSource="icons/buttons/saveas.png"/>
                             </Button.Background>
                         </Button>
                         <Button 
                                 x:Name="addAndGenerateDataSetButton"
-                                Margin="0,195,0,0" 
+                                Margin="0,180,0,0" 
                                 Height="40" 
                                 Click="addAndGenerateDataSetButton_Click"
                                  Style="{StaticResource CustomButtonStyle}"
@@ -4216,6 +4217,30 @@
                                 VerticalAlignment="Top" Width="230" Grid.Row="2">
                             <Button.Background>
                                 <ImageBrush Stretch="Uniform" ImageSource="icons/buttons/create.png"/>
+                            </Button.Background>
+                        </Button>
+                        <Button
+                            x:Name="saveToFileButton"
+                            Margin="0,225,0,0"
+                            Height="40"
+                            Click="saveToFileButton_Click"
+                            Style="{StaticResource CustomButtonStyle}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top" Width="230" Grid.Row="2">
+                            <Button.Background>
+                                <ImageBrush Stretch="Uniform" ImageSource="icons/buttons/buttonSaveAsFile.png"/>
+                            </Button.Background>
+                        </Button>
+                        <Button
+                            x:Name="loadFromFileButton"
+                            Margin="0,270,0,0"
+                            Height="40"
+                            Click="loadFromFileButton_Click"
+                            Style="{StaticResource CustomButtonStyle}"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top" Width="230" Grid.Row="2">
+                            <Button.Background>
+                                <ImageBrush Stretch="Uniform" ImageSource="icons/buttons/buttonDownloadFromFile.png"/>
                             </Button.Background>
                         </Button>
 
@@ -4532,7 +4557,7 @@
                     </GroupBox>
 
                     <!-- Итоговые статы -->
-                    <GroupBox Header="Итоговые статы" Grid.Column="2" Grid.Row="0"
+                    <GroupBox Header="Итог" Grid.Column="2" Grid.Row="0"
                               BorderBrush="#FF400984" Margin="4,8,8,8"
 >
                         <Grid>
@@ -4809,10 +4834,95 @@
                         Margin="33,404,0,0" 
                         VerticalAlignment="Top"
                         Width="98"/>
+                    <Label Content="Алгоритм:" HorizontalAlignment="Left" Height="25" Margin="493,128,0,0" VerticalAlignment="Top" Width="72"/>
+                    <ComboBox SelectedValue="{Binding SelectedRecommendationAlgorithm}"
+                              SelectedValuePath="Content"
+                              HorizontalAlignment="Left"
+                              Height="25"
+                              Margin="565,128,0,0"
+                              VerticalAlignment="Top"
+                              Width="78">
+                        <ComboBoxItem Content="DE"/>
+                        <ComboBoxItem Content="MCTS"/>
+                    </ComboBox>
+                    <Label Content="Budget tol:" HorizontalAlignment="Left" Height="25" Margin="493,156,0,0" VerticalAlignment="Top" Width="72"/>
+                    <TextBox Text="{Binding RecommendationBudgetTolerance, UpdateSourceTrigger=LostFocus}"
+                             HorizontalAlignment="Left"
+                             Height="25"
+                             Margin="565,156,0,0"
+                             VerticalAlignment="Top"
+                             Width="78"/>
+                    <Label Content="DE pop:" HorizontalAlignment="Left" Height="25" Margin="493,184,0,0" VerticalAlignment="Top" Width="72"/>
+                    <TextBox Text="{Binding RecommendationDePopulationSize, UpdateSourceTrigger=LostFocus}"
+                             HorizontalAlignment="Left"
+                             Height="25"
+                             Margin="565,184,0,0"
+                             VerticalAlignment="Top"
+                             Width="78"/>
+                    <Label Content="DE gen:" HorizontalAlignment="Left" Height="25" Margin="493,212,0,0" VerticalAlignment="Top" Width="72"/>
+                    <TextBox Text="{Binding RecommendationDeMaxGenerations, UpdateSourceTrigger=LostFocus}"
+                             HorizontalAlignment="Left"
+                             Height="25"
+                             Margin="565,212,0,0"
+                             VerticalAlignment="Top"
+                             Width="78"/>
+                    <Label Content="DE F:" HorizontalAlignment="Left" Height="25" Margin="493,240,0,0" VerticalAlignment="Top" Width="72"/>
+                    <TextBox Text="{Binding RecommendationDeMutationFactor, UpdateSourceTrigger=LostFocus}"
+                             HorizontalAlignment="Left"
+                             Height="25"
+                             Margin="565,240,0,0"
+                             VerticalAlignment="Top"
+                             Width="78"/>
+                    <Label Content="DE CR:" HorizontalAlignment="Left" Height="25" Margin="493,268,0,0" VerticalAlignment="Top" Width="72"/>
+                    <TextBox Text="{Binding RecommendationDeCrossoverRate, UpdateSourceTrigger=LostFocus}"
+                             HorizontalAlignment="Left"
+                             Height="25"
+                             Margin="565,268,0,0"
+                             VerticalAlignment="Top"
+                             Width="78"/>
+                    <Label Content="MCTS iter:" HorizontalAlignment="Left" Height="25" Margin="493,296,0,0" VerticalAlignment="Top" Width="72"/>
+                    <TextBox Text="{Binding RecommendationMctsMaxIterations, UpdateSourceTrigger=PropertyChanged}"
+                             HorizontalAlignment="Left"
+                             Height="25"
+                             Margin="565,296,0,0"
+                             VerticalAlignment="Top"
+                             Width="78"/>
+                    <Label Content="MCTS top:" HorizontalAlignment="Left" Height="25" Margin="493,324,0,0" VerticalAlignment="Top" Width="72"/>
+                    <TextBox Text="{Binding RecommendationMctsTop, UpdateSourceTrigger=PropertyChanged}"
+                             HorizontalAlignment="Left"
+                             Height="25"
+                             Margin="565,324,0,0"
+                             VerticalAlignment="Top"
+                             Width="78"/>
+                    <Label Content="MCTS шаг:" HorizontalAlignment="Left" Height="25" Margin="493,352,0,0" VerticalAlignment="Top" Width="72"/>
+                    <TextBox Text="{Binding RecommendationMctsMinSteps, UpdateSourceTrigger=PropertyChanged}"
+                             HorizontalAlignment="Left"
+                             Height="25"
+                             Margin="565,352,0,0"
+                             VerticalAlignment="Top"
+                             Width="35"/>
+                    <TextBox Text="{Binding RecommendationMctsMaxSteps, UpdateSourceTrigger=PropertyChanged}"
+                             HorizontalAlignment="Left"
+                             Height="25"
+                             Margin="608,352,0,0"
+                             VerticalAlignment="Top"
+                             Width="35"/>
+                    <Label Content="Время (мс):" HorizontalAlignment="Left" Height="25" Margin="240,294,0,0" VerticalAlignment="Top" Width="98"/>
                     <Label Content="{Binding TimeRec}" HorizontalAlignment="Left" Height="25" Margin="240,311,0,0" VerticalAlignment="Top" Width="98"/>
+                    <Label Content="Вызовов Calculate:" HorizontalAlignment="Left" Height="25" Margin="240,336,0,0" VerticalAlignment="Top" Width="130"/>
+                    <Label Content="{Binding RecCalcCount}" HorizontalAlignment="Left" Height="25" Margin="240,353,0,0" VerticalAlignment="Top" Width="130"/>
                     <Label Content="{Binding Status}" HorizontalAlignment="Left" Height="88" Margin="208,437,0,0" VerticalAlignment="Top" Width="377"/>
                     <Button Content="Recs" HorizontalAlignment="Left" Margin="375,369,0,0" VerticalAlignment="Top" Height="28" Width="97" 
                             Command="{Binding GetRecommendCommand}"/>
+                    <Label Content="Прогонов:" HorizontalAlignment="Left" Height="25" Margin="493,386,0,0" VerticalAlignment="Top" Width="72"/>
+                    <TextBox Text="{Binding RecommendationTestRuns, UpdateSourceTrigger=PropertyChanged}"
+                             HorizontalAlignment="Left"
+                             Height="25"
+                             Margin="565,386,0,0"
+                             VerticalAlignment="Top"
+                             Width="52"/>
+                    <Button Content="Тест" HorizontalAlignment="Left" Margin="493,414,0,0" VerticalAlignment="Top" Height="28" Width="124"
+                            Command="{Binding RecommendationTestCommand}"/>
                     <!--
                     <Button
                         Command="{Binding SaveCommand}"
