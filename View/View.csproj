@@ -663,6 +663,17 @@
   <ItemGroup>
     <Resource Include="icons\talents\almahad\roar.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\other\dragoneye.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\classes\templ.png" />
+    <Resource Include="icons\classes\priest.png" />
+    <Resource Include="icons\classes\druid.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\talents\blagoTalent.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.6.5.5\build\Fody.targets" Condition="Exists('..\packages\Fody.6.5.5\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

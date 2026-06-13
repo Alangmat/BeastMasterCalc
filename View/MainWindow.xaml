@@ -878,6 +878,27 @@
                         <TextBlock Foreground="White" Text="Абьюз таланта на ауру"
                             TextWrapping="Wrap" Height="19"/>
                     </CheckBox>
+                    <StackPanel  Grid.Column="2" Orientation="Horizontal"
+                           Grid.Row="2" HorizontalAlignment="Center" Margin="0,235,0,0" >
+                        <ToggleButton Margin="30,0,10,0"
+                                IsChecked="{Binding PriestActive}"
+                                Style="{StaticResource RelicToggleStyle}"
+                                ToolTip="+20% дд от ауры жреца">
+                            <Image Source="/icons/classes/priest.png" Width="50" Height="50" Stretch="Uniform"/>
+                        </ToggleButton>
+                        <ToggleButton
+                                IsChecked="{Binding DruidActive}"
+                                Style="{StaticResource RelicToggleStyle}"
+                                ToolTip="+20 кд и 16 пробива">
+                            <Image Source="/icons/classes/druid.png" Width="50" Height="50" Stretch="Uniform"/>
+                        </ToggleButton>
+                        <ToggleButton Margin="10,0,10,0"
+                            IsChecked="{Binding TemplActive}"
+                            Style="{StaticResource RelicToggleStyle}"
+                            ToolTip="+17.4% дд от храма">
+                            <Image Source="/icons/classes/templ.png" Width="50" Height="50" Stretch="Uniform"/>
+                        </ToggleButton>
+                    </StackPanel>
                     <Button Grid.Column="1"
                         Command="{Binding IncreaseLvlOrderToAttackCommand}"
                         HorizontalAlignment="Left"
@@ -1156,6 +1177,7 @@
                             <ImageBrush Stretch="Uniform" ImageSource="/icons/buttons/plus.png"/>
                         </Button.Background>
                     </Button>
+                    
 
 
                 </Grid>
@@ -3718,6 +3740,25 @@
                                         <TextBlock Text="Хищный тандем" Foreground="White"
                                                    TextWrapping="Wrap" Width="150" VerticalAlignment="Center" Margin="8,0,0,0"/>
                                     </StackPanel>
+
+                                </Grid>
+                                <Grid Grid.Row="8">
+                                    <Image Source="/icons/other/dragoneye.png"
+                                         Width="36"
+                                         Height="36"
+                                         HorizontalAlignment="Left"
+                                         VerticalAlignment="Top"
+                                         Margin="5,7,0,0"/>
+                                    <TextBox HorizontalAlignment="Left"
+                                        VerticalAlignment="Center"
+                                        Margin="50,0,0,0"
+                                        Width="45"
+                                        Text="{Binding DragonEyeLvl, Converter={StaticResource StringToDoubleConverter}}"
+                                        />
+                                    <Label Content="(уровень) Глаз мага"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Center" Width="142" Margin="104,0,0,0"
+                                        />
                                 </Grid>
                             </Grid>
                         </Border>
@@ -3725,7 +3766,7 @@
                     <Grid Grid.Column="1">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="85*"/>
-                            <RowDefinition Height="36*"/>
+                            <RowDefinition Height="20*"/>
                         </Grid.RowDefinitions>
                         <Border BorderBrush="#FFE7CE63"
                         BorderThickness="2"
@@ -3733,6 +3774,7 @@
                             <!--Margin="21,20,19,242"-->
                             <Grid Margin="5, 10, 5, 10">
                                 <Grid.RowDefinitions>
+                                    <RowDefinition Height="*"/>
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="*"/>
                                     <RowDefinition Height="*"/>
@@ -3831,7 +3873,16 @@
                                         HorizontalAlignment="Left"
                                         VerticalAlignment="Center" Width="159" Text="урон навыков от замка" Margin="143,0,0,0"/>
                                 </Grid>
-
+                                <Grid Grid.Row="7">
+                                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="5,0">
+                                        <ToggleButton IsChecked="{Binding BlagoTalent}"
+                                            Style="{StaticResource ModifierToggleStyle}">
+                                            <Image Source="/icons/talents/blagoTalent.png" Width="40" Height="40" Stretch="Uniform"/>
+                                        </ToggleButton>
+                                        <TextBlock Text="Талант на точность от блага" Foreground="White"
+                                            TextWrapping="Wrap" Width="214" VerticalAlignment="Center" Margin="8,0,0,0"/>
+                                    </StackPanel>
+                                </Grid>
                             </Grid>
                         </Border>
                         <Border BorderBrush="#FFE7CE63"
@@ -3840,7 +3891,7 @@
                             <Grid Margin="5, 10, 5, 10">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
-                                    <RowDefinition/>
+                                    
 
                                 </Grid.RowDefinitions>
 
@@ -4688,7 +4739,7 @@
                     </ScrollViewer>
                 </Grid>
             </TabItem>
-            <TabItem Header="debug">
+            <TabItem Header="debug" Visibility="Collapsed">
                 <TabItem.Background>
                     <ImageBrush Stretch="Fill">
                         <ImageBrush.ImageSource>

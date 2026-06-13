@@ -195,6 +195,12 @@ namespace Model
         public int LvlTalantContinuousFury { get; set; }
         #endregion
 
+        public int DragonEyeLvl = 0;
+        public bool PriestActive = false;
+        public bool DruidActive = false;
+        public bool TemplActive = false;
+        public bool BlagoTalent = false;
+
         #region скиллы
 
         public bool AttackActive { get; set; }

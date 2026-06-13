@@ -18,6 +18,7 @@ using System.Collections.ObjectModel;
 using Newtonsoft.Json.Linq;
 using Shared;
 using System.Configuration;
+using CommonServiceLocator;
 
 namespace ViewModel
 {
@@ -395,10 +396,16 @@ namespace ViewModel
             IsUsingBlessingOfTheMoonOnLuna = DataSet.IsUsingBlessingOfTheMoonOnLuna;
             CrushingWillActive = DataSet.CrushingWill;
             IrreversibleAngerActive = DataSet.IrreversibleAnger;
+
             #endregion
 
             //NotifyPropertyChanged(nameof(OverLimitClosed));
             NotifyPropertyChanged(nameof(AuraTalentAbuse));
+            NotifyPropertyChanged(nameof(DragonEyeLvl));
+            NotifyPropertyChanged(nameof(PriestActive));
+            NotifyPropertyChanged(nameof(DruidActive));
+            NotifyPropertyChanged(nameof(TemplActive));
+            NotifyPropertyChanged(nameof(BlagoTalent));
 
             Calculate();
         }
@@ -773,17 +780,21 @@ namespace ViewModel
             result.Add(SourcesDamage.Luna, 0);
             double coefGrandeurOfTheLotus = 0.75;
 
-            double coeffsLunaStart = FormulaCoefficientOfPenetrationLuna();
+            double coeffsLunaStart = FormulaCoefficientSkillPower()
+                * coefficientBestialRageTalant
+                * coefficientPredatoryDeliriumTalant
+                * FormulaCoefficientOfPenetrationLuna();
             double coeffsHeroStart = FormulaCoefficientSkillPower()
                 * coefficientBestialRageTalant
                 * coefficientPredatoryDeliriumTalant
-                * coefficientMomentOfPowerTalant
+                * coefficientLongDeathTalant
                 * FormulaCoefficientOfPenetration();
 
             double coeffsLunaFinal = CoefficientOfMoonTouchForLuna()
                         * FormulaCoefficientOfCriticalHitLuna()
                         * FormulaCoefficientOfAccuracyLuna()
                         * sacredShieldLunaCoef();
+
             double coeffsHeroFinal = FormulaCoefficientOfCriticalHitForSkill()
                 * FormulaCoefficientOfAccuracy()
                 * coefficientBPDungeon()
@@ -1074,6 +1085,7 @@ namespace ViewModel
             if (CastleSwordActive) SkillCooldownFinal += 5;
             if (DoubleConcentrationActive)
                 SkillCooldownFinal += DoubleConcentration.AddSkillCooldown();
+            if (DruidActive) SkillCooldownFinal += DRUID_COOLDOWN;
             if (CastleStartModifierActive) SkillCooldownFinal -= 5;
 
             SkillCooldownFinal = StatsLimit.CheckLimit(SkillCooldownFinal, StatsLimit.MAX_SKILL_COOLDOWN);
@@ -1440,6 +1452,7 @@ namespace ViewModel
             if (CastleSwordActive) PenetrationHeroFinal += 5;
             if (BlessingOfTheMoonActive) PenetrationHeroFinal += BlessingOfTheMoon.AdditionPenetration;
             if (IrreversibleAngerActive) PenetrationHeroFinal += MermanModifiers.IRREVERSIBLE_ANGER_ADDITIONAL_PENETRATION;
+            if (DruidActive) PenetrationHeroFinal += DRUID_PENETRATION;
             if (CastleStartModifierActive) PenetrationHeroFinal -= 5;
             PenetrationHeroFinal = Math.Max(PenetrationHeroFinal, 0);
             penetration = PenetrationHeroFinal;
@@ -1543,6 +1556,8 @@ namespace ViewModel
             if (CastleSwordActive) AccuracyHeroFinal += 5;
             if (IrreversibleAngerActive) AccuracyHeroFinal += MermanModifiers.IRREVERSIBLE_ANGER_ADDITIONAL_ACCURACY;
             if (CastleStartModifierActive) AccuracyHeroFinal -= 5;
+            if (DragonEyeLvl > 0) AccuracyHeroFinal += DragonEyeAccuracy;
+            if (BlessingOfTheMoonActive && BlagoTalent) AccuracyHeroFinal += 10;
             AccuracyHeroFinal = Math.Max(AccuracyHeroFinal, 0);
             double finalAcc = StatsLimit.CheckLimit(AccuracyHeroFinal, StatsLimit.MAX_ACCURACY_HERO);
             //if (OverLimitClosed) AccuracyLuna = finalAcc; else AccuracyLuna = AccuracyHeroFinal;
@@ -1907,6 +1922,7 @@ namespace ViewModel
             if (coefficientCastleStart != 0) SkillPowerFinal -= Math.Round((coefficientCastleStart - 1) * 100, 1);
             SkillPowerFinal = Math.Max(SkillPowerFinal, 0);
             SkillPowerFinal += SkillPowerPot;
+            if (DragonEyeLvl > 0) SkillPowerFinal += DRAGON_EYE_SKILL_POWER_ADDITIONAL;
             if (coefficientCastle != 0) SkillPowerFinal += Math.Round((coefficientCastle - 1) * 100, 1);
             SkillPowerFinal = StatsLimit.CheckLimit(SkillPowerFinal, StatsLimit.MAX_SKILL_POWER);
             //SkillPowerFinal = Math.Round(SkillPowerFinal, 1);
@@ -2114,6 +2130,8 @@ namespace ViewModel
             if (TalentDamageModifierActive) percentMagicalDD += ModifiersDamage.DD_TALENTS;
             if (CastleSwordActive) percentMagicalDD += ModifiersDamage.DD_CASTLE;
             if (PairingTalentAlmahadActive) percentMagicalDD += ModifiersDamage.PAIRING_TALENT_MAGICAL_DD;
+            if (PriestActive) percentMagicalDD += PRIEST_AURA;
+            if (TemplActive) percentMagicalDD += TEMPL_BLAGO;
             //if (HasTalentHarmoniousPower) percentMagicalDD += harmoniousPowerMDD;
             percentMagicalDD += AdditionalPercentMDDFinal;
         }
@@ -2162,6 +2180,8 @@ namespace ViewModel
             if (TalentDamageModifierActive) percentPhysicalDD += ModifiersDamage.DD_TALENTS;
             if (CastleSwordActive) percentPhysicalDD += ModifiersDamage.DD_CASTLE;
             if (PairingTalentAlmahadActive) percentPhysicalDD += ModifiersDamage.PAIRING_TALENT_PHYSICAL_DD;
+            if (PriestActive) percentPhysicalDD += PRIEST_AURA;
+            if (TemplActive) percentPhysicalDD += TEMPL_BLAGO;
 
             percentPhysicalDD += AdditionalPercentPDDFinal;
         }
@@ -3977,6 +3997,89 @@ namespace ViewModel
                 result += 0.15;
             return result;
         }
+        private const int DRAGON_EYE_SKILL_POWER_ADDITIONAL = 14;
+        public int DragonEyeAccuracy
+        {
+            get
+            {
+                switch (DragonEyeLvl)
+                {
+                    case 1:
+                        return 7;
+                    case 2:
+                        return 10;
+                    case 3:
+                        return 13;
+                    case 4:
+                        return 18;
+                    default:
+                        return 0;
+                }
+
+            }
+        }
+
+        public int DragonEyeLvl
+        {
+            get => DataSet.DragonEyeLvl;
+            set
+            {
+                DataSet.DragonEyeLvl = value;
+                Calculate();
+                NotifyPropertyChanged(nameof(DragonEyeLvl));
+            }
+        }
+        public bool BlagoTalent
+        {
+            get => DataSet.BlagoTalent;
+            set
+            {
+                DataSet.BlagoTalent = value;
+                Calculate();
+                NotifyPropertyChanged(nameof(BlagoTalent));
+            }
+        }
+        #endregion
+
+        #region классы
+
+        public bool PriestActive
+        {
+            get => DataSet.PriestActive;
+            set
+            {
+                DataSet.PriestActive = value;
+                Calculate();
+                NotifyPropertyChanged(nameof(PriestActive));
+            }
+        }
+        public const int PRIEST_AURA = 20;
+        public bool DruidActive
+        {
+            get => DataSet.DruidActive;
+            set
+            {
+                DataSet.DruidActive = value;
+                Calculate();
+                NotifyPropertyChanged(nameof(DruidActive));
+            }
+        }
+        public const int DRUID_COOLDOWN = 20;
+        public const int DRUID_PENETRATION = 16;
+
+        public bool TemplActive
+        {
+            get => DataSet.TemplActive;
+            set
+            {
+                DataSet.TemplActive = value;
+                Calculate();
+                NotifyPropertyChanged(nameof(TemplActive));
+            }
+        }
+        public const double TEMPL_BLAGO = 17.4;
+
+
         #endregion
 
         #region крылья жц
