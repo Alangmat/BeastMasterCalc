@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(powershell.exe -Command \"& 'C:\\\\Program Files\\\\Microsoft Visual Studio\\\\2022\\\\Community\\\\MSBuild\\\\Current\\\\Bin\\\\MSBuild.exe' 'D:\\\\WarspearCalc\\\\WarspearOnlineCalcDB\\\\ViewModel\\\\ViewModel.csproj' /p:Configuration=Debug /t:Build\")",
+      "Bash(awk -F: '$2 >= 2278 && $2 <= 2660')",
+      "Bash(awk *)"
+    ]
+  }
+}

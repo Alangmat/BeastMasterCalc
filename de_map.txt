@@ -1,0 +1,161 @@
+================================================================
+  DE (Differential Evolution) — карта кода
+  Проект: WarspearOnlineCalcDB
+================================================================
+
+Порядок статов во всех массивах: 0=SC, 1=ASp, 2=CH, 3=CD, 4=P, 5=Ac, 6=ASt, 7=PA, 8=R, 9=F, 10=SP
+
+----------------------------------------------------------------
+ФАЙЛ: ViewModel/ViewModel.cs
+----------------------------------------------------------------
+
+[1] ТОЧКА ВХОДА — GetRecommendCommand
+  Строки: ~6306–6315
+  Запускает OptimizeByDEAsync().
+  CanExecute: хотя бы один стат в "Характеристики" > 0.
+
+[2] ГЛАВНЫЙ АЛГОРИТМ — OptimizeByDEAsync()
+  Строки: ~5937–6152
+  Метод async Task. Вызывается командой GetRecommendCommand.
+  Внутри:
+    - Веса (wSC..wSP)                       ~5944–5957
+    - hardCaps, softGear                     ~5957–5958
+    - Флаги бонусов ветки (tSC, tASp...)    ~5960–5968
+    - Флаги книг (RecHasBook*)               ~5972–5984
+    - Книжные бонусы (bSC..bF)              ~5984–5993
+    - Гильдейские бонусы GetGuildStatBonuses ~5998
+    - Замковый дебаф (cFlat, cSP)           ~5999–6001
+    - baseStats[11]                          ~6001–6016
+    - mins[]/maxs[] (мин/макс диапазон)     ~6017–6023
+    - userMins[] (UserMin* из UI)            ~6030–6047
+    - original[] (DataSet.* из Характеристик)~6054–6059
+    - current[] (original, зажатый в мин/макс)~6061–6063
+    - ApplyToDataSet() — локальная функция   ~6067–6080
+    - Бюджет originalBudget (+3% допуск)     ~6082–6092
+    - Запуск RecommendationSystem.DE()       ~6097–6118
+    - Сохранение _lastRounded                ~6120
+    - Заполнение RecVal*, Delta*             ~6127–6138
+    - RecDPMDisplay                          ~6138
+    - Вызов SaveResults(..., "de", ...)      ~6146
+
+  Зависимость от внешних классов:
+    - RecommendationSystem._rs.DE(...)       строка ~2920 + ~6097
+
+[3] ПРИМЕНЕНИЕ РЕЗУЛЬТАТА — ApplyRecResult / ApplyRecResultCommand
+  Строки: ~6317–6355
+  _lastRounded: поле, куда сохраняется последний результат DE.
+  ApplyRecResult(): записывает _lastRounded[0..10] → DataSet.*, вызывает Calculate().
+  Кнопка активна только если _lastRounded != null.
+
+[4] СОХРАНЕНИЕ В ФАЙЛ — SaveResults()
+  Строки: ~6159–6305
+  Пишет результаты в txt-лог (путь: AppData или рядом с exe).
+  Содержит собственную копию весов (wSC..wSP) — СИНХРОНИЗИРОВАТЬ с [2].
+  Вызывается тремя методами: gradient (~5618), mcts (~5924), de (~6146).
+
+[5] ВСПОМОГАТЕЛЬНЫЕ МЕТОДЫ
+
+  GetGuildStatBonuses(int level)      строки ~6405–6413
+    Возвращает double[11] с бонусами гильдии.
+    SC+15, ASp+15 при уровне >=10; CH+6, PA+6 при >=8; CD+20 при >=9; Ac+7 при >=11.
+    SP всегда 0.
+
+  ComputeRecBaseStats()               строки ~6420–6453
+    Пересчитывает baseStats для отображения в UI (те же формулы что в DE).
+    Учитывает: ветку, книги, гильдию, замковый дебаф (cFlat/cSP).
+    Вызывается из RefreshRecBaseDisplay().
+
+  RefreshRecBaseDisplay()             строки ~6461–6475
+    Обновляет строки RecBase* для отображения "База" в UI рекомендаций.
+
+  FormatDelta(double d)               строка ~6561
+    "+X.X" или "-X.X" для отображения разницы стат.
+
+[6] СВОЙСТВА — НАСТРОЙКИ РЕКОМЕНДАЦИЙ
+
+  GuildLevel                          строка ~6382
+    int 0..12. При изменении вызывает RefreshRecBaseDisplay().
+
+  RecHasBook* (bool, 10 штук)         строки ~6386–6405
+    RecHasBookSC, RecHasBookASp, RecHasBookCH, RecHasBookCD, RecHasBookP,
+    RecHasBookAc, RecHasBookASt, RecHasBookPA, RecHasBookR, RecHasBookF.
+    При изменении вызывают RefreshRecBaseDisplay().
+    (Книги SP нет — SP-книга в игре отсутствует или не поддерживается.)
+
+  UserMin* (double, 11 штук)          строки ~6489–6510
+    UserMinSC, UserMinASp, UserMinCH, UserMinCD, UserMinP,
+    UserMinAc, UserMinASt, UserMinPA, UserMinR, UserMinF, UserMinSP.
+    Нижние границы для каждого стата при оптимизации.
+    Defaults: UserMinCH=30, UserMinP=24, UserMinR=8.1; остальные=0.
+
+[7] СВОЙСТВА — РЕЗУЛЬТАТЫ (binding для UI)
+
+  RecBase* (string, 11 штук)          строки ~6477–6487
+    Отображают базу (не-шмоточную часть) каждого стата.
+
+  RecVal* (string, 11 штук)           строки ~6512–6533
+    Рекомендованные значения после DE (RecValSC..RecValSP).
+
+  Delta* (string, 11 штук)            строки ~6535–6556
+    Разница рекомендация − оригинал (DeltaSC..DeltaSP).
+
+  RecDPMDisplay (string)              строка ~6558
+    Лучший DPM найденный DE.
+
+  TimeRec (long, мс)                  строки ~6356–6364
+    Время выполнения алгоритма.
+
+  Status (string)                     используется по всему файлу
+    Статус-строка в нижней части UI.
+
+[8] LEGACY-МЕТОДЫ (не используются в UI, но присутствуют)
+
+  OptimizeByGradient() — строки ~4960–5624
+    Метод градиентного спуска. 10 статов (нет SP). Веса другой шкалы (0.42..1.77).
+    baseStats не включает гильдию.
+
+  OptimizeByMCTS() — строки ~5629–5929
+    Monte Carlo Tree Search. 10 статов (нет SP). Веса ещё другой шкалы (1.88..11.36).
+    baseStats не включает гильдию.
+
+  RecommendationSystem _rs            строка ~2920
+    Экземпляр класса RecommendationSystem. Используется в OptimizeByDEAsync.
+
+----------------------------------------------------------------
+ФАЙЛ: ViewModel/RecommendationSystem.cs
+----------------------------------------------------------------
+
+  class RecommendationSystem
+    Содержит реализацию DE-алгоритма (мутация, скрещивание, отбор).
+    Вызывается из OptimizeByDEAsync через _rs.DE(...).
+
+----------------------------------------------------------------
+КОНСТАНТЫ (актуальные значения)
+----------------------------------------------------------------
+
+  Веса (в порядке индексов 0..10):
+    SC=0.0315, ASp=0.0681, CH=0.0588, CD=0.1186, P=0.0759,
+    Ac=0.0545, ASt=0.0949, PA=0.0825, R=0.0679, F=0.1196, SP=0.2277
+
+  softGear (макс. вклад шмота/кристаллов):
+    SC=90.5, ASp=41.8, CH=48.4, CD=24.0, P=37.5,
+    Ac=52.2, ASt=30.0, PA=34.5, R=41.9, F=23.8, SP=12.5
+
+  hardCaps (абсолютный предел стата):
+    SC=200, ASp=70, CH=53, CD=200, P=50, Ac=50, ASt=100, PA=50, R=50, F=50, SP=100
+
+  Допустимое превышение бюджета: +3% (строки ~6090–6092)
+
+----------------------------------------------------------------
+XAML ПРИВЯЗКИ (View/MainWindow.xaml)
+----------------------------------------------------------------
+
+  Вкладка рекомендаций содержит:
+    - Чекбоксы RecHasBook* → binding RecHasBookSC и т.д.
+    - Поля UserMin* → binding UserMinSC и т.д.
+    - Текстблоки RecBase*, RecVal*, Delta*
+    - Кнопка "Сформировать рекомендацию" → Command=GetRecommendCommand
+    - Кнопка "Перенести результат в сборку" → Command=ApplyRecResultCommand
+    - Отображение RecDPMDisplay, TimeRec, Status
+
+================================================================
